@@ -29,8 +29,8 @@ export default function Footer() {
         <div>
           <h3 className="font-semibold mb-4">Kontak</h3>
           <ul className="space-y-2 text-gray-300 text-sm">
-            <li>WhatsApp: 08xxxxxxx</li>
-            <li>Email: solit@gmail.com</li>
+            <li>WhatsApp: +62 896-3737-7826</li>
+            <li>Email: solit03@gmail.com</li>
             <li>Depok, Indonesia</li>
           </ul>
         </div>
@@ -50,12 +50,12 @@ export default function Footer() {
               </a>
             </li>
             <li>
-              <a href="https://shopee.co.id" target="_blank">
+              <a href="https://shopee.co.id/solit_03?entryPoint=ShopBySearch&searchKeyword=solit03" target="_blank">
                 Shopee
               </a>
             </li>
             <li>
-              <a href="https://tokopedia.com" target="_blank">
+              <a href="https://www.tokopedia.com/solit03" target="_blank">
                 Tokopedia
               </a>
             </li>

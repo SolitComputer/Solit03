@@ -163,17 +163,14 @@ export default function BestSeller() {
               </div>
 
               {/* Button */}
-              <button className="w-full mt-4 bg-blue-700 text-white text-xs font-medium py-2 rounded-lg transition-all duration-300 hover:bg-blue-800 hover:shadow-md flex items-center justify-center gap-1.5">
+              {/* <button className="w-full mt-4 bg-blue-700 text-white text-xs font-medium py-2 rounded-lg transition-all duration-300 hover:bg-blue-800 hover:shadow-md flex items-center justify-center gap-1.5">
                 <Eye className="w-3.5 h-3.5" />
                 <span>Lihat Detail</span>
-              </button>
+              </button> */}
             </div>
           </div>
         ))}
       </div>
-
-      {/* View All Link */}
-      
 
     </section>
   );

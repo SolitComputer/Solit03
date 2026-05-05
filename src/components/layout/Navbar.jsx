@@ -39,10 +39,10 @@ export default function Navbar() {
     }, [menuOpen]);
 
     const navLinks = [
-        { name: "Beranda", href: "#" },
+        { name: "Beranda", href: "/" },
         { name: "Katalog", href: "#" },
-        { name: "Jual-Beli", href: "#" },
-        { name: "Tentang", href: "#" },
+        { name: "Jual-Beli", href: "/jual-beli" },
+        { name: "Tentang", href: "/tentang" },
         { name: "Sosial", href: "#" }
     ];
 

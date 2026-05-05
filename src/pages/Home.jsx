@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar";
+import Navbar from "../components/layout/Navbar";
 import Hero from "../components/Hero";
 import BestSeller from "../components/BestSeller";
 import About from "../components/About";
@@ -8,12 +8,11 @@ import SocialMedia from "../components/SocialMedia";
 import Testimoni from "../components/Testimoni";
 import Location from "../components/Location";
 import Marketplace from "../components/Marketplace";
-import Footer from "../components/Footer";
+import Footer from "../components/layout/Footer";
 
 export default function Home() {
   return (
     <main>
-      <Navbar />
       <Hero />
       <BestSeller />
       <About />
@@ -23,7 +22,6 @@ export default function Home() {
       <Testimoni />
       <Location />
       <Marketplace />
-      <Footer />
     </main>
   );
 }

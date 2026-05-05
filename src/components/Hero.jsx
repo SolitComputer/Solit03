@@ -10,8 +10,7 @@ export default function Hero() {
     }, []);
 
     return (
-        <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-blue-50/50 via-white to-white">
-
+<section className="relative pt-24 pb-16 overflow-hidden bg-gradient-to-br from-blue-50/50 via-white to-white">
             {/* Background Decorative Elements */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute -top-40 -right-40 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>

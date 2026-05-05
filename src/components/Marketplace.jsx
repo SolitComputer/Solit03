@@ -15,7 +15,7 @@ export default function Marketplace() {
         
         {/* Shopee */}
         <a
-          href="https://shopee.co.id/"
+          href="https://shopee.co.id/solit_03?entryPoint=ShopBySearch&searchKeyword=solit03"
           target="_blank"
           rel="noopener noreferrer"
           className="group"
@@ -35,7 +35,7 @@ export default function Marketplace() {
 
         {/* Tokopedia */}
         <a
-          href="https://tokopedia.com/"
+          href="https://www.tokopedia.com/solit03"
           target="_blank"
           rel="noopener noreferrer"
           className="group"
