@@ -1,47 +1,64 @@
-const FUNNEL_STATE_KEY = 'solit03_funnel_state_v2_categories';
+import { supabase } from "./supabase";
 
-export const saveFunnelState = (state) => {
-  try {
-    sessionStorage.setItem(FUNNEL_STATE_KEY, JSON.stringify(state));
-  } catch (error) {
-    console.error('Failed to save funnel state:', error);
-  }
-};
+export async function uploadProductImage(file) {
 
-export const loadFunnelState = () => {
-  try {
-    const raw = sessionStorage.getItem(FUNNEL_STATE_KEY);
-    if (!raw) return null;
-    return JSON.parse(raw);
-  } catch (error) {
-    console.error('Failed to load funnel state:', error);
-    return null;
-  }
-};
+  const fileExt =
+    file.name.split(".").pop();
 
-export const clearFunnelState = () => {
-  try {
-    sessionStorage.removeItem(FUNNEL_STATE_KEY);
-  } catch (error) {
-    console.error('Failed to clear funnel state:', error);
-  }
-};
+  const fileName =
+    `${Date.now()}.${fileExt}`;
 
-export const saveCounterData = (data) => {
-  try {
-    localStorage.setItem('solit03_tx_counter_v1', JSON.stringify(data));
-  } catch (error) {
-    console.error('Failed to save counter data:', error);
-  }
-};
+  const filePath =
+    `products/${fileName}`;
 
-export const loadCounterData = () => {
-  try {
-    const raw = localStorage.getItem('solit03_tx_counter_v1');
-    if (!raw) return null;
-    return JSON.parse(raw);
-  } catch (error) {
-    console.error('Failed to load counter data:', error);
-    return null;
+  const { error } =
+    await supabase.storage
+      .from("products")
+      .upload(filePath, file);
+
+  if (error) throw error;
+
+  const {
+    data: { publicUrl }
+  } = supabase.storage
+      .from("products")
+      .getPublicUrl(filePath);
+
+  return publicUrl;
+}
+
+export async function uploadMultipleImages(
+  files
+) {
+
+  const uploadedUrls = [];
+
+  for (const file of files) {
+
+    const fileExt =
+      file.name.split(".").pop();
+
+    const fileName =
+      `${Date.now()}-${Math.random()}.${fileExt}`;
+
+    const filePath =
+      `products/${fileName}`;
+
+    const { error } =
+      await supabase.storage
+        .from("products")
+        .upload(filePath, file);
+
+    if (error) throw error;
+
+    const {
+      data: { publicUrl }
+    } = supabase.storage
+        .from("products")
+        .getPublicUrl(filePath);
+
+    uploadedUrls.push(publicUrl);
   }
-};
+
+  return uploadedUrls;
+}

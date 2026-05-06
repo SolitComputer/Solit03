@@ -1,0 +1,112 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import ProductForm from "../components/ProductForm";
+
+import {
+    createProduct
+} from "../services/AdminProducts";
+
+export default function CreateProducts() {
+
+    const navigate = useNavigate();
+
+    const [loading, setLoading] =
+        useState(false);
+
+    const [form, setForm] =
+        useState({
+
+            name: "",
+            slug: "",
+
+            price: "",
+            stock: "",
+
+            thumbnail: "",
+
+            gallery: [],
+
+            brand_id: "",
+            category_id: "",
+
+            tag_ids: [],
+
+            description: "",
+            short_description: "",
+
+            specs: {
+                processor: "",
+                ram: "",
+                storage: "",
+                gpu: "",
+                display: "",
+                system_os: "",
+                battery: ""
+            }
+        });
+
+    async function handleSubmit(e) {
+
+        e.preventDefault();
+
+        try {
+
+            setLoading(true);
+
+            await createProduct({
+                ...form,
+
+                price: Number(form.price),
+
+                stock: Number(form.stock),
+
+                brand_id: Number(form.brand_id),
+
+                category_id: Number(form.category_id)
+            });
+
+            navigate("/admin/products");
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(error.message);
+
+        } finally {
+
+            setLoading(false);
+
+        }
+    }
+
+    return (
+        <section>
+
+            <div className="mb-8">
+
+                <h1 className="text-4xl font-bold">
+                    Tambah Produk
+                </h1>
+
+                <p className="text-gray-500 mt-2">
+                    Tambahkan produk baru
+                </p>
+
+            </div>
+
+            <ProductForm
+                form={form}
+                setForm={setForm}
+                onSubmit={handleSubmit}
+                buttonText={
+                    loading
+                        ? "Loading..."
+                        : "Simpan Produk"
+                }
+            />
+
+        </section>
+    );
+}
