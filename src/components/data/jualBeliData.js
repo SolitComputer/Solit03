@@ -13,33 +13,33 @@ import sewa3 from "../../assets/sewa3.webp";
 export const tabData = {
   jual: {
     title: "Terima Laptop Second / Bekas dengan Harga Worth-it",
-    desc: "Jual laptop bekas kamu dengan cepat dan harga terbaik.",
+    desc: "Kamu bisa jual laptop bekas kamu dengan harga yang wort-it di Solit 03 Cukup dengan 3 langkah di bawah, laptop bekasmu bisa terjual dalam 15 menit!.",
     steps: [
       "Isi form jual laptop",
-      "Pengecekan oleh staff",
-      "Uang langsung ditransfer",
+      "Pengecekan laptop oleh staff professional kami",
+      "Uangnya langsung ditransfer ke rekeningmu!",
     ],
     images: [img1, img2, img3],
   },
 
   lelang: {
     title: "Kami menerima barang lelang kantor",
-    desc: "Semua aset kantor diterima dengan harga terbaik.",
+    desc: "Kami terima semua barang-barang lelang dari kantor kamu dengan harga yang wort-it di Solit 03 Cukup dengan 3 langkah di bawah.",
     steps: [
-      "Kirim daftar aset",
-      "Kami cek & kasih harga",
-      "Dana langsung cair",
+      "Kirim daftar aset yang ingin dilelang",
+      "Kami lakukan pengecekan dan penawaran harga terbaikcek & kasih harga",
+      "Setujui penawaran, dana langsung cair",
     ],
     images: [lelang1, lelang2, lelang3],
   },
 
   sewa: {
     title: "Sewa Laptop Harian / Bulanan",
-    desc: "Sewa laptop mudah dan cepat.",
+    desc: "Kamu bisa sewa laptop yang kamu mau dengan harga yang terjangkau di solit 03. Cukup dengan 3 langkah di bawah, kamu bisa sewa laptop dalam waktu singkat!",
     steps: [
-      "Pilih laptop",
-      "Bayar deposit",
-      "Deposit kembali",
+      "Pilih laptop yang mau kamu sewa",
+      "Pembayaran uang deposit",
+      "Setelah selesai, uang deposit kamu akan dikembalikan!",
     ],
     images: [sewa1, sewa2, sewa3],
   },

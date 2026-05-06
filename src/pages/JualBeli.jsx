@@ -12,7 +12,7 @@ export default function JualBeli() {
     return (
         <>
             <section className="text-center py-20 bg-gray-50">
-                <h1 className="text-4xl font-bold">
+                <h1 className="text-4xl font-bold">                                                                                                                                                                                                                                 
                     Solusi Laptop Lama Kamu <br />
                     <span className="text-primary">Jadi Cuan di Solit 03</span>
                 </h1>
@@ -27,7 +27,7 @@ export default function JualBeli() {
             />
 
             <div className="text-center mb-10">
-                <button className="border border-primary px-6 py-2 rounded-lg hover:bg-primary hover:text-white transition">
+                <button className="border border-primary px-6 py-2 rounded-lg hover:bg-primary hover:text-gray-400 transition">
                     Hubungi Admin
                 </button>
             </div>

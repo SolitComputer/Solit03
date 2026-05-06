@@ -10,7 +10,7 @@ export default function StepCard({ title, desc, steps }) {
           {steps.map((step, i) => (
             <div key={i} className="flex items-start gap-4">
               
-              <div className="min-w-[32px] h-8 bg-primary text-white flex items-center justify-center rounded-full text-sm font-semibold">
+              <div className="min-w-[32px] h-8 bg-primary text-gray-500 flex items-center justify-center rounded-full text-sm font-semibold">
                 {i + 1}
               </div>
 

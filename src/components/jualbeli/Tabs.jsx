@@ -7,7 +7,7 @@ export default function Tabs({ activeTab, setActiveTab }) {
 
   return (
     <div className="flex justify-center mt-10">
-      <div className="bg-gray-100 p-1 rounded-full flex gap-2">
+      <div className="bg-[#43b0c8] p-1 rounded-full flex gap-2 hover:">
         {tabs.map((tab) => (
           <button
             key={tab.key}
@@ -15,8 +15,8 @@ export default function Tabs({ activeTab, setActiveTab }) {
             className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
               activeTab === tab.key
                 ? "bg-primary text-white shadow"
-                : "text-gray-600 hover:text-primary"
-            }`}
+                : "text-gray-700 hover:text-primary"
+        }`}
           >
             {tab.label}
           </button>

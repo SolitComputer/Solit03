@@ -1,4 +1,4 @@
-import TeamSlider from "../components/TeamSlider";
+import TeamSlider from "../components/tentang/TeamSlider";
 
 export default function Tentang() {
     return (
@@ -7,21 +7,24 @@ export default function Tentang() {
             {/* HERO */}
             <section className="relative py-10 md:py-16">
                 <div className="max-w-6xl mx-auto px-4">
-                    <div className="relative h-[300px] md:h-[420px] rounded-2xl overflow-hidden">
+                    <div className="relative h-[300px] md:h-[420px] rounded-2xl overflow-hidden group cursor-pointer">
+                        {/* IMAGE */}
                         <img
                             src="src/assets/team-bg.jpg"
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover transition duration-700 group-hover:scale-110"
                         />
-                        {/* OVERLAY */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/30 flex flex-col items-center justify-center text-white text-center px-4">
-                            <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
+                        <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/40 opacity-0 group-hover:opacity-100 transition duration-500 flex flex-col items-center justify-center text-white text-center px-4">
+                            <h1 className="text-3xl md:text-5xl font-bold tracking-tight translate-y-6 group-hover:translate-y-0 transition duration-500">
                                 Tentang Solit 03
                             </h1>
-                            <p className="mt-3 text-sm md:text-lg text-gray-200">
+                            <p className="mt-3 text-sm md:text-lg text-gray-200 opacity-0 group-hover:opacity-100 transition duration-700 delay-100">
                                 Laptop Second Berkualitas Tinggi, Rasa Seperti Baru
                             </p>
+
                         </div>
+
                     </div>
+
                 </div>
             </section>
             {/* STORY */}
@@ -42,7 +45,7 @@ export default function Tentang() {
                 <div className="grid md:grid-cols-2 gap-12 items-center mt-16">
 
                     <img
-                        src="/assets/team-work.jpg"
+                        src="src/assets/teknisi.webp"
                         className="rounded-2xl shadow-lg hover:scale-105 transition duration-300"
                     />
 

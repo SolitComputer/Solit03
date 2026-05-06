@@ -40,10 +40,10 @@ export default function Navbar() {
 
     const navLinks = [
         { name: "Beranda", href: "/" },
-        { name: "Katalog", href: "#" },
+        { name: "Katalog", href: "/katalog" },
         { name: "Jual-Beli", href: "/jual-beli" },
         { name: "Tentang", href: "/tentang" },
-        { name: "Sosial", href: "#" }
+        { name: "Sosial", href: "/sosial-media" }
     ];
 
     return (

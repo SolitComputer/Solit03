@@ -89,7 +89,7 @@ export default function About() {
               </div>
               
               <div className="relative z-10">
-                <p className="text-white text-base md:text-lg leading-relaxed mb-6 italic">
+                <p className="text-white text-base md:text-lg leading-relaxed mb-6 italic text-justify">
                   "Menjadikan Solit sebagai perusahaan berkelanjutan yang tidak hanya menghadirkan akses teknologi melalui produk laptop berkualitas dengan harga terjangkau, tetapi juga menjadi wadah kebaikan yang memberikan dampak sosial, ekonomi, dan edukasi jangka panjang bagi masyarakat dan peradaban."
                 </p>
 

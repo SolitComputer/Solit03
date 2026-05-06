@@ -10,7 +10,7 @@ export default function Hero() {
     }, []);
 
     return (
-<section className="relative pt-24 pb-16 overflow-hidden bg-gradient-to-br from-blue-50/50 via-white to-white">
+        <section className="relative pt-24 pb-16 overflow-hidden bg-gradient-to-br from-blue-50/50 via-white to-white">
             {/* Background Decorative Elements */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute -top-40 -right-40 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
@@ -44,7 +44,7 @@ export default function Hero() {
                         </h1>
 
                         {/* Description */}
-                        <p className="text-sm sm:text-base text-gray-600 max-w-lg leading-relaxed">
+                        <p className="text-sm sm:text-base text-gray-600 max-w-lg leading-relaxed text-justify">
                             Temukan laptop second berkualitas dengan garansi resmi.
                             Performa seperti baru, harga terjangkau. Dapatkan sekarang juga!
                         </p>
