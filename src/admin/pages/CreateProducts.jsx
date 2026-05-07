@@ -6,10 +6,12 @@ import ProductForm from "../components/ProductForm";
 import {
     createProduct
 } from "../services/AdminProducts";
+import { useToast } from "../context/ToastContext";
 
 export default function CreateProducts() {
 
     const navigate = useNavigate();
+    const { showToast } = useToast();
 
     const [loading, setLoading] =
         useState(false);
@@ -66,13 +68,23 @@ export default function CreateProducts() {
                 category_id: Number(form.category_id)
             });
 
-            navigate("/admin/products");
+            showToast(
+                "Produk berhasil ditambahkan",
+                "success"
+            );
+
+            setTimeout(() => {
+                navigate("/admin/products");
+            }, 800);
 
         } catch (error) {
 
             console.error(error);
 
-            alert(error.message);
+            showToast(
+                error.message,
+                "error"
+            );
 
         } finally {
 

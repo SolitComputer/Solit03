@@ -14,12 +14,14 @@ import {
   getProductById,
   updateProduct
 } from "../services/AdminProducts";
+import { useToast } from "../context/ToastContext";
 
 export default function EditProducts() {
 
   const { id } = useParams();
 
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [loading, setLoading] =
     useState(true);
@@ -73,13 +75,23 @@ export default function EditProducts() {
         stock: Number(form.stock)
       });
 
-      navigate("/admin/products");
+      showToast(
+        "Produk berhasil diupdate",
+        "success"
+      );
+
+      setTimeout(() => {
+        navigate("/admin/products");
+      }, 800);
 
     } catch (error) {
 
       console.error(error);
-      alert(error.message);
 
+      showToast(
+        error.message,
+        "error"
+      );
     }
   }
 

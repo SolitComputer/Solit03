@@ -42,21 +42,21 @@ export default function Promo() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="px-4 sm:px-6 lg:px-8 py-16 md:py-20 bg-white">
+    <section ref={sectionRef} className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-white">
       
-      {/* Title */}
+      {/* Title - lebih minimalis dengan aksen tipis */}
       <div className="text-center mb-12">
-        <div className="inline-flex items-center gap-1.5 bg-blue-50 rounded-full px-3 py-1 mb-3">
-          <Tag className="w-3 h-3 text-blue-600" />
-          <span className="text-[10px] text-blue-700 font-medium">PROMO</span>
+        <div className="inline-flex items-center gap-1.5 bg-gray-100 rounded-full px-3 py-1 mb-4">
+          <Tag className="w-3 h-3 text-gray-500" />
+          <span className="text-[10px] text-gray-600 font-medium tracking-wide">PROMO TERBATAS</span>
         </div>
-        <h2 className="text-2xl font-bold text-gray-800">
-          Promo <span className="text-blue-700">Bulan Oktober</span>
+        <h2 className="text-3xl md:text-4xl font-light tracking-tight text-gray-900">
+          Promo <span className="font-semibold text-gray-900">Bulan Ini</span>
         </h2>
-        <div className="w-12 h-0.5 bg-blue-600 mx-auto mt-2 rounded-full"></div>
+        <div className="w-12 h-0.5 bg-gray-300 mx-auto mt-3 rounded-full" />
       </div>
 
-      {/* Grid Promo */}
+      {/* Grid Promo - desain card minimalis dengan border tipis */}
       <div className={`grid grid-cols-2 md:grid-cols-3 gap-5 max-w-5xl mx-auto transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         {promos.map((item, index) => (
           <div
@@ -64,8 +64,8 @@ export default function Promo() {
             className="group cursor-pointer"
             style={{ transitionDelay: `${index * 80}ms` }}
           >
-            {/* Image Container */}
-            <div className="relative rounded-xl overflow-hidden bg-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+            {/* Image Container - border tipis, shadow halus */}
+            <div className="relative rounded-lg overflow-hidden bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
               <img
                 src={item.img}
                 alt={item.title}
@@ -73,14 +73,14 @@ export default function Promo() {
                 loading="lazy"
               />
               
-              {/* Discount Badge */}
-              <div className="absolute top-2 right-2 bg-red-500 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full">
+              {/* Discount Badge - minimalis, tidak terlalu mencolok */}
+              <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-gray-800 text-xs font-medium px-2.5 py-1 rounded-md shadow-sm">
                 {item.discount}
               </div>
             </div>
             
-            {/* Title */}
-            <p className="text-center text-xs text-gray-600 mt-2 group-hover:text-blue-700 transition-colors">
+            {/* Title - font lebih ringan */}
+            <p className="text-center text-sm font-medium text-gray-500 mt-3 group-hover:text-gray-900 transition-colors">
               {item.title}
             </p>
           </div>

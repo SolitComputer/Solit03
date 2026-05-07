@@ -68,13 +68,6 @@ export default function About() {
                   loading="lazy"
                 />
                 
-                {/* Badge on Image */}
-                <div className="absolute -bottom-3 -right-3 bg-blue-700 text-white px-3 py-1.5 rounded-lg shadow-md">
-                  <div className="flex items-center gap-1.5">
-                    <Calendar className="w-3 h-3" />
-                    <span className="text-[10px] font-medium">Since 2024</span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
