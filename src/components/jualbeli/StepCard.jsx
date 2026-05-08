@@ -1,25 +1,22 @@
 export default function StepCard({ title, desc, steps }) {
   return (
-    <section className="px-6 py-16 text-center">
-      <h2 className="text-2xl md:text-3xl font-bold mb-6">{title}</h2>
-
-      <div className="bg-white shadow-lg rounded-2xl p-8 max-w-3xl mx-auto text-left">
-        <p className="text-gray-600 mb-6">{desc}</p>
-
-        <div className="space-y-4">
-          {steps.map((step, i) => (
-            <div key={i} className="flex items-start gap-4">
-              
-              <div className="min-w-[32px] h-8 bg-primary text-gray-500 flex items-center justify-center rounded-full text-sm font-semibold">
-                {i + 1}
-              </div>
-
-              <p className="text-gray-700">{step}</p>
-
+    <div className="bg-gray-50 rounded-xl p-5 md:p-6">
+      <h3 className="text-sm md:text-base font-semibold text-gray-800 text-center mb-2">
+        {title}
+      </h3>
+      <p className="text-[11px] md:text-xs text-gray-500 text-center mb-4">
+        {desc}
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        {steps.map((step, index) => (
+          <div key={index} className="flex items-start gap-2">
+            <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span className="text-[10px] font-bold text-blue-600">{index + 1}</span>
             </div>
-          ))}
-        </div>
+            <p className="text-[11px] md:text-xs text-gray-600 leading-relaxed">{step}</p>
+          </div>
+        ))}
       </div>
-    </section>
+    </div>
   );
 }

@@ -1,838 +1,356 @@
 import { useEffect, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
 import {
-  Plus,
-  Search,
-  Edit,
-  Trash2,
-  Tag,
-  RefreshCw,
-  ChevronLeft,
-  ChevronRight,
-  X,
-  ChevronDown,
-  CheckCircle,
-  AlertCircle,
-  Package,
-  Hash,
-  TrendingUp,
-  Save,
-  AlertTriangle
+  Plus, Search, Edit, Trash2, Tag, RefreshCw,
+  ChevronLeft, ChevronRight, X, ChevronDown, Save, AlertTriangle
 } from "lucide-react";
-import {
-  getTags,
-  createTag,
-  updateTag,
-  deleteTag
-} from "../services/AdminTags";
+import { getTags, createTag, updateTag, deleteTag } from "../services/AdminTags";
 import { useToast } from "../context/ToastContext";
 import { useDebounce } from "../hooks/useDebounce";
 
-// Color options for tags
 const colorOptions = [
-  { value: "blue", label: "Biru", bg: "bg-blue-100", text: "text-blue-700", border: "border-blue-200" },
-  { value: "green", label: "Hijau", bg: "bg-green-100", text: "text-green-700", border: "border-green-200" },
-  { value: "purple", label: "Ungu", bg: "bg-purple-100", text: "text-purple-700", border: "border-purple-200" },
-  { value: "pink", label: "Pink", bg: "bg-pink-100", text: "text-pink-700", border: "border-pink-200" },
-  { value: "yellow", label: "Kuning", bg: "bg-yellow-100", text: "text-yellow-700", border: "border-yellow-200" },
-  { value: "red", label: "Merah", bg: "bg-red-100", text: "text-red-700", border: "border-red-200" },
-  { value: "indigo", label: "Indigo", bg: "bg-indigo-100", text: "text-indigo-700", border: "border-indigo-200" },
-  { value: "teal", label: "Teal", bg: "bg-teal-100", text: "text-teal-700", border: "border-teal-200" },
+  { value: "blue",   bg: "bg-blue-100",   text: "text-blue-600" },
+  { value: "green",  bg: "bg-green-100",  text: "text-green-600" },
+  { value: "purple", bg: "bg-purple-100", text: "text-purple-600" },
+  { value: "pink",   bg: "bg-pink-100",   text: "text-pink-600" },
+  { value: "yellow", bg: "bg-yellow-100", text: "text-yellow-600" },
+  { value: "red",    bg: "bg-red-100",    text: "text-red-600" },
+  { value: "indigo", bg: "bg-indigo-100", text: "text-indigo-600" },
+  { value: "teal",   bg: "bg-teal-100",   text: "text-teal-600" },
 ];
 
-// Modal Component untuk Create/Edit (Perbaikan)
+function slugify(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+function getColorStyle(color) {
+  return colorOptions.find(c => c.value === color) || colorOptions[0];
+}
+
+// ── Shared Modal Shell ──────────────────────────────────────────────
+function Modal({ isOpen, onClose, children }) {
+  useEffect(() => {
+    if (!isOpen) return;
+    const y = window.scrollY;
+    Object.assign(document.body.style, { overflow: "hidden", position: "fixed", width: "100%", top: `-${y}px` });
+    return () => {
+      const top = document.body.style.top;
+      Object.assign(document.body.style, { overflow: "", position: "", width: "", top: "" });
+      window.scrollTo(0, parseInt(top || "0") * -1);
+    };
+  }, [isOpen]);
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)" }}
+      onClick={e => e.target === e.currentTarget && onClose()}>
+      {children}
+    </div>
+  );
+}
+
+// ── Tag Form Modal ──────────────────────────────────────────────────
 function TagModal({ isOpen, onClose, onSubmit, title, initialData, isEditing }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    slug: "",
-    color: "blue"
-  });
+  const [form, setForm] = useState({ name: "", slug: "", color: "blue" });
   const [errors, setErrors] = useState({});
+  const [slugManual, setSlugManual] = useState(false);
 
   useEffect(() => {
     if (initialData) {
-      setFormData({
-        name: initialData.name || "",
-        slug: initialData.slug || "",
-        color: initialData.color || "blue"
-      });
+      setForm({ name: initialData.name || "", slug: initialData.slug || "", color: initialData.color || "blue" });
+      setSlugManual(!!initialData.slug);
     } else {
-      setFormData({
-        name: "",
-        slug: "",
-        color: "blue"
-      });
+      setForm({ name: "", slug: "", color: "blue" });
+      setSlugManual(false);
     }
+    setErrors({});
   }, [initialData, isOpen]);
 
-  // Prevent body scroll when modal is open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.top = `-${window.scrollY}px`;
-    } else {
-      const scrollY = document.body.style.top;
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-      window.scrollTo(0, parseInt(scrollY || '0') * -1);
-    }
-
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-    };
-  }, [isOpen]);
-
-  const generateSlug = (name) => {
-    return name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '');
-  };
-
-  const handleNameChange = (e) => {
+  const handleName = e => {
     const name = e.target.value;
-    setFormData({
-      ...formData,
-      name: name,
-      slug: generateSlug(name)
-    });
+    setForm(f => ({ ...f, name, slug: slugManual ? f.slug : slugify(name) }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
-    const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = "Nama tag harus diisi";
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    onSubmit(formData);
+    if (!form.name.trim()) return setErrors({ name: "Nama tag harus diisi" });
+    onSubmit(form);
   };
 
-  if (!isOpen) return null;
+  const c = getColorStyle(form.color);
 
   return (
-    <div
-      className="fixed inset-0 z-50 overflow-y-auto"
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        backdropFilter: 'blur(4px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '1rem'
-      }}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
-      <div
-        className="bg-white rounded-2xl shadow-2xl max-w-md w-full"
-        style={{ maxHeight: '90vh', overflowY: 'auto' }}
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
-          <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-lg hover:bg-gray-100 transition flex-shrink-0"
-          >
-            <X size={20} className="text-gray-500" />
-          </button>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-sm" style={{ maxHeight: "90vh", overflowY: "auto" }}>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 sticky top-0 bg-white">
+          <h2 className="text-sm font-semibold text-gray-800">{title}</h2>
+          <button onClick={onClose} className="p-1 rounded-md hover:bg-gray-100 text-gray-400"><X size={15} /></button>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Nama Tag <span className="text-red-500">*</span>
+        <form onSubmit={handleSubmit} className="p-5 space-y-4">
+          {/* Name */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">
+              Nama Tag <span className="text-red-400">*</span>
             </label>
-            <input
-              type="text"
-              placeholder="Contoh: Best Seller"
-              value={formData.name}
-              onChange={handleNameChange}
-              className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 transition ${errors.name ? "border-red-500 focus:ring-red-500" : "border-gray-200"
-                }`}
-              autoFocus
-            />
-            {errors.name && (
-              <p className="text-xs text-red-500 mt-1">{errors.name}</p>
-            )}
+            <input autoFocus type="text" placeholder="Best Seller" value={form.name} onChange={handleName}
+              className={`w-full bg-gray-50 border rounded-lg text-sm px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:bg-white transition ${errors.name ? "border-red-300" : "border-gray-200"}`} />
+            {errors.name && <p className="text-[11px] text-red-400">{errors.name}</p>}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Slug
-            </label>
-            <input
-              type="text"
-              placeholder="best-seller"
-              value={formData.slug}
-              onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 transition bg-gray-50"
-            />
+          {/* Slug */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">Slug</label>
+            <div className="relative">
+              <input type="text" value={form.slug}
+                onChange={e => { setSlugManual(true); setForm(f => ({ ...f, slug: e.target.value })); }}
+                className="w-full bg-gray-50 border border-gray-200 rounded-lg text-xs font-mono px-3 py-2.5 pr-10 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:bg-white transition text-gray-500" />
+              {slugManual && (
+                <button type="button" onClick={() => { setSlugManual(false); setForm(f => ({ ...f, slug: slugify(f.name) })); }}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-blue-500 hover:text-blue-700">auto</button>
+              )}
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Warna Tag
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {colorOptions.map((color) => (
-                <button
-                  key={color.value}
-                  type="button"
-                  onClick={() => setFormData({ ...formData, color: color.value })}
-                  className={`w-10 h-10 rounded-full transition-all flex-shrink-0 ${color.bg
-                    } ${formData.color === color.value
-                      ? "ring-2 ring-offset-2 ring-blue-500 scale-110"
-                      : "hover:scale-105"
-                    }`}
-                  title={color.label}
-                />
+          {/* Color */}
+          <div className="space-y-2">
+            <label className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">Warna</label>
+            <div className="flex flex-wrap gap-1.5">
+              {colorOptions.map(col => (
+                <button key={col.value} type="button" onClick={() => setForm(f => ({ ...f, color: col.value }))}
+                  className={`w-7 h-7 rounded-full transition-all ${col.bg}
+                    ${form.color === col.value ? "ring-2 ring-offset-1 ring-blue-500 scale-110" : "hover:scale-105"}`}
+                  title={col.value} />
               ))}
             </div>
           </div>
 
           {/* Preview */}
-          <div className="pt-4 border-t border-gray-100">
-            <p className="text-sm text-gray-500 mb-2">Preview:</p>
-            <div className="flex items-center gap-2 flex-wrap">
-              <div className={`px-3 py-1.5 rounded-lg text-sm font-medium ${getColorStyle(formData.color).bg} ${getColorStyle(formData.color).text}`}>
-                {formData.name || "Nama Tag"}
-              </div>
-              <span className="text-xs text-gray-400 break-all">slug: {formData.slug || "slug-tag"}</span>
-            </div>
+          <div className="border border-gray-100 rounded-lg p-3 flex items-center gap-3 bg-gray-50">
+            <span className={`px-2.5 py-1 rounded-md text-xs font-semibold ${c.bg} ${c.text}`}>
+              {form.name || "Nama Tag"}
+            </span>
+            <p className="text-[10px] text-gray-400 font-mono">{form.slug || "slug-tag"}</p>
           </div>
 
-          {/* Buttons */}
-          <div className="flex gap-3 pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 transition font-medium"
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              className="flex-1 px-4 py-2.5 bg-blue-700 hover:bg-blue-800 text-white rounded-xl transition font-medium flex items-center justify-center gap-2"
-            >
-              <Save size={18} />
-              {isEditing ? "Update" : "Simpan"}
+          <div className="flex gap-2 pt-1">
+            <button type="button" onClick={onClose}
+              className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:bg-gray-50 transition">Batal</button>
+            <button type="submit"
+              className="flex-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition flex items-center justify-center gap-1.5">
+              <Save size={13} /> {isEditing ? "Update" : "Simpan"}
             </button>
           </div>
         </form>
       </div>
-    </div>
+    </Modal>
   );
 }
 
-function DeleteConfirmModal({ isOpen, onClose, onConfirm, tagName, isDeleting }) {
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.top = `-${window.scrollY}px`;
-    } else {
-      const scrollY = document.body.style.top;
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-      window.scrollTo(0, parseInt(scrollY || '0') * -1);
-    }
-
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-    };
-  }, [isOpen]);
-
-  if (!isOpen) return null;
-
+// ── Delete Modal ────────────────────────────────────────────────────
+function DeleteModal({ isOpen, onClose, onConfirm, name, isDeleting }) {
   return (
-    <div
-      className="fixed inset-0 z-50 overflow-y-auto"
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        backdropFilter: 'blur(4px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '1rem'
-      }}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-100">
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-sm">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
           <div className="flex items-center gap-2">
-            <AlertTriangle size={24} className="text-red-500" />
-            <h2 className="text-xl font-semibold text-gray-800">Konfirmasi Hapus</h2>
+            <AlertTriangle size={15} className="text-red-400" />
+            <h2 className="text-sm font-semibold text-gray-800">Hapus Tag</h2>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-lg hover:bg-gray-100 transition flex-shrink-0"
-          >
-            <X size={20} className="text-gray-500" />
-          </button>
+          <button onClick={onClose} className="p-1 rounded-md hover:bg-gray-100 text-gray-400"><X size={15} /></button>
         </div>
-
-        {/* Content */}
-        <div className="p-6">
-          <p className="text-gray-600 mb-2">
-            Apakah Anda yakin ingin menghapus tag <span className="font-semibold text-red-600">"{tagName}"</span>?
-          </p>
-          <p className="text-sm text-gray-500">
-            Tindakan ini tidak dapat dibatalkan dan akan menghapus tag dari semua produk yang menggunakannya.
-          </p>
+        <div className="px-5 py-4">
+          <p className="text-xs text-gray-600">Hapus tag <span className="font-semibold text-red-500">"{name}"</span>? Tindakan ini tidak dapat dibatalkan.</p>
         </div>
-
-        {/* Buttons */}
-        <div className="flex gap-3 p-6 pt-0">
-          <button
-            onClick={onClose}
-            className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 transition font-medium"
-          >
-            Batal
-          </button>
-          <button
-            onClick={onConfirm}
-            disabled={isDeleting}
-            className="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl transition font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isDeleting ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                Menghapus...
-              </>
-            ) : (
-              <>
-                <Trash2 size={18} />
-                Hapus
-              </>
-            )}
+        <div className="flex gap-2 px-5 pb-5">
+          <button onClick={onClose} className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:bg-gray-50 transition">Batal</button>
+          <button onClick={onConfirm} disabled={isDeleting}
+            className="flex-1 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs font-medium transition flex items-center justify-center gap-1.5 disabled:opacity-50">
+            {isDeleting ? <><div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" /> Menghapus...</> : <><Trash2 size={13} /> Hapus</>}
           </button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }
 
-// Helper function untuk mendapatkan color style
-function getColorStyle(color) {
-  const colorOption = colorOptions.find(opt => opt.value === color);
-  return colorOption || colorOptions[0];
-}
-
-// Skeleton Components
-function TagCardSkeleton() {
-  return (
-    <div className="bg-white rounded-xl shadow-sm p-4 animate-pulse">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
-          <div>
-            <div className="w-32 h-5 bg-gray-200 rounded mb-2"></div>
-            <div className="w-48 h-3 bg-gray-200 rounded"></div>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <div className="w-8 h-8 bg-gray-200 rounded-lg"></div>
-          <div className="w-8 h-8 bg-gray-200 rounded-lg"></div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function FormSkeleton() {
-  return (
-    <div className="bg-white rounded-xl shadow-sm p-6 animate-pulse">
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="flex-1">
-          <div className="w-24 h-4 bg-gray-200 rounded mb-2"></div>
-          <div className="w-full h-12 bg-gray-200 rounded-xl"></div>
-        </div>
-        <div className="flex-1">
-          <div className="w-24 h-4 bg-gray-200 rounded mb-2"></div>
-          <div className="w-full h-12 bg-gray-200 rounded-xl"></div>
-        </div>
-        <div className="w-32">
-          <div className="w-24 h-4 bg-gray-200 rounded mb-2"></div>
-          <div className="w-full h-12 bg-gray-200 rounded-xl"></div>
-        </div>
-        <div className="flex items-end">
-          <div className="w-28 h-12 bg-gray-200 rounded-xl"></div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
+// ── Main Page ───────────────────────────────────────────────────────
 export default function Tags() {
   const [tags, setTags] = useState([]);
-  const [filteredTags, setFilteredTags] = useState([]);
+  const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(true);
   const [initialLoading, setInitialLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [search, setSearch] = useState("");
   const [deletingId, setDeletingId] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
   const [sortBy, setSortBy] = useState("newest");
 
-  // Modal states
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedTag, setSelectedTag] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [selected, setSelected] = useState(null);
 
   const { showToast } = useToast();
-  const debouncedSearch = useDebounce(searchTerm, 500);
+  const debouncedSearch = useDebounce(search, 500);
 
-  // Load tags
-  const loadTags = useCallback(async () => {
+  const load = useCallback(async () => {
     setLoading(true);
-    try {
-      const data = await getTags();
-      setTags(data);
-    } catch (error) {
-      console.error(error);
-      showToast("Gagal memuat data tag", "error");
-    } finally {
-      setLoading(false);
-      setInitialLoading(false);
-    }
+    try { setTags(await getTags()); }
+    catch { showToast("Gagal memuat tag", "error"); }
+    finally { setLoading(false); setInitialLoading(false); }
   }, [showToast]);
 
+  useEffect(() => { load(); }, [load]);
+
   useEffect(() => {
-    loadTags();
-  }, [loadTags]);
-
-  // Filter and sort tags
-  useEffect(() => {
-    let filtered = [...tags];
-
-    if (debouncedSearch) {
-      filtered = filtered.filter(tag =>
-        tag.name?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-        tag.slug?.toLowerCase().includes(debouncedSearch.toLowerCase())
-      );
-    }
-
-    switch (sortBy) {
-      case "newest":
-        filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-        break;
-      case "oldest":
-        filtered.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-        break;
-      case "name_asc":
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case "name_desc":
-        filtered.sort((a, b) => b.name.localeCompare(a.name));
-        break;
-      default:
-        filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    }
-
-    setFilteredTags(filtered);
-    setCurrentPage(1);
+    let f = [...tags];
+    if (debouncedSearch) f = f.filter(t => t.name?.toLowerCase().includes(debouncedSearch.toLowerCase()) || t.slug?.toLowerCase().includes(debouncedSearch.toLowerCase()));
+    f.sort((a, b) => {
+      if (sortBy === "oldest") return new Date(a.created_at) - new Date(b.created_at);
+      if (sortBy === "name_asc") return a.name.localeCompare(b.name);
+      if (sortBy === "name_desc") return b.name.localeCompare(a.name);
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
+    setFiltered(f); setPage(1);
   }, [tags, debouncedSearch, sortBy]);
 
-  // Create tag
-  const handleCreateTag = async (formData) => {
-    setIsSubmitting(true);
-    try {
-      await createTag(formData);
-      showToast("Tag berhasil ditambahkan", "success");
-      setIsCreateModalOpen(false);
-      loadTags();
-    } catch (error) {
-      console.error(error);
-      showToast("Gagal menambahkan tag", "error");
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleCreate = async (data) => {
+    try { await createTag(data); showToast("Tag ditambahkan", "success"); setCreateOpen(false); load(); }
+    catch { showToast("Gagal menambahkan tag", "error"); }
+  };
+  const handleUpdate = async (data) => {
+    try { await updateTag(selected.id, data); showToast("Tag diupdate", "success"); setEditOpen(false); setSelected(null); load(); }
+    catch { showToast("Gagal mengupdate tag", "error"); }
+  };
+  const handleDelete = async () => {
+    if (!selected) return;
+    setDeletingId(selected.id);
+    try { await deleteTag(selected.id); showToast("Tag dihapus", "success"); setDeleteOpen(false); setSelected(null); load(); }
+    catch { showToast("Gagal menghapus tag", "error"); }
+    finally { setDeletingId(null); }
   };
 
-  // Update tag
-  const handleUpdateTag = async (formData) => {
-    setIsSubmitting(true);
-    try {
-      await updateTag(selectedTag.id, formData);
-      showToast("Tag berhasil diupdate", "success");
-      setIsEditModalOpen(false);
-      setSelectedTag(null);
-      loadTags();
-    } catch (error) {
-      console.error(error);
-      showToast("Gagal mengupdate tag", "error");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const totalPages = Math.ceil(filtered.length / perPage);
+  const paginated = filtered.slice((page - 1) * perPage, page * perPage);
 
-  // Delete tag
-  const handleDeleteTag = async () => {
-    if (!selectedTag) return;
-
-    setDeletingId(selectedTag.id);
-    try {
-      await deleteTag(selectedTag.id);
-      showToast("Tag berhasil dihapus", "success");
-      setIsDeleteModalOpen(false);
-      setSelectedTag(null);
-      loadTags();
-    } catch (error) {
-      console.error(error);
-      showToast("Gagal menghapus tag", "error");
-    } finally {
-      setDeletingId(null);
-    }
-  };
-
-  const openEditModal = (tag) => {
-    setSelectedTag(tag);
-    setIsEditModalOpen(true);
-  };
-
-  const openDeleteModal = (tag) => {
-    setSelectedTag(tag);
-    setIsDeleteModalOpen(true);
-  };
-
-  // Pagination
-  const totalPages = Math.ceil(filteredTags.length / itemsPerPage);
-  const paginatedTags = filteredTags.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+  if (initialLoading) return (
+    <div className="space-y-4">
+      <div className="animate-pulse space-y-1"><div className="w-12 h-5 bg-gray-200 rounded" /><div className="w-32 h-3 bg-gray-200 rounded" /></div>
+      <div className="grid grid-cols-3 gap-3">{[1,2,3].map(i => <div key={i} className="bg-white border border-gray-100 rounded-xl p-3 animate-pulse"><div className="w-12 h-3 bg-gray-200 rounded mb-2"/><div className="w-8 h-6 bg-gray-200 rounded"/></div>)}</div>
+      <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden animate-pulse">
+        {[1,2,3,4,5].map(i => <div key={i} className="flex items-center gap-3 px-4 py-3 border-b border-gray-50"><div className="w-8 h-8 bg-gray-200 rounded-lg"/><div className="flex-1"><div className="w-24 h-3 bg-gray-200 rounded mb-1.5"/><div className="w-16 h-2.5 bg-gray-200 rounded"/></div></div>)}
+      </div>
+    </div>
   );
 
-  const itemsPerPageOptions = [10, 25, 50, 100];
-  const totalTags = tags.length;
+  return (
+    <div className="space-y-4">
+      <TagModal isOpen={createOpen} onClose={() => setCreateOpen(false)} onSubmit={handleCreate} title="Tambah Tag" isEditing={false} />
+      <TagModal isOpen={editOpen} onClose={() => { setEditOpen(false); setSelected(null); }} onSubmit={handleUpdate} title="Edit Tag" initialData={selected} isEditing={true} />
+      <DeleteModal isOpen={deleteOpen} onClose={() => { setDeleteOpen(false); setSelected(null); }} onConfirm={handleDelete} name={selected?.name} isDeleting={deletingId === selected?.id} />
 
-  if (initialLoading) {
-    return (
-      <div className="space-y-6">
-        <div className="mb-2 animate-pulse">
-          <div className="w-48 h-10 bg-gray-200 rounded mb-2"></div>
-          <div className="w-80 h-5 bg-gray-200 rounded"></div>
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-lg font-semibold text-gray-800">Tags</h1>
+          <p className="text-xs text-gray-400 mt-0.5">{tags.length} total tag</p>
         </div>
+        <button onClick={() => setCreateOpen(true)}
+          className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg shadow-sm transition">
+          <Plus size={14} /> Tambah Tag
+        </button>
+      </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-white rounded-xl shadow-sm p-5 animate-pulse">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="w-24 h-4 bg-gray-200 rounded mb-2"></div>
-                  <div className="w-16 h-8 bg-gray-200 rounded"></div>
-                </div>
-                <div className="w-10 h-10 bg-gray-200 rounded-lg"></div>
-              </div>
+      {/* Stats */}
+      <div className="grid grid-cols-3 gap-3">
+        {[
+          { label: "Total", value: tags.length, color: "text-blue-600" },
+          { label: "Ditampilkan", value: paginated.length, color: "text-gray-600" },
+          { label: "Filter", value: search ? 1 : 0, color: "text-purple-600" },
+        ].map(({ label, value, color }) => (
+          <div key={label} className="bg-white border border-gray-100 rounded-lg px-3 py-2.5 shadow-sm">
+            <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">{label}</p>
+            <p className={`text-lg font-bold mt-0.5 ${color}`}>{value}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Toolbar */}
+      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-3 flex flex-col sm:flex-row gap-2.5">
+        <div className="relative flex-1">
+          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input type="text" placeholder="Cari tag..." value={search} onChange={e => setSearch(e.target.value)}
+            className="w-full bg-gray-50 border border-gray-200 rounded-lg text-sm pl-8 pr-8 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:bg-white transition" />
+          {search && <button onClick={() => setSearch("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"><X size={13} /></button>}
+        </div>
+        <div className="flex gap-2">
+          {[
+            { val: sortBy, set: setSortBy, opts: [["newest","Terbaru"],["oldest","Terlama"],["name_asc","A-Z"],["name_desc","Z-A"]] },
+            { val: perPage, set: v => { setPerPage(Number(v)); setPage(1); }, opts: [[10,"10/hal"],[25,"25/hal"],[50,"50/hal"]] },
+          ].map((s, i) => (
+            <div key={i} className="relative">
+              <select value={s.val} onChange={e => s.set(e.target.value)}
+                className="bg-gray-50 border border-gray-200 rounded-lg text-xs pl-2.5 pr-6 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 appearance-none cursor-pointer text-gray-600">
+                {s.opts.map(([v,l]) => <option key={v} value={v}>{l}</option>)}
+              </select>
+              <ChevronDown size={10} className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
             </div>
           ))}
-        </div>
-
-        <FormSkeleton />
-
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-          <div className="p-4 border-b border-gray-100">
-            <div className="w-48 h-5 bg-gray-200 rounded"></div>
-          </div>
-          <div className="divide-y divide-gray-100">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <TagCardSkeleton key={i} />
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-6">
-      {/* Modals */}
-      <TagModal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        onSubmit={handleCreateTag}
-        title="Tambah Tag Baru"
-        isEditing={false}
-      />
-
-      <TagModal
-        isOpen={isEditModalOpen}
-        onClose={() => {
-          setIsEditModalOpen(false);
-          setSelectedTag(null);
-        }}
-        onSubmit={handleUpdateTag}
-        title="Edit Tag"
-        initialData={selectedTag}
-        isEditing={true}
-      />
-
-      <DeleteConfirmModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => {
-          setIsDeleteModalOpen(false);
-          setSelectedTag(null);
-        }}
-        onConfirm={handleDeleteTag}
-        tagName={selectedTag?.name}
-        isDeleting={deletingId === selectedTag?.id}
-      />
-
-      {/* HEADER */}
-      <div className="mb-2">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
-          Tags
-        </h1>
-        <p className="text-gray-500 mt-2">
-          Kelola semua tag produk laptop Anda
-        </p>
-      </div>
-
-      {/* STATS CARDS */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white rounded-xl shadow-sm p-5 border-l-4 border-blue-700 hover:shadow-md transition">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500">Total Tag</p>
-              <p className="text-2xl font-bold text-gray-800 mt-1">{totalTags}</p>
-            </div>
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-              <Tag className="text-blue-700" size={20} />
-            </div>
-          </div>
-          <div className="mt-2 text-xs text-green-600">
-            {totalTags} tag tersedia
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm p-5 border-l-4 border-green-500 hover:shadow-md transition">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500">Ditampilkan</p>
-              <p className="text-2xl font-bold text-gray-800 mt-1">{paginatedTags.length}</p>
-            </div>
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-              <Hash className="text-green-600" size={20} />
-            </div>
-          </div>
-          <div className="mt-2 text-xs text-gray-500">
-            Per halaman: {itemsPerPage}
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm p-5 border-l-4 border-purple-500 hover:shadow-md transition">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500">Filter Aktif</p>
-              <p className="text-2xl font-bold text-gray-800 mt-1">
-                {searchTerm ? "1" : "0"}
-              </p>
-            </div>
-            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-              <Search className="text-purple-600" size={20} />
-            </div>
-          </div>
-          <div className="mt-2 text-xs text-gray-500">
-            {searchTerm ? `Mencari: ${searchTerm}` : "Tidak ada filter"}
-          </div>
-        </div>
-      </div>
-
-      {/* FORM TAMBAH TAG - Button to open modal */}
-      <div className="bg-white rounded-xl shadow-sm p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold text-gray-800">Tambah Tag Baru</h2>
-            <p className="text-sm text-gray-500 mt-1">Klik tombol di samping untuk menambahkan tag baru</p>
-          </div>
-          <button
-            onClick={() => setIsCreateModalOpen(true)}
-            className="px-6 py-2.5 bg-blue-700 hover:bg-blue-800 text-white rounded-xl font-medium transition flex items-center gap-2 shadow-sm"
-          >
-            <Plus size={18} />
-            Tambah Tag
-          </button>
-        </div>
-      </div>
-
-      {/* ACTION BAR */}
-      <div className="bg-white rounded-xl shadow-sm p-4">
-        <div className="flex flex-col lg:flex-row gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-            <input
-              type="text"
-              placeholder="Cari tag berdasarkan nama atau slug..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-11 pr-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
-            />
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm("")}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                <X size={16} />
-              </button>
-            )}
-          </div>
-
-          <div className="flex gap-3">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 bg-white text-sm"
-            >
-              <option value="newest">Terbaru</option>
-              <option value="oldest">Terlama</option>
-              <option value="name_asc">Nama A-Z</option>
-              <option value="name_desc">Nama Z-A</option>
-            </select>
-
-            <select
-              value={itemsPerPage}
-              onChange={(e) => {
-                setItemsPerPage(Number(e.target.value));
-                setCurrentPage(1);
-              }}
-              className="px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 bg-white text-sm"
-            >
-              {itemsPerPageOptions.map(option => (
-                <option key={option} value={option}>{option} / halaman</option>
-              ))}
-            </select>
-
-            <button
-              onClick={() => {
-                setSearchTerm("");
-                setSortBy("newest");
-                setCurrentPage(1);
-              }}
-              className="px-4 py-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 transition flex items-center gap-2"
-            >
-              <RefreshCw size={18} className="text-gray-600" />
-              <span className="hidden sm:inline">Reset</span>
+          {(search || sortBy !== "newest") && (
+            <button onClick={() => { setSearch(""); setSortBy("newest"); setPage(1); }}
+              className="px-2.5 py-2 border border-gray-200 rounded-lg text-xs text-gray-500 hover:bg-gray-50 transition flex items-center gap-1">
+              <RefreshCw size={12} /> Reset
             </button>
-          </div>
+          )}
         </div>
       </div>
 
-      {/* TAGS LIST */}
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold text-gray-800">Daftar Tag</h2>
-            <p className="text-sm text-gray-500 mt-1">
-              Total {filteredTags.length} tag ditemukan
-            </p>
-          </div>
+      {/* List */}
+      <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
+        <div className="px-4 py-3 border-b border-gray-50 flex items-center justify-between">
+          <p className="text-xs font-medium text-gray-600">Daftar Tag</p>
+          <p className="text-[11px] text-gray-400">{filtered.length} ditemukan</p>
         </div>
 
         {loading ? (
-          <div className="divide-y divide-gray-100">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <TagCardSkeleton key={i} />
-            ))}
-          </div>
-        ) : paginatedTags.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-gray-400">
-              <Tag size={48} className="mx-auto mb-3 opacity-50" />
-              <p className="text-lg mb-2">Tidak ada tag</p>
-              <p className="text-sm">
-                {searchTerm ? "Coba dengan kata kunci berbeda" : "Klik tombol 'Tambah Tag' untuk mulai menambahkan tag"}
-              </p>
+          <div>{[1,2,3,4].map(i => (
+            <div key={i} className="flex items-center gap-3 px-4 py-3 border-b border-gray-50 animate-pulse">
+              <div className="w-8 h-8 bg-gray-200 rounded-lg" />
+              <div className="flex-1"><div className="w-28 h-3 bg-gray-200 rounded mb-1.5"/><div className="w-20 h-2.5 bg-gray-200 rounded"/></div>
             </div>
+          ))}</div>
+        ) : paginated.length === 0 ? (
+          <div className="py-14 text-center">
+            <Tag size={28} className="mx-auto text-gray-200 mb-2" />
+            <p className="text-xs text-gray-400">{search ? "Tidak ditemukan" : "Belum ada tag"}</p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-100">
-            {paginatedTags.map((tag) => {
-              const colorStyle = getColorStyle(tag.color);
-
+          <div className="divide-y divide-gray-50">
+            {paginated.map(tag => {
+              const c = getColorStyle(tag.color);
               return (
-                <div key={tag.id} className="px-6 py-4 hover:bg-gray-50 transition group">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-12 h-12 ${colorStyle.bg} rounded-xl flex items-center justify-center`}>
-                          <Tag className={`${colorStyle.text}`} size={22} />
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <h3 className="font-semibold text-gray-800 text-lg">
-                              {tag.name}
-                            </h3>
-                            <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${colorStyle.bg} ${colorStyle.text}`}>
-                              {tag.slug}
-                            </span>
-                          </div>
-                          <p className="text-sm text-gray-500 mt-1">
-                            Slug: {tag.slug}
-                          </p>
-                          {tag.created_at && (
-                            <p className="text-xs text-gray-400 mt-1">
-                              Ditambahkan: {new Date(tag.created_at).toLocaleDateString('id-ID')}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => openEditModal(tag)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                        title="Edit Tag"
-                      >
-                        <Edit size={18} />
-                      </button>
-                      <button
-                        onClick={() => openDeleteModal(tag)}
-                        disabled={deletingId === tag.id}
-                        className={`p-2 text-red-600 hover:bg-red-50 rounded-lg transition ${deletingId === tag.id ? "opacity-50 cursor-not-allowed" : ""
-                          }`}
-                        title="Hapus Tag"
-                      >
-                        {deletingId === tag.id ? (
-                          <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-                        ) : (
-                          <Trash2 size={18} />
-                        )}
-                      </button>
-                    </div>
+                <div key={tag.id} className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50/60 transition group">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${c.bg}`}>
+                    <Tag size={13} className={c.text} />
+                  </div>
+                  <div className="flex-1 min-w-0 flex items-center gap-2">
+                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-md ${c.bg} ${c.text}`}>{tag.name}</span>
+                    <p className="text-[10px] text-gray-400 font-mono truncate">{tag.slug}</p>
+                  </div>
+                  {tag.created_at && (
+                    <p className="text-[10px] text-gray-300 hidden sm:block flex-shrink-0">
+                      {new Date(tag.created_at).toLocaleDateString("id-ID")}
+                    </p>
+                  )}
+                  <div className="flex gap-0.5 flex-shrink-0">
+                    <button onClick={() => { setSelected(tag); setEditOpen(true); }}
+                      className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition"><Edit size={13} /></button>
+                    <button onClick={() => { setSelected(tag); setDeleteOpen(true); }} disabled={deletingId === tag.id}
+                      className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition disabled:opacity-40">
+                      {deletingId === tag.id
+                        ? <div className="w-3 h-3 border border-red-400 border-t-transparent rounded-full animate-spin" />
+                        : <Trash2 size={13} />}
+                    </button>
                   </div>
                 </div>
               );
@@ -841,63 +359,26 @@ export default function Tags() {
         )}
 
         {/* Pagination */}
-        {filteredTags.length > itemsPerPage && (
-          <div className="px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-gray-500">
-              Menampilkan {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredTags.length)} dari {filteredTags.length} tag
-            </p>
-
-            <div className="flex gap-2">
-              <button
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1 ${currentPage === 1
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "border border-gray-200 hover:bg-gray-50 text-gray-700"
-                  }`}
-              >
-                <ChevronLeft size={16} />
-                Sebelumnya
+        {filtered.length > perPage && (
+          <div className="px-4 py-3 border-t border-gray-50 flex items-center justify-between">
+            <p className="text-[11px] text-gray-400">{(page-1)*perPage+1}–{Math.min(page*perPage, filtered.length)} dari {filtered.length}</p>
+            <div className="flex items-center gap-1">
+              <button onClick={() => setPage(p => Math.max(p-1,1))} disabled={page===1}
+                className="p-1.5 rounded-md border border-gray-200 text-gray-400 hover:bg-gray-50 transition disabled:opacity-30 disabled:cursor-not-allowed">
+                <ChevronLeft size={13} />
               </button>
-
-              <div className="flex gap-1">
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  let pageNum;
-                  if (totalPages <= 5) {
-                    pageNum = i + 1;
-                  } else if (currentPage <= 3) {
-                    pageNum = i + 1;
-                  } else if (currentPage >= totalPages - 2) {
-                    pageNum = totalPages - 4 + i;
-                  } else {
-                    pageNum = currentPage - 2 + i;
-                  }
-
-                  return (
-                    <button
-                      key={pageNum}
-                      onClick={() => setCurrentPage(pageNum)}
-                      className={`min-w-[36px] h-9 rounded-lg text-sm font-medium transition ${currentPage === pageNum
-                        ? "bg-blue-700 text-white"
-                        : "hover:bg-gray-100 text-gray-700"
-                        }`}
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                })}
-              </div>
-
-              <button
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1 ${currentPage === totalPages
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "border border-gray-200 hover:bg-gray-50 text-gray-700"
-                  }`}
-              >
-                Selanjutnya
-                <ChevronRight size={16} />
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let n = totalPages <= 5 ? i+1 : page <= 3 ? i+1 : page >= totalPages-2 ? totalPages-4+i : page-2+i;
+                return (
+                  <button key={n} onClick={() => setPage(n)}
+                    className={`min-w-[28px] h-7 rounded-md text-xs font-medium transition ${page===n ? "bg-blue-600 text-white" : "text-gray-500 hover:bg-gray-100"}`}>
+                    {n}
+                  </button>
+                );
+              })}
+              <button onClick={() => setPage(p => Math.min(p+1,totalPages))} disabled={page===totalPages}
+                className="p-1.5 rounded-md border border-gray-200 text-gray-400 hover:bg-gray-50 transition disabled:opacity-30 disabled:cursor-not-allowed">
+                <ChevronRight size={13} />
               </button>
             </div>
           </div>

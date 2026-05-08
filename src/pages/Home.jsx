@@ -1,6 +1,6 @@
 import Navbar from "../components/layout/Navbar";
 import Hero from "../components/Hero";
-import BestSeller from "../components/BestSeller";
+import BestSeller from "../components/LatestProduct";
 import About from "../components/About";
 import Services from "../components/Services";
 import Promo from "../components/Promo";

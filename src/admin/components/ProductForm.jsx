@@ -1,732 +1,495 @@
 import { useEffect, useState } from "react";
 import {
     uploadProductImage,
-    uploadMultipleImages
+    uploadMultipleImages,
 } from "../../services/storage";
 import { supabase } from "../../services/supabase";
 import {
-    Upload,
-    X,
-    Image as ImageIcon,
-    Cpu,
-    MemoryStick,
-    HardDrive,
-    Monitor,
-    Battery,
-    Gamepad2,
-    Laptop,
-    Tag,
-    Package,
-    DollarSign,
-    Layers,
-    Link2,
-    CheckCircle,
-    AlertCircle,
-    Percent,
-    Sparkles
+    Upload, X, Image as ImageIcon, Cpu, MemoryStick,
+    HardDrive, Monitor, Battery, Gamepad2, Laptop, Tag,
+    Package, DollarSign, Layers, Link2, Percent, Sparkles, ChevronDown
 } from "lucide-react";
 import { useToast } from "../context/ToastContext";
 
-export default function ProductForm({
-    form,
-    setForm,
-    onSubmit,
-    buttonText
-}) {
+function slugify(text) {
+    return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/[\s_]+/g, "-")
+        .replace(/[^\w\-]+/g, "")
+        .replace(/\-\-+/g, "-")
+        .replace(/^-+|-+$/g, "");
+}
+
+const SECTIONS = [
+    { id: "basic", label: "Basic Info", icon: Package },
+    { id: "images", label: "Images", icon: ImageIcon },
+    { id: "specs", label: "Specs", icon: Cpu },
+    { id: "tags", label: "Tags", icon: Tag },
+];
+
+function Field({ label, required, hint, children }) {
+    return (
+        <div className="space-y-1.5">
+            <label className="flex items-center gap-1 text-[11px] font-medium text-gray-500 uppercase tracking-wider">
+                {label}
+                {required && <span className="text-red-400">*</span>}
+            </label>
+            {children}
+            {hint && <p className="text-[11px] text-gray-400">{hint}</p>}
+        </div>
+    );
+}
+
+function Input({ icon: Icon, ...props }) {
+    return (
+        <div className="relative">
+            {Icon && <Icon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />}
+            <input
+                {...props}
+                className={`w-full bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800 placeholder-gray-400
+          focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition
+          py-2.5 pr-3 ${Icon ? "pl-9" : "pl-3"} ${props.className || ""}`}
+            />
+        </div>
+    );
+}
+
+function Select({ children, ...props }) {
+    return (
+        <div className="relative">
+            <select
+                {...props}
+                className="w-full bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800
+          focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-white
+          transition py-2.5 pl-3 pr-8 appearance-none cursor-pointer"
+            >
+                {children}
+            </select>
+            <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+        </div>
+    );
+}
+
+export default function ProductForm({ form, setForm, onSubmit, buttonText }) {
     const [brands, setBrands] = useState([]);
     const [categories, setCategories] = useState([]);
     const [tags, setTags] = useState([]);
     const [uploading, setUploading] = useState(false);
     const [activeSection, setActiveSection] = useState("basic");
     const [isDiscounted, setIsDiscounted] = useState(false);
+    const [slugManual, setSlugManual] = useState(false);
     const { showToast } = useToast();
 
     useEffect(() => {
         loadData();
-        // Cek apakah produk memiliki diskon
         if (form.normal_price && form.price && Number(form.normal_price) > Number(form.price)) {
             setIsDiscounted(true);
-        } else if (form.price && form.price > 0) {
-            // Jika tidak ada diskon, set normal_price = price
-            setIsDiscounted(false);
         }
+        if (form.slug) setSlugManual(true);
     }, []);
+
+    // Auto-slug dari nama produk
+    useEffect(() => {
+        if (!slugManual && form.name) {
+            setForm((prev) => ({ ...prev, slug: slugify(form.name) }));
+        }
+    }, [form.name, slugManual]);
 
     async function loadData() {
         try {
-            const { data: brandsData } = await supabase
-                .from("brands")
-                .select("*");
-            const { data: categoriesData } = await supabase
-                .from("categories")
-                .select("*");
-            const { data: tagsData } = await supabase
-                .from("tags")
-                .select("*");
-
-            setBrands(brandsData || []);
-            setCategories(categoriesData || []);
-            setTags(tagsData || []);
-        } catch (error) {
-            console.error(error);
+            const [{ data: b }, { data: c }, { data: t }] = await Promise.all([
+                supabase.from("brands").select("*"),
+                supabase.from("categories").select("*"),
+                supabase.from("tags").select("*"),
+            ]);
+            setBrands(b || []);
+            setCategories(c || []);
+            setTags(t || []);
+        } catch {
             showToast("Gagal memuat data", "error");
         }
     }
 
     async function handleImageUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (!file.type.startsWith("image/")) return showToast("File harus gambar", "error");
+        if (file.size > 5 * 1024 * 1024) return showToast("Maks 5MB", "error");
         try {
             setUploading(true);
-            const file = e.target.files[0];
-            if (!file) return;
-
-            if (!file.type.startsWith('image/')) {
-                showToast("File harus berupa gambar", "error");
-                return;
-            }
-
-            if (file.size > 5 * 1024 * 1024) {
-                showToast("Ukuran file maksimal 5MB", "error");
-                return;
-            }
-
-            const imageUrl = await uploadProductImage(file);
-            setForm({ ...form, thumbnail: imageUrl });
-            showToast("Thumbnail berhasil diupload", "success");
-        } catch (error) {
-            console.error(error);
-            showToast(error.message || "Gagal upload gambar", "error");
+            const url = await uploadProductImage(file);
+            setForm({ ...form, thumbnail: url });
+            showToast("Thumbnail terupload", "success");
+        } catch (err) {
+            showToast(err.message || "Gagal upload", "error");
         } finally {
             setUploading(false);
         }
     }
 
     async function handleGalleryUpload(e) {
+        const files = Array.from(e.target.files);
+        if (!files.length) return;
+        for (const f of files) {
+            if (!f.type.startsWith("image/")) return showToast("Semua file harus gambar", "error");
+            if (f.size > 5 * 1024 * 1024) return showToast("Maks 5MB per gambar", "error");
+        }
         try {
             setUploading(true);
-            const files = Array.from(e.target.files);
-            if (!files.length) return;
-
-            for (const file of files) {
-                if (!file.type.startsWith('image/')) {
-                    showToast("Semua file harus berupa gambar", "error");
-                    return;
-                }
-                if (file.size > 5 * 1024 * 1024) {
-                    showToast("Ukuran file maksimal 5MB per gambar", "error");
-                    return;
-                }
-            }
-
             const urls = await uploadMultipleImages(files);
-            setForm({
-                ...form,
-                gallery: [...(form.gallery || []), ...urls]
-            });
-            showToast(`${urls.length} gambar berhasil diupload`, "success");
-        } catch (error) {
-            console.error(error);
-            showToast(error.message || "Gagal upload galeri", "error");
+            setForm({ ...form, gallery: [...(form.gallery || []), ...urls] });
+            showToast(`${urls.length} gambar diupload`, "success");
+        } catch (err) {
+            showToast(err.message || "Gagal upload", "error");
         } finally {
             setUploading(false);
         }
     }
 
-    // Handle perubahan toggle diskon
     const handleDiscountToggle = (e) => {
-        const checked = e.target.checked;
-        setIsDiscounted(checked);
-        
-        if (!checked) {
-            // Jika tidak diskon, set normal_price = price
-            setForm({ 
-                ...form, 
-                normal_price: form.price,
-            });
-        } else {
-            // Jika diskon diaktifkan, set normal_price dari price jika belum ada
-            if (!form.normal_price && form.price) {
-                setForm({ 
-                    ...form, 
-                    normal_price: form.price,
-                });
-            }
-        }
+        setIsDiscounted(e.target.checked);
+        if (!e.target.checked) setForm({ ...form, normal_price: form.price });
     };
 
-    // Handle perubahan harga normal
-    const handleNormalPriceChange = (e) => {
-        const normalPrice = e.target.value === "" ? "" : Number(e.target.value);
-        setForm({ ...form, normal_price: normalPrice });
-        
-        // Jika diskon aktif dan harga normal < harga diskon, sesuaikan
-        if (isDiscounted && normalPrice && form.price && Number(normalPrice) < Number(form.price)) {
-            setForm({ ...form, normal_price: normalPrice, price: normalPrice });
-            showToast("Harga normal tidak boleh lebih kecil dari harga diskon", "warning");
-        }
-    };
-
-    // Handle perubahan harga diskon
-    const handleDiscountPriceChange = (e) => {
-        const discountPrice = e.target.value === "" ? "" : Number(e.target.value);
-        setForm({ ...form, price: discountPrice });
-        
-        // Jika diskon aktif dan harga diskon > harga normal
-        if (isDiscounted && form.normal_price && discountPrice && Number(discountPrice) > Number(form.normal_price)) {
-            showToast("Harga diskon tidak boleh lebih besar dari harga normal", "warning");
-        }
-    };
-
-    // Handle perubahan harga biasa (tanpa diskon)
-    const handleRegularPriceChange = (e) => {
-        const price = e.target.value === "" ? "" : Number(e.target.value);
-        setForm({ 
-            ...form, 
-            price: price,
-            normal_price: price  // Untuk produk tanpa diskon, normal_price = price
-        });
-    };
-
-    const sections = [
-        { id: "basic", name: "Informasi Dasar", icon: Package },
-        { id: "images", name: "Galeri Produk", icon: ImageIcon },
-        { id: "specs", name: "Spesifikasi", icon: Cpu },
-        { id: "tags", name: "Tags & Kategori", icon: Tag }
-    ];
-
-    // Hitung persentase diskon
-    const discountPercent = form.normal_price && form.price && Number(form.normal_price) > Number(form.price)
-        ? Math.round(((Number(form.normal_price) - Number(form.price)) / Number(form.normal_price)) * 100)
-        : 0;
+    const discountPercent =
+        form.normal_price && form.price && Number(form.normal_price) > Number(form.price)
+            ? Math.round(((Number(form.normal_price) - Number(form.price)) / Number(form.normal_price)) * 100)
+            : 0;
 
     return (
-        <form onSubmit={onSubmit} className="max-w-6xl mx-auto space-y-6">
-            {/* Header */}
-            <div className="bg-white rounded-2xl shadow-sm overflow-hidden sticky top-0 z-10">
-                <div className="px-6 py-5 border-b border-gray-100">
-                    <h1 className="text-2xl font-bold text-gray-800">
-                        {buttonText === "Update" ? "Edit Produk" : "Tambah Produk Baru"}
-                    </h1>
-                    <p className="text-sm text-gray-500 mt-1">
-                        Lengkapi informasi produk laptop Anda dengan detail
-                    </p>
+        <form onSubmit={onSubmit} className="max-w-3xl mx-auto space-y-4">
+
+            {/* Upload indicator */}
+            {uploading && (
+                <div className="fixed top-3 right-3 z-50 bg-gray-900 text-white text-xs px-3 py-2 rounded-lg shadow-xl flex items-center gap-2">
+                    <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Uploading...
+                </div>
+            )}
+
+            {/* Section Tabs */}
+            <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
+                <div className="flex border-b border-gray-100">
+                    {SECTIONS.map(({ id, label, icon: Icon }) => (
+                        <button
+                            key={id}
+                            type="button"
+                            onClick={() => setActiveSection(id)}
+                            className={`flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-medium transition-all
+                ${activeSection === id
+                                    ? "bg-blue-50 text-blue-600 border-b-2 border-blue-500"
+                                    : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
+                                }`}
+                        >
+                            <Icon size={13} />
+                            <span className="hidden sm:inline">{label}</span>
+                        </button>
+                    ))}
                 </div>
 
-                <div className="px-6 py-3 bg-gray-50/50 flex flex-wrap gap-2">
-                    {sections.map((section) => {
-                        const Icon = section.icon;
-                        return (
-                            <button
-                                key={section.id}
-                                type="button"
-                                onClick={() => setActiveSection(section.id)}
-                                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${activeSection === section.id
-                                    ? "bg-blue-700 text-white shadow-sm"
-                                    : "text-gray-600 hover:bg-gray-100"
-                                    }`}
-                            >
-                                <Icon size={16} />
-                                <span className="text-sm">{section.name}</span>
-                            </button>
-                        );
-                    })}
+                <div className="p-5">
+                    {/* ── BASIC ── */}
+                    {activeSection === "basic" && (
+                        <div className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                                <Field label="Nama Produk" required>
+                                    <Input
+                                        icon={Laptop}
+                                        type="text"
+                                        placeholder="ASUS ROG Zephyrus G14"
+                                        value={form.name || ""}
+                                        onChange={(e) => setForm({ ...form, name: e.target.value })}
+                                    />
+                                </Field>
+                                <Field label="Slug">
+                                    <div className="relative">
+                                        <Link2 size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                                        <input
+                                            type="text"
+                                            value={form.slug || ""}
+                                            onChange={(e) => {
+                                                setSlugManual(true);
+                                                setForm({ ...form, slug: e.target.value });
+                                            }}
+                                            placeholder="auto-generated"
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-600 placeholder-gray-300
+                        focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-white
+                        transition py-2.5 pl-9 pr-3 font-mono text-xs"
+                                        />
+                                        {slugManual && (
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setSlugManual(false);
+                                                    setForm({ ...form, slug: slugify(form.name || "") });
+                                                }}
+                                                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-blue-500 hover:text-blue-700"
+                                            >
+                                                auto
+                                            </button>
+                                        )}
+                                    </div>
+                                    <p className="text-[11px] text-gray-400">
+                                        {slugManual ? "Manual · klik 'auto' untuk reset" : "Otomatis dari nama produk"}
+                                    </p>
+                                </Field>
+                            </div>
+
+                            {/* Harga */}
+                            <div className="border border-gray-100 rounded-lg p-4 space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">Harga</span>
+                                    <label className="flex items-center gap-2 cursor-pointer">
+                                        <div className="relative">
+                                            <input type="checkbox" className="sr-only" checked={isDiscounted} onChange={handleDiscountToggle} />
+                                            <div className={`w-8 h-4 rounded-full transition-colors ${isDiscounted ? "bg-blue-500" : "bg-gray-200"}`} />
+                                            <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full shadow transition-all ${isDiscounted ? "left-4.5 translate-x-1" : "left-0.5"}`} />
+                                        </div>
+                                        <span className="text-xs text-gray-500 flex items-center gap-1">
+                                            <Sparkles size={11} className="text-yellow-400" /> Diskon
+                                        </span>
+                                    </label>
+                                </div>
+
+                                {isDiscounted ? (
+                                    <div className="space-y-3">
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <Field label="Harga Normal" required>
+                                                <Input
+                                                    icon={DollarSign}
+                                                    type="number"
+                                                    placeholder="0"
+                                                    value={form.normal_price || ""}
+                                                    onChange={(e) => setForm({ ...form, normal_price: Number(e.target.value) || "" })}
+                                                />
+                                            </Field>
+                                            <Field label="Harga Diskon" required>
+                                                <Input
+                                                    icon={Percent}
+                                                    type="number"
+                                                    placeholder="0"
+                                                    value={form.price || ""}
+                                                    onChange={(e) => setForm({ ...form, price: Number(e.target.value) || "" })}
+                                                    className="border-red-200 bg-red-50 focus:border-red-400 focus:ring-red-300"
+                                                />
+                                            </Field>
+                                        </div>
+                                        {discountPercent > 0 && (
+                                            <div className="flex items-center gap-2 px-3 py-2 bg-red-50 border border-red-100 rounded-lg">
+                                                <span className="text-[10px] font-bold text-red-600 bg-red-100 px-1.5 py-0.5 rounded">-{discountPercent}%</span>
+                                                <span className="text-xs text-red-500">
+                                                    Hemat Rp {(Number(form.normal_price) - Number(form.price)).toLocaleString("id-ID")}
+                                                </span>
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <Field label="Harga Jual" required>
+                                        <Input
+                                            icon={DollarSign}
+                                            type="number"
+                                            placeholder="0"
+                                            value={form.price || ""}
+                                            onChange={(e) => {
+                                                const v = Number(e.target.value) || "";
+                                                setForm({ ...form, price: v, normal_price: v });
+                                            }}
+                                        />
+                                    </Field>
+                                )}
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <Field label="Stok" required>
+                                    <Input
+                                        icon={Package}
+                                        type="number"
+                                        placeholder="0"
+                                        value={form.stock || ""}
+                                        onChange={(e) => setForm({ ...form, stock: e.target.value })}
+                                    />
+                                </Field>
+                            </div>
+
+                            <Field label="Deskripsi Singkat">
+                                <textarea
+                                    rows={2}
+                                    placeholder="Deskripsi singkat produk..."
+                                    value={form.short_description || ""}
+                                    onChange={(e) => setForm({ ...form, short_description: e.target.value })}
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800 placeholder-gray-400
+                    focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-white
+                    transition py-2.5 px-3 resize-none"
+                                />
+                            </Field>
+
+                            <Field label="Deskripsi Lengkap">
+                                <textarea
+                                    rows={4}
+                                    placeholder="Deskripsi lengkap produk..."
+                                    value={form.description || ""}
+                                    onChange={(e) => setForm({ ...form, description: e.target.value })}
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800 placeholder-gray-400
+                    focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-white
+                    transition py-2.5 px-3 resize-none"
+                                />
+                            </Field>
+                        </div>
+                    )}
+
+                    {/* ── IMAGES ── */}
+                    {activeSection === "images" && (
+                        <div className="space-y-5">
+                            <Field label="Thumbnail">
+                                {form.thumbnail ? (
+                                    <div className="flex items-center gap-3">
+                                        <img src={form.thumbnail} alt="" className="w-20 h-20 rounded-lg object-cover border border-gray-200" />
+                                        <div>
+                                            <p className="text-xs text-green-600 font-medium mb-1.5">✓ Terupload</p>
+                                            <button
+                                                type="button"
+                                                onClick={() => setForm({ ...form, thumbnail: "" })}
+                                                className="text-xs text-red-500 hover:text-red-700 flex items-center gap-1"
+                                            >
+                                                <X size={11} /> Hapus
+                                            </button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <label htmlFor="thumb-upload" className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-lg py-8 cursor-pointer hover:border-blue-400 hover:bg-blue-50/50 transition">
+                                        <Upload size={22} className="text-gray-300 mb-2" />
+                                        <span className="text-xs text-gray-400">Klik untuk upload thumbnail</span>
+                                        <span className="text-[10px] text-gray-300 mt-1">PNG, JPG, WEBP · max 5MB</span>
+                                        <input id="thumb-upload" type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                                    </label>
+                                )}
+                            </Field>
+
+                            <Field label="Galeri">
+                                <label htmlFor="gallery-upload" className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-lg py-6 cursor-pointer hover:border-blue-400 hover:bg-blue-50/50 transition">
+                                    <Upload size={18} className="text-gray-300 mb-1.5" />
+                                    <span className="text-xs text-gray-400">Upload beberapa foto sekaligus</span>
+                                    <input id="gallery-upload" type="file" multiple accept="image/*" onChange={handleGalleryUpload} className="hidden" />
+                                </label>
+                                {form.gallery?.length > 0 && (
+                                    <div className="grid grid-cols-4 gap-2 mt-3">
+                                        {form.gallery.map((img, i) => (
+                                            <div key={i} className="relative group">
+                                                <img src={img} alt="" className="w-full h-20 rounded-lg object-cover border border-gray-100" />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setForm({ ...form, gallery: form.gallery.filter((_, idx) => idx !== i) })}
+                                                    className="absolute top-1 right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+                                                >
+                                                    <X size={10} className="text-white" />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </Field>
+                        </div>
+                    )}
+
+                    {/* ── SPECS ── */}
+                    {activeSection === "specs" && (
+                        <div className="grid grid-cols-2 gap-4">
+                            {[
+                                { key: "processor", label: "Processor", icon: Cpu, placeholder: "Intel Core i7-12700H" },
+                                { key: "ram", label: "RAM", icon: MemoryStick, placeholder: "16GB DDR5" },
+                                { key: "storage", label: "Storage", icon: HardDrive, placeholder: "512GB SSD NVMe" },
+                                { key: "gpu", label: "GPU", icon: Gamepad2, placeholder: "NVIDIA RTX 3060" },
+                                { key: "display", label: "Display", icon: Monitor, placeholder: "14\" 2.8K 120Hz" },
+                                { key: "system_os", label: "OS", icon: Layers, placeholder: "Windows 11 Home" },
+                            ].map(({ key, label, icon, placeholder }) => (
+                                <Field key={key} label={label}>
+                                    <Input
+                                        icon={icon}
+                                        type="text"
+                                        placeholder={placeholder}
+                                        value={form.specs?.[key] || ""}
+                                        onChange={(e) => setForm({ ...form, specs: { ...form.specs, [key]: e.target.value } })}
+                                    />
+                                </Field>
+                            ))}
+                            <div className="col-span-2">
+                                <Field label="Battery">
+                                    <Input
+                                        icon={Battery}
+                                        type="text"
+                                        placeholder="76WHrs, up to 10 hours"
+                                        value={form.specs?.battery || ""}
+                                        onChange={(e) => setForm({ ...form, specs: { ...form.specs, battery: e.target.value } })}
+                                    />
+                                </Field>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ── TAGS ── */}
+                    {activeSection === "tags" && (
+                        <div className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                                <Field label="Brand">
+                                    <Select
+                                        value={form.brand_id || ""}
+                                        onChange={(e) => setForm({ ...form, brand_id: e.target.value })}
+                                    >
+                                        <option value="">Pilih Brand</option>
+                                        {brands.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
+                                    </Select>
+                                </Field>
+                                <Field label="Kategori">
+                                    <Select
+                                        value={form.category_id || ""}
+                                        onChange={(e) => setForm({ ...form, category_id: e.target.value })}
+                                    >
+                                        <option value="">Pilih Kategori</option>
+                                        {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                                    </Select>
+                                </Field>
+                            </div>
+
+                            <Field label="Tags">
+                                <div className="flex flex-wrap gap-1.5 mt-1">
+                                    {tags.map((tag) => {
+                                        const active = form.tag_ids?.includes(tag.id);
+                                        return (
+                                            <button
+                                                key={tag.id}
+                                                type="button"
+                                                onClick={() =>
+                                                    setForm({
+                                                        ...form,
+                                                        tag_ids: active
+                                                            ? form.tag_ids.filter((id) => id !== tag.id)
+                                                            : [...(form.tag_ids || []), tag.id],
+                                                    })
+                                                }
+                                                className={`px-2.5 py-1 rounded-md text-xs font-medium transition
+                          ${active
+                                                        ? "bg-blue-500 text-white"
+                                                        : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                                                    }`}
+                                            >
+                                                {tag.name}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </Field>
+                        </div>
+                    )}
                 </div>
             </div>
 
-            {uploading && (
-                <div className="fixed top-4 right-4 z-50 bg-blue-700 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2">
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span className="text-sm">Uploading...</span>
-                </div>
-            )}
-
-            {/* Basic Information Section */}
-            {activeSection === "basic" && (
-                <div className="bg-white rounded-2xl shadow-sm p-6 space-y-5">
-                    {/* Nama Produk */}
-                    <div className="grid md:grid-cols-2 gap-5">
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Nama Produk <span className="text-red-500">*</span>
-                            </label>
-                            <div className="relative">
-                                <Laptop className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                                <input
-                                    type="text"
-                                    placeholder="Contoh: ASUS ROG Zephyrus G14"
-                                    value={form.name || ""}
-                                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                                    className="w-full border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Slug Produk
-                            </label>
-                            <div className="relative">
-                                <Link2 className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                                <input
-                                    type="text"
-                                    placeholder="asus-rog-zephyrus-g14"
-                                    value={form.slug || ""}
-                                    onChange={(e) => setForm({ ...form, slug: e.target.value })}
-                                    className="w-full border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Harga Section */}
-                    <div className="border-t border-gray-100 pt-5">
-                        <div className="flex items-center justify-between mb-4">
-                            <label className="block text-sm font-semibold text-gray-700">
-                                Pengaturan Harga
-                            </label>
-                            <label className="relative inline-flex items-center cursor-pointer">
-                                <input
-                                    type="checkbox"
-                                    checked={isDiscounted}
-                                    onChange={handleDiscountToggle}
-                                    className="sr-only peer"
-                                />
-                                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-700"></div>
-                                <span className="ml-3 text-sm font-medium text-gray-700 flex items-center gap-1">
-                                    <Sparkles size={14} className="text-yellow-500" />
-                                    Produk Diskon
-                                </span>
-                            </label>
-                        </div>
-
-                        {isDiscounted ? (
-                            // Mode DISKON - Tampilkan 2 input harga
-                            <div className="grid md:grid-cols-2 gap-5">
-                                {/* Harga Normal */}
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                        Harga Normal <span className="text-red-500">*</span>
-                                    </label>
-                                    <div className="relative">
-                                        <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                                        <input
-                                            type="number"
-                                            placeholder="Harga sebelum diskon"
-                                            value={form.normal_price || ""}
-                                            onChange={handleNormalPriceChange}
-                                            className="w-full border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
-                                        />
-                                    </div>
-                                    <p className="text-xs text-gray-400 mt-1">Harga sebelum diskon</p>
-                                </div>
-
-                                {/* Harga Diskon */}
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                        Harga Diskon <span className="text-red-500">*</span>
-                                    </label>
-                                    <div className="relative">
-                                        <Percent className="absolute left-4 top-1/2 transform -translate-y-1/2 text-red-500" size={18} />
-                                        <input
-                                            type="number"
-                                            placeholder="Harga setelah diskon"
-                                            value={form.price || ""}
-                                            onChange={handleDiscountPriceChange}
-                                            className="w-full border border-red-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition bg-red-50"
-                                        />
-                                    </div>
-                                    <p className="text-xs text-red-500 mt-1">Harga spesial diskon</p>
-                                </div>
-
-                                {/* Informasi Diskon */}
-                                {form.normal_price && form.price && Number(form.normal_price) > Number(form.price) && (
-                                    <div className="md:col-span-2 bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-xl p-3 flex items-center gap-3">
-                                        <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                                            <Percent size={20} className="text-red-600" />
-                                        </div>
-                                        <div className="flex-1">
-                                            <p className="text-sm font-semibold text-red-700">🔥 Promo Aktif!</p>
-                                            <p className="text-xs text-red-600">
-                                                Diskon {discountPercent}% • Hemat Rp {(Number(form.normal_price) - Number(form.price)).toLocaleString('id-ID')}
-                                            </p>
-                                        </div>
-                                        <div className="text-right">
-                                            <p className="text-lg font-black text-red-700">
-                                                {discountPercent}% OFF
-                                            </p>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        ) : (
-                            // Mode NORMAL - Tampilkan 1 input harga
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Harga Produk <span className="text-red-500">*</span>
-                                </label>
-                                <div className="relative">
-                                    <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                                    <input
-                                        type="number"
-                                        placeholder="Harga produk"
-                                        value={form.price || ""}
-                                        onChange={handleRegularPriceChange}
-                                        className="w-full border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
-                                    />
-                                </div>
-                                <p className="text-xs text-gray-400 mt-1">Harga jual produk</p>
-                                
-                                {form.price && (
-                                    <div className="mt-3 bg-gray-50 border border-gray-200 rounded-xl p-3 flex items-center gap-2">
-                                        <CheckCircle size={18} className="text-green-500" />
-                                        <p className="text-sm text-gray-600">Produk tanpa diskon</p>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Stok */}
-                    <div className="grid md:grid-cols-2 gap-5">
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Stok <span className="text-red-500">*</span>
-                            </label>
-                            <div className="relative">
-                                <Package className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                                <input
-                                    type="number"
-                                    placeholder="0"
-                                    value={form.stock || ""}
-                                    onChange={(e) => setForm({ ...form, stock: e.target.value })}
-                                    className="w-full border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Deskripsi */}
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                            Deskripsi Singkat
-                        </label>
-                        <textarea
-                            placeholder="Tulis deskripsi singkat tentang produk..."
-                            value={form.short_description || ""}
-                            onChange={(e) => setForm({ ...form, short_description: e.target.value })}
-                            rows="3"
-                            className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition resize-none"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                            Deskripsi Lengkap
-                        </label>
-                        <textarea
-                            placeholder="Tulis deskripsi lengkap produk..."
-                            value={form.description || ""}
-                            onChange={(e) => setForm({ ...form, description: e.target.value })}
-                            rows="6"
-                            className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition resize-none"
-                        />
-                    </div>
-                </div>
-            )}
-
-            {/* Images Section - tetap sama */}
-            {activeSection === "images" && (
-                <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6">
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                            Thumbnail Produk
-                        </label>
-                        <div className={`border-2 border-dashed rounded-xl p-6 text-center transition ${form.thumbnail ? "border-green-300 bg-green-50" : "border-gray-200 hover:border-blue-700"
-                            }`}>
-                            {form.thumbnail ? (
-                                <div className="relative inline-block">
-                                    <img src={form.thumbnail} alt="Thumbnail" className="w-40 h-40 rounded-xl object-cover shadow-sm" />
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            setForm({ ...form, thumbnail: "" });
-                                            showToast("Thumbnail dihapus", "info");
-                                        }}
-                                        className="absolute -top-2 -right-2 bg-red-500 text-white w-6 h-6 rounded-full text-sm hover:bg-red-600 transition flex items-center justify-center"
-                                    >
-                                        <X size={14} />
-                                    </button>
-                                    <p className="text-sm text-green-600 mt-2">✓ Thumbnail terupload</p>
-                                </div>
-                            ) : (
-                                <>
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleImageUpload}
-                                        className="hidden"
-                                        id="thumbnail-upload"
-                                    />
-                                    <label htmlFor="thumbnail-upload" className="cursor-pointer inline-flex flex-col items-center">
-                                        <Upload className="w-12 h-12 text-gray-400 mb-3" />
-                                        <span className="text-blue-700 font-medium">Klik untuk upload thumbnail</span>
-                                        <p className="text-xs text-gray-500 mt-1">PNG, JPG, WEBP (Max 5MB)</p>
-                                    </label>
-                                </>
-                            )}
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                            Galeri Produk
-                        </label>
-                        <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-blue-700 transition">
-                            <input
-                                type="file"
-                                multiple
-                                accept="image/*"
-                                onChange={handleGalleryUpload}
-                                className="hidden"
-                                id="gallery-upload"
-                            />
-                            <label htmlFor="gallery-upload" className="cursor-pointer inline-flex flex-col items-center">
-                                <Upload className="w-12 h-12 text-gray-400 mb-3" />
-                                <span className="text-blue-700 font-medium">Upload foto galeri</span>
-                                <p className="text-xs text-gray-500 mt-1">Bisa upload banyak foto sekaligus</p>
-                            </label>
-                        </div>
-
-                        {form.gallery && form.gallery.length > 0 && (
-                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-5">
-                                {form.gallery.map((image, index) => (
-                                    <div key={index} className="relative group">
-                                        <img src={image} alt="" className="w-full h-32 rounded-xl object-cover shadow-sm" />
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                const updatedGallery = form.gallery.filter((_, i) => i !== index);
-                                                setForm({ ...form, gallery: updatedGallery });
-                                                showToast("Gambar dihapus dari galeri", "info");
-                                            }}
-                                            className="absolute top-2 right-2 bg-red-500 text-white w-6 h-6 rounded-full text-sm opacity-0 group-hover:opacity-100 transition hover:bg-red-600 flex items-center justify-center"
-                                        >
-                                            <X size={14} />
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
-
-            {/* Specifications Section - tetap sama */}
-            {activeSection === "specs" && (
-                <div className="bg-white rounded-2xl shadow-sm p-6">
-                    <div className="grid md:grid-cols-2 gap-5">
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                <Cpu size={16} className="inline mr-2" />
-                                Processor
-                            </label>
-                            <input
-                                type="text"
-                                placeholder="Contoh: Intel Core i7-12700H"
-                                value={form.specs?.processor || ""}
-                                onChange={(e) => setForm({
-                                    ...form,
-                                    specs: { ...form.specs, processor: e.target.value }
-                                })}
-                                className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                <MemoryStick size={16} className="inline mr-2" />
-                                RAM
-                            </label>
-                            <input
-                                type="text"
-                                placeholder="Contoh: 16GB DDR5"
-                                value={form.specs?.ram || ""}
-                                onChange={(e) => setForm({
-                                    ...form,
-                                    specs: { ...form.specs, ram: e.target.value }
-                                })}
-                                className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                <HardDrive size={16} className="inline mr-2" />
-                                Storage
-                            </label>
-                            <input
-                                type="text"
-                                placeholder="Contoh: 512GB SSD NVMe"
-                                value={form.specs?.storage || ""}
-                                onChange={(e) => setForm({
-                                    ...form,
-                                    specs: { ...form.specs, storage: e.target.value }
-                                })}
-                                className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                <Gamepad2 size={16} className="inline mr-2" />
-                                GPU
-                            </label>
-                            <input
-                                type="text"
-                                placeholder="Contoh: NVIDIA RTX 3060"
-                                value={form.specs?.gpu || ""}
-                                onChange={(e) => setForm({
-                                    ...form,
-                                    specs: { ...form.specs, gpu: e.target.value }
-                                })}
-                                className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                <Monitor size={16} className="inline mr-2" />
-                                Display
-                            </label>
-                            <input
-                                type="text"
-                                placeholder="Contoh: 14 inch 2.8K 120Hz"
-                                value={form.specs?.display || ""}
-                                onChange={(e) => setForm({
-                                    ...form,
-                                    specs: { ...form.specs, display: e.target.value }
-                                })}
-                                className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                <Layers size={16} className="inline mr-2" />
-                                Sistem Operasi
-                            </label>
-                            <input
-                                type="text"
-                                placeholder="Contoh: Windows 11 Home"
-                                value={form.specs?.system_os || ""}
-                                onChange={(e) => setForm({
-                                    ...form,
-                                    specs: { ...form.specs, system_os: e.target.value }
-                                })}
-                                className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
-                            />
-                        </div>
-
-                        <div className="md:col-span-2">
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                <Battery size={16} className="inline mr-2" />
-                                Battery
-                            </label>
-                            <input
-                                type="text"
-                                placeholder="Contoh: 76WHrs, up to 10 hours"
-                                value={form.specs?.battery || ""}
-                                onChange={(e) => setForm({
-                                    ...form,
-                                    specs: { ...form.specs, battery: e.target.value }
-                                })}
-                                className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
-                            />
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Tags & Categories Section */}
-            {activeSection === "tags" && (
-                <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6">
-                    <div className="grid md:grid-cols-2 gap-5">
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Brand
-                            </label>
-                            <select
-                                value={form.brand_id || ""}
-                                onChange={(e) => setForm({ ...form, brand_id: e.target.value })}
-                                className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition bg-white"
-                            >
-                                <option value="">Pilih Brand</option>
-                                {brands.map((brand) => (
-                                    <option key={brand.id} value={brand.id}>{brand.name}</option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Kategori
-                            </label>
-                            <select
-                                value={form.category_id || ""}
-                                onChange={(e) => setForm({ ...form, category_id: e.target.value })}
-                                className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition bg-white"
-                            >
-                                <option value="">Pilih Kategori</option>
-                                {categories.map((category) => (
-                                    <option key={category.id} value={category.id}>{category.name}</option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-3">
-                            Tags Produk
-                        </label>
-                        <div className="flex flex-wrap gap-2">
-                            {tags.map((tag) => {
-                                const checked = form.tag_ids?.includes(tag.id);
-                                return (
-                                    <button
-                                        type="button"
-                                        key={tag.id}
-                                        onClick={() => {
-                                            if (checked) {
-                                                setForm({
-                                                    ...form,
-                                                    tag_ids: form.tag_ids.filter((id) => id !== tag.id)
-                                                });
-                                                showToast(`Tag "${tag.name}" dihapus`, "info");
-                                            } else {
-                                                setForm({
-                                                    ...form,
-                                                    tag_ids: [...(form.tag_ids || []), tag.id]
-                                                });
-                                                showToast(`Tag "${tag.name}" ditambahkan`, "success");
-                                            }
-                                        }}
-                                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${checked
-                                            ? "bg-blue-700 text-white shadow-sm"
-                                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                                            }`}
-                                    >
-                                        {tag.name}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            <div className="sticky bottom-6 flex justify-end">
+            {/* Submit */}
+            <div className="flex justify-end">
                 <button
                     type="submit"
-                    className="bg-blue-700 hover:bg-blue-800 text-white px-8 py-3 rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5 flex items-center gap-2"
+                    className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm transition-all hover:shadow-md active:scale-95"
                 >
                     {buttonText === "Update" ? "Update Produk" : "Simpan Produk"}
                 </button>

@@ -1,908 +1,383 @@
 import { useEffect, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
 import {
-  Plus,
-  Search,
-  Edit,
-  Trash2,
-  Layers3,
-  RefreshCw,
-  ChevronLeft,
-  ChevronRight,
-  X,
-  ChevronDown,
-  CheckCircle,
-  AlertCircle,
-  Package,
-  Grid3x3,
-  Tag,
-  Save,
-  AlertTriangle
+  Plus, Search, Edit, Trash2, Layers3, RefreshCw,
+  ChevronLeft, ChevronRight, X, ChevronDown, Save, AlertTriangle
 } from "lucide-react";
-import {
-  getCategories,
-  createCategory,
-  updateCategory,
-  deleteCategory
-} from "../services/AdminCategories";
+import { getCategories, createCategory, updateCategory, deleteCategory } from "../services/AdminCategories";
 import { useToast } from "../context/ToastContext";
 import { useDebounce } from "../hooks/useDebounce";
 
-// Color options for categories (for preview)
-const colorOptions = [
-  { value: "purple", label: "Ungu", bg: "bg-purple-100", text: "text-purple-700" },
-  { value: "blue", label: "Biru", bg: "bg-blue-100", text: "text-blue-700" },
-  { value: "green", label: "Hijau", bg: "bg-green-100", text: "text-green-700" },
-  { value: "orange", label: "Oranye", bg: "bg-orange-100", text: "text-orange-700" },
-  { value: "red", label: "Merah", bg: "bg-red-100", text: "text-red-700" },
-  { value: "teal", label: "Teal", bg: "bg-teal-100", text: "text-teal-700" },
-];
-
-// Icon options for categories
 const iconOptions = [
-  { value: "Laptop", label: "💻 Laptop", emoji: "💻" },
-  { value: "Gaming", label: "🎮 Gaming", emoji: "🎮" },
-  { value: "Office", label: "📊 Office", emoji: "📊" },
-  { value: "Design", label: "🎨 Design", emoji: "🎨" },
-  { value: "Student", label: "📚 Student", emoji: "📚" },
-  { value: "Premium", label: "⭐ Premium", emoji: "⭐" },
-  { value: "Budget", label: "💰 Budget", emoji: "💰" },
-  { value: "Ultrabook", label: "✨ Ultrabook", emoji: "✨" },
+  { value: "Laptop",    emoji: "💻" },
+  { value: "Gaming",    emoji: "🎮" },
+  { value: "Office",    emoji: "📊" },
+  { value: "Design",    emoji: "🎨" },
+  { value: "Student",   emoji: "📚" },
+  { value: "Premium",   emoji: "⭐" },
+  { value: "Budget",    emoji: "💰" },
+  { value: "Ultrabook", emoji: "✨" },
 ];
 
-// Modal Component untuk Create/Edit Category
+function slugify(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+function getEmoji(icon) {
+  return iconOptions.find(o => o.value === icon)?.emoji || "📁";
+}
+
+// ── Shared Modal Shell ──────────────────────────────────────────────
+function Modal({ isOpen, onClose, children }) {
+  useEffect(() => {
+    if (!isOpen) return;
+    const y = window.scrollY;
+    Object.assign(document.body.style, { overflow: "hidden", position: "fixed", width: "100%", top: `-${y}px` });
+    return () => {
+      const top = document.body.style.top;
+      Object.assign(document.body.style, { overflow: "", position: "", width: "", top: "" });
+      window.scrollTo(0, parseInt(top || "0") * -1);
+    };
+  }, [isOpen]);
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)" }}
+      onClick={e => e.target === e.currentTarget && onClose()}>
+      {children}
+    </div>
+  );
+}
+
+// ── Category Form Modal ─────────────────────────────────────────────
 function CategoryModal({ isOpen, onClose, onSubmit, title, initialData, isEditing }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    slug: "",
-    icon: ""
-  });
+  const [form, setForm] = useState({ name: "", slug: "", icon: "" });
   const [errors, setErrors] = useState({});
+  const [slugManual, setSlugManual] = useState(false);
 
   useEffect(() => {
     if (initialData) {
-      setFormData({
-        name: initialData.name || "",
-        slug: initialData.slug || "",
-        icon: initialData.icon || ""
-      });
+      setForm({ name: initialData.name || "", slug: initialData.slug || "", icon: initialData.icon || "" });
+      setSlugManual(!!initialData.slug);
     } else {
-      setFormData({
-        name: "",
-        slug: "",
-        icon: ""
-      });
+      setForm({ name: "", slug: "", icon: "" });
+      setSlugManual(false);
     }
+    setErrors({});
   }, [initialData, isOpen]);
 
-  // Prevent body scroll when modal is open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.top = `-${window.scrollY}px`;
-    } else {
-      const scrollY = document.body.style.top;
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-      window.scrollTo(0, parseInt(scrollY || '0') * -1);
-    }
-    
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-    };
-  }, [isOpen]);
-
-  const generateSlug = (name) => {
-    return name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '');
-  };
-
-  const handleNameChange = (e) => {
+  const handleName = e => {
     const name = e.target.value;
-    setFormData({
-      ...formData,
-      name: name,
-      slug: generateSlug(name)
-    });
+    setForm(f => ({ ...f, name, slug: slugManual ? f.slug : slugify(name) }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
-    const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = "Nama kategori harus diisi";
-    
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-    
-    onSubmit(formData);
+    if (!form.name.trim()) return setErrors({ name: "Nama kategori harus diisi" });
+    onSubmit(form);
   };
-
-  const getIconDisplay = (icon) => {
-    const iconOption = iconOptions.find(opt => opt.value === icon);
-    return iconOption ? iconOption.emoji : (icon || "📁");
-  };
-
-  if (!isOpen) return null;
 
   return (
-    <div 
-      className="fixed inset-0 z-50 overflow-y-auto"
-      style={{ 
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        backdropFilter: 'blur(4px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '1rem'
-      }}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
-      <div 
-        className="bg-white rounded-2xl shadow-2xl max-w-md w-full"
-        style={{ maxHeight: '90vh', overflowY: 'auto' }}
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
-          <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-lg hover:bg-gray-100 transition flex-shrink-0"
-          >
-            <X size={20} className="text-gray-500" />
-          </button>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-sm" style={{ maxHeight: "90vh", overflowY: "auto" }}>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 sticky top-0 bg-white">
+          <h2 className="text-sm font-semibold text-gray-800">{title}</h2>
+          <button onClick={onClose} className="p-1 rounded-md hover:bg-gray-100 text-gray-400"><X size={15} /></button>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Nama Kategori <span className="text-red-500">*</span>
+        <form onSubmit={handleSubmit} className="p-5 space-y-4">
+          {/* Name */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">
+              Nama Kategori <span className="text-red-400">*</span>
             </label>
-            <input
-              type="text"
-              placeholder="Contoh: Gaming Laptop"
-              value={formData.name}
-              onChange={handleNameChange}
-              className={`w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 transition ${
-                errors.name ? "border-red-500 focus:ring-red-500" : "border-gray-200"
-              }`}
-              autoFocus
-            />
-            {errors.name && (
-              <p className="text-xs text-red-500 mt-1">{errors.name}</p>
-            )}
+            <input autoFocus type="text" placeholder="Gaming Laptop" value={form.name} onChange={handleName}
+              className={`w-full bg-gray-50 border rounded-lg text-sm px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:bg-white transition ${errors.name ? "border-red-300" : "border-gray-200"}`} />
+            {errors.name && <p className="text-[11px] text-red-400">{errors.name}</p>}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Slug
-            </label>
-            <input
-              type="text"
-              placeholder="gaming-laptop"
-              value={formData.slug}
-              onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 transition bg-gray-50"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Icon / Emoji
-            </label>
-            <select
-              value={formData.icon}
-              onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 bg-white text-sm"
-            >
-              <option value="">Pilih Icon</option>
-              {iconOptions.map((icon) => (
-                <option key={icon.value} value={icon.value}>
-                  {icon.emoji} {icon.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Preview */}
-          <div className="pt-4 border-t border-gray-100">
-            <p className="text-sm text-gray-500 mb-2">Preview:</p>
-            <div className="flex items-center gap-3 flex-wrap">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl flex items-center justify-center text-2xl">
-                {getIconDisplay(formData.icon)}
-              </div>
-              <div>
-                <div className="font-semibold text-gray-800">
-                  {formData.name || "Nama Kategori"}
-                </div>
-                <div className="text-xs text-gray-400">
-                  slug: {formData.slug || "slug-kategori"}
-                </div>
-              </div>
+          {/* Slug */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">Slug</label>
+            <div className="relative">
+              <input type="text" value={form.slug}
+                onChange={e => { setSlugManual(true); setForm(f => ({ ...f, slug: e.target.value })); }}
+                className="w-full bg-gray-50 border border-gray-200 rounded-lg text-xs font-mono px-3 py-2.5 pr-10 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:bg-white transition text-gray-500" />
+              {slugManual && (
+                <button type="button" onClick={() => { setSlugManual(false); setForm(f => ({ ...f, slug: slugify(f.name) })); }}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-blue-500 hover:text-blue-700">auto</button>
+              )}
             </div>
           </div>
 
-          {/* Buttons */}
-          <div className="flex gap-3 pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 transition font-medium"
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              className="flex-1 px-4 py-2.5 bg-blue-700 hover:bg-blue-800 text-white rounded-xl transition font-medium flex items-center justify-center gap-2"
-            >
-              <Save size={18} />
-              {isEditing ? "Update" : "Simpan"}
+          {/* Icon */}
+          <div className="space-y-2">
+            <label className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">Icon</label>
+            <div className="grid grid-cols-4 gap-1.5">
+              {iconOptions.map(opt => (
+                <button key={opt.value} type="button" onClick={() => setForm(f => ({ ...f, icon: opt.value }))}
+                  className={`flex flex-col items-center gap-0.5 p-2 rounded-lg text-lg transition border
+                    ${form.icon === opt.value ? "border-blue-300 bg-blue-50 ring-1 ring-blue-400" : "border-gray-100 bg-gray-50 hover:bg-gray-100"}`}>
+                  <span>{opt.emoji}</span>
+                  <span className="text-[9px] text-gray-400">{opt.value}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Preview */}
+          <div className="border border-gray-100 rounded-lg p-3 flex items-center gap-3 bg-gray-50">
+            <div className="w-9 h-9 bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg flex items-center justify-center text-xl flex-shrink-0">
+              {getEmoji(form.icon)}
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-semibold text-gray-700 truncate">{form.name || "Nama Kategori"}</p>
+              <p className="text-[10px] text-gray-400 font-mono truncate">{form.slug || "slug-kategori"}</p>
+            </div>
+          </div>
+
+          <div className="flex gap-2 pt-1">
+            <button type="button" onClick={onClose}
+              className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:bg-gray-50 transition">Batal</button>
+            <button type="submit"
+              className="flex-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition flex items-center justify-center gap-1.5">
+              <Save size={13} /> {isEditing ? "Update" : "Simpan"}
             </button>
           </div>
         </form>
       </div>
-    </div>
+    </Modal>
   );
 }
 
-// Modal Component untuk Delete Confirmation
-function DeleteConfirmModal({ isOpen, onClose, onConfirm, categoryName, isDeleting }) {
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.top = `-${window.scrollY}px`;
-    } else {
-      const scrollY = document.body.style.top;
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-      window.scrollTo(0, parseInt(scrollY || '0') * -1);
-    }
-    
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-    };
-  }, [isOpen]);
-
-  if (!isOpen) return null;
-
+// ── Delete Modal ────────────────────────────────────────────────────
+function DeleteModal({ isOpen, onClose, onConfirm, name, isDeleting }) {
   return (
-    <div 
-      className="fixed inset-0 z-50 overflow-y-auto"
-      style={{ 
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        backdropFilter: 'blur(4px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '1rem'
-      }}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-100">
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-sm">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
           <div className="flex items-center gap-2">
-            <AlertTriangle size={24} className="text-red-500" />
-            <h2 className="text-xl font-semibold text-gray-800">Konfirmasi Hapus</h2>
+            <AlertTriangle size={15} className="text-red-400" />
+            <h2 className="text-sm font-semibold text-gray-800">Hapus Kategori</h2>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-lg hover:bg-gray-100 transition flex-shrink-0"
-          >
-            <X size={20} className="text-gray-500" />
-          </button>
+          <button onClick={onClose} className="p-1 rounded-md hover:bg-gray-100 text-gray-400"><X size={15} /></button>
         </div>
-
-        {/* Content */}
-        <div className="p-6">
-          <p className="text-gray-600 mb-2">
-            Apakah Anda yakin ingin menghapus kategori <span className="font-semibold text-red-600">"{categoryName}"</span>?
-          </p>
-          <p className="text-sm text-gray-500">
-            Tindakan ini tidak dapat dibatalkan dan akan menghapus kategori dari semua produk yang menggunakannya.
-          </p>
+        <div className="px-5 py-4">
+          <p className="text-xs text-gray-600">Hapus kategori <span className="font-semibold text-red-500">"{name}"</span>? Tindakan ini tidak dapat dibatalkan.</p>
         </div>
-
-        {/* Buttons */}
-        <div className="flex gap-3 p-6 pt-0">
-          <button
-            onClick={onClose}
-            className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 transition font-medium"
-          >
-            Batal
-          </button>
-          <button
-            onClick={onConfirm}
-            disabled={isDeleting}
-            className="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl transition font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isDeleting ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                Menghapus...
-              </>
-            ) : (
-              <>
-                <Trash2 size={18} />
-                Hapus
-              </>
-            )}
+        <div className="flex gap-2 px-5 pb-5">
+          <button onClick={onClose} className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:bg-gray-50 transition">Batal</button>
+          <button onClick={onConfirm} disabled={isDeleting}
+            className="flex-1 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs font-medium transition flex items-center justify-center gap-1.5 disabled:opacity-50">
+            {isDeleting ? <><div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" /> Menghapus...</> : <><Trash2 size={13} /> Hapus</>}
           </button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }
 
-// Skeleton Components
-function CategoryCardSkeleton() {
-  return (
-    <div className="bg-white rounded-xl shadow-sm p-4 animate-pulse">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gray-200 rounded-xl"></div>
-          <div>
-            <div className="w-32 h-5 bg-gray-200 rounded mb-2"></div>
-            <div className="w-48 h-3 bg-gray-200 rounded"></div>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <div className="w-8 h-8 bg-gray-200 rounded-lg"></div>
-          <div className="w-8 h-8 bg-gray-200 rounded-lg"></div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function FormSkeleton() {
-  return (
-    <div className="bg-white rounded-xl shadow-sm p-6 animate-pulse">
-      <div className="flex items-center justify-between">
-        <div>
-          <div className="w-32 h-5 bg-gray-200 rounded mb-2"></div>
-          <div className="w-48 h-3 bg-gray-200 rounded"></div>
-        </div>
-        <div className="w-28 h-10 bg-gray-200 rounded-xl"></div>
-      </div>
-    </div>
-  );
-}
-
+// ── Main Page ───────────────────────────────────────────────────────
 export default function Categories() {
   const [categories, setCategories] = useState([]);
-  const [filteredCategories, setFilteredCategories] = useState([]);
+  const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(true);
   const [initialLoading, setInitialLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [search, setSearch] = useState("");
   const [deletingId, setDeletingId] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
   const [sortBy, setSortBy] = useState("newest");
-  
-  // Modal states
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  const { showToast } = useToast();
-  const debouncedSearch = useDebounce(searchTerm, 500);
 
-  // Load categories
-  const loadCategories = useCallback(async () => {
+  const [createOpen, setCreateOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [selected, setSelected] = useState(null);
+
+  const { showToast } = useToast();
+  const debouncedSearch = useDebounce(search, 500);
+
+  const load = useCallback(async () => {
     setLoading(true);
-    try {
-      const data = await getCategories();
-      setCategories(data);
-    } catch (error) {
-      console.error(error);
-      showToast("Gagal memuat data kategori", "error");
-    } finally {
-      setLoading(false);
-      setInitialLoading(false);
-    }
+    try { setCategories(await getCategories()); }
+    catch { showToast("Gagal memuat kategori", "error"); }
+    finally { setLoading(false); setInitialLoading(false); }
   }, [showToast]);
 
-  useEffect(() => {
-    loadCategories();
-  }, [loadCategories]);
+  useEffect(() => { load(); }, [load]);
 
-  // Filter and sort categories
   useEffect(() => {
-    let filtered = [...categories];
-    
-    if (debouncedSearch) {
-      filtered = filtered.filter(category => 
-        category.name?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-        category.slug?.toLowerCase().includes(debouncedSearch.toLowerCase())
-      );
-    }
-    
-    switch (sortBy) {
-      case "newest":
-        filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-        break;
-      case "oldest":
-        filtered.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-        break;
-      case "name_asc":
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case "name_desc":
-        filtered.sort((a, b) => b.name.localeCompare(a.name));
-        break;
-      default:
-        filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    }
-    
-    setFilteredCategories(filtered);
-    setCurrentPage(1);
+    let f = [...categories];
+    if (debouncedSearch) f = f.filter(c => c.name?.toLowerCase().includes(debouncedSearch.toLowerCase()) || c.slug?.toLowerCase().includes(debouncedSearch.toLowerCase()));
+    f.sort((a, b) => {
+      if (sortBy === "oldest") return new Date(a.created_at) - new Date(b.created_at);
+      if (sortBy === "name_asc") return a.name.localeCompare(b.name);
+      if (sortBy === "name_desc") return b.name.localeCompare(a.name);
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
+    setFiltered(f); setPage(1);
   }, [categories, debouncedSearch, sortBy]);
 
-  // Create category
-  const handleCreateCategory = async (formData) => {
-    setIsSubmitting(true);
-    try {
-      await createCategory(formData);
-      showToast("Kategori berhasil ditambahkan", "success");
-      setIsCreateModalOpen(false);
-      loadCategories();
-    } catch (error) {
-      console.error(error);
-      showToast("Gagal menambahkan kategori", "error");
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleCreate = async (data) => {
+    try { await createCategory(data); showToast("Kategori ditambahkan", "success"); setCreateOpen(false); load(); }
+    catch { showToast("Gagal menambahkan kategori", "error"); }
+  };
+  const handleUpdate = async (data) => {
+    try { await updateCategory(selected.id, data); showToast("Kategori diupdate", "success"); setEditOpen(false); setSelected(null); load(); }
+    catch { showToast("Gagal mengupdate kategori", "error"); }
+  };
+  const handleDelete = async () => {
+    if (!selected) return;
+    setDeletingId(selected.id);
+    try { await deleteCategory(selected.id); showToast("Kategori dihapus", "success"); setDeleteOpen(false); setSelected(null); load(); }
+    catch { showToast("Gagal menghapus kategori", "error"); }
+    finally { setDeletingId(null); }
   };
 
-  // Update category
-  const handleUpdateCategory = async (formData) => {
-    setIsSubmitting(true);
-    try {
-      await updateCategory(selectedCategory.id, formData);
-      showToast("Kategori berhasil diupdate", "success");
-      setIsEditModalOpen(false);
-      setSelectedCategory(null);
-      loadCategories();
-    } catch (error) {
-      console.error(error);
-      showToast("Gagal mengupdate kategori", "error");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const totalPages = Math.ceil(filtered.length / perPage);
+  const paginated = filtered.slice((page - 1) * perPage, page * perPage);
 
-  // Delete category
-  const handleDeleteCategory = async () => {
-    if (!selectedCategory) return;
-    
-    setDeletingId(selectedCategory.id);
-    try {
-      await deleteCategory(selectedCategory.id);
-      showToast("Kategori berhasil dihapus", "success");
-      setIsDeleteModalOpen(false);
-      setSelectedCategory(null);
-      loadCategories();
-    } catch (error) {
-      console.error(error);
-      showToast("Gagal menghapus kategori", "error");
-    } finally {
-      setDeletingId(null);
-    }
-  };
-
-  const openEditModal = (category) => {
-    setSelectedCategory(category);
-    setIsEditModalOpen(true);
-  };
-
-  const openDeleteModal = (category) => {
-    setSelectedCategory(category);
-    setIsDeleteModalOpen(true);
-  };
-
-  // Pagination
-  const totalPages = Math.ceil(filteredCategories.length / itemsPerPage);
-  const paginatedCategories = filteredCategories.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-  
-  const itemsPerPageOptions = [10, 25, 50, 100];
-
-  // Get icon display
-  const getIconDisplay = (icon) => {
-    const iconOption = iconOptions.find(opt => opt.value === icon);
-    return iconOption ? iconOption.emoji : (icon || "📁");
-  };
-
-  if (initialLoading) {
-    return (
-      <div className="space-y-6">
-        <div className="mb-2 animate-pulse">
-          <div className="w-48 h-10 bg-gray-200 rounded mb-2"></div>
-          <div className="w-80 h-5 bg-gray-200 rounded"></div>
-        </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-white rounded-xl shadow-sm p-5 animate-pulse">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="w-24 h-4 bg-gray-200 rounded mb-2"></div>
-                  <div className="w-16 h-8 bg-gray-200 rounded"></div>
-                </div>
-                <div className="w-10 h-10 bg-gray-200 rounded-lg"></div>
-              </div>
-            </div>
-          ))}
-        </div>
-        
-        <FormSkeleton />
-        
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-          <div className="p-4 border-b border-gray-100">
-            <div className="w-48 h-5 bg-gray-200 rounded"></div>
-          </div>
-          <div className="divide-y divide-gray-100">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <CategoryCardSkeleton key={i} />
-            ))}
-          </div>
-        </div>
+  if (initialLoading) return (
+    <div className="space-y-4">
+      <div className="animate-pulse space-y-1"><div className="w-24 h-5 bg-gray-200 rounded" /><div className="w-40 h-3 bg-gray-200 rounded" /></div>
+      <div className="grid grid-cols-3 gap-3">{[1,2,3].map(i => <div key={i} className="bg-white border border-gray-100 rounded-xl p-3 animate-pulse"><div className="w-12 h-3 bg-gray-200 rounded mb-2"/><div className="w-8 h-6 bg-gray-200 rounded"/></div>)}</div>
+      <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden animate-pulse">
+        {[1,2,3,4,5].map(i => <div key={i} className="flex items-center gap-3 px-4 py-3 border-b border-gray-50"><div className="w-8 h-8 bg-gray-200 rounded-lg"/><div className="flex-1"><div className="w-24 h-3 bg-gray-200 rounded mb-1.5"/><div className="w-16 h-2.5 bg-gray-200 rounded"/></div></div>)}
       </div>
-    );
-  }
+    </div>
+  );
 
   return (
-    <div className="space-y-6">
-      {/* Modals */}
-      <CategoryModal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        onSubmit={handleCreateCategory}
-        title="Tambah Kategori Baru"
-        isEditing={false}
-      />
+    <div className="space-y-4">
+      <CategoryModal isOpen={createOpen} onClose={() => setCreateOpen(false)} onSubmit={handleCreate} title="Tambah Kategori" isEditing={false} />
+      <CategoryModal isOpen={editOpen} onClose={() => { setEditOpen(false); setSelected(null); }} onSubmit={handleUpdate} title="Edit Kategori" initialData={selected} isEditing={true} />
+      <DeleteModal isOpen={deleteOpen} onClose={() => { setDeleteOpen(false); setSelected(null); }} onConfirm={handleDelete} name={selected?.name} isDeleting={deletingId === selected?.id} />
 
-      <CategoryModal
-        isOpen={isEditModalOpen}
-        onClose={() => {
-          setIsEditModalOpen(false);
-          setSelectedCategory(null);
-        }}
-        onSubmit={handleUpdateCategory}
-        title="Edit Kategori"
-        initialData={selectedCategory}
-        isEditing={true}
-      />
-
-      <DeleteConfirmModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => {
-          setIsDeleteModalOpen(false);
-          setSelectedCategory(null);
-        }}
-        onConfirm={handleDeleteCategory}
-        categoryName={selectedCategory?.name}
-        isDeleting={deletingId === selectedCategory?.id}
-      />
-
-      {/* HEADER */}
-      <div className="mb-2">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
-          Categories
-        </h1>
-        <p className="text-gray-500 mt-2">
-          Kelola semua kategori produk laptop Anda
-        </p>
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-lg font-semibold text-gray-800">Categories</h1>
+          <p className="text-xs text-gray-400 mt-0.5">{categories.length} total kategori</p>
+        </div>
+        <button onClick={() => setCreateOpen(true)}
+          className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg shadow-sm transition">
+          <Plus size={14} /> Tambah Kategori
+        </button>
       </div>
 
-      {/* STATS CARDS */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white rounded-xl shadow-sm p-5 border-l-4 border-blue-700 hover:shadow-md transition">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500">Total Kategori</p>
-              <p className="text-2xl font-bold text-gray-800 mt-1">{categories.length}</p>
-            </div>
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-              <Layers3 className="text-blue-700" size={20} />
-            </div>
+      {/* Stats */}
+      <div className="grid grid-cols-3 gap-3">
+        {[
+          { label: "Total", value: categories.length, color: "text-blue-600" },
+          { label: "Ditampilkan", value: paginated.length, color: "text-gray-600" },
+          { label: "Filter", value: search ? 1 : 0, color: "text-purple-600" },
+        ].map(({ label, value, color }) => (
+          <div key={label} className="bg-white border border-gray-100 rounded-lg px-3 py-2.5 shadow-sm">
+            <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">{label}</p>
+            <p className={`text-lg font-bold mt-0.5 ${color}`}>{value}</p>
           </div>
-          <div className="mt-2 text-xs text-green-600">
-            {categories.length} kategori tersedia
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm p-5 border-l-4 border-green-500 hover:shadow-md transition">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500">Ditampilkan</p>
-              <p className="text-2xl font-bold text-gray-800 mt-1">{paginatedCategories.length}</p>
-            </div>
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-              <Grid3x3 className="text-green-600" size={20} />
-            </div>
-          </div>
-          <div className="mt-2 text-xs text-gray-500">
-            Per halaman: {itemsPerPage}
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm p-5 border-l-4 border-purple-500 hover:shadow-md transition">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500">Filter Aktif</p>
-              <p className="text-2xl font-bold text-gray-800 mt-1">
-                {searchTerm ? "1" : "0"}
-              </p>
-            </div>
-            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-              <Search className="text-purple-600" size={20} />
-            </div>
-          </div>
-          <div className="mt-2 text-xs text-gray-500">
-            {searchTerm ? `Mencari: ${searchTerm}` : "Tidak ada filter"}
-          </div>
-        </div>
+        ))}
       </div>
 
-      {/* FORM TAMBAH KATEGORI - Button to open modal */}
-      <div className="bg-white rounded-xl shadow-sm p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold text-gray-800">Tambah Kategori Baru</h2>
-            <p className="text-sm text-gray-500 mt-1">Klik tombol di samping untuk menambahkan kategori baru</p>
-          </div>
-          <button
-            onClick={() => setIsCreateModalOpen(true)}
-            className="px-6 py-2.5 bg-blue-700 hover:bg-blue-800 text-white rounded-xl font-medium transition flex items-center gap-2 shadow-sm"
-          >
-            <Plus size={18} />
-            Tambah Kategori
-          </button>
+      {/* Toolbar */}
+      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-3 flex flex-col sm:flex-row gap-2.5">
+        <div className="relative flex-1">
+          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input type="text" placeholder="Cari kategori..." value={search} onChange={e => setSearch(e.target.value)}
+            className="w-full bg-gray-50 border border-gray-200 rounded-lg text-sm pl-8 pr-8 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:bg-white transition" />
+          {search && <button onClick={() => setSearch("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"><X size={13} /></button>}
         </div>
-      </div>
-
-      {/* ACTION BAR */}
-      <div className="bg-white rounded-xl shadow-sm p-4">
-        <div className="flex flex-col lg:flex-row gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-            <input
-              type="text"
-              placeholder="Cari kategori berdasarkan nama atau slug..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-11 pr-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
-            />
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm("")}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                <X size={16} />
-              </button>
-            )}
-          </div>
-
-          <div className="flex gap-3">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 bg-white text-sm"
-            >
-              <option value="newest">Terbaru</option>
-              <option value="oldest">Terlama</option>
-              <option value="name_asc">Nama A-Z</option>
-              <option value="name_desc">Nama Z-A</option>
-            </select>
-
-            <select
-              value={itemsPerPage}
-              onChange={(e) => {
-                setItemsPerPage(Number(e.target.value));
-                setCurrentPage(1);
-              }}
-              className="px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 bg-white text-sm"
-            >
-              {itemsPerPageOptions.map(option => (
-                <option key={option} value={option}>{option} / halaman</option>
-              ))}
-            </select>
-
-            <button
-              onClick={() => {
-                setSearchTerm("");
-                setSortBy("newest");
-                setCurrentPage(1);
-              }}
-              className="px-4 py-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 transition flex items-center gap-2"
-            >
-              <RefreshCw size={18} className="text-gray-600" />
-              <span className="hidden sm:inline">Reset</span>
+        <div className="flex gap-2">
+          {[
+            { val: sortBy, set: setSortBy, opts: [["newest","Terbaru"],["oldest","Terlama"],["name_asc","A-Z"],["name_desc","Z-A"]] },
+            { val: perPage, set: v => { setPerPage(Number(v)); setPage(1); }, opts: [[10,"10/hal"],[25,"25/hal"],[50,"50/hal"]] },
+          ].map((s, i) => (
+            <div key={i} className="relative">
+              <select value={s.val} onChange={e => s.set(e.target.value)}
+                className="bg-gray-50 border border-gray-200 rounded-lg text-xs pl-2.5 pr-6 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 appearance-none cursor-pointer text-gray-600">
+                {s.opts.map(([v,l]) => <option key={v} value={v}>{l}</option>)}
+              </select>
+              <ChevronDown size={10} className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+            </div>
+          ))}
+          {(search || sortBy !== "newest") && (
+            <button onClick={() => { setSearch(""); setSortBy("newest"); setPage(1); }}
+              className="px-2.5 py-2 border border-gray-200 rounded-lg text-xs text-gray-500 hover:bg-gray-50 transition flex items-center gap-1">
+              <RefreshCw size={12} /> Reset
             </button>
-          </div>
+          )}
         </div>
       </div>
 
-      {/* CATEGORIES LIST */}
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold text-gray-800">Daftar Kategori</h2>
-            <p className="text-sm text-gray-500 mt-1">
-              Total {filteredCategories.length} kategori ditemukan
-            </p>
-          </div>
+      {/* List */}
+      <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
+        <div className="px-4 py-3 border-b border-gray-50 flex items-center justify-between">
+          <p className="text-xs font-medium text-gray-600">Daftar Kategori</p>
+          <p className="text-[11px] text-gray-400">{filtered.length} ditemukan</p>
         </div>
 
         {loading ? (
-          <div className="divide-y divide-gray-100">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <CategoryCardSkeleton key={i} />
-            ))}
-          </div>
-        ) : paginatedCategories.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-gray-400">
-              <Layers3 size={48} className="mx-auto mb-3 opacity-50" />
-              <p className="text-lg mb-2">Tidak ada kategori</p>
-              <p className="text-sm">
-                {searchTerm ? "Coba dengan kata kunci berbeda" : "Klik tombol 'Tambah Kategori' untuk mulai menambahkan kategori"}
-              </p>
+          <div>{[1,2,3,4].map(i => (
+            <div key={i} className="flex items-center gap-3 px-4 py-3 border-b border-gray-50 animate-pulse">
+              <div className="w-8 h-8 bg-gray-200 rounded-lg" />
+              <div className="flex-1"><div className="w-28 h-3 bg-gray-200 rounded mb-1.5"/><div className="w-20 h-2.5 bg-gray-200 rounded"/></div>
             </div>
+          ))}</div>
+        ) : paginated.length === 0 ? (
+          <div className="py-14 text-center">
+            <Layers3 size={28} className="mx-auto text-gray-200 mb-2" />
+            <p className="text-xs text-gray-400">{search ? "Tidak ditemukan" : "Belum ada kategori"}</p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-100">
-            {paginatedCategories.map((category) => (
-              <div key={category.id} className="px-6 py-4 hover:bg-gray-50 transition group">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl flex items-center justify-center text-2xl">
-                        {getIconDisplay(category.icon)}
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-gray-800 text-lg">
-                          {category.name}
-                        </h3>
-                        <p className="text-sm text-gray-500">
-                          Slug: {category.slug}
-                        </p>
-                        {category.created_at && (
-                          <p className="text-xs text-gray-400 mt-1">
-                            Ditambahkan: {new Date(category.created_at).toLocaleDateString('id-ID')}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => openEditModal(category)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                      title="Edit Kategori"
-                    >
-                      <Edit size={18} />
-                    </button>
-                    <button
-                      onClick={() => openDeleteModal(category)}
-                      disabled={deletingId === category.id}
-                      className={`p-2 text-red-600 hover:bg-red-50 rounded-lg transition ${
-                        deletingId === category.id ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
-                      title="Hapus Kategori"
-                    >
-                      {deletingId === category.id ? (
-                        <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-                      ) : (
-                        <Trash2 size={18} />
-                      )}
-                    </button>
-                  </div>
+          <div className="divide-y divide-gray-50">
+            {paginated.map(cat => (
+              <div key={cat.id} className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50/60 transition group">
+                <div className="w-8 h-8 bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg flex items-center justify-center text-base flex-shrink-0">
+                  {getEmoji(cat.icon)}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold text-gray-700">{cat.name}</p>
+                  <p className="text-[10px] text-gray-400 font-mono mt-0.5">{cat.slug}</p>
+                </div>
+                {cat.created_at && (
+                  <p className="text-[10px] text-gray-300 hidden sm:block flex-shrink-0">
+                    {new Date(cat.created_at).toLocaleDateString("id-ID")}
+                  </p>
+                )}
+                <div className="flex gap-0.5 flex-shrink-0">
+                  <button onClick={() => { setSelected(cat); setEditOpen(true); }}
+                    className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition"><Edit size={13} /></button>
+                  <button onClick={() => { setSelected(cat); setDeleteOpen(true); }} disabled={deletingId === cat.id}
+                    className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition disabled:opacity-40">
+                    {deletingId === cat.id
+                      ? <div className="w-3 h-3 border border-red-400 border-t-transparent rounded-full animate-spin" />
+                      : <Trash2 size={13} />}
+                  </button>
                 </div>
               </div>
             ))}
           </div>
         )}
 
-        {/* Pagination */}
-        {filteredCategories.length > itemsPerPage && (
-          <div className="px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-gray-500">
-              Menampilkan {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredCategories.length)} dari {filteredCategories.length} kategori
-            </p>
-            
-            <div className="flex gap-2">
-              <button
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1 ${
-                  currentPage === 1
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "border border-gray-200 hover:bg-gray-50 text-gray-700"
-                }`}
-              >
-                <ChevronLeft size={16} />
-                Sebelumnya
+        {filtered.length > perPage && (
+          <div className="px-4 py-3 border-t border-gray-50 flex items-center justify-between">
+            <p className="text-[11px] text-gray-400">{(page-1)*perPage+1}–{Math.min(page*perPage, filtered.length)} dari {filtered.length}</p>
+            <div className="flex items-center gap-1">
+              <button onClick={() => setPage(p => Math.max(p-1,1))} disabled={page===1}
+                className="p-1.5 rounded-md border border-gray-200 text-gray-400 hover:bg-gray-50 transition disabled:opacity-30 disabled:cursor-not-allowed">
+                <ChevronLeft size={13} />
               </button>
-              
-              <div className="flex gap-1">
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  let pageNum;
-                  if (totalPages <= 5) {
-                    pageNum = i + 1;
-                  } else if (currentPage <= 3) {
-                    pageNum = i + 1;
-                  } else if (currentPage >= totalPages - 2) {
-                    pageNum = totalPages - 4 + i;
-                  } else {
-                    pageNum = currentPage - 2 + i;
-                  }
-                  
-                  return (
-                    <button
-                      key={pageNum}
-                      onClick={() => setCurrentPage(pageNum)}
-                      className={`min-w-[36px] h-9 rounded-lg text-sm font-medium transition ${
-                        currentPage === pageNum
-                          ? "bg-blue-700 text-white"
-                          : "hover:bg-gray-100 text-gray-700"
-                      }`}
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                })}
-              </div>
-              
-              <button
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1 ${
-                  currentPage === totalPages
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "border border-gray-200 hover:bg-gray-50 text-gray-700"
-                }`}
-              >
-                Selanjutnya
-                <ChevronRight size={16} />
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let n = totalPages <= 5 ? i+1 : page <= 3 ? i+1 : page >= totalPages-2 ? totalPages-4+i : page-2+i;
+                return (
+                  <button key={n} onClick={() => setPage(n)}
+                    className={`min-w-[28px] h-7 rounded-md text-xs font-medium transition ${page===n ? "bg-blue-600 text-white" : "text-gray-500 hover:bg-gray-100"}`}>
+                    {n}
+                  </button>
+                );
+              })}
+              <button onClick={() => setPage(p => Math.min(p+1,totalPages))} disabled={page===totalPages}
+                className="p-1.5 rounded-md border border-gray-200 text-gray-400 hover:bg-gray-50 transition disabled:opacity-30 disabled:cursor-not-allowed">
+                <ChevronRight size={13} />
               </button>
             </div>
           </div>
