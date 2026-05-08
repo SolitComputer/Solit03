@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, MessageCircle, Phone, Home, ShoppingBag, Users, Info, Share2 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
+import logo from "../../assets/solit03.jpeg";
 
 const WHATSAPP_NUMBER = "6285210647047";
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
@@ -20,13 +21,13 @@ export default function Navbar() {
             } else {
                 setShowNavbar(true);
             }
-            
+
             if (window.scrollY > 20) {
                 setScrolled(true);
             } else {
                 setScrolled(false);
             }
-            
+
             setLastScrollY(window.scrollY);
         };
 
@@ -66,27 +67,30 @@ export default function Navbar() {
         <>
             <nav
                 className={`
-                    fixed top-0 left-0 w-full z-40
-                    transition-all duration-500 ease-in-out
-                    ${showNavbar ? "translate-y-0" : "-translate-y-full"}
-                    ${scrolled 
-                        ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100" 
-                        : "bg-white/80 backdrop-blur-sm"
-                    }
-                `}
+    fixed top-0 left-0 w-full z-40
+    transition-all duration-500 ease-in-out
+    ${showNavbar ? "translate-y-0" : "-translate-y-full"}
+    
+    bg-white/70 backdrop-blur-md
+    border-b border-white/20
+    shadow-sm
+  `}
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-12 md:h-14">
-                        
+
                         {/* Logo */}
-                        <button 
+                        <button
                             onClick={() => handleNavigation("/")}
                             className="group focus:outline-none"
                         >
-                            <div className="flex items-center gap-1.5">
-                                <div className="w-6 h-6 bg-gradient-to-br from-blue-600 to-blue-500 rounded-lg flex items-center justify-center shadow-sm">
-                                    <span className="text-white text-xs font-bold">S</span>
-                                </div>
+                            <div className="flex items-center gap-2">
+                                <img
+                                    src={logo}
+                                    alt="Solit 03"
+                                    className="w-10 h-10 object-cover rounded-xl shadow-sm"
+                                />
+
                                 <h1 className="text-sm md:text-base font-semibold text-blue-900 tracking-tight">
                                     Solit <span className="text-blue-600">03</span>
                                 </h1>
@@ -102,8 +106,8 @@ export default function Navbar() {
                                         className={`
                                             relative px-3 py-1.5 rounded-lg transition-all duration-300
                                             flex items-center gap-1.5
-                                            ${location.pathname === item.href 
-                                                ? "text-blue-700 bg-blue-50 font-medium" 
+                                            ${location.pathname === item.href
+                                                ? "text-blue-700 bg-blue-50 font-medium"
                                                 : "text-gray-600 hover:text-blue-700 hover:bg-gray-50"
                                             }
                                         `}
@@ -163,8 +167,8 @@ export default function Navbar() {
                                 className={`
                                     w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg
                                     text-sm transition-all duration-300
-                                    ${location.pathname === item.href 
-                                        ? "bg-blue-50 text-blue-700 font-medium" 
+                                    ${location.pathname === item.href
+                                        ? "bg-blue-50 text-blue-700 font-medium"
                                         : "text-gray-700 hover:bg-gray-50"
                                     }
                                 `}
@@ -178,7 +182,7 @@ export default function Navbar() {
                                 )}
                             </button>
                         ))}
-                        
+
                         <div className="border-t border-gray-100 my-2 pt-2">
                             <button
                                 onClick={handleWhatsApp}
