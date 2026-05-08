@@ -9,6 +9,7 @@ import Testimoni from "../components/Testimoni";
 import Location from "../components/Location";
 import Marketplace from "../components/Marketplace";
 import Footer from "../components/layout/Footer";
+import ChatBot from "../components/ChatBot";
 
 export default function Home() {
   return (
@@ -23,6 +24,7 @@ export default function Home() {
       <Testimoni />
       <Location />
       <Marketplace />
+       <ChatBot />
     </main>
   );
 }

@@ -4,3 +4,15 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.animate-bounce-custom {
+  animation: bounce 0.5s ease-in-out infinite;
+}

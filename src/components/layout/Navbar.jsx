@@ -88,11 +88,11 @@ export default function Navbar() {
                                 <img
                                     src={logo}
                                     alt="Solit 03"
-                                    className="w-10 h-10 object-cover rounded-xl shadow-sm"
+                                    className="w-10 h-10 object-cover rounded-full shadow-sm"
                                 />
 
                                 <h1 className="text-sm md:text-base font-semibold text-blue-900 tracking-tight">
-                                    Solit <span className="text-blue-600">03</span>
+                                    Solit<span className="text-blue-600">03</span>
                                 </h1>
                             </div>
                         </button>

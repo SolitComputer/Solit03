@@ -21,7 +21,9 @@ import {
     Layers,
     Link2,
     CheckCircle,
-    AlertCircle
+    AlertCircle,
+    Percent,
+    Sparkles
 } from "lucide-react";
 import { useToast } from "../context/ToastContext";
 
@@ -36,10 +38,15 @@ export default function ProductForm({
     const [tags, setTags] = useState([]);
     const [uploading, setUploading] = useState(false);
     const [activeSection, setActiveSection] = useState("basic");
+    const [isDiscounted, setIsDiscounted] = useState(false);
     const { showToast } = useToast();
 
     useEffect(() => {
         loadData();
+        // Cek apakah produk memiliki diskon
+        if (form.normal_price && form.price && Number(form.normal_price) > Number(form.price)) {
+            setIsDiscounted(true);
+        }
     }, []);
 
     async function loadData() {
@@ -69,7 +76,6 @@ export default function ProductForm({
             const file = e.target.files[0];
             if (!file) return;
 
-            // Validasi file
             if (!file.type.startsWith('image/')) {
                 showToast("File harus berupa gambar", "error");
                 return;
@@ -97,7 +103,6 @@ export default function ProductForm({
             const files = Array.from(e.target.files);
             if (!files.length) return;
 
-            // Validasi setiap file
             for (const file of files) {
                 if (!file.type.startsWith('image/')) {
                     showToast("Semua file harus berupa gambar", "error");
@@ -123,12 +128,54 @@ export default function ProductForm({
         }
     }
 
+    // Handle perubahan toggle diskon
+    const handleDiscountToggle = (e) => {
+        const checked = e.target.checked;
+        setIsDiscounted(checked);
+        
+        if (!checked) {
+            // Jika tidak diskon, set normal_price = price
+            setForm({ 
+                ...form, 
+                normal_price: form.price,
+                price: form.price 
+            });
+        }
+    };
+
+    // Handle perubahan harga normal
+    const handleNormalPriceChange = (e) => {
+        const normalPrice = e.target.value;
+        setForm({ ...form, normal_price: normalPrice });
+        
+        // Jika harga normal lebih kecil dari harga diskon, update harga diskon
+        if (isDiscounted && normalPrice && form.price && Number(normalPrice) < Number(form.price)) {
+            setForm({ ...form, normal_price: normalPrice, price: normalPrice });
+        }
+    };
+
+    // Handle perubahan harga diskon
+    const handleDiscountPriceChange = (e) => {
+        const discountPrice = e.target.value;
+        setForm({ ...form, price: discountPrice });
+        
+        // Validasi: harga diskon tidak boleh lebih besar dari harga normal
+        if (form.normal_price && discountPrice && Number(discountPrice) > Number(form.normal_price)) {
+            showToast("Harga diskon tidak boleh lebih besar dari harga normal", "warning");
+        }
+    };
+
     const sections = [
         { id: "basic", name: "Informasi Dasar", icon: Package },
         { id: "images", name: "Galeri Produk", icon: ImageIcon },
         { id: "specs", name: "Spesifikasi", icon: Cpu },
         { id: "tags", name: "Tags & Kategori", icon: Tag }
     ];
+
+    // Hitung persentase diskon
+    const discountPercent = form.normal_price && form.price && Number(form.normal_price) > Number(form.price)
+        ? Math.round(((Number(form.normal_price) - Number(form.price)) / Number(form.normal_price)) * 100)
+        : 0;
 
     return (
         <form onSubmit={onSubmit} className="max-w-6xl mx-auto space-y-6">
@@ -143,7 +190,6 @@ export default function ProductForm({
                     </p>
                 </div>
 
-                {/* Navigation Sections */}
                 <div className="px-6 py-3 bg-gray-50/50 flex flex-wrap gap-2">
                     {sections.map((section) => {
                         const Icon = section.icon;
@@ -165,7 +211,6 @@ export default function ProductForm({
                 </div>
             </div>
 
-            {/* Loading Indicator */}
             {uploading && (
                 <div className="fixed top-4 right-4 z-50 bg-blue-700 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2">
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -176,57 +221,8 @@ export default function ProductForm({
             {/* Basic Information Section */}
             {activeSection === "basic" && (
                 <div className="bg-white rounded-2xl shadow-sm p-6 space-y-5">
+                    {/* Nama Produk */}
                     <div className="grid md:grid-cols-2 gap-5">
-
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Harga Normal <span className="text-red-500">*</span>
-                            </label>
-                            <div className="relative">
-                                <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                                <input
-                                    type="number"
-                                    placeholder="Harga sebelum diskon"
-                                    value={form.normal_price || ""}
-                                    onChange={(e) => setForm({ ...form, normal_price: e.target.value })}
-                                    className="w-full border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
-                                />
-                            </div>
-                            <p className="text-xs text-gray-400 mt-1">Harga normal sebelum diskon (kosongkan jika tidak ada diskon)</p>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Harga Diskon <span className="text-red-500">*</span>
-                            </label>
-                            <div className="relative">
-                                <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                                <input
-                                    type="number"
-                                    placeholder="Harga setelah diskon"
-                                    value={form.price}
-                                    onChange={(e) => {
-                                        const newPrice = e.target.value;
-                                        setForm({ ...form, price: newPrice });
-                                    }}
-                                    className="w-full border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Display promo badge if product is on discount */}
-                        {form.normal_price && form.price && Number(form.normal_price) > Number(form.price) && (
-                            <div className="md:col-span-2 bg-green-50 border border-green-200 rounded-xl p-3 flex items-center gap-2">
-                                <Tag size={18} className="text-green-600" />
-                                <div>
-                                    <p className="text-sm font-semibold text-green-700">Produk Promo!</p>
-                                    <p className="text-xs text-green-600">
-                                        Diskon: {Math.round(((Number(form.normal_price) - Number(form.price)) / Number(form.normal_price)) * 100)}% off
-                                    </p>
-                                </div>
-                            </div>
-                        )}
-
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">
                                 Nama Produk <span className="text-red-500">*</span>
@@ -258,23 +254,103 @@ export default function ProductForm({
                                 />
                             </div>
                         </div>
+                    </div>
 
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Harga <span className="text-red-500">*</span>
+                    {/* Harga Section - Rapih dengan Toggle Diskon */}
+                    <div className="border-t border-gray-100 pt-5">
+                        <div className="flex items-center justify-between mb-4">
+                            <label className="block text-sm font-semibold text-gray-700">
+                                Pengaturan Harga
                             </label>
-                            <div className="relative">
-                                <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                            <label className="relative inline-flex items-center cursor-pointer">
                                 <input
-                                    type="number"
-                                    placeholder="0"
-                                    value={form.price}
-                                    onChange={(e) => setForm({ ...form, price: e.target.value })}
-                                    className="w-full border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
+                                    type="checkbox"
+                                    checked={isDiscounted}
+                                    onChange={handleDiscountToggle}
+                                    className="sr-only peer"
                                 />
-                            </div>
+                                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-700"></div>
+                                <span className="ml-3 text-sm font-medium text-gray-700 flex items-center gap-1">
+                                    <Sparkles size={14} className="text-yellow-500" />
+                                    Produk Diskon
+                                </span>
+                            </label>
                         </div>
 
+                        <div className="grid md:grid-cols-2 gap-5">
+                            {/* Harga Normal */}
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                    Harga Normal {!isDiscounted && <span className="text-red-500">*</span>}
+                                </label>
+                                <div className="relative">
+                                    <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                                    <input
+                                        type="number"
+                                        placeholder="Harga normal produk"
+                                        value={form.normal_price || ""}
+                                        onChange={handleNormalPriceChange}
+                                        className="w-full border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
+                                    />
+                                </div>
+                                <p className="text-xs text-gray-400 mt-1">
+                                    {isDiscounted ? "Harga sebelum diskon" : "Harga produk"}
+                                </p>
+                            </div>
+
+                            {/* Harga Diskon (hanya tampil jika diskon aktif) */}
+                            {isDiscounted && (
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                        Harga Diskon <span className="text-red-500">*</span>
+                                    </label>
+                                    <div className="relative">
+                                        <Percent className="absolute left-4 top-1/2 transform -translate-y-1/2 text-red-500" size={18} />
+                                        <input
+                                            type="number"
+                                            placeholder="Harga setelah diskon"
+                                            value={form.price}
+                                            onChange={handleDiscountPriceChange}
+                                            className="w-full border border-red-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition bg-red-50"
+                                        />
+                                    </div>
+                                    <p className="text-xs text-red-500 mt-1">
+                                        Harga spesial diskon
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Tampilkan informasi diskon */}
+                            {isDiscounted && form.normal_price && form.price && Number(form.normal_price) > Number(form.price) && (
+                                <div className="md:col-span-2 bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-xl p-3 flex items-center gap-3">
+                                    <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                                        <Percent size={20} className="text-red-600" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-sm font-semibold text-red-700">🔥 Promo Aktif!</p>
+                                        <p className="text-xs text-red-600">
+                                            Diskon {discountPercent}% • Hemat Rp {(Number(form.normal_price) - Number(form.price)).toLocaleString('id-ID')}
+                                        </p>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-lg font-black text-red-700">
+                                            {discountPercent}% OFF
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {!isDiscounted && form.normal_price && (
+                                <div className="md:col-span-2 bg-gray-50 border border-gray-200 rounded-xl p-3 flex items-center gap-2">
+                                    <CheckCircle size={18} className="text-gray-500" />
+                                    <p className="text-sm text-gray-600">Produk tanpa diskon</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Stok */}
+                    <div className="grid md:grid-cols-2 gap-5">
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">
                                 Stok
@@ -292,6 +368,7 @@ export default function ProductForm({
                         </div>
                     </div>
 
+                    {/* Deskripsi */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                             Deskripsi Singkat
@@ -323,7 +400,6 @@ export default function ProductForm({
             {/* Images Section */}
             {activeSection === "images" && (
                 <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6">
-                    {/* Thumbnail Upload */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                             Thumbnail Produk
@@ -364,7 +440,6 @@ export default function ProductForm({
                         </div>
                     </div>
 
-                    {/* Gallery Upload */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                             Galeri Produk
@@ -612,7 +687,6 @@ export default function ProductForm({
                 </div>
             )}
 
-            {/* Submit Button */}
             <div className="sticky bottom-6 flex justify-end">
                 <button
                     type="submit"
