@@ -49,7 +49,6 @@ export async function updateBrand(id, brandData) {
     slug: brandData.slug,
     color: brandData.color || 'blue',
     logo_url: brandData.logo_url || null
-    // Hapus updated_at karena tidak ada di tabel
   };
 
   const { data, error } = await supabase

@@ -46,6 +46,9 @@ export default function ProductForm({
         // Cek apakah produk memiliki diskon
         if (form.normal_price && form.price && Number(form.normal_price) > Number(form.price)) {
             setIsDiscounted(true);
+        } else if (form.price && form.price > 0) {
+            // Jika tidak ada diskon, set normal_price = price
+            setIsDiscounted(false);
         }
     }, []);
 
@@ -138,31 +141,49 @@ export default function ProductForm({
             setForm({ 
                 ...form, 
                 normal_price: form.price,
-                price: form.price 
             });
+        } else {
+            // Jika diskon diaktifkan, set normal_price dari price jika belum ada
+            if (!form.normal_price && form.price) {
+                setForm({ 
+                    ...form, 
+                    normal_price: form.price,
+                });
+            }
         }
     };
 
     // Handle perubahan harga normal
     const handleNormalPriceChange = (e) => {
-        const normalPrice = e.target.value;
+        const normalPrice = e.target.value === "" ? "" : Number(e.target.value);
         setForm({ ...form, normal_price: normalPrice });
         
-        // Jika harga normal lebih kecil dari harga diskon, update harga diskon
+        // Jika diskon aktif dan harga normal < harga diskon, sesuaikan
         if (isDiscounted && normalPrice && form.price && Number(normalPrice) < Number(form.price)) {
             setForm({ ...form, normal_price: normalPrice, price: normalPrice });
+            showToast("Harga normal tidak boleh lebih kecil dari harga diskon", "warning");
         }
     };
 
     // Handle perubahan harga diskon
     const handleDiscountPriceChange = (e) => {
-        const discountPrice = e.target.value;
+        const discountPrice = e.target.value === "" ? "" : Number(e.target.value);
         setForm({ ...form, price: discountPrice });
         
-        // Validasi: harga diskon tidak boleh lebih besar dari harga normal
-        if (form.normal_price && discountPrice && Number(discountPrice) > Number(form.normal_price)) {
+        // Jika diskon aktif dan harga diskon > harga normal
+        if (isDiscounted && form.normal_price && discountPrice && Number(discountPrice) > Number(form.normal_price)) {
             showToast("Harga diskon tidak boleh lebih besar dari harga normal", "warning");
         }
+    };
+
+    // Handle perubahan harga biasa (tanpa diskon)
+    const handleRegularPriceChange = (e) => {
+        const price = e.target.value === "" ? "" : Number(e.target.value);
+        setForm({ 
+            ...form, 
+            price: price,
+            normal_price: price  // Untuk produk tanpa diskon, normal_price = price
+        });
     };
 
     const sections = [
@@ -232,7 +253,7 @@ export default function ProductForm({
                                 <input
                                     type="text"
                                     placeholder="Contoh: ASUS ROG Zephyrus G14"
-                                    value={form.name}
+                                    value={form.name || ""}
                                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                                     className="w-full border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
                                 />
@@ -248,7 +269,7 @@ export default function ProductForm({
                                 <input
                                     type="text"
                                     placeholder="asus-rog-zephyrus-g14"
-                                    value={form.slug}
+                                    value={form.slug || ""}
                                     onChange={(e) => setForm({ ...form, slug: e.target.value })}
                                     className="w-full border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
                                 />
@@ -256,7 +277,7 @@ export default function ProductForm({
                         </div>
                     </div>
 
-                    {/* Harga Section - Rapih dengan Toggle Diskon */}
+                    {/* Harga Section */}
                     <div className="border-t border-gray-100 pt-5">
                         <div className="flex items-center justify-between mb-4">
                             <label className="block text-sm font-semibold text-gray-700">
@@ -277,29 +298,28 @@ export default function ProductForm({
                             </label>
                         </div>
 
-                        <div className="grid md:grid-cols-2 gap-5">
-                            {/* Harga Normal */}
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Harga Normal {!isDiscounted && <span className="text-red-500">*</span>}
-                                </label>
-                                <div className="relative">
-                                    <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                                    <input
-                                        type="number"
-                                        placeholder="Harga normal produk"
-                                        value={form.normal_price || ""}
-                                        onChange={handleNormalPriceChange}
-                                        className="w-full border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
-                                    />
+                        {isDiscounted ? (
+                            // Mode DISKON - Tampilkan 2 input harga
+                            <div className="grid md:grid-cols-2 gap-5">
+                                {/* Harga Normal */}
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                        Harga Normal <span className="text-red-500">*</span>
+                                    </label>
+                                    <div className="relative">
+                                        <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                                        <input
+                                            type="number"
+                                            placeholder="Harga sebelum diskon"
+                                            value={form.normal_price || ""}
+                                            onChange={handleNormalPriceChange}
+                                            className="w-full border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
+                                        />
+                                    </div>
+                                    <p className="text-xs text-gray-400 mt-1">Harga sebelum diskon</p>
                                 </div>
-                                <p className="text-xs text-gray-400 mt-1">
-                                    {isDiscounted ? "Harga sebelum diskon" : "Harga produk"}
-                                </p>
-                            </div>
 
-                            {/* Harga Diskon (hanya tampil jika diskon aktif) */}
-                            {isDiscounted && (
+                                {/* Harga Diskon */}
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                                         Harga Diskon <span className="text-red-500">*</span>
@@ -309,58 +329,74 @@ export default function ProductForm({
                                         <input
                                             type="number"
                                             placeholder="Harga setelah diskon"
-                                            value={form.price}
+                                            value={form.price || ""}
                                             onChange={handleDiscountPriceChange}
                                             className="w-full border border-red-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition bg-red-50"
                                         />
                                     </div>
-                                    <p className="text-xs text-red-500 mt-1">
-                                        Harga spesial diskon
-                                    </p>
+                                    <p className="text-xs text-red-500 mt-1">Harga spesial diskon</p>
                                 </div>
-                            )}
 
-                            {/* Tampilkan informasi diskon */}
-                            {isDiscounted && form.normal_price && form.price && Number(form.normal_price) > Number(form.price) && (
-                                <div className="md:col-span-2 bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-xl p-3 flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                                        <Percent size={20} className="text-red-600" />
+                                {/* Informasi Diskon */}
+                                {form.normal_price && form.price && Number(form.normal_price) > Number(form.price) && (
+                                    <div className="md:col-span-2 bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-xl p-3 flex items-center gap-3">
+                                        <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                                            <Percent size={20} className="text-red-600" />
+                                        </div>
+                                        <div className="flex-1">
+                                            <p className="text-sm font-semibold text-red-700">🔥 Promo Aktif!</p>
+                                            <p className="text-xs text-red-600">
+                                                Diskon {discountPercent}% • Hemat Rp {(Number(form.normal_price) - Number(form.price)).toLocaleString('id-ID')}
+                                            </p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-lg font-black text-red-700">
+                                                {discountPercent}% OFF
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div className="flex-1">
-                                        <p className="text-sm font-semibold text-red-700">🔥 Promo Aktif!</p>
-                                        <p className="text-xs text-red-600">
-                                            Diskon {discountPercent}% • Hemat Rp {(Number(form.normal_price) - Number(form.price)).toLocaleString('id-ID')}
-                                        </p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-lg font-black text-red-700">
-                                            {discountPercent}% OFF
-                                        </p>
-                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            // Mode NORMAL - Tampilkan 1 input harga
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                    Harga Produk <span className="text-red-500">*</span>
+                                </label>
+                                <div className="relative">
+                                    <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                                    <input
+                                        type="number"
+                                        placeholder="Harga produk"
+                                        value={form.price || ""}
+                                        onChange={handleRegularPriceChange}
+                                        className="w-full border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
+                                    />
                                 </div>
-                            )}
-
-                            {!isDiscounted && form.normal_price && (
-                                <div className="md:col-span-2 bg-gray-50 border border-gray-200 rounded-xl p-3 flex items-center gap-2">
-                                    <CheckCircle size={18} className="text-gray-500" />
-                                    <p className="text-sm text-gray-600">Produk tanpa diskon</p>
-                                </div>
-                            )}
-                        </div>
+                                <p className="text-xs text-gray-400 mt-1">Harga jual produk</p>
+                                
+                                {form.price && (
+                                    <div className="mt-3 bg-gray-50 border border-gray-200 rounded-xl p-3 flex items-center gap-2">
+                                        <CheckCircle size={18} className="text-green-500" />
+                                        <p className="text-sm text-gray-600">Produk tanpa diskon</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     {/* Stok */}
                     <div className="grid md:grid-cols-2 gap-5">
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Stok
+                                Stok <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
                                 <Package className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                                 <input
                                     type="number"
                                     placeholder="0"
-                                    value={form.stock}
+                                    value={form.stock || ""}
                                     onChange={(e) => setForm({ ...form, stock: e.target.value })}
                                     className="w-full border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
                                 />
@@ -375,7 +411,7 @@ export default function ProductForm({
                         </label>
                         <textarea
                             placeholder="Tulis deskripsi singkat tentang produk..."
-                            value={form.short_description}
+                            value={form.short_description || ""}
                             onChange={(e) => setForm({ ...form, short_description: e.target.value })}
                             rows="3"
                             className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition resize-none"
@@ -388,7 +424,7 @@ export default function ProductForm({
                         </label>
                         <textarea
                             placeholder="Tulis deskripsi lengkap produk..."
-                            value={form.description}
+                            value={form.description || ""}
                             onChange={(e) => setForm({ ...form, description: e.target.value })}
                             rows="6"
                             className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition resize-none"
@@ -397,7 +433,7 @@ export default function ProductForm({
                 </div>
             )}
 
-            {/* Images Section */}
+            {/* Images Section - tetap sama */}
             {activeSection === "images" && (
                 <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6">
                     <div>
@@ -484,7 +520,7 @@ export default function ProductForm({
                 </div>
             )}
 
-            {/* Specifications Section */}
+            {/* Specifications Section - tetap sama */}
             {activeSection === "specs" && (
                 <div className="bg-white rounded-2xl shadow-sm p-6">
                     <div className="grid md:grid-cols-2 gap-5">
@@ -619,7 +655,7 @@ export default function ProductForm({
                                 Brand
                             </label>
                             <select
-                                value={form.brand_id}
+                                value={form.brand_id || ""}
                                 onChange={(e) => setForm({ ...form, brand_id: e.target.value })}
                                 className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition bg-white"
                             >
@@ -635,7 +671,7 @@ export default function ProductForm({
                                 Kategori
                             </label>
                             <select
-                                value={form.category_id}
+                                value={form.category_id || ""}
                                 onChange={(e) => setForm({ ...form, category_id: e.target.value })}
                                 className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition bg-white"
                             >

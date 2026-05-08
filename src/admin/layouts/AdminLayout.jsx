@@ -4,17 +4,19 @@ import Topbar from "../components/Topbar";
 
 export default function AdminLayout() {
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-100">
-      {/* Sidebar - fixed height */}
+    <div className="flex h-screen overflow-hidden bg-gray-50">
+      {/* Sidebar */}
       <Sidebar />
 
-      {/* Content - akan scroll sendiri */}
+      {/* Content area */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <Topbar />
         
-        {/* Main content with scrolling */}
-        <main className="flex-1 overflow-y-auto p-6">
-          <Outlet />
+        {/* Main content dengan padding lebih kecil */}
+        <main className="flex-1 overflow-y-auto p-4 md:p-5">
+          <div className="max-w-7xl mx-auto">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>
