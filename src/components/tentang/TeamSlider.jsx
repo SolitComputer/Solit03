@@ -1,15 +1,18 @@
 import { useState } from "react";
+import reinaldy from "../../assets/reinaldy.webp";
+import sewa1 from "../../assets/sewa1.webp";
+import sewa2 from "../../assets/sewa2.webp";
 
 export default function TeamSlider() {
   const [index, setIndex] = useState(0);
 
   const members = [
-    { name: "Reinaldy", role: "CEO", img: "/src/assets/reinaldy.webp" },
-    { name: "Niva", role: "HRD", img: "/src/assets/sewa1.webp" },
-    { name: "Rafi", role: "Marketing", img: "/src/assets/sewa2.webp" },
-    { name: "Adit", role: "Tech", img: "/src/assets/sewa2.webp" },
-    { name: "Fajar", role: "Admin", img: "/src/assets/sewa2.webp" },
-    { name: "Dika", role: "Support", img: "/src/assets/sewa2.webp" },
+    { name: "Reinaldy", role: "CEO", img: reinaldy },
+    { name: "Niva", role: "HRD", img: sewa1 },
+    { name: "Rafi", role: "Marketing", img: sewa2 },
+    { name: "Adit", role: "Tech", img: sewa2 },
+    { name: "Fajar", role: "Admin", img: sewa2 },
+    { name: "Dika", role: "Support", img: sewa2 },
   ];
 
   const prev = () => {
@@ -67,9 +70,8 @@ export default function TeamSlider() {
                 }}
               >
                 <div
-                  className={`bg-white rounded-2xl shadow-2xl p-4 w-64 md:w-72 transition ${
-                    !isCenter ? "cursor-pointer" : ""
-                  }`}
+                  className={`bg-white rounded-2xl shadow-2xl p-4 w-64 md:w-72 transition ${!isCenter ? "cursor-pointer" : ""
+                    }`}
                 >
                   <img
                     src={member.img}
