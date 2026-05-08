@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Star, Eye, TrendingUp, Shield } from "lucide-react";
+import { Star } from "lucide-react";
 import laptop1 from "../assets/thinkpad.jpg";
 import laptop2 from "../assets/hp_elite.webp";
 import laptop3 from "../assets/laptop_dell.jpg";
@@ -69,40 +69,39 @@ export default function BestSeller() {
   };
 
   return (
-    <section ref={sectionRef} className="px-4 sm:px-6 lg:px-8 py-12 md:py-16 bg-white">
-      
-      {/* Title Section - Sederhana */}
-      <div className="text-center mb-10 md:mb-12">
-        <h2 className="text-xl md:text-2xl font-semibold text-gray-900">
+    <section ref={sectionRef} className="px-4 sm:px-6 lg:px-8 py-10 md:py-12 bg-white">
+
+      {/* Title Section */}
+      <div className="text-center mb-8 md:mb-10">
+        <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900">
           Best <span className="text-blue-700">Seller</span>
         </h2>
-        <p className="text-xs text-gray-500 mt-1.5">
+        <p className="text-[10px] sm:text-xs text-gray-500 mt-1">
           3 Laptop terlaris bulan ini
         </p>
       </div>
 
       {/* Grid Products */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 max-w-6xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 max-w-5xl mx-auto">
         {products.map((item, index) => (
           <div
             key={index}
             data-index={index}
-            className={`product-card group bg-white rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all duration-500 overflow-hidden
-              ${visibleItems[index] 
-                ? 'opacity-100 translate-y-0' 
-                : 'opacity-0 translate-y-6'
+            className={`product-card group bg-white rounded-lg border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all duration-500 overflow-hidden
+              ${visibleItems[index]
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-4'
               }`}
             style={{ transitionDelay: `${index * 100}ms` }}
           >
-            
+
             {/* Image Section */}
-            <div className="relative bg-gray-50 p-6 pt-8">
-              
+            <div className="relative bg-gray-50 p-4 pt-5">
+
               {/* Badge */}
-              <div className={`absolute top-3 left-3 z-10 text-white text-[10px] font-medium px-2 py-1 rounded-md ${
-                item.badge === "Best Seller" ? "bg-amber-500" :
-                item.badge === "Hot Item" ? "bg-orange-500" : "bg-emerald-500"
-              }`}>
+              <div className={`absolute top-2 left-2 z-10 text-white text-[9px] font-medium px-1.5 py-0.5 rounded ${item.badge === "Best Seller" ? "bg-amber-500" :
+                  item.badge === "Hot Item" ? "bg-orange-500" : "bg-emerald-500"
+                }`}>
                 {item.badge}
               </div>
 
@@ -111,67 +110,60 @@ export default function BestSeller() {
                 <img
                   src={item.img}
                   alt={item.name}
-                  className="h-36 md:h-40 w-auto object-contain transition-transform duration-500 group-hover:scale-105"
+                  className="h-28 sm:h-32 md:h-36 w-auto object-contain transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
                 />
               </div>
 
               {/* Discount Tag */}
-              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-red-500 text-white text-[10px] font-medium px-2 py-0.5 rounded-full whitespace-nowrap">
+              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-red-500 text-white text-[9px] font-medium px-1.5 py-0.5 rounded-full whitespace-nowrap">
                 Hemat {getDiscount(item.price, item.originalPrice)}%
               </div>
             </div>
 
-            {/* Content Section - Simple */}
-            <div className="p-4 pt-5">
-              
+            {/* Content Section */}
+            <div className="p-3 pt-4">
+
               {/* Title & Rating */}
               <div className="text-center">
-                <h3 className="font-semibold text-sm text-gray-800 group-hover:text-blue-700 transition-colors">
+                <h3 className="font-semibold text-xs sm:text-sm text-gray-800 group-hover:text-blue-700 transition-colors">
                   {item.name}
                 </h3>
-                
-                <div className="flex items-center justify-center gap-1 mt-1.5">
+
+                <div className="flex items-center justify-center gap-1 mt-1">
                   <div className="flex items-center gap-0.5">
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-3 h-3 ${i < Math.floor(item.rating) 
-                          ? 'text-yellow-400 fill-yellow-400' 
+                        className={`w-2.5 h-2.5 ${i < Math.floor(item.rating)
+                          ? 'text-yellow-400 fill-yellow-400'
                           : 'text-gray-200'
-                        }`}
+                          }`}
                       />
                     ))}
                   </div>
-                  <span className="text-[10px] text-gray-500 ml-1">({item.sold})</span>
+                  <span className="text-[9px] text-gray-500 ml-0.5">({item.sold})</span>
                 </div>
               </div>
 
               {/* Spec */}
-              <p className="text-[11px] text-gray-500 text-center mt-2">
+              <p className="text-[9px] sm:text-[10px] text-gray-500 text-center mt-1.5">
                 {item.spec}
               </p>
 
               {/* Price */}
-              <div className="text-center mt-3">
-                <p className="text-blue-700 font-bold text-base">
+              <div className="text-center mt-2">
+                <p className="text-blue-700 font-bold text-sm sm:text-base">
                   {item.price}
                 </p>
-                <p className="text-[10px] text-gray-400 line-through">
+                <p className="text-[9px] text-gray-400 line-through">
                   {item.originalPrice}
                 </p>
               </div>
-
-              {/* Button */}
-              {/* <button className="w-full mt-4 bg-blue-700 text-white text-xs font-medium py-2 rounded-lg transition-all duration-300 hover:bg-blue-800 hover:shadow-md flex items-center justify-center gap-1.5">
-                <Eye className="w-3.5 h-3.5" />
-                <span>Lihat Detail</span>
-              </button> */}
             </div>
           </div>
         ))}
       </div>
-
     </section>
   );
 }

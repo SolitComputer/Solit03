@@ -1,19 +1,21 @@
 export default function Location() {
   return (
-    <section className="px-12 py-20 bg-gray-50 text-center">
-      <h2 className="text-3xl font-semibold text-blue-900 mb-16">
+    <section className="px-4 sm:px-6 py-10 md:py-12 bg-gray-50 text-center">
+      <h2 className="text-xl sm:text-2xl font-semibold text-blue-900 mb-6 md:mb-8">
         Lokasi Toko Offline
       </h2>
 
-      <div className="flex justify-center mb-20">
-        <div className="w-full max-w-4xl rounded-2xl overflow-hidden shadow-lg">
+      <div className="flex justify-center">
+        <div className="w-full max-w-4xl rounded-xl overflow-hidden shadow-md">
           <iframe
             src="https://www.google.com/maps?q=Solit%2003%20Depok%20Sawangan&output=embed"
             width="100%"
-            height="350"
+            height="300"
             style={{ border: 0 }}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
+            title="Lokasi Solit 03 Depok Sawangan"
+            className="w-full"
           ></iframe>
         </div>
       </div>

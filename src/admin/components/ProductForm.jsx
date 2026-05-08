@@ -4,9 +4,9 @@ import {
     uploadMultipleImages
 } from "../../services/storage";
 import { supabase } from "../../services/supabase";
-import { 
-    Upload, 
-    X, 
+import {
+    Upload,
+    X,
     Image as ImageIcon,
     Cpu,
     MemoryStick,
@@ -68,18 +68,18 @@ export default function ProductForm({
             setUploading(true);
             const file = e.target.files[0];
             if (!file) return;
-            
+
             // Validasi file
             if (!file.type.startsWith('image/')) {
                 showToast("File harus berupa gambar", "error");
                 return;
             }
-            
+
             if (file.size > 5 * 1024 * 1024) {
                 showToast("Ukuran file maksimal 5MB", "error");
                 return;
             }
-            
+
             const imageUrl = await uploadProductImage(file);
             setForm({ ...form, thumbnail: imageUrl });
             showToast("Thumbnail berhasil diupload", "success");
@@ -96,7 +96,7 @@ export default function ProductForm({
             setUploading(true);
             const files = Array.from(e.target.files);
             if (!files.length) return;
-            
+
             // Validasi setiap file
             for (const file of files) {
                 if (!file.type.startsWith('image/')) {
@@ -108,7 +108,7 @@ export default function ProductForm({
                     return;
                 }
             }
-            
+
             const urls = await uploadMultipleImages(files);
             setForm({
                 ...form,
@@ -142,7 +142,7 @@ export default function ProductForm({
                         Lengkapi informasi produk laptop Anda dengan detail
                     </p>
                 </div>
-                
+
                 {/* Navigation Sections */}
                 <div className="px-6 py-3 bg-gray-50/50 flex flex-wrap gap-2">
                     {sections.map((section) => {
@@ -152,11 +152,10 @@ export default function ProductForm({
                                 key={section.id}
                                 type="button"
                                 onClick={() => setActiveSection(section.id)}
-                                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                                    activeSection === section.id
-                                        ? "bg-blue-700 text-white shadow-sm"
-                                        : "text-gray-600 hover:bg-gray-100"
-                                }`}
+                                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${activeSection === section.id
+                                    ? "bg-blue-700 text-white shadow-sm"
+                                    : "text-gray-600 hover:bg-gray-100"
+                                    }`}
                             >
                                 <Icon size={16} />
                                 <span className="text-sm">{section.name}</span>
@@ -178,6 +177,56 @@ export default function ProductForm({
             {activeSection === "basic" && (
                 <div className="bg-white rounded-2xl shadow-sm p-6 space-y-5">
                     <div className="grid md:grid-cols-2 gap-5">
+
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                Harga Normal <span className="text-red-500">*</span>
+                            </label>
+                            <div className="relative">
+                                <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                                <input
+                                    type="number"
+                                    placeholder="Harga sebelum diskon"
+                                    value={form.normal_price || ""}
+                                    onChange={(e) => setForm({ ...form, normal_price: e.target.value })}
+                                    className="w-full border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
+                                />
+                            </div>
+                            <p className="text-xs text-gray-400 mt-1">Harga normal sebelum diskon (kosongkan jika tidak ada diskon)</p>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                Harga Diskon <span className="text-red-500">*</span>
+                            </label>
+                            <div className="relative">
+                                <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                                <input
+                                    type="number"
+                                    placeholder="Harga setelah diskon"
+                                    value={form.price}
+                                    onChange={(e) => {
+                                        const newPrice = e.target.value;
+                                        setForm({ ...form, price: newPrice });
+                                    }}
+                                    className="w-full border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-transparent transition"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Display promo badge if product is on discount */}
+                        {form.normal_price && form.price && Number(form.normal_price) > Number(form.price) && (
+                            <div className="md:col-span-2 bg-green-50 border border-green-200 rounded-xl p-3 flex items-center gap-2">
+                                <Tag size={18} className="text-green-600" />
+                                <div>
+                                    <p className="text-sm font-semibold text-green-700">Produk Promo!</p>
+                                    <p className="text-xs text-green-600">
+                                        Diskon: {Math.round(((Number(form.normal_price) - Number(form.price)) / Number(form.normal_price)) * 100)}% off
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">
                                 Nama Produk <span className="text-red-500">*</span>
@@ -193,7 +242,7 @@ export default function ProductForm({
                                 />
                             </div>
                         </div>
-                        
+
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">
                                 Slug Produk
@@ -279,9 +328,8 @@ export default function ProductForm({
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                             Thumbnail Produk
                         </label>
-                        <div className={`border-2 border-dashed rounded-xl p-6 text-center transition ${
-                            form.thumbnail ? "border-green-300 bg-green-50" : "border-gray-200 hover:border-blue-700"
-                        }`}>
+                        <div className={`border-2 border-dashed rounded-xl p-6 text-center transition ${form.thumbnail ? "border-green-300 bg-green-50" : "border-gray-200 hover:border-blue-700"
+                            }`}>
                             {form.thumbnail ? (
                                 <div className="relative inline-block">
                                     <img src={form.thumbnail} alt="Thumbnail" className="w-40 h-40 rounded-xl object-cover shadow-sm" />
@@ -550,11 +598,10 @@ export default function ProductForm({
                                                 showToast(`Tag "${tag.name}" ditambahkan`, "success");
                                             }
                                         }}
-                                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                                            checked
-                                                ? "bg-blue-700 text-white shadow-sm"
-                                                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                                        }`}
+                                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${checked
+                                            ? "bg-blue-700 text-white shadow-sm"
+                                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                            }`}
                                     >
                                         {tag.name}
                                     </button>

@@ -1,49 +1,42 @@
 import { supabase } from "../../services/supabase";
 
 export async function getProducts() {
-
-  const { data, error } =
-    await supabase
-      .from("products")
-      .select(`
-        *,
-        brands(name),
-        categories(name)
-      `)
-      .order("created_at", {
-        ascending: false
-      });
+  const { data, error } = await supabase
+    .from("products")
+    .select(`
+      *,
+      brands(name),
+      categories(name)
+    `)
+    .order("created_at", { ascending: false });
 
   if (error) throw error;
-
   return data;
 }
 
-export async function createProduct(
-  product
-) {
-
-  const gallery =
-    product.gallery || [];
-
-  const specs =
-    product.specs || {};
+export async function createProduct(product) {
+  const gallery = product.gallery || [];
+  const specs = product.specs || {};
 
   delete specs.id;
   delete specs.created_at;
   delete specs.product_id;
 
-  const tagIds =
-    product.tag_ids || [];
+  const tagIds = product.tag_ids || [];
 
   delete product.gallery;
   delete product.specs;
   delete product.tag_ids;
 
-  const {
-    data,
-    error
-  } = await supabase
+  if (product.normal_price && product.price && product.normal_price > product.price) {
+    product.discount_percent = Math.round(((product.normal_price - product.price) / product.normal_price) * 100);
+    product.is_promo = true;
+  } else {
+    product.discount_percent = 0;
+    product.is_promo = false;
+  }
+
+  const { data, error } = await supabase
     .from("products")
     .insert([product])
     .select()
@@ -52,77 +45,57 @@ export async function createProduct(
   if (error) throw error;
 
   if (gallery.length > 0) {
-
-    const galleryRows =
-      gallery.map((image) => ({
-        product_id: data.id,
-        image_url: image
-      }));
-
-    const {
-      error: galleryError
-    } = await supabase
-      .from("product_images")
-      .insert(galleryRows);
-
-    if (galleryError)
-      throw galleryError;
+    const galleryRows = gallery.map((image) => ({
+      product_id: data.id,
+      image_url: image,
+    }));
+    const { error: galleryError } = await supabase.from("product_images").insert(galleryRows);
+    if (galleryError) throw galleryError;
   }
 
-  await supabase
-    .from("product_specs")
-    .insert([
-      {
-        product_id: data.id,
-        ...specs
-      }
-    ]);
+  await supabase.from("product_specs").insert([
+    {
+      product_id: data.id,
+      ...specs,
+    },
+  ]);
 
   if (tagIds.length > 0) {
-
-    const tagRows =
-      tagIds.map((tagId) => ({
-        product_id: data.id,
-        tag_id: tagId
-      }));
-
-    await supabase
-      .from("product_tags")
-      .insert(tagRows);
+    const tagRows = tagIds.map((tagId) => ({
+      product_id: data.id,
+      tag_id: tagId,
+    }));
+    await supabase.from("product_tags").insert(tagRows);
   }
 
   return data;
 }
 
-export async function updateProduct(
-  id,
-  product
-) {
-
-  const gallery =
-    product.gallery || [];
-
-  const specs =
-    product.specs || {};
+export async function updateProduct(id, product) {
+  const gallery = product.gallery || [];
+  const specs = product.specs || {};
 
   delete specs.id;
   delete specs.created_at;
   delete specs.product_id;
 
-  const tagIds =
-    product.tag_ids || [];
+  const tagIds = product.tag_ids || [];
 
   delete product.id;
   delete product.created_at;
-
   delete product.gallery;
   delete product.specs;
   delete product.tag_ids;
 
-  const {
-    data,
-    error
-  } = await supabase
+  if (product.normal_price && product.price && product.normal_price > product.price) {
+    product.discount_percent = Math.round(((product.normal_price - product.price) / product.normal_price) * 100);
+    product.is_promo = true;
+  } else {
+    product.discount_percent = 0;
+    product.is_promo = false;
+  }
+
+  const { data, error } = await supabase
     .from("products")
     .update(product)
     .eq("id", id)
@@ -131,130 +104,73 @@ export async function updateProduct(
 
   if (error) throw error;
 
-  await supabase
-    .from("product_images")
-    .delete()
-    .eq("product_id", id);
+  await supabase.from("product_images").delete().eq("product_id", id);
 
   if (gallery.length > 0) {
-
-    const galleryRows =
-      gallery.map((image) => ({
-        product_id: id,
-        image_url: image
-      }));
-
-    const {
-      error: galleryError
-    } = await supabase
-      .from("product_images")
-      .insert(galleryRows);
-
-    if (galleryError)
-      throw galleryError;
+    const galleryRows = gallery.map((image) => ({
+      product_id: id,
+      image_url: image,
+    }));
+    const { error: galleryError } = await supabase.from("product_images").insert(galleryRows);
+    if (galleryError) throw galleryError;
   }
 
-  await supabase
-    .from("product_specs")
-    .delete()
-    .eq("product_id", id);
+  await supabase.from("product_specs").delete().eq("product_id", id);
+  const { error: specsError } = await supabase.from("product_specs").insert([
+    {
+      product_id: id,
+      ...specs,
+    },
+  ]);
+  if (specsError) throw specsError;
 
-  const {
-    error: specsError
-  } = await supabase
-    .from("product_specs")
-    .insert([
-      {
-        product_id: id,
-        ...specs
-      }
-    ]);
-
-  if (specsError)
-    throw specsError;
-
-  await supabase
-    .from("product_tags")
-    .delete()
-    .eq("product_id", id);
+  await supabase.from("product_tags").delete().eq("product_id", id);
 
   if (tagIds.length > 0) {
-
-    const tagRows =
-      tagIds.map((tagId) => ({
-        product_id: id,
-        tag_id: tagId
-      }));
-
-    const {
-      error: tagError
-    } = await supabase
-      .from("product_tags")
-      .insert(tagRows);
-
-    if (tagError)
-      throw tagError;
+    const tagRows = tagIds.map((tagId) => ({
+      product_id: id,
+      tag_id: tagId,
+    }));
+    const { error: tagError } = await supabase.from("product_tags").insert(tagRows);
+    if (tagError) throw tagError;
   }
 
   return data;
 }
 
 export async function deleteProduct(id) {
-
-  const { error } =
-    await supabase
-      .from("products")
-      .delete()
-      .eq("id", id);
-
+  const { error } = await supabase.from("products").delete().eq("id", id);
   if (error) throw error;
 }
 
 export async function getProductById(id) {
-
-  const {
-    data: product,
-    error: productError
-  } = await supabase
+  const { data: product, error: productError } = await supabase
     .from("products")
     .select("*")
     .eq("id", id)
     .single();
 
-  if (productError)
-    throw productError;
+  if (productError) throw productError;
 
-  // GALLERY
-  const {
-    data: images
-  } = await supabase
+  const { data: images } = await supabase
     .from("product_images")
     .select("image_url")
     .eq("product_id", id);
 
-  const {
-    data: specs
-  } = await supabase
+  const { data: specs } = await supabase
     .from("product_specs")
     .select("*")
     .eq("product_id", id)
     .single();
 
-  const {
-    data: tags
-  } = await supabase
+  const { data: tags } = await supabase
     .from("product_tags")
     .select("tag_id")
     .eq("product_id", id);
 
   return {
     ...product,
-
-    gallery:
-      images?.map(
-        (img) => img.image_url
-      ) || [],
-
+    gallery: images?.map((img) => img.image_url) || [],
     specs: {
       processor: specs?.processor || "",
       ram: specs?.ram || "",
@@ -264,11 +180,7 @@ export async function getProductById(id) {
       system_os: specs?.system_os || "",
       battery: specs?.battery || "",
     },
-
-    tag_ids:
-      tags?.map(
-        (tag) => tag.tag_id
-      ) || [],
+    tag_ids: tags?.map((tag) => tag.tag_id) || [],
   };
 }
 

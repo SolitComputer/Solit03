@@ -16,80 +16,53 @@ export default function CreateProducts() {
     const [loading, setLoading] =
         useState(false);
 
-    const [form, setForm] =
-        useState({
+    // Tambahkan normal_price ke state form
+    const [form, setForm] = useState({
+        name: "",
+        slug: "",
+        price: "",
+        normal_price: "",  // Tambahkan ini
+        stock: "",
+        thumbnail: "",
+        gallery: [],
+        brand_id: "",
+        category_id: "",
+        tag_ids: [],
+        description: "",
+        short_description: "",
+        specs: {
+            processor: "",
+            ram: "",
+            storage: "",
+            gpu: "",
+            display: "",
+            system_os: "",
+            battery: ""
+        }
+    });
 
-            name: "",
-            slug: "",
-
-            price: "",
-            stock: "",
-
-            thumbnail: "",
-
-            gallery: [],
-
-            brand_id: "",
-            category_id: "",
-
-            tag_ids: [],
-
-            description: "",
-            short_description: "",
-
-            specs: {
-                processor: "",
-                ram: "",
-                storage: "",
-                gpu: "",
-                display: "",
-                system_os: "",
-                battery: ""
-            }
-        });
-
+    // Update handleSubmit
     async function handleSubmit(e) {
-
         e.preventDefault();
-
         try {
-
             setLoading(true);
-
             await createProduct({
                 ...form,
-
                 price: Number(form.price),
-
+                normal_price: form.normal_price ? Number(form.normal_price) : null, // Tambahkan ini
                 stock: Number(form.stock),
-
                 brand_id: Number(form.brand_id),
-
                 category_id: Number(form.category_id)
             });
-
-            showToast(
-                "Produk berhasil ditambahkan",
-                "success"
-            );
-
+            showToast("Produk berhasil ditambahkan", "success");
             setTimeout(() => {
                 navigate("/admin/products");
             }, 800);
-
         } catch (error) {
-
             console.error(error);
-
-            showToast(
-                error.message,
-                "error"
-            );
-
+            showToast(error.message, "error");
         } finally {
-
             setLoading(false);
-
         }
     }
 

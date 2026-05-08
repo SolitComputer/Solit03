@@ -41,7 +41,7 @@ export default function Products() {
   const [totalCount, setTotalCount] = useState(0);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  
+
   const { showToast } = useToast();
   const debouncedSearch = useDebounce(searchTerm, 500);
 
@@ -69,7 +69,7 @@ export default function Products() {
         filterStock,
         filterBrand: filterBrand !== "all" ? filterBrand : null
       });
-      
+
       setProducts(result.data);
       setTotalCount(result.total);
     } catch (error) {
@@ -93,7 +93,7 @@ export default function Products() {
     try {
       await deleteProduct(id);
       showToast("Produk berhasil dihapus", "success");
-      
+
       // Reload current page
       if (products.length === 1 && currentPage > 1) {
         setCurrentPage(currentPage - 1);
@@ -110,7 +110,7 @@ export default function Products() {
 
   async function handleBulkDelete() {
     if (selectedProducts.length === 0) return;
-    
+
     const confirmDelete = confirm(`Hapus ${selectedProducts.length} produk?`);
     if (!confirmDelete) return;
 
@@ -428,21 +428,33 @@ export default function Products() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="font-semibold text-blue-700">
-                        Rp {product.price?.toLocaleString('id-ID')}
-                      </span>
+                      {product.normal_price && product.price < product.normal_price ? (
+                        <div>
+                          <span className="font-semibold text-red-600">
+                            Rp {product.price?.toLocaleString('id-ID')}
+                          </span>
+                          <p className="text-xs text-gray-400 line-through">
+                            Rp {product.normal_price?.toLocaleString('id-ID')}
+                          </p>
+                          <span className="inline-block mt-1 px-1.5 py-0.5 bg-red-100 text-red-700 text-[10px] font-bold rounded">
+                            -{product.discount_percent}%
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="font-semibold text-blue-700">
+                          Rp {product.price?.toLocaleString('id-ID')}
+                        </span>
+                      )}
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${
-                        product.stock > 10 ? "bg-green-100 text-green-700" :
-                        product.stock > 0 ? "bg-yellow-100 text-yellow-700" :
-                        "bg-red-100 text-red-700"
-                      }`}>
-                        <div className={`w-1.5 h-1.5 rounded-full ${
-                          product.stock > 10 ? "bg-green-500" :
-                          product.stock > 0 ? "bg-yellow-500" :
-                          "bg-red-500"
-                        }`}></div>
+                      <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${product.stock > 10 ? "bg-green-100 text-green-700" :
+                          product.stock > 0 ? "bg-yellow-100 text-yellow-700" :
+                            "bg-red-100 text-red-700"
+                        }`}>
+                        <div className={`w-1.5 h-1.5 rounded-full ${product.stock > 10 ? "bg-green-500" :
+                            product.stock > 0 ? "bg-yellow-500" :
+                              "bg-red-500"
+                          }`}></div>
                         {product.stock > 0 ? `${product.stock.toLocaleString()} unit` : "Habis"}
                       </span>
                     </td>
@@ -468,9 +480,8 @@ export default function Products() {
                         <button
                           onClick={() => handleDelete(product.id)}
                           disabled={deletingId === product.id}
-                          className={`p-2 text-red-600 hover:bg-red-50 rounded-lg transition ${
-                            deletingId === product.id ? "opacity-50 cursor-not-allowed" : ""
-                          }`}
+                          className={`p-2 text-red-600 hover:bg-red-50 rounded-lg transition ${deletingId === product.id ? "opacity-50 cursor-not-allowed" : ""
+                            }`}
                           title="Hapus"
                         >
                           {deletingId === product.id ? (
@@ -494,21 +505,20 @@ export default function Products() {
             <p className="text-sm text-gray-500">
               Menampilkan {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, totalCount)} dari {totalCount.toLocaleString()} produk
             </p>
-            
+
             <div className="flex gap-2">
               <button
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1 ${
-                  currentPage === 1
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1 ${currentPage === 1
                     ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                     : "border border-gray-200 hover:bg-gray-50 text-gray-700"
-                }`}
+                  }`}
               >
                 <ChevronLeft size={16} />
                 Sebelumnya
               </button>
-              
+
               <div className="flex gap-1">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                   let pageNum;
@@ -521,31 +531,29 @@ export default function Products() {
                   } else {
                     pageNum = currentPage - 2 + i;
                   }
-                  
+
                   return (
                     <button
                       key={pageNum}
                       onClick={() => setCurrentPage(pageNum)}
-                      className={`min-w-[36px] h-9 rounded-lg text-sm font-medium transition ${
-                        currentPage === pageNum
+                      className={`min-w-[36px] h-9 rounded-lg text-sm font-medium transition ${currentPage === pageNum
                           ? "bg-blue-700 text-white"
                           : "hover:bg-gray-100 text-gray-700"
-                      }`}
+                        }`}
                     >
                       {pageNum}
                     </button>
                   );
                 })}
               </div>
-              
+
               <button
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1 ${
-                  currentPage === totalPages
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1 ${currentPage === totalPages
                     ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                     : "border border-gray-200 hover:bg-gray-50 text-gray-700"
-                }`}
+                  }`}
               >
                 Selanjutnya
                 <ChevronRight size={16} />

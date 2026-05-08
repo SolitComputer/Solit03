@@ -26,18 +26,18 @@ export default function EditProducts() {
   const [loading, setLoading] =
     useState(true);
 
-  const [form, setForm] =
-    useState({
-      name: "",
-      slug: "",
-      price: "",
-      stock: "",
-      thumbnail: "",
-      brand_id: "",
-      category_id: "",
-      description: "",
-      short_description: ""
-    });
+  const [form, setForm] = useState({
+    name: "",
+    slug: "",
+    price: "",
+    normal_price: "",
+    stock: "",
+    thumbnail: "",
+    brand_id: "",
+    category_id: "",
+    description: "",
+    short_description: ""
+  });
 
   useEffect(() => {
     loadProduct();
@@ -64,34 +64,21 @@ export default function EditProducts() {
   }
 
   async function handleSubmit(e) {
-
     e.preventDefault();
-
     try {
-
       await updateProduct(id, {
         ...form,
         price: Number(form.price),
+        normal_price: form.normal_price ? Number(form.normal_price) : null, // Tambahkan ini
         stock: Number(form.stock)
       });
-
-      showToast(
-        "Produk berhasil diupdate",
-        "success"
-      );
-
+      showToast("Produk berhasil diupdate", "success");
       setTimeout(() => {
         navigate("/admin/products");
       }, 800);
-
     } catch (error) {
-
       console.error(error);
-
-      showToast(
-        error.message,
-        "error"
-      );
+      showToast(error.message, "error");
     }
   }
 
