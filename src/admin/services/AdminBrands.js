@@ -1,3 +1,4 @@
+// AdminBrands.js
 import { supabase } from "../../services/supabase";
 
 export async function getBrands() {
@@ -22,11 +23,13 @@ export async function getBrandById(id) {
 }
 
 export async function createBrand(brandData) {
+  // Remove updated_at jika ada karena kolom ini tidak ada di database
   const dataToInsert = {
     name: brandData.name,
     slug: brandData.slug,
-    color: brandData.color || 'blue',  
+    color: brandData.color || 'blue',
     logo_url: brandData.logo_url || null
+    // Hapus updated_at karena tidak ada di tabel
   };
 
   const { data, error } = await supabase
@@ -40,12 +43,13 @@ export async function createBrand(brandData) {
 }
 
 export async function updateBrand(id, brandData) {
+  // Hanya update kolom yang ada di database
   const dataToUpdate = {
     name: brandData.name,
     slug: brandData.slug,
     color: brandData.color || 'blue',
-    logo_url: brandData.logo_url || null,
-    updated_at: new Date().toISOString()
+    logo_url: brandData.logo_url || null
+    // Hapus updated_at karena tidak ada di tabel
   };
 
   const { data, error } = await supabase
