@@ -25,7 +25,7 @@ export default function Hero() {
 
     return (
         <section
-            className="relative min-h-screen flex items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat"
+            className="relative min-h-[90vh] flex justify-center overflow-hidden bg-cover bg-center bg-no-repeat pt-12 md:pt-20"
             style={{ backgroundImage: `url(${bgHero})` }}
         >
             {/* Overlay gelap agar teks terbaca */}
