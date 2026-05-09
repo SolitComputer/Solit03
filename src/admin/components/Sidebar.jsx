@@ -12,6 +12,8 @@ import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../services/supabase";
+import logo from "../../assets/solit03.jpeg";
+
 
 export default function Sidebar() {
   const location = useLocation();
@@ -116,14 +118,23 @@ export default function Sidebar() {
           h-12 px-3 border-b border-gray-100
           ${collapsed ? "px-2 justify-center" : ""}
         `}>
-          {!collapsed ? (
+          {!collapsed ? (<>
+            <img
+              src={logo}
+              alt="Solit 03"
+              className="w-7 h-7 rounded-full shadow-sm object-cover"
+            />
             <h1 className="text-sm font-bold bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent">
               Solit Admin
             </h1>
+          </>
+
           ) : (
-            <div className="w-7 h-7 bg-gradient-to-r from-blue-700 to-blue-500 rounded-lg flex items-center justify-center shadow-sm">
-              <span className="text-white font-bold text-xs">S</span>
-            </div>
+            <img
+              src={logo}
+              alt="Solit 03"
+              className="w-7 h-7 rounded-full shadow-sm object-cover"
+            />
           )}
 
           {/* Toggle Button - Desktop only */}

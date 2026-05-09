@@ -1,6 +1,8 @@
 import { Bell, Search, ArrowLeft, Home, Phone, MessageCircle, Menu, X } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import logo from "../../assets/solit03.jpeg";
+
 
 const WHATSAPP_NUMBER = "6285210647047";
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
@@ -14,12 +16,12 @@ export default function Topbar() {
   useEffect(() => {
     const paths = location.pathname.split("/").filter(path => path);
     const crumbs = [];
-    
+
     let currentPath = "";
     for (let i = 0; i < paths.length; i++) {
       currentPath += `/${paths[i]}`;
       const label = paths[i].charAt(0).toUpperCase() + paths[i].slice(1);
-      
+
       let customLabel = label;
       if (paths[i] === "admin") customLabel = "Dashboard";
       if (paths[i] === "products") customLabel = "Products";
@@ -32,14 +34,14 @@ export default function Topbar() {
       if (paths[i] === "jual-beli") customLabel = "Jual Beli";
       if (paths[i] === "tentang") customLabel = "Tentang Kami";
       if (paths[i] === "sosial-media") customLabel = "Sosial Media";
-      
+
       crumbs.push({
         label: customLabel,
         path: currentPath,
         isLast: i === paths.length - 1
       });
     }
-    
+
     setBreadcrumbs(crumbs);
   }, [location]);
 
@@ -78,7 +80,7 @@ export default function Topbar() {
               <ArrowLeft size={18} className="text-gray-600" />
             </button>
           )}
-          
+
           <div className="flex items-center gap-1.5 text-xs sm:text-sm overflow-x-auto whitespace-nowrap scrollbar-hide">
             <button
               onClick={() => navigate(isAdminRoute ? "/admin" : "/")}
@@ -87,7 +89,7 @@ export default function Topbar() {
               <Home size={14} />
               <span className="hidden sm:inline">{isAdminRoute ? "Dashboard" : "Home"}</span>
             </button>
-            
+
             {breadcrumbs.map((crumb, idx) => (
               <div key={idx} className="flex items-center gap-1.5">
                 <span className="text-gray-400 text-xs">/</span>
@@ -115,11 +117,10 @@ export default function Topbar() {
               <button
                 key={item.path}
                 onClick={() => navigate(item.path)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 ${
-                  location.pathname === item.path
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 ${location.pathname === item.path
                     ? "bg-blue-50 text-blue-700"
                     : "text-gray-600 hover:bg-gray-100 hover:text-blue-600"
-                }`}
+                  }`}
               >
                 <span className="flex items-center gap-1.5">
                   <span>{item.icon}</span>
@@ -144,10 +145,12 @@ export default function Topbar() {
 
           {/* User Avatar */}
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-blue-700 to-blue-500 text-white flex items-center justify-center font-bold text-sm shadow-sm">
-              S
-            </div>
-            
+            <img
+              src={logo}
+              alt="Solit 03"
+              className="w-7 h-7 rounded-full shadow-sm object-cover"
+            />
+
             <div className="hidden sm:block">
               <p className="font-semibold text-xs text-gray-800">
                 {isAdminRoute ? "Solit Admin" : "Solit 03"}
@@ -181,17 +184,16 @@ export default function Topbar() {
                   navigate(item.path);
                   setShowMobileMenu(false);
                 }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
-                  location.pathname === item.path
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${location.pathname === item.path
                     ? "bg-blue-50 text-blue-700"
                     : "text-gray-700 hover:bg-gray-50"
-                }`}
+                  }`}
               >
                 <span className="text-lg">{item.icon}</span>
                 <span>{item.name}</span>
               </button>
             ))}
-            
+
             <div className="border-t border-gray-100 my-3 pt-3">
               <button
                 onClick={() => {
