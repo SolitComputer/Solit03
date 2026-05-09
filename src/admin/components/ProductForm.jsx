@@ -6,7 +6,7 @@ import {
 import { supabase } from "../../services/supabase";
 import {
     Upload, X, Image as ImageIcon, Cpu, MemoryStick,
-    HardDrive, Monitor, Battery, Gamepad2, Laptop, Tag,
+    HardDrive, Monitor, Gamepad2, Laptop, Tag,
     Package, DollarSign, Layers, Link2, Percent, Sparkles, ChevronDown
 } from "lucide-react";
 import { useToast } from "../context/ToastContext";
@@ -414,17 +414,6 @@ export default function ProductForm({ form, setForm, onSubmit, buttonText }) {
                                     />
                                 </Field>
                             ))}
-                            <div className="col-span-2">
-                                <Field label="Battery">
-                                    <Input
-                                        icon={Battery}
-                                        type="text"
-                                        placeholder="76WHrs, up to 10 hours"
-                                        value={form.specs?.battery || ""}
-                                        onChange={(e) => setForm({ ...form, specs: { ...form.specs, battery: e.target.value } })}
-                                    />
-                                </Field>
-                            </div>
                         </div>
                     )}
 

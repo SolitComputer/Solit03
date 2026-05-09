@@ -178,7 +178,6 @@ export async function getProductById(id) {
       gpu: specs?.gpu || "",
       display: specs?.display || "",
       system_os: specs?.system_os || "",
-      battery: specs?.battery || "",
     },
     tag_ids: tags?.map((tag) => tag.tag_id) || [],
   };

@@ -36,16 +36,16 @@ export default function About() {
         <div className="absolute bottom-20 left-10 w-56 h-56 bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
       </div>
 
-      {/* Title Section */}
+      {/* Title Section - Teks diperbesar */}
       <div className="text-center mb-8 md:mb-10 relative z-10">
-        <div className="inline-flex items-center gap-1.5 bg-blue-100/50 backdrop-blur-sm rounded-full px-2.5 py-0.5 mb-3">
-          <span className="text-[9px] sm:text-[10px] text-blue-700 font-medium">TENTANG KAMI</span>
+        <div className="inline-flex items-center gap-1.5 bg-blue-100/50 backdrop-blur-sm rounded-full px-3 py-1 mb-3">
+          <span className="text-xs sm:text-sm text-blue-700 font-medium">TENTANG KAMI</span>
         </div>
-        <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
           Solit Hadir Untuk <span className="text-blue-700">Memajukan Teknologi</span>
         </h2>
-        <div className="w-12 h-0.5 bg-blue-600 mx-auto mt-2 rounded-full"></div>
-        <p className="text-[10px] sm:text-xs text-gray-500 mt-2 max-w-md mx-auto">
+        <div className="w-16 h-0.5 bg-blue-600 mx-auto mt-3 rounded-full"></div>
+        <p className="text-xs sm:text-sm text-gray-500 mt-3 max-w-md mx-auto">
           Berkomitmen menghadirkan laptop berkualitas dengan harga terjangkau
         </p>
       </div>
@@ -68,25 +68,25 @@ export default function About() {
             </div>
           </div>
 
-          {/* Quote Section */}
+          {/* Quote Section - Teks diperbesar */}
           <div className={`flex-1 transition-all duration-700 delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
-            <div className="relative bg-gradient-to-br from-blue-700 to-blue-900 rounded-xl p-5 sm:p-6 md:p-7 shadow-xl">
+            <div className="relative bg-gradient-to-br from-blue-700 to-blue-900 rounded-xl p-6 sm:p-7 md:p-8 shadow-xl">
 
-              {/* Quote Icon */}
-              <div className="absolute -top-3 -left-1 text-blue-300 opacity-20">
-                <Quote className="w-12 h-12" />
+              {/* Quote Icon - lebih besar */}
+              <div className="absolute -top-4 -left-2 text-blue-300 opacity-20">
+                <Quote className="w-16 h-16" />
               </div>
 
               <div className="relative z-10">
-                <p className="text-white text-xs sm:text-sm md:text-base leading-relaxed mb-4 italic text-justify">
+                <p className="text-white text-sm sm:text-base md:text-lg leading-relaxed mb-5 italic text-justify">
                   "Menjadikan Solit sebagai perusahaan berkelanjutan yang tidak hanya menghadirkan akses teknologi melalui produk laptop berkualitas dengan harga terjangkau, tetapi juga menjadi wadah kebaikan yang memberikan dampak sosial, ekonomi, dan edukasi jangka panjang bagi masyarakat dan peradaban."
                 </p>
 
-                <div className="border-t border-blue-500/30 pt-3 mt-1">
-                  <p className="text-blue-100 font-semibold text-xs sm:text-sm">
+                <div className="border-t border-blue-500/30 pt-4 mt-2">
+                  <p className="text-blue-100 font-semibold text-sm sm:text-base">
                     Reinaldy Olyvierd Sendouw
                   </p>
-                  <p className="text-blue-300 text-[10px] sm:text-xs mt-0.5">
+                  <p className="text-blue-300 text-xs sm:text-sm mt-1">
                     CEO & Founder Solit
                   </p>
                 </div>

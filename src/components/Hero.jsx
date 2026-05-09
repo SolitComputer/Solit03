@@ -59,69 +59,70 @@ export default function Hero() {
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
                 <div className="flex flex-col md:flex-row gap-8 md:gap-10 items-center">
 
-                    {/* Left Content */}
-                    <div className={`flex-1 space-y-4 transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"}`}>
-                        {/* Badge */}
-                        <div className="inline-flex items-center gap-1.5 bg-blue-100/60 backdrop-blur-sm rounded-full px-2.5 py-0.5">
-                            <span className="relative flex h-2 w-2">
+                    {/* Left Content - Text diperbesar dan dimajukan */}
+                    <div className={`flex-1 space-y-5 transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"}`}>
+                        {/* Badge - lebih besar */}
+                        <div className="inline-flex items-center gap-1.5 bg-blue-100/60 backdrop-blur-sm rounded-full px-3 py-1">
+                            <span className="relative flex h-2.5 w-2.5">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-700"></span>
+                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-700"></span>
                             </span>
-                            <span className="text-[10px] sm:text-xs text-blue-800 font-medium">Trusted Since 2024</span>
+                            <span className="text-xs sm:text-sm text-blue-800 font-medium">Trusted Since 2024</span>
                         </div>
 
-                        {/* Main Title */}
-                        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold leading-tight">
+                        {/* Main Title - lebih besar dan tegas */}
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight">
                             <span className="text-blue-900">
                                 Solit 03
                             </span>
                             <br />
-                            <span className="text-gray-800 text-sm sm:text-base md:text-lg font-normal mt-0.5 block">
+                            <span className="text-gray-800 text-base sm:text-lg md:text-xl font-normal mt-1 block">
                                 Solusi Laptop Second Berkualitas
                             </span>
                         </h1>
 
-                        <p className="text-xs sm:text-sm text-gray-600 max-w-lg leading-relaxed text-justify">
+                        {/* Deskripsi - lebih besar dan nyaman dibaca */}
+                        <p className="text-sm sm:text-base text-gray-700 max-w-xl leading-relaxed text-justify">
                             Temukan laptop second berkualitas dengan garansi resmi.
                             Performa seperti baru, harga terjangkau. Dapatkan sekarang juga!
                         </p>
 
-                        {/* CTA Buttons */}
-                        <div className="flex flex-col sm:flex-row gap-2 pt-1">
+                        {/* CTA Buttons - teks dan padding diperbesar */}
+                        <div className="flex flex-col sm:flex-row gap-3 pt-1">
                             <button
                                 onClick={handleViewCatalog}
-                                className="group bg-blue-700 text-white text-xs sm:text-sm px-4 sm:px-5 py-2 rounded-lg transition-all duration-300 hover:bg-blue-800 hover:shadow-md flex items-center justify-center gap-1.5"
+                                className="group bg-blue-700 text-white text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg transition-all duration-300 hover:bg-blue-800 hover:shadow-md flex items-center justify-center gap-2"
                             >
                                 <span>Lihat Katalog</span>
-                                <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5" />
+                                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
                             </button>
 
                             <button
                                 onClick={handleWhatsApp}
-                                className="group border border-blue-700 text-blue-700 text-xs sm:text-sm px-4 sm:px-5 py-2 rounded-lg transition-all duration-300 hover:bg-blue-700 hover:text-white flex items-center justify-center gap-1.5">
+                                className="group border border-blue-700 text-blue-700 text-sm sm:text-base px-5 sm:px-6 py-2.5 rounded-lg transition-all duration-300 hover:bg-blue-700 hover:text-white flex items-center justify-center gap-2">
                                 <span>Hubungi Kami</span>
-                                <ChevronRight className="w-3 h-3" />
+                                <ChevronRight className="w-4 h-4" />
                             </button>
                         </div>
 
-                        {/* Trust Indicators */}
-                        <div className="flex flex-wrap items-center gap-3 pt-3 text-[10px] sm:text-xs text-gray-400">
-                            <div className="flex items-center gap-1">
-                                <Shield className="w-3 h-3" />
+                        {/* Trust Indicators - lebih besar */}
+                        <div className="flex flex-wrap items-center gap-4 pt-3 text-xs sm:text-sm text-gray-500">
+                            <div className="flex items-center gap-1.5">
+                                <Shield className="w-4 h-4" />
                                 <span>Garansi 1 Tahun</span>
                             </div>
-                            <div className="flex items-center gap-1">
-                                <Truck className="w-3 h-3" />
+                            <div className="flex items-center gap-1.5">
+                                <Truck className="w-4 h-4" />
                                 <span>Free Antar</span>
                             </div>
-                            <div className="flex items-center gap-1">
-                                <Clock className="w-3 h-3" />
-                                <span>Service navbCenter</span>
+                            <div className="flex items-center gap-1.5">
+                                <Clock className="w-4 h-4" />
+                                <span>Service Center</span>
                             </div>
                         </div>
                     </div>
 
-                    {/* Right Image with 3D Animation */}
+                    {/* Right Image with 3D Animation - tidak diubah */}
                     <div className={`flex-1 transition-all duration-700 delay-400 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"}`}>
                         <div 
                             className="relative group flex justify-center perspective-1000"
@@ -146,7 +147,7 @@ export default function Hero() {
                                     }}
                                 />
                                 
-                                {/* Image container with 3D effect */}
+                                {/* Image container */}
                                 <div
                                     className="relative overflow-hidden rounded-lg"
                                     style={{
@@ -192,7 +193,7 @@ export default function Hero() {
                 </div>
             </div>
 
-            {/* CSS for animations */}
+            {/* CSS untuk animasi (tetap) */}
             <style jsx>{`
                 @keyframes shine {
                     0% {

@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { supabase } from "../services/supabase";
 import {
   Laptop, ChevronRight, Filter, X, Star, ShoppingBag,
-  ChevronLeft, Cpu, MemoryStick, HardDrive, Battery,
+  ChevronLeft, Cpu, MemoryStick, HardDrive,
   Tag, ArrowRight, Search, SlidersHorizontal, RotateCcw,
   Package, Zap, Monitor, BookOpen, Gamepad2, Briefcase,
   ChevronDown, Heart, Eye, Check, Sparkles, Loader2,
@@ -586,7 +586,6 @@ function ProductModal({ product, onClose, allTags }) {
     { icon: <MemoryStick size={14} />, label: "RAM", value: specs.ram },
     { icon: <HardDrive size={14} />, label: "Storage", value: specs.storage },
     { icon: <Monitor size={14} />, label: "Display", value: specs.display },
-    { icon: <Battery size={14} />, label: "Baterai", value: specs.battery },
     { icon: <Package size={14} />, label: "GPU", value: specs.gpu },
     { icon: <Tag size={14} />, label: "OS", value: specs.system_os },
   ].filter(r => r.value && r.value.trim());

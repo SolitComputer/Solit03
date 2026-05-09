@@ -5,8 +5,8 @@ export default function Marketplace() {
   return (
     <section className="py-10 md:py-12 bg-white">
       <div className="container mx-auto px-4 sm:px-6">
-        {/* Title */}
-        <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 text-center tracking-tight mb-6 md:mb-8">
+        {/* Title - diperbesar */}
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 text-center tracking-tight mb-6 md:mb-10">
           Marketplace Kami
         </h2>
 
@@ -21,7 +21,9 @@ export default function Marketplace() {
           >
             <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
               <div className="p-2.5 pb-1 text-center">
-                <p className="text-sm font-medium text-gray-800">Shopee</p>
+                <p className="text-base sm:text-lg font-medium text-gray-800">
+                  Shopee
+                </p>
               </div>
               <div className="overflow-hidden">
                 <img
@@ -43,7 +45,9 @@ export default function Marketplace() {
           >
             <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
               <div className="p-2.5 pb-1 text-center">
-                <p className="text-sm font-medium text-gray-800">Tokopedia</p>
+                <p className="text-base sm:text-lg font-medium text-gray-800">
+                  Tokopedia
+                </p>
               </div>
               <div className="overflow-hidden">
                 <img

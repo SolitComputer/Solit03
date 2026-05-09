@@ -5,8 +5,8 @@ export default function SocialMedia() {
   return (
     <section className="px-4 sm:px-6 py-10 md:py-12 bg-gray-50 text-center">
       
-      {/* Title */}
-      <h2 className="text-xl sm:text-2xl font-semibold text-blue-900 mb-6 md:mb-8">
+      {/* Title - diperbesar */}
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-blue-900 mb-6 md:mb-8">
         Follow Social Media
       </h2>
 
@@ -20,7 +20,7 @@ export default function SocialMedia() {
           rel="noopener noreferrer"
           className="flex flex-col items-center group w-full sm:w-auto"
         >
-          <p className="mb-3 font-medium text-xs sm:text-sm text-gray-700">
+          <p className="mb-3 font-medium text-sm sm:text-base text-gray-700">
             Instagram @solit.comp
           </p>
 
@@ -38,7 +38,7 @@ export default function SocialMedia() {
           rel="noopener noreferrer"
           className="flex flex-col items-center group w-full sm:w-auto"
         >
-          <p className="mb-3 font-medium text-xs sm:text-sm text-gray-700">
+          <p className="mb-3 font-medium text-sm sm:text-base text-gray-700">
             Tiktok @solusi_it03
           </p>
 

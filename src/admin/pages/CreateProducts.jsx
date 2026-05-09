@@ -37,7 +37,6 @@ export default function CreateProducts() {
             gpu: "",
             display: "",
             system_os: "",
-            battery: ""
         }
     });
 

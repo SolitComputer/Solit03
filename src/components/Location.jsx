@@ -1,7 +1,7 @@
 export default function Location() {
   return (
     <section className="px-4 sm:px-6 py-10 md:py-12 bg-gray-50 text-center">
-      <h2 className="text-xl sm:text-2xl font-semibold text-blue-900 mb-6 md:mb-8">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-blue-900 mb-6 md:mb-10">
         Lokasi Toko Offline
       </h2>
 

@@ -12,12 +12,12 @@ export default function Promo() {
   const sectionRef = useRef(null);
 
   const showcases = [
-    { img: promo1, title: "Dell Latitude 3310 2in1" },
-    { img: promo2, title: "Laptop Business Series" },
-    { img: promo3, title: "Laptop Siap Kuliah" },
-    { img: promo4, title: "Laptop Gaming Pilihan" },
-    { img: promo5, title: "Laptop Tipis & Elegan" },
-    { img: promo6, title: "Best Performance Laptop" },
+    { img: promo1, },
+    { img: promo2, },
+    { img: promo3, },
+    { img: promo4, },
+    { img: promo5, },
+    { img: promo6, },
   ];
 
   useEffect(() => {
@@ -46,25 +46,25 @@ export default function Promo() {
       ref={sectionRef}
       className="px-4 sm:px-6 lg:px-8 py-10 md:py-12 bg-white"
     >
-      {/* Title */}
+      {/* Title - Teks diperbesar */}
       <div className="text-center mb-8 md:mb-10">
-        <div className="inline-flex items-center gap-1 bg-gray-100 rounded-full px-2.5 py-0.5 mb-3">
-          <Image className="w-2.5 h-2.5 text-gray-500" />
-          <span className="text-[9px] text-gray-600 font-medium tracking-wide">
+        <div className="inline-flex items-center gap-1.5 bg-gray-100 rounded-full px-3 py-1 mb-3">
+          <Image className="w-3 h-3 text-gray-500" /> {/* Ikon lebih besar */}
+          <span className="text-[11px] sm:text-xs text-gray-600 font-medium tracking-wide">
             KOLEKSI POSTER LAPTOP
           </span>
         </div>
 
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-light tracking-tight text-gray-900">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-light tracking-tight text-gray-900">
           Showcase <span className="font-semibold text-gray-900">Laptop</span>
         </h2>
 
-        <p className="text-xs sm:text-sm text-gray-500 mt-2 max-w-lg mx-auto">
+        <p className="text-sm sm:text-base text-gray-500 mt-3 max-w-lg mx-auto">
           Beberapa koleksi laptop pilihan dari Solit03 dengan desain modern,
           performa terbaik, dan kualitas yang siap menemani aktivitas harianmu.
         </p>
 
-        <div className="w-10 h-0.5 bg-gray-300 mx-auto mt-3 rounded-full" />
+        <div className="w-12 h-0.5 bg-gray-300 mx-auto mt-3 rounded-full" /> {/* Garis lebih lebar */}
       </div>
 
       {/* Grid */}
@@ -93,8 +93,8 @@ export default function Promo() {
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300" />
             </div>
 
-            {/* Title */}
-            <p className="text-center text-xs sm:text-sm font-medium text-gray-500 mt-2 group-hover:text-gray-900 transition-colors">
+            {/* Title - lebih besar */}
+            <p className="text-center text-sm sm:text-base font-medium text-gray-500 mt-2 group-hover:text-gray-900 transition-colors">
               {item.title}
             </p>
           </div>

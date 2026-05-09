@@ -24,7 +24,7 @@ export default function TeamSlider() {
   };
 
   return (
-    <section className="py-24 text-center overflow-hidden">
+    <section className="text-center overflow-hidden">
       <h2 className="text-2xl md:text-3xl font-bold mb-16">
         Team Solit
       </h2>

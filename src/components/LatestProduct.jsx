@@ -13,19 +13,14 @@ function ProductSkeleton() {
         </div>
       </div>
 
-      {/* Content Section Skeleton */}
+      {/* Content Section Skeleton - teks skeleton juga ikut membesar */}
       <div className="p-3 pt-4">
-        {/* Brand & Category Skeleton */}
         <div className="flex items-center justify-center gap-2 mb-2">
           <div className="h-3 w-12 bg-gray-200 rounded-full"></div>
           <div className="w-1 h-1 bg-gray-200 rounded-full"></div>
           <div className="h-3 w-10 bg-gray-200 rounded-full"></div>
         </div>
-
-        {/* Title Skeleton */}
         <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-2"></div>
-
-        {/* Spec Skeleton */}
         <div className="flex justify-center gap-1 mt-2 mb-2">
           <div className="h-2 w-12 bg-gray-200 rounded"></div>
           <div className="w-1 h-1 bg-gray-200 rounded-full mt-0.5"></div>
@@ -33,8 +28,6 @@ function ProductSkeleton() {
           <div className="w-1 h-1 bg-gray-200 rounded-full mt-0.5"></div>
           <div className="h-2 w-12 bg-gray-200 rounded"></div>
         </div>
-
-        {/* Price Skeleton */}
         <div className="text-center mt-3">
           <div className="h-5 bg-gray-200 rounded w-24 mx-auto"></div>
         </div>
@@ -53,7 +46,6 @@ export default function LatestProducts() {
     loadProducts();
   }, []);
 
-  // Load produk terbaru dari database (ambil 3 produk terbaru)
   const loadProducts = async () => {
     setLoading(true);
     try {
@@ -84,7 +76,7 @@ export default function LatestProducts() {
           id: product.id,
           name: product.name,
           slug: product.slug,
-            thumbnail: product.thumbnail,
+          thumbnail: product.thumbnail,
           price: product.price,
           normal_price: product.normal_price,
           discount_percent: product.discount_percent,
@@ -106,7 +98,6 @@ export default function LatestProducts() {
     }
   };
 
-  // Real-time subscription untuk update produk
   useEffect(() => {
     const subscription = supabase
       .channel('products-changes')
@@ -124,7 +115,6 @@ export default function LatestProducts() {
     };
   }, []);
 
-  // Intersection Observer untuk animasi
   useEffect(() => {
     if (!loading && products.length > 0) {
       const observer = new IntersectionObserver(
@@ -158,39 +148,36 @@ export default function LatestProducts() {
 
   return (
     <section ref={sectionRef} className="px-4 sm:px-6 lg:px-8 py-10 md:py-12 bg-white">
-      {/* Title Section */}
+      {/* Title Section - Teks diperbesar */}
       <div className="text-center mb-8 md:mb-10">
         <div className="flex items-center justify-center gap-2 mb-2">
-          <Clock className="w-5 h-5 text-blue-600" />
-          <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900">
+          <Clock className="w-6 h-6 text-blue-600" /> {/* Ikon diperbesar */}
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-900">
             Produk <span className="text-blue-700">Terbaru</span>
           </h2>
         </div>
-        <p className="text-[10px] sm:text-xs text-gray-500 mt-1">
+        <p className="text-xs sm:text-sm text-gray-500 mt-1"> {/* Deskripsi lebih besar */}
           {loading ? "Memuat produk..." : `${products.length} Produk terbaru dari Solit 03`}
         </p>
       </div>
 
-      {/* Grid Products - dengan Skeleton Loading */}
+      {/* Grid Products */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 max-w-5xl mx-auto">
         {loading ? (
-          // Tampilkan 3 skeleton saat loading
           <>
             <ProductSkeleton />
             <ProductSkeleton />
             <ProductSkeleton />
           </>
         ) : products.length === 0 ? (
-          // Empty State
           <div className="col-span-3 text-center py-12">
             <div className="bg-gray-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
-              <ShoppingBag size={28} className="text-gray-300" />
+              <ShoppingBag size={32} className="text-gray-300" />
             </div>
             <p className="text-sm text-gray-400">Belum ada produk</p>
             <p className="text-xs text-gray-300 mt-1">Tambah produk di halaman admin</p>
           </div>
         ) : (
-          // Tampilkan produk
           products.map((item, index) => (
             <div
               key={item.id}
@@ -205,16 +192,16 @@ export default function LatestProducts() {
             >
               {/* Image Section */}
               <div className="relative bg-gradient-to-br from-gray-50 to-white p-4 pt-5">
-                {/* Promo Badge */}
+                {/* Promo Badge - teks diperbesar */}
                 {item.is_promo && item.discount_percent > 0 && (
-                  <div className="absolute top-2 right-2 z-10 bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+                  <div className="absolute top-2 right-2 z-10 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
                     -{item.discount_percent}%
                   </div>
                 )}
 
-                {/* New Badge */}
-                <div className="absolute top-2 left-2 z-10 bg-blue-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm flex items-center gap-0.5">
-                  <Clock size={8} />
+                {/* New Badge - teks diperbesar */}
+                <div className="absolute top-2 left-2 z-10 bg-blue-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-sm flex items-center gap-0.5">
+                  <Clock size={10} /> {/* Ikon lebih besar */}
                   <span>BARU</span>
                 </div>
 
@@ -229,57 +216,57 @@ export default function LatestProducts() {
                     />
                   ) : (
                     <div className="h-28 sm:h-32 md:h-36 w-36 bg-gray-100 rounded-lg flex items-center justify-center">
-                      <Laptop size={32} className="text-gray-300" />
+                      <Laptop size={36} className="text-gray-300" />
                     </div>
                   )}
                 </div>
 
                 {/* Discount Tag */}
                 {item.is_promo && item.discount_percent > 0 && (
-                  <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-red-500 text-white text-[9px] font-medium px-2 py-0.5 rounded-full whitespace-nowrap shadow-sm">
+                  <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-red-500 text-white text-[10px] font-medium px-2 py-0.5 rounded-full whitespace-nowrap shadow-sm">
                     Hemat {item.discount_percent}%
                   </div>
                 )}
               </div>
 
-              {/* Content Section */}
+              {/* Content Section - teks diperbesar */}
               <div className="p-3 pt-4">
                 {/* Brand & Category */}
                 <div className="flex items-center justify-center gap-2 mb-1">
-                  <span className="text-[8px] text-blue-600 font-medium bg-blue-50 px-1.5 py-0.5 rounded">
+                  <span className="text-[10px] sm:text-xs text-blue-600 font-medium bg-blue-50 px-1.5 py-0.5 rounded">
                     {item.brand}
                   </span>
-                  <span className="text-[8px] text-gray-300">•</span>
-                  <span className="text-[8px] text-gray-400">
+                  <span className="text-[10px] text-gray-300">•</span>
+                  <span className="text-[10px] sm:text-xs text-gray-500">
                     {item.category}
                   </span>
                 </div>
 
-                {/* Title */}
-                <h3 className="font-semibold text-xs sm:text-sm text-gray-800 text-center group-hover:text-blue-700 transition-colors line-clamp-1">
+                {/* Title - lebih besar */}
+                <h3 className="font-semibold text-sm sm:text-base text-gray-800 text-center group-hover:text-blue-700 transition-colors line-clamp-1">
                   {item.name}
                 </h3>
 
-                {/* Spec */}
-                <p className="text-[9px] sm:text-[10px] text-gray-500 text-center mt-1.5 line-clamp-1">
+                {/* Spec - lebih besar */}
+                <p className="text-[10px] sm:text-xs text-gray-500 text-center mt-1.5 line-clamp-1">
                   {item.processor !== "-" && `${item.processor} • `}
                   {item.ram !== "-" && `${item.ram} • `}
                   {item.storage !== "-" && item.storage}
                 </p>
 
-                {/* Price */}
+                {/* Price - lebih besar */}
                 <div className="text-center mt-2">
                   {item.is_promo && item.normal_price && item.normal_price > item.price ? (
                     <>
-                      <p className="text-blue-700 font-bold text-sm sm:text-base">
+                      <p className="text-blue-700 font-bold text-base sm:text-lg">
                         {formatPrice(item.price)}
                       </p>
-                      <p className="text-[9px] text-gray-400 line-through">
+                      <p className="text-[10px] text-gray-400 line-through">
                         {formatPrice(item.normal_price)}
                       </p>
                     </>
                   ) : (
-                    <p className="text-blue-700 font-bold text-sm sm:text-base">
+                    <p className="text-blue-700 font-bold text-base sm:text-lg">
                       {formatPrice(item.price)}
                     </p>
                   )}
