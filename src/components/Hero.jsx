@@ -67,7 +67,7 @@ export default function Hero() {
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-700"></span>
                             </span>
-                            <span className="text-xs sm:text-sm text-blue-800 font-medium">Trusted Since 2024</span>
+                            <span className="text-xs sm:text-sm text-blue-800 font-medium">Trusted Since 2020</span>
                         </div>
 
                         {/* Main Title - lebih besar dan tegas */}
