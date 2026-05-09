@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, ChevronRight, Laptop, Shield, Truck, Clock } from "lucide-react";
-import heroLaptop from "../assets/laptop.webp";
+import heroLaptop from "../assets/logo.png";
 
 export default function Hero() {
     const [isVisible, setIsVisible] = useState(false);
@@ -16,18 +16,18 @@ export default function Hero() {
 
     const handleMouseMove = (e) => {
         if (!isHovering) return;
-        
+
         const card = e.currentTarget;
         const rect = card.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
         const mouseX = e.clientX - centerX;
         const mouseY = e.clientY - centerY;
-        
+
         const maxRotation = 15;
         const rotateYValue = (mouseX / (rect.width / 2)) * maxRotation;
         const rotateXValue = -(mouseY / (rect.height / 2)) * maxRotation;
-        
+
         setRotateX(rotateXValue);
         setRotateY(rotateYValue);
     };
@@ -122,56 +122,83 @@ export default function Hero() {
                         </div>
                     </div>
 
-                    {/* Right Image with 3D Animation - tidak diubah */}
                     <div className={`flex-1 transition-all duration-700 delay-400 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"}`}>
-                        <div 
+                        <div
                             className="relative group flex justify-center perspective-1000"
                             onMouseMove={handleMouseMove}
                             onMouseEnter={handleMouseEnter}
                             onMouseLeave={handleMouseLeave}
                         >
-                            <div 
-                                className="relative bg-gradient-to-br from-white to-blue-50/50 rounded-xl p-3 sm:p-4 shadow-md max-w-xs sm:max-w-sm"
-                                style={{
+                            <div
+                                className="
+relative
+bg-linear-to-br
+from-white
+to-blue-50/50
+rounded-4xl
+p-2  
+shadow-xl
+w-full
+max-w-100
+overflow-visible
+"                                style={{
                                     transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
                                     transition: isHovering ? 'none' : 'transform 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1)',
                                     transformStyle: 'preserve-3d',
                                 }}
                             >
                                 {/* Glow effect */}
-                                <div 
+                                <div
                                     className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                                     style={{
                                         background: 'radial-gradient(circle at 50% 50%, rgba(59,130,246,0.2), transparent 70%)',
                                         pointerEvents: 'none',
                                     }}
                                 />
-                                
+
                                 {/* Image container */}
                                 <div
-                                    className="relative overflow-hidden rounded-lg"
+                                    className="relative overflow-visible rounded-lg flex justify-center"
                                     style={{
-                                        transform: 'translateZ(20px)',
-                                        transformStyle: 'preserve-3d',
+                                        transform: "translateZ(20px)",
+                                        transformStyle: "preserve-3d",
                                     }}
                                 >
                                     <img
                                         src={heroLaptop}
                                         alt="Laptop Solit 03"
-                                        className="w-full h-48 sm:h-56 md:h-64 object-contain"
+                                        className="
+    w-[320px]
+    sm:w-130
+    md:w-162.5
+    lg:w-190
+    xl:w-212.5
+    object-contain
+    select-none
+    pointer-events-none
+    max-w-none
+  "
                                         loading="lazy"
                                         style={{
-                                            filter: isHovering ? 'drop-shadow(0 20px 15px rgba(0,0,0,0.2))' : 'drop-shadow(0 10px 8px rgba(0,0,0,0.1))',
-                                            transition: 'all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1)',
+                                            transform: isHovering
+                                                ? "scale(1.08)"
+                                                : "scale(1)",
+
+                                            filter: isHovering
+                                                ? "drop-shadow(0 35px 45px rgba(0,0,0,0.25))"
+                                                : "drop-shadow(0 20px 25px rgba(0,0,0,0.15))",
+
+                                            transition:
+                                                "all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1)",
                                         }}
                                     />
                                 </div>
 
                                 {/* Shine effect overlay */}
-                                <div 
+                                <div
                                     className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-700 overflow-hidden"
                                 >
-                                    <div 
+                                    <div
                                         className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent"
                                         style={{
                                             transform: 'translateX(-100%) skewX(-20deg)',
@@ -181,7 +208,7 @@ export default function Hero() {
                                 </div>
 
                                 {/* Shadow effect */}
-                                <div 
+                                <div
                                     className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-3/4 h-4 bg-black/20 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                                     style={{
                                         transform: `translateX(-50%) translateZ(-10px)`,

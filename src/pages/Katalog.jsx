@@ -70,7 +70,6 @@ function getTagBadgeColor(colorName) {
   return colorMap[colorName] || "bg-blue-500";
 }
 
-// Search Loading Indicator
 function SearchLoadingIndicator() {
   return (
     <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -79,11 +78,9 @@ function SearchLoadingIndicator() {
   );
 }
 
-// Product Tag Badge Component (menampilkan tag dari product_tags)
 function ProductTagBadge({ productTags, allTags }) {
   if (!productTags || productTags.length === 0) return null;
 
-  // Dapatkan informasi tag lengkap dari allTags
   const tagsToShow = productTags.slice(0, 2).map(pt => {
     const tagInfo = allTags.find(t => t.id === pt.tag_id);
     return tagInfo;
@@ -105,7 +102,6 @@ function ProductTagBadge({ productTags, allTags }) {
   );
 }
 
-// Animated Product Card
 function AnimatedProductCard({ product, onClick, index, allTags }) {
   const [imgError, setImgError] = useState(false);
   const specs = product.product_specs?.[0] || {};
@@ -118,77 +114,91 @@ function AnimatedProductCard({ product, onClick, index, allTags }) {
   return (
     <div
       onClick={onClick}
-      className="group bg-white rounded-xl border border-slate-200 hover:border-blue-300 overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md animate-fadeInUp"
+      className="group bg-white rounded-xl border border-slate-200 hover:border-blue-400 overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg animate-fadeInUp"
       style={{ animationDelay: `${index * 50}ms` }}
     >
-      <div className="relative h-32 bg-slate-100 overflow-hidden">
+      {/* Container gambar dengan aspect ratio video (16:9) */}
+      <div className="relative aspect-video bg-gradient-to-br from-slate-100 to-slate-50 overflow-hidden">
         {product.thumbnail && !imgError ? (
           <img
             src={product.thumbnail}
             alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500 ease-out"
             onError={() => setImgError(true)}
             loading="lazy"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <Laptop size={28} className="text-slate-300" />
+            <Laptop size={48} className="text-slate-300" />
           </div>
         )}
 
+        {/* Product Tag Badge */}
         <ProductTagBadge productTags={product.product_tags} allTags={allTags} />
 
+        {/* Out of Stock Badge */}
         {outOfStock && (
-          <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 bg-red-500 text-white text-[9px] font-semibold rounded-full z-10">
+          <div className="absolute top-2 right-2 px-2 py-0.5 bg-red-500/90 backdrop-blur-sm text-white text-[10px] font-semibold rounded-full z-10 shadow-sm">
             Habis
           </div>
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        {/* Gradient overlay on hover */}
+        <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
 
-      <div className="p-2.5">
-        <p className="text-[10px] text-blue-600 font-semibold mb-0.5 truncate">{product.brands?.name || "–"}</p>
-        <h3 className="font-bold text-slate-800 text-xs leading-tight line-clamp-2 group-hover:text-blue-700 transition-colors">
+      {/* Informasi produk */}
+      <div className="p-3">
+        {/* Brand */}
+        <p className="text-[11px] text-slate-500 font-medium mb-0.5 truncate">
+          {product.brands?.name || "Umum"}
+        </p>
+
+        {/* Nama produk */}
+        <h3 className="font-bold text-slate-800 text-sm leading-tight line-clamp-2 group-hover:text-blue-600 transition-colors">
           {product.name}
         </h3>
 
-        <div className="flex flex-wrap gap-1 mt-1.5 mb-2">
+        {/* Spesifikasi ringkas (processor & ram) dalam satu baris */}
+        <div className="flex flex-wrap items-center gap-1.5 mt-1.5 mb-2">
           {specs.processor && (
-            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[9px]">
-              <Cpu size={8} />
+            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[10px] font-medium">
+              <Cpu size={9} />
               {specs.processor.split(" ").slice(0, 2).join(" ")}
             </span>
           )}
           {specs.ram && (
-            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[9px]">
-              <MemoryStick size={8} />
+            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[9px] font-medium">
+              <MemoryStick size={9} />
               {specs.ram}
             </span>
           )}
         </div>
 
-        <div className="flex items-center justify-between pt-1.5 border-t border-slate-100">
+        {/* Harga dan tombol */}
+        <div className="flex items-end justify-between pt-2 border-t border-slate-100">
           <div>
-            {product.normal_price && product.price < product.normal_price ? (
+            {hasDiscount ? (
               <>
-                <p className="text-sm font-black text-red-600">
-                  {fmt(product.price)}
+                <p className="text-base font-black text-red-600 leading-tight">
+                  {fmt(finalPrice)}
                 </p>
-                <div className="flex items-center gap-1">
-                  <p className="text-[9px] text-slate-400 line-through">
+                <div className="flex items-center gap-1 mt-0.5">
+                  <p className="text-[10px] text-slate-400 line-through">
                     {fmt(product.normal_price)}
                   </p>
-                  <span className="text-[8px] font-bold text-red-500 bg-red-50 px-1 py-0.5 rounded">
+                  <span className="text-[9px] font-bold text-red-600 bg-red-50 px-1 py-px rounded">
                     -{product.discount_percent}%
                   </span>
                 </div>
               </>
             ) : (
-              <p className="text-sm font-black text-blue-700">{fmt(product.price)}</p>
+              <p className="text-base font-black text-slate-800 leading-tight">
+                {fmt(product.price)}
+              </p>
             )}
           </div>
-          <button className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-semibold rounded-lg transition-colors">
+          <button className="px-2.5 py-1 bg-white border border-slate-300 hover:border-blue-500 text-slate-700 hover:text-blue-600 text-[11px] font-semibold rounded-lg transition-all hover:shadow-sm">
             Detail
           </button>
         </div>
@@ -303,7 +313,6 @@ function ResultCountWithAnimation({ count, isSearching }) {
   );
 }
 
-// Dynamic Tag Filter Component (berdasarkan data dari database)
 function DynamicTagFilter({ tags, selectedTagId, onTagChange, onClear, isLoading }) {
   const [isExpanded, setIsExpanded] = useState(true);
 
@@ -374,21 +383,20 @@ function DynamicTagFilter({ tags, selectedTagId, onTagChange, onClear, isLoading
   );
 }
 
-// Skeleton Components
 function SkeletonProductCard() {
   return (
     <div className="bg-white rounded-xl border border-slate-200 overflow-hidden animate-pulse">
-      <div className="h-32 bg-slate-200" />
-      <div className="p-2.5">
-        <div className="h-2 bg-slate-200 rounded w-16 mb-1.5" />
-        <div className="h-3 bg-slate-200 rounded w-3/4 mb-2" />
-        <div className="flex gap-1 mb-2">
-          <div className="h-3 bg-slate-200 rounded w-12" />
-          <div className="h-3 bg-slate-200 rounded w-12" />
+      <div className="aspect-video bg-slate-200" />
+      <div className="p-3">
+        <div className="h-2.5 bg-slate-200 rounded w-20 mb-2" />
+        <div className="h-3.5 bg-slate-200 rounded w-3/4 mb-2" />
+        <div className="flex gap-1.5 mb-3">
+          <div className="h-4 bg-slate-200 rounded w-16" />
+          <div className="h-4 bg-slate-200 rounded w-14" />
         </div>
-        <div className="flex justify-between pt-1.5">
-          <div className="h-4 bg-slate-200 rounded w-20" />
-          <div className="h-6 bg-slate-200 rounded w-14" />
+        <div className="flex justify-between items-center">
+          <div className="h-5 bg-slate-200 rounded w-20" />
+          <div className="h-7 bg-slate-200 rounded w-16" />
         </div>
       </div>
     </div>
@@ -996,45 +1004,45 @@ function ProductScreen({
   return (
     <div className="bg-slate-50 min-h-screen">
       <style>{`
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideDown {
-          from { opacity: 0; transform: translateY(-10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes slideInRight {
-          from { opacity: 0; transform: translateX(100%); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        .animate-fadeInUp {
-          animation: fadeInUp 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
-          opacity: 0;
-        }
-        .animate-slideDown {
-          animation: slideDown 0.3s ease-out forwards;
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-out forwards;
-        }
-        .animate-slideInRight {
-          animation: slideInRight 0.3s ease-out forwards;
-        }
-        .shimmer-text {
-          background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-          background-size: 200% 100%;
-          animation: shimmer 1.5s infinite;
-        }
-        @keyframes shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
-        }
-      `}</style>
+          @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+          }
+          .animate-fadeInUp {
+            animation: fadeInUp 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+            opacity: 0;
+          }
+          .animate-slideDown {
+            animation: slideDown 0.3s ease-out forwards;
+          }
+          .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out forwards;
+          }
+          .animate-slideInRight {
+            animation: slideInRight 0.3s ease-out forwards;
+          }
+          .shimmer-text {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+          }
+          @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+          }
+        `}</style>
 
       <div className="sticky top-0 z-20 bg-white border-b border-slate-200 shadow-sm">
         <div className="w-full px-3 py-2">
@@ -1215,9 +1223,11 @@ function ProductScreen({
 
 // Main Katalog Component
 export default function Katalog() {
-  const [step, setStep] = useState(
-    localStorage.getItem("katalog_step") || "welcome"
-  );
+  const [step, setStep] = useState(() => {
+    const saved = localStorage.getItem("katalog_step");
+    if (saved === "products" || saved === "category") return saved;
+    return "category";
+  });
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
