@@ -113,7 +113,7 @@ export default function Hero() {
                             </div>
                             <div className="flex items-center gap-1.5">
                                 <Truck className="w-4 h-4" />
-                                <span>Free Antar</span>
+                                <span>Free Antar Sejabodetabek</span>
                             </div>
                             <div className="flex items-center gap-1.5">
                                 <Clock className="w-4 h-4" />

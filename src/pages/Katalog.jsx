@@ -460,26 +460,8 @@ function CategoryScreen({ categories, onSelect, onSkip }) {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-lg bg-blue-600 flex items-center justify-center">
-              <Laptop size={14} className="text-white" />
-            </div>
-            <span className="font-bold text-slate-800 text-sm">LaptopStore</span>
-          </div>
-          <button
-            onClick={onSkip}
-            className="text-xs text-slate-500 hover:text-slate-700 flex items-center gap-1 transition-colors"
-          >
-            Lihat semua produk
-            <ChevronRight size={12} />
-          </button>
-        </div>
-      </div>
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <p className="text-blue-600 font-semibold text-xs uppercase tracking-widest mb-2">Langkah 1 dari 1</p>
           <h2 className="text-2xl md:text-3xl font-black text-slate-900 mb-2">Pilih Kategori</h2>
           <p className="text-slate-500 text-sm">Laptop apa yang kamu cari?</p>
         </div>

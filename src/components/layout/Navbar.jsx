@@ -56,11 +56,11 @@ export default function Navbar() {
     };
 
     const navLinks = [
-        { name: "Beranda", href: "/", icon: <Home size={12} /> },
-        { name: "Katalog", href: "/katalog", icon: <ShoppingBag size={12} /> },
-        { name: "Jual-Beli", href: "/jual-beli", icon: <Users size={12} /> },
-        { name: "Tentang", href: "/tentang", icon: <Info size={12} /> },
-        { name: "Sosial", href: "/sosial-media", icon: <Share2 size={12} /> },
+        { name: "Beranda", href: "/", icon: <Home size={14} /> },
+        { name: "Katalog", href: "/katalog", icon: <ShoppingBag size={14} /> },
+        { name: "Jual-Beli", href: "/jual-beli", icon: <Users size={14} /> },
+        { name: "Tentang", href: "/tentang", icon: <Info size={14} /> },
+        { name: "Sosial", href: "/sosial-media", icon: <Share2 size={14} /> },
     ];
 
     return (
@@ -77,9 +77,9 @@ export default function Navbar() {
                 `}
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-10 md:h-12">
+                    <div className="flex justify-between items-center h-12 md:h-14">
 
-                        {/* Logo - Lebih kecil */}
+                        {/* Logo - Lebih besar */}
                         <button
                             onClick={() => handleNavigation("/")}
                             className="group focus:outline-none"
@@ -88,22 +88,22 @@ export default function Navbar() {
                                 <img
                                     src={logo}
                                     alt="Solit 03"
-                                    className="w-7 h-7 rounded-full shadow-sm object-cover"
+                                    className="w-8 h-8 rounded-full shadow-sm object-cover"
                                 />
-                                <h1 className="text-xs md:text-sm font-semibold text-blue-900 tracking-tight">
+                                <h1 className="text-sm md:text-base font-semibold text-blue-900 tracking-tight">
                                     Solit<span className="text-blue-600">03</span>
                                 </h1>
                             </div>
                         </button>
 
-                        {/* Desktop Navigation - Font lebih kecil */}
-                        <ul className="hidden md:flex gap-0.5 lg:gap-1 text-gray-500 text-[11px]">
+                        {/* Desktop Navigation - Lebih besar */}
+                        <ul className="hidden md:flex gap-0.5 lg:gap-1 text-gray-500 text-xs md:text-sm">
                             {navLinks.map((item, i) => (
                                 <li key={i}>
                                     <button
                                         onClick={() => handleNavigation(item.href)}
                                         className={`
-                                            relative px-2.5 py-1.5 rounded-md transition-all duration-200
+                                            relative px-3 py-2 rounded-md transition-all duration-200
                                             flex items-center gap-1.5
                                             ${location.pathname === item.href
                                                 ? "text-blue-700 bg-blue-50/80 font-medium"
@@ -121,18 +121,18 @@ export default function Navbar() {
                             ))}
                         </ul>
 
-                        {/* Desktop CTA Button - Lebih kecil */}
+                        {/* Desktop CTA Button - Lebih besar */}
                         <div className="hidden md:block">
                             <button
                                 onClick={handleWhatsApp}
-                                className="group relative inline-flex items-center gap-1.5 bg-gradient-to-r from-green-500 to-green-600 text-white text-[10px] px-3 py-1.5 rounded-md transition-all duration-200 hover:shadow-sm hover:-translate-y-0.5"
+                                className="group relative inline-flex items-center gap-1.5 bg-gradient-to-r from-green-500 to-green-600 text-white text-xs px-4 py-2 rounded-md transition-all duration-200 hover:shadow-sm hover:-translate-y-0.5"
                             >
-                                <MessageCircle size={11} />
+                                <MessageCircle size={13} />
                                 <span>Hubungi Kami</span>
                             </button>
                         </div>
 
-                        {/* Mobile Menu Button - Lebih kecil */}
+                        {/* Mobile Menu Button - Lebih besar */}
                         <div className="md:hidden">
                             <button
                                 onClick={() => setMenuOpen(!menuOpen)}
@@ -140,21 +140,21 @@ export default function Navbar() {
                                 aria-label="Toggle menu"
                             >
                                 {menuOpen ? (
-                                    <X className="w-4 h-4 text-blue-700" />
+                                    <X className="w-5 h-5 text-blue-700" />
                                 ) : (
-                                    <Menu className="w-4 h-4 text-blue-700" />
+                                    <Menu className="w-5 h-5 text-blue-700" />
                                 )}
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {/* Mobile Navigation Menu - Lebih kecil */}
+                {/* Mobile Navigation Menu - Lebih besar */}
                 <div
                     className={`
                         md:hidden absolute w-full bg-white/95 backdrop-blur-md shadow-md
                         transition-all duration-300 ease-in-out overflow-hidden
-                        ${menuOpen ? "max-h-[380px] opacity-100 border-t border-gray-100" : "max-h-0 opacity-0"}
+                        ${menuOpen ? "max-h-[420px] opacity-100 border-t border-gray-100" : "max-h-0 opacity-0"}
                     `}
                 >
                     <div className="px-3 py-2 space-y-0.5">
@@ -163,8 +163,8 @@ export default function Navbar() {
                                 key={i}
                                 onClick={() => handleNavigation(item.href)}
                                 className={`
-                                    w-full flex items-center gap-2 px-3 py-2 rounded-md
-                                    text-xs transition-all duration-200
+                                    w-full flex items-center gap-2 px-4 py-2.5 rounded-md
+                                    text-sm transition-all duration-200
                                     ${location.pathname === item.href
                                         ? "bg-blue-50 text-blue-700 font-medium"
                                         : "text-gray-600 hover:bg-gray-50"
@@ -184,9 +184,9 @@ export default function Navbar() {
                         <div className="border-t border-gray-100 my-1.5 pt-1.5">
                             <button
                                 onClick={handleWhatsApp}
-                                className="w-full flex items-center justify-center gap-1.5 bg-gradient-to-r from-green-500 to-green-600 text-white text-xs py-1.5 rounded-md transition-all duration-200 hover:shadow-sm"
+                                className="w-full flex items-center justify-center gap-1.5 bg-gradient-to-r from-green-500 to-green-600 text-white text-sm py-2 rounded-md transition-all duration-200 hover:shadow-sm"
                             >
-                                <MessageCircle size={12} />
+                                <MessageCircle size={14} />
                                 Hubungi WhatsApp
                             </button>
                         </div>
@@ -195,7 +195,7 @@ export default function Navbar() {
             </nav>
 
             {/* Spacer untuk konten di bawah navbar */}
-            <div className="h-10 md:h-12"></div>
+            <div className="h-12 md:h-14"></div>
         </>
     );
 }
