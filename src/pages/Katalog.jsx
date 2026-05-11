@@ -1044,7 +1044,7 @@ function ProductScreen({
           }
         `}</style>
 
-      <div className="sticky top-0 z-20 bg-white border-b border-slate-200 shadow-sm">
+      <div className="sticky top-16 md:top-20 z-20 bg-white border-b border-slate-200 shadow-sm">
         <div className="w-full px-3 py-2">
           <div className="flex items-center justify-between gap-2">
             <button
@@ -1088,7 +1088,7 @@ function ProductScreen({
         </div>
       </div>
 
-      <div className="w-full px-3 py-3">
+      <div className="w-full px-3 py-10">
         <div className="flex gap-4">
           <div className="hidden lg:block w-64 flex-shrink-0">
             <div className="sticky top-16 bg-white rounded-xl border border-slate-200 p-3">
@@ -1098,14 +1098,28 @@ function ProductScreen({
 
           {showMobileFilters && (
             <div className="fixed inset-0 z-50 lg:hidden animate-fadeIn">
-              <div className="absolute inset-0 bg-black/50" onClick={() => setShowMobileFilters(false)} />
-              <div className="absolute right-0 top-0 bottom-0 w-72 bg-white shadow-xl overflow-y-auto animate-slideInRight">
-                <div className="p-3 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white">
-                  <h3 className="font-bold text-slate-800 text-sm">Filter</h3>
-                  <button onClick={() => setShowMobileFilters(false)} className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
+
+              {/* Overlay mulai di bawah navbar */}
+              <div
+                className="absolute inset-0 top-16 bg-black/50"
+                onClick={() => setShowMobileFilters(false)}
+              />
+
+              {/* Sidebar filter mobile */}
+              <div className="absolute right-0 top-16 bottom-0 w-72 bg-white shadow-xl overflow-y-auto animate-slideInRight rounded-tl-2xl">
+                <div className="p-3 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white z-10">
+                  <h3 className="font-bold text-slate-800 text-sm">
+                    Filter
+                  </h3>
+
+                  <button
+                    onClick={() => setShowMobileFilters(false)}
+                    className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+                  >
                     <X size={14} />
                   </button>
                 </div>
+
                 <div className="p-3">
                   <FilterSidebar />
                 </div>

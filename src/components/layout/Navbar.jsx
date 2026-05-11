@@ -197,7 +197,7 @@ export default function Navbar() {
 
             {/* Spacer disesuaikan dengan tinggi navbar baru */}
             {/* Spacer minimal */}
-<div className="h-8 md:h-12"></div>
+            <div className="h-8 md:h-12"></div>
         </>
-    );
+    );''
 }
