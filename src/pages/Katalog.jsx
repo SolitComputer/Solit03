@@ -1044,48 +1044,48 @@ function ProductScreen({
           }
         `}</style>
 
-      <div className="sticky top-16 md:top-20 z-20 bg-white border-b border-slate-200 shadow-sm">
+      <div className="relative top-6 md:top-6 z-20 bg-white border-b border-slate-200 shadow-sm">
         <div className="w-full px-3 py-2">
-          <div className="flex items-center justify-between gap-2">
-            <button
-              onClick={onBack}
-              className="flex items-center gap-1 text-slate-500 hover:text-slate-800 transition-colors text-xs"
+        <div className="flex items-center justify-between gap-2">
+          <button
+            onClick={onBack}
+            className="flex items-center gap-1 text-slate-500 hover:text-slate-800 transition-colors text-xs"
+          >
+            <ChevronLeft size={14} />
+            <span className="hidden sm:inline">Kembali</span>
+          </button>
+
+          <div className="flex-1 max-w-xs">
+            <AnimatedSearchBar
+              value={searchInput}
+              onChange={setSearchInput}
+              isLoading={isSearching}
+            />
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-2 py-1.5 text-xs bg-slate-100 border-0 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer transition-all hover:bg-slate-200"
             >
-              <ChevronLeft size={14} />
-              <span className="hidden sm:inline">Kembali</span>
+              <option value="newest">Terbaru</option>
+              <option value="price_high">Harga Tertinggi</option>
+              <option value="price_low">Harga Terendah</option>
+              <option value="name_asc">Nama A-Z</option>
+            </select>
+
+            <button
+              onClick={() => setShowMobileFilters(!showMobileFilters)}
+              className="lg:hidden flex items-center gap-1.5 px-2 py-1.5 text-xs bg-slate-100 rounded-lg transition-all hover:bg-slate-200"
+            >
+              <Filter size={12} />
+              Filter
+              {hasFilter && <span className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse" />}
             </button>
-
-            <div className="flex-1 max-w-xs">
-              <AnimatedSearchBar
-                value={searchInput}
-                onChange={setSearchInput}
-                isLoading={isSearching}
-              />
-            </div>
-
-            <div className="flex items-center gap-1.5">
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="px-2 py-1.5 text-xs bg-slate-100 border-0 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer transition-all hover:bg-slate-200"
-              >
-                <option value="newest">Terbaru</option>
-                <option value="price_high">Harga Tertinggi</option>
-                <option value="price_low">Harga Terendah</option>
-                <option value="name_asc">Nama A-Z</option>
-              </select>
-
-              <button
-                onClick={() => setShowMobileFilters(!showMobileFilters)}
-                className="lg:hidden flex items-center gap-1.5 px-2 py-1.5 text-xs bg-slate-100 rounded-lg transition-all hover:bg-slate-200"
-              >
-                <Filter size={12} />
-                Filter
-                {hasFilter && <span className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse" />}
-              </button>
-            </div>
           </div>
         </div>
+      </div>
       </div>
 
       <div className="w-full px-3 py-10">
