@@ -63,58 +63,156 @@ export default function Tentang() {
         </div>
       </section>
 
-      {/* VISI MISI - lebih besar */}
-      <section className="bg-gray-50 py-12 md:py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-center text-2xl md:text-3xl font-bold text-gray-800 mb-8">
-            Visi dan Misi Kami
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* VISI */}
-            <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 text-center">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-bold mb-3 text-blue-700">Visi</h3>
-              <p className="text-gray-500 leading-relaxed text-sm md:text-base">
-                Menjadi perusahaan teknologi terpercaya yang menghadirkan laptop berkualitas tinggi
-                dengan harga yang terjangkau untuk semua kalangan.
-              </p>
-            </div>
+      {/* VISI MISI - Premium Compact Design */}
+<section className="py-16 md:py-20 px-4 relative overflow-hidden">
+  {/* Background dengan efek gradien dan blur */}
+  <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-blue-50/30" />
+  <div className="absolute top-0 right-0 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl" />
+  <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-400/10 rounded-full blur-3xl" />
+  
+  <div className="max-w-5xl mx-auto relative z-10">
+    {/* Section Header - Lebih compact */}
+    <div className="text-center mb-10 md:mb-12">
+      <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-full px-3 py-1 mb-3 shadow-sm">
+        <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
+        <span className="text-[11px] font-semibold text-gray-600 tracking-wider uppercase">
+          Peta Perjalanan
+        </span>
+      </div>
+      
+      <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">
+        <span className="bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+          Visi & 
+        </span>
+        <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent ml-2">
+          Misi Kami
+        </span>
+      </h2>
+      
+      <div className="flex justify-center gap-1.5 mt-3">
+        <div className="w-10 h-0.5 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full" />
+        <div className="w-2 h-0.5 bg-blue-400 rounded-full" />
+        <div className="w-2 h-0.5 bg-indigo-400 rounded-full" />
+      </div>
+      
+      <p className="text-gray-500 mt-3 max-w-2xl mx-auto text-xs md:text-sm">
+        Komitmen kami dalam menghadirkan yang terbaik untuk setiap pelanggan
+      </p>
+    </div>
 
-            {/* MISI */}
-            <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-bold mb-3 text-blue-700 text-center">Misi</h3>
-              <ul className="space-y-2 text-gray-500 text-sm md:text-base">
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 text-base">✓</span>
-                  Menyediakan laptop berkualitas dengan harga kompetitif
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 text-base">✓</span>
-                  Memberikan layanan profesional dan transparan
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 text-base">✓</span>
-                  Membangun kepercayaan jangka panjang dengan pelanggan
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 text-base">✓</span>
-                  Mengedukasi pasar tentang laptop second berkualitas
-                </li>
-              </ul>
+    <div className="grid md:grid-cols-2 gap-6">
+      {/* VISI CARD - Compact Premium */}
+      <div className="group relative bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 rounded-full blur-2xl" />
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-500/5 to-indigo-500/5 rounded-full blur-2xl" />
+        
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl -z-10" />
+        <div className="absolute inset-[1px] bg-white rounded-xl -z-10" />
+        
+        <div className="p-5 md:p-6 text-center relative">
+          {/* Icon Container - Diperkecil */}
+          <div className="relative inline-block">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl blur-md opacity-40 group-hover:opacity-70 transition duration-300" />
+            <div className="relative w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md group-hover:scale-105 transition duration-300">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </div>
+          </div>
+          
+          <h3 className="text-xl font-bold mb-3">
+            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              Visi
+            </span>
+          </h3>
+          
+          <p className="text-gray-600 leading-relaxed text-sm">
+            Menjadi perusahaan teknologi terpercaya yang menghadirkan laptop berkualitas tinggi
+            dengan harga yang terjangkau untuk semua kalangan.
+          </p>
+          
+          {/* Quote decoration - Lebih subtle */}
+          <div className="mt-4 pt-3 border-t border-gray-100">
+            <div className="flex justify-center gap-1 text-blue-400">
+              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+              </svg>
+              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+              </svg>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+
+      {/* MISI CARD - Compact Premium */}
+      <div className="group relative bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 rounded-full blur-2xl" />
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-indigo-500/5 to-purple-500/5 rounded-full blur-2xl" />
+        
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl -z-10" />
+        <div className="absolute inset-[1px] bg-white rounded-xl -z-10" />
+        
+        <div className="p-5 md:p-6">
+          {/* Icon Container - Diperkecil */}
+          <div className="relative inline-block mx-auto block w-fit mb-4">
+            <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl blur-md opacity-40 group-hover:opacity-70 transition duration-300" />
+            <div className="relative w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-md group-hover:scale-105 transition duration-300">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+            </div>
+          </div>
+          
+          <h3 className="text-xl font-bold text-center mb-4">
+            <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              Misi
+            </span>
+          </h3>
+          
+          <ul className="space-y-2.5">
+            {[
+              "Menyediakan laptop berkualitas dengan harga kompetitif",
+              "Memberikan layanan profesional dan transparan",
+              "Membangun kepercayaan jangka panjang dengan pelanggan",
+              "Mengedukasi pasar tentang laptop second berkualitas"
+            ].map((item, idx) => (
+              <li key={idx} className="flex items-start gap-2 group/item hover:translate-x-0.5 transition duration-300">
+                <div className="relative flex-shrink-0 mt-0.5">
+                  <div className="w-4 h-4 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center shadow-sm">
+                    <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                </div>
+                <span className="text-gray-600 text-xs md:text-sm leading-relaxed">
+                  {item}
+                </span>
+              </li>
+            ))}
+          </ul>
+          
+          {/* Decorative line - Lebih subtle */}
+          <div className="mt-4 pt-3 flex justify-center gap-1 text-indigo-400">
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.57-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    {/* Decorative bottom element - Lebih kecil */}
+    <div className="flex justify-center mt-8">
+      <div className="flex gap-1">
+        {[...Array(3)].map((_, i) => (
+          <div key={i} className="w-1 h-1 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400 opacity-60" />
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* VALUES - lebih besar */}
       <section className="max-w-6xl mx-auto px-4 py-12 md:py-16">
