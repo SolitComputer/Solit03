@@ -211,32 +211,54 @@ function AnimatedProductCard({ product, onClick, index, allTags }) {
 function AnimatedSearchBar({ value, onChange, isLoading, onFocus, onBlur }) {
   const [isFocused, setIsFocused] = useState(false);
 
-  return (
-    <div className={`relative transition-all duration-300 ${isFocused ? 'scale-[1.02]' : 'scale-100'}`}>
-      <div className={`absolute inset-0 bg-blue-500 rounded-lg blur-lg transition-opacity duration-300 ${isFocused ? 'opacity-30' : 'opacity-0'}`} />
-      <div className="relative">
-        <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 transition-all duration-300" style={{ transform: isFocused ? 'translateY(-50%) scale(1.1)' : 'translateY(-50%)' }} />
-        <input
-          type="text"
-          placeholder="Cari produk, brand, atau kategori..."
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onFocus={() => { setIsFocused(true); onFocus?.(); }}
-          onBlur={() => { setIsFocused(false); onBlur?.(); }}
-          className="w-full pl-8 pr-8 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50 transition-all duration-300"
-        />
-        {isLoading && <SearchLoadingIndicator />}
-        {value && !isLoading && (
-          <button
-            onClick={() => onChange("")}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
-          >
-            <X size={10} />
-          </button>
-        )}
-      </div>
+return (
+  <div className={`relative transition-all duration-300 ${isFocused ? 'scale-[1.02]' : 'scale-100'}`}>
+    <div
+      className={`absolute inset-0 bg-blue-500 rounded-lg blur-lg transition-opacity duration-300 ${
+        isFocused ? 'opacity-30' : 'opacity-0'
+      }`}
+    />
+
+    <div className="relative">
+      <Search
+        size={12}
+        className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 transition-all duration-300"
+        style={{
+          transform: isFocused
+            ? 'translateY(-50%) scale(1.1)'
+            : 'translateY(-50%)',
+        }}
+      />
+
+      <input
+        type="text"
+        placeholder="Cari produk, brand, atau kategori..."
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onFocus={() => {
+          setIsFocused(true);
+          onFocus?.();
+        }}
+        onBlur={() => {
+          setIsFocused(false);
+          onBlur?.();
+        }}
+        className="w-full pl-8 pr-8 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50 transition-all duration-300"
+      />
+
+      {isLoading && <SearchLoadingIndicator />}
+
+      {value && !isLoading && (
+        <button
+          onClick={() => onChange("")}
+          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+        >
+          <X size={10} />
+        </button>
+      )}
     </div>
-  );
+  </div>
+);
 }
 
 // Empty State with Animation
@@ -790,16 +812,16 @@ function ProductScreen({
   const [isLoadingTags, setIsLoadingTags] = useState(false);
   const PER_PAGE = 12;
 
-  const debouncedSearch = useDebounce(searchInput, 300);
+  // SESUDAH (diperbaiki):
+const debouncedSearch = useDebounce(searchInput, 400);
 
-  useEffect(() => {
-    if (searchInput) {
-      setIsSearching(true);
-      const timer = setTimeout(() => setIsSearching(false), 400);
-      return () => clearTimeout(timer);
-    }
+useEffect(() => {
+  if (searchInput !== debouncedSearch) {
+    setIsSearching(true);
+  } else {
     setIsSearching(false);
-  }, [searchInput]);
+  }
+}, [searchInput, debouncedSearch]);
 
   const filtered = useMemo(() => {
     let result = [...products];
@@ -878,7 +900,8 @@ function ProductScreen({
     setPage(1);
   };
 
-  useEffect(() => { setPage(1); }, [selectedCategory, selectedBrand, selectedTagId, debouncedSearch, priceRange, stockFilter, sortBy]);
+  useEffect(() => { 
+    setPage(1); }, [selectedCategory, selectedBrand, selectedTagId, debouncedSearch, priceRange, stockFilter, sortBy]);
 
   const FilterSidebar = () => (
     <div className="space-y-4">
@@ -1279,75 +1302,83 @@ export default function Katalog() {
     localStorage.setItem("katalog_sort", sortBy);
   }, [sortBy]);
 
-  const loadData = useCallback(async () => {
-    setLoading(true);
+const loadData = useCallback(async () => {
+  setLoading(true);
+  setError(null);
+  try {
+    const [categoriesRes, brandsRes, productsRes] = await Promise.all([
+      supabase.from("categories").select("*").order("name"),
+      supabase.from("brands").select("*").order("name"),
+      supabase.from("products").select("*").order("created_at", { ascending: false }),
+    ]);
+
+    if (categoriesRes.error) throw categoriesRes.error;
+    if (brandsRes.error) throw brandsRes.error;
+    if (productsRes.error) throw productsRes.error;
+
+    // Tags & product_tags tidak blocking — gagal pun produk tetap tampil
+    let tagsData = [];
+    let productTagsData = [];
     try {
-      // Load categories, brands, products, tags, and product_tags
-      const [categoriesRes, brandsRes, productsRes, tagsRes, productTagsRes] = await Promise.all([
-        supabase.from("categories").select("*").order("name"),
-        supabase.from("brands").select("*").order("name"),
-        supabase.from("products").select("*").order("created_at", { ascending: false }),
+      const [tagsRes, productTagsRes] = await Promise.all([
         supabase.from("tags").select("*").order("name"),
-        supabase.from("product_tags").select("*")
+        supabase.from("product_tags").select("*"),
       ]);
-
-      if (categoriesRes.error) throw categoriesRes.error;
-      if (brandsRes.error) throw brandsRes.error;
-      if (productsRes.error) throw productsRes.error;
-      if (tagsRes.error) throw tagsRes.error;
-      if (productTagsRes.error) throw productTagsRes.error;
-
-      const productIds = productsRes.data.map(p => p.id);
-      let specs = [], images = [];
-
-      if (productIds.length) {
-        const [specsRes, imagesRes] = await Promise.all([
-          supabase.from("product_specs").select("*").in("product_id", productIds),
-          supabase.from("product_images").select("*").in("product_id", productIds)
-        ]);
-        if (!specsRes.error) specs = specsRes.data;
-        if (!imagesRes.error) images = imagesRes.data;
-      }
-
-      // Group product_tags by product_id
-      const productTagsMap = {};
-      productTagsRes.data.forEach(pt => {
-        if (!productTagsMap[pt.product_id]) {
-          productTagsMap[pt.product_id] = [];
-        }
-        productTagsMap[pt.product_id].push(pt);
-      });
-
-      const enriched = productsRes.data.map(p => ({
-        ...p,
-        brands: brandsRes.data.find(b => b.id === p.brand_id) || null,
-        categories: categoriesRes.data.find(c => c.id === p.category_id) || null,
-        product_specs: specs.filter(s => s.product_id === p.id),
-        product_images: images.filter(i => i.product_id === p.id),
-        product_tags: productTagsMap[p.id] || []
-      }));
-
-      setCategories(categoriesRes.data || []);
-      setBrands(brandsRes.data || []);
-      setAllTags(tagsRes.data || []);
-      setProducts(enriched);
-    } catch (err) {
-      console.error(err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      if (!tagsRes.error) tagsData = tagsRes.data || [];
+      if (!productTagsRes.error) productTagsData = productTagsRes.data || [];
+    } catch (_) {
+      // Tags tidak tersedia, lanjut tanpa tags
     }
-  }, []);
+
+    const productIds = productsRes.data.map(p => p.id);
+    let specs = [], images = [];
+
+    if (productIds.length) {
+      const [specsRes, imagesRes] = await Promise.all([
+        supabase.from("product_specs").select("*").in("product_id", productIds),
+        supabase.from("product_images").select("*").in("product_id", productIds),
+      ]);
+      if (!specsRes.error) specs = specsRes.data || [];
+      if (!imagesRes.error) images = imagesRes.data || [];
+    }
+
+    const productTagsMap = {};
+    productTagsData.forEach(pt => {
+      if (!productTagsMap[pt.product_id]) productTagsMap[pt.product_id] = [];
+      productTagsMap[pt.product_id].push(pt);
+    });
+
+    const enriched = productsRes.data.map(p => ({
+      ...p,
+      brands: brandsRes.data.find(b => b.id === p.brand_id) || null,
+      categories: categoriesRes.data.find(c => c.id === p.category_id) || null,
+      product_specs: specs.filter(s => s.product_id === p.id),
+      product_images: images.filter(i => i.product_id === p.id),
+      product_tags: productTagsMap[p.id] || [],
+    }));
+
+    setCategories(categoriesRes.data || []);
+    setBrands(brandsRes.data || []);
+    setAllTags(tagsData);
+    setProducts(enriched);
+  } catch (err) {
+    console.error("loadData error:", err);
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+}, []);
 
   useEffect(() => {
     loadData();
   }, [loadData]);
 
-  useEffect(() => {
-    if (!modalProduct) return;
-    const updated = products.find((p) => p.id === modalProduct.id);
-    if (updated) setModalProduct(updated);
-  }, [products]);
+  // SESUDAH:
+useEffect(() => {
+  if (!modalProduct) return;
+  const updated = products.find((p) => p.id === modalProduct.id);
+  if (updated && updated !== modalProduct) setModalProduct(updated);
+}, [products]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const channel = supabase

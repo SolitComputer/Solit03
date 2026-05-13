@@ -193,8 +193,22 @@ export async function getProductsPaginated({ page, limit, search, sortBy, filter
         categories (id, name)
       `, { count: "exact" });
 
+    // ✅ Fix: cari brand ID dulu, lalu OR dengan name
     if (search) {
-      query = query.or(`name.ilike.%${search}%,brands.name.ilike.%${search}%`);
+      const { data: matchedBrands } = await supabase
+        .from("brands")
+        .select("id")
+        .ilike("name", `%${search}%`);
+
+      const brandIds = matchedBrands?.map(b => b.id) || [];
+
+      if (brandIds.length > 0) {
+        query = query.or(
+          `name.ilike.%${search}%,brand_id.in.(${brandIds.join(",")})`
+        );
+      } else {
+        query = query.ilike("name", `%${search}%`);
+      }
     }
 
     if (filterStock === "available") {
@@ -208,23 +222,12 @@ export async function getProductsPaginated({ page, limit, search, sortBy, filter
     }
 
     switch (sortBy) {
-      case "newest":
-        query = query.order("created_at", { ascending: false });
-        break;
-      case "oldest":
-        query = query.order("created_at", { ascending: true });
-        break;
-      case "price_high":
-        query = query.order("price", { ascending: false });
-        break;
-      case "price_low":
-        query = query.order("price", { ascending: true });
-        break;
-      case "name_asc":
-        query = query.order("name", { ascending: true });
-        break;
-      default:
-        query = query.order("created_at", { ascending: false });
+      case "newest": query = query.order("created_at", { ascending: false }); break;
+      case "oldest": query = query.order("created_at", { ascending: true }); break;
+      case "price_high": query = query.order("price", { ascending: false }); break;
+      case "price_low": query = query.order("price", { ascending: true }); break;
+      case "name_asc": query = query.order("name", { ascending: true }); break;
+      default: query = query.order("created_at", { ascending: false });
     }
 
     const from = (page - 1) * limit;
@@ -232,7 +235,6 @@ export async function getProductsPaginated({ page, limit, search, sortBy, filter
     query = query.range(from, to);
 
     const { data, error, count } = await query;
-
     if (error) throw error;
 
     return { data: data || [], total: count || 0 };
