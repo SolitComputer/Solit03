@@ -18,7 +18,7 @@ import Tags from "./admin/pages/Tags";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/">
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />

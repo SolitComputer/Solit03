@@ -237,11 +237,11 @@ function AnimatedSearchBar({ value, onChange, isLoading, onFocus, onBlur }) {
           onChange={(e) => onChange(e.target.value)}
           onFocus={() => {
             setIsFocused(true);
-            onFocus?.();
+            if (onFocus) onFocus();
           }}
           onBlur={() => {
             setIsFocused(false);
-            onBlur?.();
+            onBlur?.(); if (onBlur) onBlur();
           }}
           className="w-full pl-8 pr-8 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50 transition-all duration-300"
         />
@@ -1438,7 +1438,7 @@ export default function Katalog() {
           href="https://solit03.com/katalog"
         />
       </Helmet>
-      
+
       {step === "welcome" && <WelcomeScreen onStart={() => setStep("category")} />}
       {step === "category" && (
         <CategoryScreen
