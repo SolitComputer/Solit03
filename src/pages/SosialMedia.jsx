@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import shopeeIcon from "../assets/shoppe.png";
 import tokopediaIcon from "../assets/tokopedia.jpg";
 import tiktokIcon from "../assets/tiktok1.png";
@@ -9,60 +10,70 @@ const WHATSAPP_NUMBER = "6285210647047";
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
 export default function SosialMedia() {
+    const [isVisible, setIsVisible] = useState({
+        hero: false,
+        grid: false,
+        cta: false,
+        location: false,
+    });
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setIsVisible((prev) => ({ ...prev, [entry.target.id]: true }));
+                    }
+                });
+            },
+            { threshold: 0.2, triggerOnce: true }
+        );
+
+        const sections = ["hero", "grid", "cta", "location"];
+        sections.forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) observer.observe(el);
+        });
+
+        return () => observer.disconnect();
+    }, []);
+
     const socials = [
         {
             name: "Shopee",
             icon: shopeeIcon,
             link: "https://shopee.co.id/solit_03?entryPoint=ShopBySearch&searchKeyword=solit03",
-            color: "from-orange-500 to-orange-700",
-            bgHover: "hover:bg-orange-50",
-            border: "border-orange-100",
-            
+            color: "from-orange-500 to-orange-600",
         },
         {
             name: "Tokopedia",
             icon: tokopediaIcon,
             link: "https://www.tokopedia.com/solit03",
-            color: "from-green-500 to-green-700",
-            bgHover: "hover:bg-green-50",
-            border: "border-green-100",
-            
+            color: "from-green-500 to-green-600",
         },
         {
             name: "TikTok",
             icon: tiktokIcon,
             link: "https://www.tiktok.com/@solusi_it03",
-            color: "from-pink-500 to-pink-700",
-            bgHover: "hover:bg-pink-50",
-            border: "border-pink-100",
-            
+            color: "from-pink-500 to-pink-600",
         },
         {
             name: "WhatsApp",
             icon: whatsappIcon,
             link: WHATSAPP_URL,
-            color: "from-green-500 to-green-700",
-            bgHover: "hover:bg-green-50",
-            border: "border-green-100",
-            
+            color: "from-green-500 to-green-600",
         },
         {
             name: "Instagram",
             icon: instagramIcon,
             link: "https://www.instagram.com/solit.comp",
             color: "from-pink-500 to-purple-600",
-            bgHover: "hover:bg-pink-50",
-            border: "border-pink-100",
-            
         },
         {
             name: "Facebook",
             icon: facebookIcon,
             link: "https://www.facebook.com/share/18xXspWL5H/",
-            color: "from-blue-500 to-blue-700",
-            bgHover: "hover:bg-blue-50",
-            border: "border-blue-100",
-            
+            color: "from-blue-500 to-blue-600",
         },
     ];
 
@@ -72,227 +83,238 @@ export default function SosialMedia() {
     };
 
     return (
-        <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-            {/* HERO SECTION - Premium Design */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-700 text-white py-16 md:py-24">
-                {/* Background pattern */}
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-0 left-0 w-72 h-72 bg-white rounded-full blur-3xl" />
-                    <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl" />
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full">
-                        <div className="grid grid-cols-3 gap-4 p-8 opacity-20">
-                            {[...Array(9)].map((_, i) => (
-                                <div key={i} className="w-2 h-2 bg-white rounded-full" />
-                            ))}
-                        </div>
+        <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50/30">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 md:py-14">
+                <style>{`
+                    @keyframes fadeSlideUp {
+                        from { opacity: 0; transform: translateY(20px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                    @keyframes scaleIn {
+                        from { opacity: 0; transform: scale(0.95); }
+                        to { opacity: 1; transform: scale(1); }
+                    }
+                    @keyframes shimmer {
+                        0% { background-position: -200% 0; }
+                        100% { background-position: 200% 0; }
+                    }
+                    @keyframes float {
+                        0%, 100% { transform: translateY(0px); }
+                        50% { transform: translateY(-8px); }
+                    }
+                    .animate-fadeSlideUp { animation: fadeSlideUp 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards; }
+                    .animate-scaleIn { animation: scaleIn 0.4s ease-out forwards; }
+                    .animate-float { animation: float 4s ease-in-out infinite; }
+                `}</style>
+
+                {/* Hero Section - Premium Design (Sama persis dengan Jual Beli) */}
+                <section
+                    id="hero"
+                    className={`text-center mb-10 md:mb-12 transition-all duration-700 ${
+                        isVisible.hero ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                    }`}
+                >
+                    {/* Decorative Badge */}
+                    <div className="inline-flex items-center gap-1.5 bg-white/80 backdrop-blur-sm border border-blue-100 rounded-full px-3 py-1 mb-4 shadow-sm">
+                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
+                        <span className="text-[10px] font-semibold text-blue-700 tracking-wider uppercase">
+                            Connect With Us
+                        </span>
                     </div>
-                </div>
-                
-                <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6 border border-white/30">
-                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                        <span className="text-xs font-semibold tracking-wider uppercase">Connect With Us</span>
-                    </div>
-                    
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tight">
-                        Temukan Kami di{' '}
-                        <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+
+                    {/* Main Title */}
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
+                        <span className="text-gray-900">Temukan Kami di </span>
+                        <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                             Sosial Media
                         </span>
                     </h1>
-                    
-                    <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
-                        Follow dan hubungi Solit 03 di berbagai platform untuk mendapatkan update terbaru, 
-                        promo, dan penawaran terbaik.
-                    </p>
-                    
-                    {/* Floating stats */}
-                    <div className="flex flex-wrap justify-center gap-6 mt-8">
-                        <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-                                </svg>
-                            </div>
-                            <span className="text-sm">24/7 Support</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-                                </svg>
-                            </div>
-                            <span className="text-sm">Fast Response</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-                                </svg>
-                            </div>
-                            <span className="text-sm">Trusted Store</span>
-                        </div>
-                    </div>
-                </div>
-                
-                {/* Wave bottom */}
-                <div className="absolute bottom-0 left-0 right-0">
-                    <svg className="w-full h-12 text-gray-50" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" 
-                              fill="currentColor" opacity="0.6"/>
-                        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" 
-                              fill="currentColor" className="text-gray-50"/>
-                    </svg>
-                </div>
-            </section>
 
-            {/* SOCIAL GRID - Premium Cards */}
-            <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 md:py-20">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-5 md:gap-6">
-                    {socials.map((item, i) => (
-                        <a
-                            key={i}
-                            href={item.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={`group relative bg-white rounded-2xl p-5 md:p-6 transition-all duration-500 hover:-translate-y-2 overflow-hidden border ${item.border} shadow-lg hover:shadow-2xl`}
-                        >
-                            {/* Gradient background on hover */}
-                            <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-100 transition-all duration-500`} />
-                            
-                            {/* Shine effect */}
-                            <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition duration-500 bg-gradient-to-r from-transparent via-white to-transparent -translate-x-full group-hover:translate-x-full transform transition-transform duration-1000" />
-                            
-                            <div className="relative z-10 flex flex-col items-center text-center">
-                                {/* Icon container with glow */}
-                                <div className="relative mb-4">
-                                    <div className={`absolute inset-0 bg-gradient-to-br ${item.color} rounded-full blur-xl opacity-0 group-hover:opacity-60 transition duration-500`} />
-                                    <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden ring-2 ring-offset-2 ring-gray-100 group-hover:ring-white/50 transition-all duration-300">
+                    {/* Subtitle */}
+                    <div className="mt-4">
+                        <p className="text-gray-500 text-sm sm:text-base md:text-lg">
+                            Follow dan hubungi{" "}
+                            <span className="relative inline-block">
+                                <span className="absolute inset-x-0 bottom-0 h-2 bg-blue-200/50 rounded-full -z-10"></span>
+                                <span className="font-bold bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent">
+                                    Solit 03
+                                </span>
+                            </span>
+                        </p>
+                    </div>
+
+                    {/* Decorative Elements */}
+                    <div className="flex justify-center gap-2 mt-4">
+                        <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-blue-600 rounded-full" />
+                        <div className="w-2 h-0.5 bg-blue-500 rounded-full" />
+                        <div className="w-12 h-0.5 bg-gradient-to-r from-blue-600 to-transparent rounded-full" />
+                    </div>
+
+                    {/* Floating Icon Decoration */}
+                    <div className="absolute left-4 top-20 opacity-20 hidden lg:block animate-float">
+                        <svg className="w-12 h-12 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M4 4h16v16H4z" stroke="currentColor" strokeWidth="2" fill="none" />
+                        </svg>
+                    </div>
+                    <div className="absolute right-4 bottom-20 opacity-20 hidden lg:block animate-float" style={{ animationDelay: "2s" }}>
+                        <svg className="w-10 h-10 text-indigo-400" fill="currentColor" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="2" fill="none" />
+                        </svg>
+                    </div>
+                </section>
+
+                {/* SOCIAL GRID - Premium Cards */}
+                <div
+                    id="grid"
+                    className={`transition-all duration-500 delay-100 ${
+                        isVisible.grid ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                    }`}
+                >
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-5">
+                        {socials.map((item, i) => (
+                            <a
+                                key={i}
+                                href={item.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                            >
+                                <div className="p-4 md:p-5 text-center">
+                                    {/* Icon */}
+                                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full mx-auto mb-3 overflow-hidden ring-2 ring-offset-2 ring-gray-100 group-hover:ring-blue-200 transition-all duration-300">
                                         <img
                                             src={item.icon}
                                             alt={item.name}
-                                            className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
+                                            className="w-full h-full object-cover transition duration-300 group-hover:scale-110"
                                         />
                                     </div>
+                                    
+                                    {/* Name */}
+                                    <h3 className="text-sm md:text-base font-bold text-gray-800 group-hover:text-blue-700 transition-colors duration-300">
+                                        {item.name}
+                                    </h3>
+                                    
+                                    {/* Action Text */}
+                                    <p className="text-[10px] text-gray-400 mt-1 group-hover:text-blue-500 transition-colors">
+                                        Kunjungi →
+                                    </p>
                                 </div>
-                                
-                                <h3 className="text-base md:text-lg font-bold text-gray-800 group-hover:text-white transition-colors duration-300 mb-1">
-                                    {item.name}
-                                </h3>
-                                
-                                <p className="text-xs text-gray-500 group-hover:text-white/80 transition-colors duration-300">
-                                    {item.stats}
-                                </p>
-                                
-                                {/* Arrow indicator */}
-                                <div className="mt-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0">
-                                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                    </svg>
-                                </div>
-                            </div>
-                            
-                            {/* Corner decoration */}
-                            <div className="absolute top-2 right-2 w-8 h-8 opacity-0 group-hover:opacity-100 transition duration-300">
-                                <div className="w-full h-full bg-white/20 rounded-full blur-sm" />
-                            </div>
-                        </a>
-                    ))}
-                </div>
-            </section>
-
-            {/* Quick WhatsApp Section - Premium CTA */}
-            <section className="relative py-20 md:py-28 overflow-hidden">
-                {/* Background gradient */}
-                <div className="absolute inset-0 bg-gradient-to-br from-green-600 to-emerald-700" />
-                
-                {/* Animated background patterns */}
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl animate-pulse" />
-                    <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl animate-pulse delay-1000" />
-                </div>
-                
-                <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
-                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6 border border-white/30">
-                        <span className="w-2 h-2 bg-green-300 rounded-full animate-pulse" />
-                        <span className="text-xs font-semibold text-white tracking-wider uppercase">Priority Support</span>
+                            </a>
+                        ))}
                     </div>
-                    
-                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                        Butuh <span className="underline decoration-green-300">Respon Cepat?</span>
-                    </h2>
-                    
-                    <p className="text-base md:text-lg text-white/80 mb-8 max-w-2xl mx-auto">
-                        Langsung chat via WhatsApp untuk mendapatkan informasi produk, harga, dan promo terbaru.
-                        Tim kami siap membantu Anda!
-                    </p>
-                    
-                    <button
-                        onClick={handleWhatsApp}
-                        className="group relative inline-flex items-center gap-3 px-8 py-4 bg-white text-green-700 rounded-2xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
-                    >
-                        <span className="absolute inset-0 bg-gradient-to-r from-green-100 to-white opacity-0 group-hover:opacity-100 transition duration-300" />
-                        <svg className="relative z-10 w-5 h-5 group-hover:scale-110 transition duration-300" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12.032 2.001c-5.514 0-10 4.486-10 10 0 1.78.469 3.452 1.283 4.899L2 21.999l5.225-1.312c1.39.794 3.002 1.253 4.713 1.253 5.514 0 10-4.486 10-10s-4.486-10-10-10zm0 18.5c-1.657 0-3.236-.448-4.618-1.277l-.338-.195-3.125.785.84-3.077-.208-.347c-.891-1.449-1.363-3.113-1.363-4.889 0-4.688 3.812-8.5 8.5-8.5s8.5 3.812 8.5 8.5-3.812 8.5-8.5 8.5z" />
-                            <path d="M16.75 13.45c-.26-.13-1.54-.76-1.78-.85s-.41-.13-.59.13c-.18.26-.69.85-.85 1.02s-.31.2-.56.07c-.26-.13-1.09-.4-2.07-1.28-.77-.69-1.29-1.54-1.44-1.8-.15-.26-.02-.4.11-.53.13-.13.26-.33.39-.5.13-.17.18-.28.27-.47.09-.19.05-.36-.02-.5s-.59-1.42-.81-1.95c-.21-.52-.43-.45-.59-.46s-.31-.01-.48-.01c-.18 0-.47.07-.71.33-.24.26-.91.89-.91 2.16 0 1.27.93 2.5 1.06 2.67.13.17 1.83 2.79 4.43 3.91.62.27 1.1.43 1.48.55.62.2 1.19.17 1.63.1.5-.07 1.54-.63 1.76-1.24.22-.61.22-1.13.15-1.24-.07-.1-.26-.16-.52-.26z" />
-                        </svg>
-                        <span className="relative z-10">Hubungi Admin via WhatsApp</span>
-                        <svg className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                    </button>
-                    
-                    <p className="text-sm text-white/70 mt-6 flex items-center justify-center gap-2">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Klik untuk chat langsung • +62 852-1064-7047 • Available 24/7
-                    </p>
                 </div>
-            </section>
 
-            {/* Location Section - Premium */}
-            <section className="py-16 md:py-20 bg-gray-50">
-                <div className="max-w-6xl mx-auto px-4 sm:px-6">
-                    <div className="text-center mb-10">
-                        <div className="inline-flex items-center gap-2 bg-white shadow-sm rounded-full px-4 py-1.5 mb-4">
-                            <svg className="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                {/* Location Section - Premium (Sama dengan Jual Beli) */}
+                <div
+                    id="location"
+                    className={`mt-8 md:mt-10 transition-all duration-500 delay-200 ${
+                        isVisible.location ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                    }`}
+                >
+                    {/* Section Header */}
+                    <div className="text-center mb-6">
+                        <div className="inline-flex items-center gap-1.5 bg-white/80 backdrop-blur-sm border border-blue-100 rounded-full px-3 py-1 mb-4 shadow-sm">
+                            <svg className="w-3 h-3 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
                             </svg>
-                            <span className="text-xs font-semibold text-gray-600 tracking-wider uppercase">Visit Us</span>
+                            <span className="text-[10px] font-semibold text-blue-700 uppercase">Visit Us</span>
                         </div>
-                        
-                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-                            Lokasi Kami
-                        </h2>
-                        <div className="w-20 h-0.5 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto mb-5 rounded-full" />
-                        <p className="text-gray-500 text-sm md:text-base">
-                            Jl. Raya Sawangan No. 123, Depok, Jawa Barat
-                        </p>
+                        <h2 className="text-lg md:text-xl font-bold text-gray-800">Lokasi Kami</h2>
+                        <div className="w-10 h-0.5 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto mt-2 rounded-full" />
                     </div>
-                    
-                    <div className="group relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500">
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 z-10" />
-                        <div className="w-full h-[350px] md:h-[400px]">
+
+                    {/* Map */}
+                    <div className="rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300">
+                        <div className="w-full h-[280px] md:h-[320px]">
                             <iframe
                                 src="https://www.google.com/maps?q=Solit%2003%20Depok%20Sawangan&output=embed"
-                                className="w-full h-full border-0 group-hover:scale-105 transition duration-700"
+                                className="w-full h-full border-0"
                                 loading="lazy"
                                 referrerPolicy="no-referrer-when-downgrade"
                                 title="Lokasi Solit 03"
                             ></iframe>
                         </div>
-                        <div className="absolute bottom-4 left-4 right-4 z-20 bg-black/70 backdrop-blur-md rounded-lg p-3 transform translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                            <div className="flex items-center gap-2 text-white text-sm">
-                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                        <div className="bg-gray-50 px-4 py-3 border-t border-gray-100">
+                            <div className="flex items-center justify-center gap-2 text-xs text-gray-600">
+                                <svg className="w-3.5 h-3.5 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
                                 </svg>
                                 <span>Jl. Raya Sawangan No. 123, Depok, Jawa Barat</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-        </main>
+
+                {/* CTA WhatsApp Section - Premium (Sama persis dengan Jual Beli) */}
+                <div
+                    id="cta"
+                    className={`text-center my-8 md:my-10 transition-all duration-500 delay-300 ${
+                        isVisible.cta ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                    }`}
+                >
+                    {/* Background Glow Effect */}
+                    <div className="relative inline-block">
+                        <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full blur-xl opacity-40 group-hover:opacity-60 transition duration-500"></div>
+
+                        <button
+                            onClick={handleWhatsApp}
+                            className="group relative inline-flex items-center gap-2 px-6 sm:px-8 py-2.5 rounded-full text-sm font-medium text-white bg-gradient-to-r from-green-500 to-emerald-600 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500/50 overflow-hidden"
+                        >
+                            {/* Shimmer Effect on Hover */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+
+                            <svg className="relative w-4 h-4 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12.032 2.001c-5.514 0-10 4.486-10 10 0 1.78.469 3.452 1.283 4.899L2 21.999l5.225-1.312c1.39.794 3.002 1.253 4.713 1.253 5.514 0 10-4.486 10-10s-4.486-10-10-10zm0 18.5c-1.657 0-3.236-.448-4.618-1.277l-.338-.195-3.125.785.84-3.077-.208-.347c-.891-1.449-1.363-3.113-1.363-4.889 0-4.688 3.812-8.5 8.5-8.5s8.5 3.812 8.5 8.5-3.812 8.5-8.5 8.5z" />
+                                <path d="M16.75 13.45c-.26-.13-1.54-.76-1.78-.85s-.41-.13-.59.13c-.18.26-.69.85-.85 1.02s-.31.2-.56.07c-.26-.13-1.09-.4-2.07-1.28-.77-.69-1.29-1.54-1.44-1.8-.15-.26-.02-.4.11-.53.13-.13.26-.33.39-.5.13-.17.18-.28.27-.47.09-.19.05-.36-.02-.5s-.59-1.42-.81-1.95c-.21-.52-.43-.45-.59-.46s-.31-.01-.48-.01c-.18 0-.47.07-.71.33-.24.26-.91.89-.91 2.16 0 1.27.93 2.5 1.06 2.67.13.17 1.83 2.79 4.43 3.91.62.27 1.1.43 1.48.55.62.2 1.19.17 1.63.1.5-.07 1.54-.63 1.76-1.24.22-.61.22-1.13.15-1.24-.07-.1-.26-.16-.52-.26z" />
+                            </svg>
+
+                            <span className="relative font-semibold">
+                                Hubungi Kami via WhatsApp
+                            </span>
+
+                            <svg
+                                className="relative w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                strokeWidth="2.5"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    {/* Contact Info */}
+                    <div className="flex items-center justify-center gap-2 mt-3">
+                        <div className="h-3 w-px bg-gray-300"></div>
+                        <p className="text-[11px] text-gray-400">
+                            Atau hubungi langsung:
+                        </p>
+                        <a
+                            href={WHATSAPP_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[11px] font-mono text-green-600 hover:text-green-700 font-medium hover:underline transition"
+                        >
+                            +62 852-1064-7047
+                        </a>
+                        <div className="h-3 w-px bg-gray-300"></div>
+                    </div>
+                </div>
+
+                {/* Bottom Decorative Element (Sama dengan Jual Beli) */}
+                <div className="flex justify-center mt-10">
+                    <div className="flex gap-1.5">
+                        {[...Array(3)].map((_, i) => (
+                            <div
+                                key={i}
+                                className="w-1 h-1 rounded-full bg-gradient-to-r from-blue-300 to-indigo-300 opacity-40"
+                                style={{ animationDelay: `${i * 0.2}s` }}
+                            />
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }
