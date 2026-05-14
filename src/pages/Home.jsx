@@ -10,21 +10,39 @@ import Location from "../components/Location";
 import Marketplace from "../components/Marketplace";
 import Footer from "../components/layout/Footer";
 import ChatBot from "../components/ChatBot";
+import { Helmet } from "react-helmet-async";
 
 export default function Home() {
   return (
-    <main className="overflow-x-hidden">
-      <Navbar />
-      <Hero />
-      <BestSeller />
-      <About />
-      <Services />
-      <Promo />
-      <SocialMedia />
-      <Testimoni />
-      <Location />
-      <Marketplace />
-       <ChatBot />
-    </main>
+    <>
+      <Helmet>
+        <title>
+          Laptop Second Bergaransi Murah di Depok | Solit 03
+        </title>
+
+        <meta
+          name="description"
+          content="Solit 03 toko laptop second bergaransi di Depok. Laptop untuk kuliah, kerja, coding, desain hingga gaming dengan harga terbaik."
+        />
+
+        <link
+          rel="canonical"
+          href="https://solit03.com"
+        />
+      </Helmet>
+      <main className="overflow-x-hidden">
+        <Navbar />
+        <Hero />
+        <BestSeller />
+        <About />
+        <Services />
+        <Promo />
+        <SocialMedia />
+        <Testimoni />
+        <Location />
+        <Marketplace />
+        <ChatBot />
+      </main>
+    </>
   );
 }

@@ -8,6 +8,7 @@ import {
   ChevronDown, Heart, Eye, Check, Sparkles, Loader2,
   TrendingUp, Flame, Gift, Award
 } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 const CATEGORY_ICONS = {
   gaming: <Gamepad2 size={20} />,
@@ -211,54 +212,53 @@ function AnimatedProductCard({ product, onClick, index, allTags }) {
 function AnimatedSearchBar({ value, onChange, isLoading, onFocus, onBlur }) {
   const [isFocused, setIsFocused] = useState(false);
 
-return (
-  <div className={`relative transition-all duration-300 ${isFocused ? 'scale-[1.02]' : 'scale-100'}`}>
-    <div
-      className={`absolute inset-0 bg-blue-500 rounded-lg blur-lg transition-opacity duration-300 ${
-        isFocused ? 'opacity-30' : 'opacity-0'
-      }`}
-    />
-
-    <div className="relative">
-      <Search
-        size={12}
-        className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 transition-all duration-300"
-        style={{
-          transform: isFocused
-            ? 'translateY(-50%) scale(1.1)'
-            : 'translateY(-50%)',
-        }}
+  return (
+    <div className={`relative transition-all duration-300 ${isFocused ? 'scale-[1.02]' : 'scale-100'}`}>
+      <div
+        className={`absolute inset-0 bg-blue-500 rounded-lg blur-lg transition-opacity duration-300 ${isFocused ? 'opacity-30' : 'opacity-0'
+          }`}
       />
 
-      <input
-        type="text"
-        placeholder="Cari produk, brand, atau kategori..."
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={() => {
-          setIsFocused(true);
-          onFocus?.();
-        }}
-        onBlur={() => {
-          setIsFocused(false);
-          onBlur?.();
-        }}
-        className="w-full pl-8 pr-8 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50 transition-all duration-300"
-      />
+      <div className="relative">
+        <Search
+          size={12}
+          className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 transition-all duration-300"
+          style={{
+            transform: isFocused
+              ? 'translateY(-50%) scale(1.1)'
+              : 'translateY(-50%)',
+          }}
+        />
 
-      {isLoading && <SearchLoadingIndicator />}
+        <input
+          type="text"
+          placeholder="Cari produk, brand, atau kategori..."
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onFocus={() => {
+            setIsFocused(true);
+            onFocus?.();
+          }}
+          onBlur={() => {
+            setIsFocused(false);
+            onBlur?.();
+          }}
+          className="w-full pl-8 pr-8 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50 transition-all duration-300"
+        />
 
-      {value && !isLoading && (
-        <button
-          onClick={() => onChange("")}
-          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
-        >
-          <X size={10} />
-        </button>
-      )}
+        {isLoading && <SearchLoadingIndicator />}
+
+        {value && !isLoading && (
+          <button
+            onClick={() => onChange("")}
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+          >
+            <X size={10} />
+          </button>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
 }
 
 // Empty State with Animation
@@ -813,15 +813,15 @@ function ProductScreen({
   const PER_PAGE = 12;
 
   // SESUDAH (diperbaiki):
-const debouncedSearch = useDebounce(searchInput, 400);
+  const debouncedSearch = useDebounce(searchInput, 400);
 
-useEffect(() => {
-  if (searchInput !== debouncedSearch) {
-    setIsSearching(true);
-  } else {
-    setIsSearching(false);
-  }
-}, [searchInput, debouncedSearch]);
+  useEffect(() => {
+    if (searchInput !== debouncedSearch) {
+      setIsSearching(true);
+    } else {
+      setIsSearching(false);
+    }
+  }, [searchInput, debouncedSearch]);
 
   const filtered = useMemo(() => {
     let result = [...products];
@@ -900,8 +900,9 @@ useEffect(() => {
     setPage(1);
   };
 
-  useEffect(() => { 
-    setPage(1); }, [selectedCategory, selectedBrand, selectedTagId, debouncedSearch, priceRange, stockFilter, sortBy]);
+  useEffect(() => {
+    setPage(1);
+  }, [selectedCategory, selectedBrand, selectedTagId, debouncedSearch, priceRange, stockFilter, sortBy]);
 
   const FilterSidebar = () => (
     <div className="space-y-4">
@@ -1069,46 +1070,46 @@ useEffect(() => {
 
       <div className="relative top-6 md:top-6 z-20 bg-white border-b border-slate-200 shadow-sm">
         <div className="w-full px-3 py-2">
-        <div className="flex items-center justify-between gap-2">
-          <button
-            onClick={onBack}
-            className="flex items-center gap-1 text-slate-500 hover:text-slate-800 transition-colors text-xs"
-          >
-            <ChevronLeft size={14} />
-            <span className="hidden sm:inline">Kembali</span>
-          </button>
-
-          <div className="flex-1 max-w-xs">
-            <AnimatedSearchBar
-              value={searchInput}
-              onChange={setSearchInput}
-              isLoading={isSearching}
-            />
-          </div>
-
-          <div className="flex items-center gap-1.5">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="px-2 py-1.5 text-xs bg-slate-100 border-0 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer transition-all hover:bg-slate-200"
-            >
-              <option value="newest">Terbaru</option>
-              <option value="price_high">Harga Tertinggi</option>
-              <option value="price_low">Harga Terendah</option>
-              <option value="name_asc">Nama A-Z</option>
-            </select>
-
+          <div className="flex items-center justify-between gap-2">
             <button
-              onClick={() => setShowMobileFilters(!showMobileFilters)}
-              className="lg:hidden flex items-center gap-1.5 px-2 py-1.5 text-xs bg-slate-100 rounded-lg transition-all hover:bg-slate-200"
+              onClick={onBack}
+              className="flex items-center gap-1 text-slate-500 hover:text-slate-800 transition-colors text-xs"
             >
-              <Filter size={12} />
-              Filter
-              {hasFilter && <span className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse" />}
+              <ChevronLeft size={14} />
+              <span className="hidden sm:inline">Kembali</span>
             </button>
+
+            <div className="flex-1 max-w-xs">
+              <AnimatedSearchBar
+                value={searchInput}
+                onChange={setSearchInput}
+                isLoading={isSearching}
+              />
+            </div>
+
+            <div className="flex items-center gap-1.5">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="px-2 py-1.5 text-xs bg-slate-100 border-0 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer transition-all hover:bg-slate-200"
+              >
+                <option value="newest">Terbaru</option>
+                <option value="price_high">Harga Tertinggi</option>
+                <option value="price_low">Harga Terendah</option>
+                <option value="name_asc">Nama A-Z</option>
+              </select>
+
+              <button
+                onClick={() => setShowMobileFilters(!showMobileFilters)}
+                className="lg:hidden flex items-center gap-1.5 px-2 py-1.5 text-xs bg-slate-100 rounded-lg transition-all hover:bg-slate-200"
+              >
+                <Filter size={12} />
+                Filter
+                {hasFilter && <span className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse" />}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
       </div>
 
       <div className="w-full px-3 py-10">
@@ -1258,7 +1259,6 @@ useEffect(() => {
   );
 }
 
-// Main Katalog Component
 export default function Katalog() {
   const [step, setStep] = useState(() => {
     const saved = localStorage.getItem("katalog_step");
@@ -1302,83 +1302,83 @@ export default function Katalog() {
     localStorage.setItem("katalog_sort", sortBy);
   }, [sortBy]);
 
-const loadData = useCallback(async () => {
-  setLoading(true);
-  setError(null);
-  try {
-    const [categoriesRes, brandsRes, productsRes] = await Promise.all([
-      supabase.from("categories").select("*").order("name"),
-      supabase.from("brands").select("*").order("name"),
-      supabase.from("products").select("*").order("created_at", { ascending: false }),
-    ]);
-
-    if (categoriesRes.error) throw categoriesRes.error;
-    if (brandsRes.error) throw brandsRes.error;
-    if (productsRes.error) throw productsRes.error;
-
-    // Tags & product_tags tidak blocking — gagal pun produk tetap tampil
-    let tagsData = [];
-    let productTagsData = [];
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
-      const [tagsRes, productTagsRes] = await Promise.all([
-        supabase.from("tags").select("*").order("name"),
-        supabase.from("product_tags").select("*"),
+      const [categoriesRes, brandsRes, productsRes] = await Promise.all([
+        supabase.from("categories").select("*").order("name"),
+        supabase.from("brands").select("*").order("name"),
+        supabase.from("products").select("*").order("created_at", { ascending: false }),
       ]);
-      if (!tagsRes.error) tagsData = tagsRes.data || [];
-      if (!productTagsRes.error) productTagsData = productTagsRes.data || [];
-    } catch (_) {
-      // Tags tidak tersedia, lanjut tanpa tags
+
+      if (categoriesRes.error) throw categoriesRes.error;
+      if (brandsRes.error) throw brandsRes.error;
+      if (productsRes.error) throw productsRes.error;
+
+      // Tags & product_tags tidak blocking — gagal pun produk tetap tampil
+      let tagsData = [];
+      let productTagsData = [];
+      try {
+        const [tagsRes, productTagsRes] = await Promise.all([
+          supabase.from("tags").select("*").order("name"),
+          supabase.from("product_tags").select("*"),
+        ]);
+        if (!tagsRes.error) tagsData = tagsRes.data || [];
+        if (!productTagsRes.error) productTagsData = productTagsRes.data || [];
+      } catch (_) {
+        // Tags tidak tersedia, lanjut tanpa tags
+      }
+
+      const productIds = productsRes.data.map(p => p.id);
+      let specs = [], images = [];
+
+      if (productIds.length) {
+        const [specsRes, imagesRes] = await Promise.all([
+          supabase.from("product_specs").select("*").in("product_id", productIds),
+          supabase.from("product_images").select("*").in("product_id", productIds),
+        ]);
+        if (!specsRes.error) specs = specsRes.data || [];
+        if (!imagesRes.error) images = imagesRes.data || [];
+      }
+
+      const productTagsMap = {};
+      productTagsData.forEach(pt => {
+        if (!productTagsMap[pt.product_id]) productTagsMap[pt.product_id] = [];
+        productTagsMap[pt.product_id].push(pt);
+      });
+
+      const enriched = productsRes.data.map(p => ({
+        ...p,
+        brands: brandsRes.data.find(b => b.id === p.brand_id) || null,
+        categories: categoriesRes.data.find(c => c.id === p.category_id) || null,
+        product_specs: specs.filter(s => s.product_id === p.id),
+        product_images: images.filter(i => i.product_id === p.id),
+        product_tags: productTagsMap[p.id] || [],
+      }));
+
+      setCategories(categoriesRes.data || []);
+      setBrands(brandsRes.data || []);
+      setAllTags(tagsData);
+      setProducts(enriched);
+    } catch (err) {
+      console.error("loadData error:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-
-    const productIds = productsRes.data.map(p => p.id);
-    let specs = [], images = [];
-
-    if (productIds.length) {
-      const [specsRes, imagesRes] = await Promise.all([
-        supabase.from("product_specs").select("*").in("product_id", productIds),
-        supabase.from("product_images").select("*").in("product_id", productIds),
-      ]);
-      if (!specsRes.error) specs = specsRes.data || [];
-      if (!imagesRes.error) images = imagesRes.data || [];
-    }
-
-    const productTagsMap = {};
-    productTagsData.forEach(pt => {
-      if (!productTagsMap[pt.product_id]) productTagsMap[pt.product_id] = [];
-      productTagsMap[pt.product_id].push(pt);
-    });
-
-    const enriched = productsRes.data.map(p => ({
-      ...p,
-      brands: brandsRes.data.find(b => b.id === p.brand_id) || null,
-      categories: categoriesRes.data.find(c => c.id === p.category_id) || null,
-      product_specs: specs.filter(s => s.product_id === p.id),
-      product_images: images.filter(i => i.product_id === p.id),
-      product_tags: productTagsMap[p.id] || [],
-    }));
-
-    setCategories(categoriesRes.data || []);
-    setBrands(brandsRes.data || []);
-    setAllTags(tagsData);
-    setProducts(enriched);
-  } catch (err) {
-    console.error("loadData error:", err);
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-}, []);
+  }, []);
 
   useEffect(() => {
     loadData();
   }, [loadData]);
 
   // SESUDAH:
-useEffect(() => {
-  if (!modalProduct) return;
-  const updated = products.find((p) => p.id === modalProduct.id);
-  if (updated && updated !== modalProduct) setModalProduct(updated);
-}, [products]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!modalProduct) return;
+    const updated = products.find((p) => p.id === modalProduct.id);
+    if (updated && updated !== modalProduct) setModalProduct(updated);
+  }, [products]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const channel = supabase
@@ -1418,6 +1418,27 @@ useEffect(() => {
 
   return (
     <>
+      <Helmet>
+        <title>
+          Daftar Harga Laptop Second Update Setiap Hari | Solit 03
+        </title>
+
+        <meta
+          name="description"
+          content="Cari laptop second bergaransi? Lihat katalog laptop Solit 03 dengan harga update setiap hari. Cocok untuk kuliah, kerja, coding, desain hingga gaming."
+        />
+
+        <meta
+          name="keywords"
+          content="katalog laptop second, harga laptop second, laptop murah depok, laptop bekas bergaransi"
+        />
+
+        <link
+          rel="canonical"
+          href="https://solit03.com/katalog"
+        />
+      </Helmet>
+      
       {step === "welcome" && <WelcomeScreen onStart={() => setStep("category")} />}
       {step === "category" && (
         <CategoryScreen
