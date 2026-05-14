@@ -31,9 +31,7 @@ export default function Hero() {
         window.open(whatsappUrl, '_blank');
     };
 
-    const testimonials = [
-
-    ];
+    const testimonials = [];
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -42,21 +40,21 @@ export default function Hero() {
         return () => clearInterval(interval);
     }, []);
 
-    // Loading Screen Component - Premium Design
+    // Loading Screen Component - White/Premium Design
     if (isLoading) {
         return (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 overflow-hidden">
-                {/* Animated Background Patterns */}
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-white overflow-hidden">
+                {/* Animated Background Patterns - Soft Gray */}
                 <div className="absolute inset-0 overflow-hidden">
-                    <div className="absolute top-0 left-0 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl animate-pulse" />
-                    <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-400/20 rounded-full blur-3xl animate-pulse delay-700" />
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-400/10 rounded-full blur-3xl animate-pulse delay-300" />
+                    <div className="absolute top-0 left-0 w-96 h-96 bg-gray-100 rounded-full blur-3xl animate-pulse" />
+                    <div className="absolute bottom-0 right-0 w-96 h-96 bg-gray-50 rounded-full blur-3xl animate-pulse delay-700" />
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gray-100 rounded-full blur-3xl animate-pulse delay-300" />
                     
-                    {/* Floating particles */}
+                    {/* Floating particles - Soft Gray */}
                     {[...Array(30)].map((_, i) => (
                         <div
                             key={i}
-                            className="absolute w-1 h-1 bg-white/30 rounded-full animate-float"
+                            className="absolute w-1 h-1 bg-gray-300 rounded-full animate-float"
                             style={{
                                 top: `${Math.random() * 100}%`,
                                 left: `${Math.random() * 100}%`,
@@ -71,23 +69,23 @@ export default function Hero() {
                 <div className="relative z-10 text-center px-4">
                     {/* Animated Logo */}
                     <div className="mb-8 relative">
-                        {/* Glow effects */}
+                        {/* Glow effects - Soft Gray */}
                         <div className="absolute inset-0 animate-ping-slow">
-                            <div className="w-32 h-32 bg-blue-500/30 rounded-full mx-auto blur-2xl" />
+                            <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto blur-2xl" />
                         </div>
                         <div className="absolute inset-0 animate-ping-slow delay-300">
-                            <div className="w-40 h-40 bg-indigo-500/20 rounded-full mx-auto blur-2xl" />
+                            <div className="w-40 h-40 bg-gray-100 rounded-full mx-auto blur-2xl" />
                         </div>
                         
                         {/* Logo Container */}
                         <div className="relative w-28 h-28 md:w-36 md:h-36 mx-auto">
-                            {/* Rotating rings */}
-                            <div className="absolute inset-0 rounded-full border-2 border-blue-400/50 animate-spin-slow" />
-                            <div className="absolute inset-0 rounded-full border-t-2 border-blue-400 animate-spin-slow" style={{ animationDuration: '2s' }} />
-                            <div className="absolute inset-0 rounded-full border-r-2 border-indigo-400 animate-spin-slow" style={{ animationDuration: '1.5s' }} />
+                            {/* Rotating rings - Soft Gray */}
+                            <div className="absolute inset-0 rounded-full border-2 border-gray-300 animate-spin-slow" />
+                            <div className="absolute inset-0 rounded-full border-t-2 border-gray-400 animate-spin-slow" style={{ animationDuration: '2s' }} />
+                            <div className="absolute inset-0 rounded-full border-r-2 border-gray-300 animate-spin-slow" style={{ animationDuration: '1.5s' }} />
                             
                             {/* Logo Image */}
-                            <div className="relative w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center overflow-hidden shadow-2xl">
+                            <div className="relative w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center overflow-hidden shadow-xl">
                                 <img 
                                     src={solitLogo} 
                                     alt="Solit 03 Logo" 
@@ -98,10 +96,10 @@ export default function Hero() {
                     </div>
 
                     {/* Loading Text */}
-                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-3 animate-pulse tracking-tight">
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3 animate-pulse tracking-tight">
                         Solit 03
                     </h2>
-                    <p className="text-blue-200 text-sm md:text-base mb-4 font-light">
+                    <p className="text-gray-400 text-sm md:text-base mb-4 font-light">
                         Loading experience...
                     </p>
                     
@@ -110,7 +108,7 @@ export default function Hero() {
                         {[...Array(3)].map((_, i) => (
                             <div 
                                 key={i} 
-                                className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
+                                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
                                 style={{ animationDelay: `${i * 0.15}s` }}
                             />
                         ))}
@@ -118,13 +116,13 @@ export default function Hero() {
 
                     {/* Loading Bar */}
                     <div className="w-72 md:w-96 mx-auto">
-                        <div className="relative h-1 bg-white/20 rounded-full overflow-hidden">
-                            <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 rounded-full animate-loading-bar" />
+                        <div className="relative h-1 bg-gray-200 rounded-full overflow-hidden">
+                            <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-gray-500 via-gray-600 to-gray-700 rounded-full animate-loading-bar" />
                         </div>
                     </div>
 
                     {/* Brand Quote */}
-                    <p className="text-blue-300/60 text-[10px] mt-6 tracking-wider font-medium">
+                    <p className="text-gray-300 text-[10px] mt-6 tracking-wider font-medium">
                         QUALITY LAPTOPS • TRUSTED SERVICE
                     </p>
                 </div>
