@@ -1,14 +1,13 @@
 import { useState, useEffect, useRef } from "react";
-import { Quote, Sparkles, Shield, Heart, Target, Star, Award } from "lucide-react";
+import { Quote, Sparkles, Shield, Heart, Target, Star, Award, ArrowRight } from "lucide-react";
 import founderImg from "../assets/reinaldy.webp";
 
 export default function About() {
   const [isVisible, setIsVisible] = useState(false);
-  const [activeStat, setActiveStat] = useState(0);
   const sectionRef = useRef(null);
 
   const stats = [
-   
+
   ];
 
   useEffect(() => {
@@ -25,15 +24,10 @@ export default function About() {
       observer.observe(sectionRef.current);
     }
 
-    const statInterval = setInterval(() => {
-      setActiveStat((prev) => (prev + 1) % stats.length);
-    }, 3000);
-
     return () => {
       if (sectionRef.current) {
         observer.unobserve(sectionRef.current);
       }
-      clearInterval(statInterval);
     };
   }, []);
 
@@ -66,9 +60,9 @@ export default function About() {
         ))}
       </div>
 
-      {/* Title Section - Premium Design */}
+      {/* Title Section */}
       <div className="text-center mb-12 md:mb-16 relative z-10">
-        {/* Sparkle Badge */}
+        {/* Our Story Badge */}
         <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-blue-100 rounded-full px-4 py-1.5 mb-5 shadow-sm">
           <Sparkles className="w-3.5 h-3.5 text-blue-600 animate-pulse" />
           <span className="text-[11px] font-semibold text-blue-700 tracking-wider uppercase">
@@ -76,7 +70,16 @@ export default function About() {
           </span>
         </div>
 
-        {/* Main Title with Gradient */}
+        
+
+        {/* Elegant Separator */}
+        <div className="flex justify-center items-center gap-3 mb-8">
+          <div className="w-12 h-px bg-gradient-to-r from-transparent to-blue-300"></div>
+          <div className="w-1.5 h-1.5 rounded-full bg-blue-400"></div>
+          <div className="w-12 h-px bg-gradient-to-l from-transparent to-blue-300"></div>
+        </div>
+
+        {/* Main Title */}
         <div className="relative inline-block">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
             <span className="text-gray-900">Solit Hadir Untuk </span>
@@ -92,7 +95,7 @@ export default function About() {
         </div>
 
         {/* Elegant Underline */}
-        <div className="flex justify-center gap-1.5 mt-4">
+        <div className="flex justify-center gap-1.5 mt-6">
           <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-blue-500 to-blue-600 rounded-full" />
           <div className="w-2 h-0.5 bg-blue-500 rounded-full" />
           <div className="w-2 h-0.5 bg-indigo-500 rounded-full" />
@@ -110,15 +113,14 @@ export default function About() {
       <div className="relative z-10 max-w-6xl mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
 
-          {/* Image Section with Premium Effects */}
+          {/* Image Section */}
           <div className={`flex-1 transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
             <div className="relative group">
-              {/* Glow Effect Behind Image */}
+              {/* Glow Effect */}
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl blur-xl opacity-0 group-hover:opacity-30 transition duration-500" />
               
               {/* Main Image Container */}
               <div className="relative bg-gradient-to-br from-white to-gray-50 rounded-2xl p-2 shadow-xl group-hover:shadow-2xl transition-all duration-500">
-                {/* Decorative Border */}
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/20 to-indigo-500/20 opacity-0 group-hover:opacity-100 transition duration-500" />
                 
                 <img
@@ -128,13 +130,13 @@ export default function About() {
                   loading="lazy"
                 />
                 
-                {/* Overlay Badge */}
+                {/* Founder Badge */}
                 <div className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-md rounded-lg px-3 py-1.5">
                   <p className="text-white text-xs font-medium">Founder & CEO</p>
                 </div>
               </div>
 
-              {/* Stats Floating Cards */}
+              {/* Stats Floating Card */}
               <div className="absolute -bottom-6 -right-6 bg-white rounded-xl shadow-lg p-3 hidden lg:block animate-float">
                 <div className="flex items-center gap-2">
                   {stats.map((stat, idx) => (
@@ -149,7 +151,7 @@ export default function About() {
             </div>
           </div>
 
-          {/* Quote Section - Premium Design */}
+          {/* Quote Section */}
           <div className={`flex-1 transition-all duration-700 delay-200 ease-out ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
             <div className="relative">
               {/* Animated Gradient Border */}
@@ -164,11 +166,10 @@ export default function About() {
                   <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
                 </div>
 
-                {/* Large Quote Icon */}
+                {/* Quote Icons */}
                 <div className="absolute -top-3 -left-3 text-white/10">
                   <Quote className="w-20 h-20" />
                 </div>
-                
                 <div className="absolute -bottom-3 -right-3 text-white/5 rotate-180">
                   <Quote className="w-16 h-16" />
                 </div>
@@ -225,7 +226,7 @@ export default function About() {
                 </div>
               </div>
 
-              {/* Animated Stats Ticker (Mobile) */}
+              {/* Mobile Stats */}
               <div className="lg:hidden mt-6 bg-white rounded-xl shadow-lg p-4">
                 <div className="grid grid-cols-3 gap-4 text-center">
                   {stats.map((stat, idx) => (
@@ -258,7 +259,7 @@ export default function About() {
   );
 }
 
-// Add CSS animations
+// CSS Animations
 const styles = `
   @keyframes float-slow {
     0%, 100% { transform: translateY(0px) translateX(0px); }
