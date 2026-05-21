@@ -38,7 +38,7 @@ export default function TeamSlider() {
     { name: "Tengku Muhammad Faturahman", role: "Kurir", img: fatur },
     { name: "Fikri Arryansyah", role: "Penyedia Barang", img: fikri },
     { name: "Dirga Riadmas", role: "Teknisi", img: dirga },
-    { name: "Raesty Yuliana", role: "Customer Offline", img: raesty },
+    { name: "Raesty Yuliana", role: "Sales Offline", img: raesty },
     { name: "Achmad Jaelani", role: "Chef", img: jaelani },
     { name: "Ramdhani Suci", role: "Management Sales", img: mbafitri },
     { name: "Rizki Revinza Saputra", role: "Sales", img: revin },
