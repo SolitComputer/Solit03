@@ -1,18 +1,48 @@
 import { useState } from "react";
 import reinaldy from "../../assets/reinaldy.webp";
-import sewa1 from "../../assets/sewa1.webp";
-import sewa2 from "../../assets/sewa2.webp";
+import bangimron from "../../assets/bangimron.jpg";
+import nuralim from "../../assets/bangalim.jpg";
+import novita from "../../assets/owiiii.jpg";
+import rayhan from "../../assets/Raihan.jpg";
+import romadhon from "../../assets/bangsalam.jpg";
+import rafisalim from "../../assets/rafi.jpg";
+import yoga from "../../assets/masyoga.jpg";
+import yuna from "../../assets/kayuna.jpg";
+import ikmal from "../../assets/ikmall.jpg";
+import fauzan from "../../assets/fauzan.jpg";
+import fatur from "../../assets/tengkuu.jpg";
+import fikri from "../../assets/fikri.jpg";
+import dirga from "../../assets/dirga.jpg";
+import raesty from "../../assets/raesty.jpg";
+import jaelani from "../../assets/pamud.jpg";
+import ramdhani from "../../assets/mbaulfa.jpg";
+import dicky from "../../assets/bangdiki.jpg";
+import revin from "../../assets/bangrevin.jpg";
+
 
 export default function TeamSlider() {
   const [index, setIndex] = useState(0);
 
   const members = [
-    { name: "Reinaldy", role: "CEO", img: reinaldy },
-    { name: "Niva", role: "HRD", img: sewa1 },
-    { name: "Rafi", role: "Marketing", img: sewa2 },
-    { name: "Adit", role: "Tech", img: sewa2 },
-    { name: "Fajar", role: "Admin", img: sewa2 },
-    { name: "Dika", role: "Support", img: sewa2 },
+    { name: "Reinaldy Olyvierd Sendouw", role: "CEO", img: reinaldy },
+    { name: "Imron Muafi", role: "HRD", img: bangimron },
+    { name: "Nur Alim", role: "Marketing", img: nuralim },
+    { name: "Novita Glory Sendouw", role: "Content Creator", img: novita },
+    { name: "Rayhan Saputra", role: "Accounting", img: rayhan },
+    { name: "Romadhon Abdusalam", role: "Sales One", img: romadhon },
+    { name: "Rafi Salim", role: "Pengelola Barang", img: rafisalim },
+    { name: "Yoga Adi Prakoso", role: "Finance", img: yoga },
+    { name: "Yuna Luscyana Wati", role: "Sales Two", img: yuna },
+    { name: "Ikmal Fairuz Arabi", role: "Web Developer", img: ikmal },
+    { name: "Fauzan Abdul Ghaffar", role: "Web Developer", img: fauzan },
+    { name: "Tengku Muhammad Faturahman", role: "All Role", img: fatur },
+    { name: "Fikri Arryansyah", role: "Penyedia Barang", img: fikri },
+    { name: "Dirga Riadmas", role: "Teknisi", img: dirga },
+    { name: "Raesty Yuliana", role: "Customer Servis", img: raesty },
+    { name: "Achmad Jaelani", role: "Chef", img: jaelani },
+    { name: "Ramdhani Suci", role: "Management Sales", img: ramdhani },
+    { name: "Rizki Revinza Saputra", role: "Sales One", img: revin },
+    { name: "Dicky Pratama Setiawan", role: "Sotech", img: dicky },
   ];
 
   const prev = () => {
