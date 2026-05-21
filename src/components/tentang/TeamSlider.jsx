@@ -15,7 +15,7 @@ import fikri from "../../assets/fikri.jpg";
 import dirga from "../../assets/dirga.jpg";
 import raesty from "../../assets/raesty.jpg";
 import jaelani from "../../assets/pamud.jpg";
-import ramdhani from "../../assets/mbaulfa.jpg";
+import mbafitri from "../../assets/mbafitri.jpg";
 import dicky from "../../assets/bangdiki.jpg";
 import revin from "../../assets/bangrevin.jpg";
 
@@ -40,7 +40,7 @@ export default function TeamSlider() {
     { name: "Dirga Riadmas", role: "Teknisi", img: dirga },
     { name: "Raesty Yuliana", role: "Customer Servis", img: raesty },
     { name: "Achmad Jaelani", role: "Chef", img: jaelani },
-    { name: "Ramdhani Suci", role: "Management Sales", img: ramdhani },
+    { name: "Ramdhani Suci", role: "Management Sales", img: mbafitri },
     { name: "Rizki Revinza Saputra", role: "Sales One", img: revin },
     { name: "Dicky Pratama Setiawan", role: "Sotech", img: dicky },
   ];
