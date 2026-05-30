@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, MessageCircle, Home, ShoppingBag, Users, Info, Share2 } from "lucide-react";
+import { Menu, X, MessageCircle, Home, ShoppingBag, Users, Info, Share2, Shield } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/solit03.jpeg";
 
@@ -61,6 +61,7 @@ export default function Navbar() {
         { name: "Jual-Beli", href: "/jual-beli", icon: <Users size={16} /> },
         { name: "Tentang", href: "/tentang", icon: <Info size={16} /> },
         { name: "Sosial", href: "/sosial-media", icon: <Share2 size={16} /> },
+        { name: "Cek Garansi", href: "/cek-garansi", icon: <Shield size={16} /> },
     ];
 
     return (

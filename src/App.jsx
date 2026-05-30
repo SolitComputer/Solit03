@@ -15,6 +15,7 @@ import EditProducts from "./admin/pages/EditProducts";
 import Brands from "./admin/pages/Brands";
 import Categories from "./admin/pages/Categories";
 import Tags from "./admin/pages/Tags";
+import CekGaransi from "./pages/CekGaransi";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           {/* Route baru untuk halaman katalog/funnel */}
           <Route path="/katalog" element={<Katalog />} />
           {/* Bisa juga pakai path /jual-beli/katalog jika diinginkan */}
+          <Route path="/cek-garansi" element={<CekGaransi />} />
         </Route>
         <Route
           path="/admin/login"
