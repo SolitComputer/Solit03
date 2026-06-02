@@ -293,7 +293,6 @@ export default function CekGaransi() {
                             <div className="text-center">
                                 <p className="text-2xl font-bold text-gray-800">Selamat!</p>
                                 <p className="text-xl font-semibold text-emerald-600">Garansi Anda Aktif</p>
-                                <p className="text-sm text-gray-500 mt-1">Laptop Anda terlindungi</p>
                             </div>
                         </div>
                     </div>
