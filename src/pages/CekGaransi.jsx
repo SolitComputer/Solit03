@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 
-// ── Konfigurasi API ──────────────────────────────────────────────────────────
+// ── Config ────────────────────────────────────────────────────────────────────
 const SOLIT_POS_API = import.meta.env.VITE_SOLIT_POS_URL || "https://solit-pos.vercel.app";
 
 const STATUS_CONFIG = {
@@ -149,7 +149,7 @@ export default function CekGaransi() {
     const cfg = result?.data ? STATUS_CONFIG[result.data.status] || STATUS_CONFIG.EXPIRED : null;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50/30 relative overflow-x-hidden">
+        <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50/30">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 md:py-14">
                 <style>{`
                     @keyframes fadeSlideUp {
@@ -172,16 +172,10 @@ export default function CekGaransi() {
                         0%, 100% { opacity: 1; transform: scale(1); }
                         50% { opacity: 0.7; transform: scale(1.02); }
                     }
-                    @keyframes glow {
-                        0% { box-shadow: 0 0 0 0 rgba(59,130,246,0.4); }
-                        70% { box-shadow: 0 0 0 8px rgba(59,130,246,0); }
-                        100% { box-shadow: 0 0 0 0 rgba(59,130,246,0); }
-                    }
                     .animate-fadeSlideUp { animation: fadeSlideUp 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards; }
                     .animate-scaleIn { animation: scaleIn 0.4s ease-out forwards; }
                     .animate-float { animation: float 4s ease-in-out infinite; }
                     .animate-pulse-fast { animation: pulse-fast 1s ease-in-out infinite; }
-                    .animate-glow { animation: glow 1.5s ease-in-out infinite; }
                 `}</style>
 
                 {/* Hero Section */}
@@ -218,7 +212,7 @@ export default function CekGaransi() {
                         <div className="w-12 h-0.5 bg-gradient-to-r from-blue-600 to-transparent rounded-full" />
                     </div>
 
-                    {/* Floating Decorations */}
+                    {/* Dekorasi apung */}
                     <div className="absolute left-4 top-20 opacity-20 hidden lg:block animate-float">
                         <svg className="w-12 h-12 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M4 4h16v16H4z" stroke="currentColor" strokeWidth="2" fill="none" />
@@ -238,7 +232,7 @@ export default function CekGaransi() {
                         isVisible.card ? "opacity-100 scale-100" : "opacity-0 scale-95"
                     }`}
                 >
-                    <div className="bg-white/90 backdrop-blur-sm rounded-xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 p-6 sm:p-8">
+                    <div className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 p-6 sm:p-8">
                         <form onSubmit={handleCheck} className="space-y-5">
                             <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -269,7 +263,6 @@ export default function CekGaransi() {
                                             type="button"
                                             onClick={handleReset}
                                             className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition p-1 rounded-full hover:bg-gray-100"
-                                            aria-label="Hapus SN"
                                         >
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                                                 <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
@@ -310,7 +303,7 @@ export default function CekGaransi() {
                 <Confetti active={showConfetti} />
                 {loading && <SkeletonResult />}
                 {!loading && searched && (
-                    <div className="mt-8 transition-all duration-500 animate-fadeSlideUp">
+                    <div className="mt-8 transition-all duration-500">
                         {result?.success && result.data ? (
                             <WarrantyResult
                                 data={result.data}
@@ -344,7 +337,7 @@ export default function CekGaransi() {
                         ].map((item, i) => (
                             <div
                                 key={i}
-                                className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-100 shadow-sm p-5 text-center transition-all hover:shadow-md hover:-translate-y-1 duration-300 hover:bg-white"
+                                className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 text-center transition-all hover:shadow-md hover:-translate-y-1 duration-300"
                             >
                                 <div className="text-3xl mb-3">{item.icon}</div>
                                 <p className="text-sm font-bold text-gray-800">{item.title}</p>
@@ -420,16 +413,14 @@ function Confetti({ active }) {
         canvas.height = window.innerHeight;
 
         let particles = [];
-        for (let i = 0; i < 200; i++) { // lebih banyak partikel
+        for (let i = 0; i < 150; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height - canvas.height,
                 size: Math.random() * 6 + 2,
                 speedY: Math.random() * 5 + 3,
                 speedX: (Math.random() - 0.5) * 2,
-                color: `hsl(${Math.random() * 360}, 80%, 60%)`,
-                rotation: Math.random() * 360,
-                rotSpeed: (Math.random() - 0.5) * 10,
+                color: `hsl(${Math.random() * 360}, 70%, 60%)`,
             });
         }
 
@@ -440,14 +431,9 @@ function Confetti({ active }) {
             for (let p of particles) {
                 p.y += p.speedY;
                 p.x += p.speedX;
-                p.rotation += p.rotSpeed;
                 if (p.y < canvas.height) stillActive = true;
-                ctx.save();
-                ctx.translate(p.x, p.y);
-                ctx.rotate((p.rotation * Math.PI) / 180);
                 ctx.fillStyle = p.color;
-                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-                ctx.restore();
+                ctx.fillRect(p.x, p.y, p.size, p.size);
             }
             if (stillActive) {
                 animationId = requestAnimationFrame(animate);
@@ -465,8 +451,8 @@ function Confetti({ active }) {
 // ── Skeleton Loading ──────────────────────────────────────────────────────────
 function SkeletonResult() {
     return (
-        <div className="bg-white/90 rounded-xl border border-gray-100 overflow-hidden shadow-sm animate-pulse">
-            <div className="h-28 bg-gradient-to-r from-gray-200 to-gray-100" />
+        <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm animate-pulse">
+            <div className="h-28 bg-gray-200" />
             <div className="p-6 space-y-4">
                 <div className="h-4 bg-gray-200 rounded w-3/4" />
                 <div className="h-4 bg-gray-200 rounded w-1/2" />
@@ -490,7 +476,7 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
     const isExpiring = data.status === "EXPIRING_SOON";
 
     return (
-        <div className={`rounded-xl border ${cfg.border} overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 bg-white transform hover:-translate-y-1`}>
+        <div className={`rounded-xl border ${cfg.border} overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 bg-white`}>
             {/* Header Gradien */}
             <div className={`bg-gradient-to-r ${cfg.gradient} px-6 py-5 relative overflow-hidden`}>
                 <div className="absolute inset-0 bg-white/10 transform -skew-x-12 translate-x-1/2" />
@@ -526,7 +512,7 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
                         <span>Berakhir: {fmtDate(data.warranty_end)}</span>
                     </div>
                     <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden border border-gray-200">
-                        <div className={`h-full rounded-full transition-all duration-1000 ease-out ${cfg.barColor}`} style={{ width: `${pct}%` }} />
+                        <div className={`h-full rounded-full transition-all duration-700 ease-out ${cfg.barColor}`} style={{ width: `${pct}%` }} />
                     </div>
                     <div className="flex justify-between text-[11px] text-gray-500 mt-2">
                         <span>0%</span>
@@ -555,7 +541,6 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
                                     onClick={() => onCopy(row.value)}
                                     className="text-gray-400 hover:text-blue-500 transition opacity-0 group-hover:opacity-100 focus:opacity-100"
                                     title="Salin SN"
-                                    aria-label="Salin Serial Number"
                                 >
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                         <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
@@ -599,7 +584,7 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
 // ── Not Found Card (dengan tombol copy) ───────────────────────────────────────
 function NotFoundCard({ message, sn, onReset, onCopy }) {
     return (
-        <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+        <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
             <div className="bg-gradient-to-r from-gray-600 to-gray-700 px-6 py-5">
                 <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
@@ -621,7 +606,6 @@ function NotFoundCard({ message, sn, onReset, onCopy }) {
                         onClick={() => onCopy(sn)}
                         className="text-gray-400 hover:text-blue-500 transition opacity-0 group-hover:opacity-100 focus:opacity-100"
                         title="Salin SN"
-                        aria-label="Salin Serial Number"
                     >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
