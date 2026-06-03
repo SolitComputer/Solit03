@@ -56,12 +56,12 @@ export default function Navbar() {
     };
 
     const navLinks = [
-        { name: "Beranda", href: "/", icon: <Home size={16} /> },
-        { name: "Katalog", href: "/katalog", icon: <ShoppingBag size={16} /> },
-        { name: "Jual-Beli", href: "/jual-beli", icon: <Users size={16} /> },
-        { name: "Tentang", href: "/tentang", icon: <Info size={16} /> },
-        { name: "Sosial", href: "/sosial-media", icon: <Share2 size={16} /> },
-        { name: "Cek Garansi", href: "/cek-garansi", icon: <Shield size={16} /> },
+        { name: "Beranda", href: "/", icon: <Home size={14} /> },
+        { name: "Katalog", href: "/katalog", icon: <ShoppingBag size={14} /> },
+        { name: "Jual-Beli", href: "/jual-beli", icon: <Users size={14} /> },
+        { name: "Tentang", href: "/tentang", icon: <Info size={14} /> },
+        { name: "Sosial", href: "/sosial-media", icon: <Share2 size={14} /> },
+        { name: "Cek Garansi", href: "/cek-garansi", icon: <Shield size={14} /> },
     ];
 
     return (
@@ -78,10 +78,10 @@ export default function Navbar() {
                 `}
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    {/* Tinggi navbar diperbesar dari h-12/h-14 menjadi h-16/h-20 */}
-                    <div className="flex justify-between items-center h-16 md:h-20">
+                    {/* Tinggi navbar lebih kecil: h-12 md:h-14 */}
+                    <div className="flex justify-between items-center h-12 md:h-14">
 
-                        {/* Logo - lebih besar */}
+                        {/* Logo lebih kecil */}
                         <button
                             onClick={() => handleNavigation("/")}
                             className="group focus:outline-none"
@@ -90,23 +90,23 @@ export default function Navbar() {
                                 <img
                                     src={logo}
                                     alt="Solit 03"
-                                    className="w-10 h-10 rounded-full shadow-sm object-cover"
+                                    className="w-8 h-8 rounded-full shadow-sm object-cover"
                                 />
-                                <h1 className="text-base md:text-lg font-semibold text-blue-900 tracking-tight">
+                                <h1 className="text-sm md:text-base font-semibold text-blue-900 tracking-tight">
                                     Solit<span className="text-blue-600">03</span>
                                 </h1>
                             </div>
                         </button>
 
-                        {/* Desktop Navigation - item lebih besar */}
-                        <ul className="hidden md:flex gap-1 lg:gap-2 text-gray-500 text-sm md:text-base">
+                        {/* Desktop Navigation - lebih padat */}
+                        <ul className="hidden md:flex gap-1 text-sm">
                             {navLinks.map((item, i) => (
                                 <li key={i}>
                                     <button
                                         onClick={() => handleNavigation(item.href)}
                                         className={`
-                                            relative px-4 py-2 rounded-md transition-all duration-200
-                                            flex items-center gap-2
+                                            relative px-3 py-1.5 rounded-md transition-all duration-200
+                                            flex items-center gap-1.5
                                             ${location.pathname === item.href
                                                 ? "text-blue-700 bg-blue-50/80 font-medium"
                                                 : "text-gray-500 hover:text-blue-600 hover:bg-gray-50"
@@ -123,50 +123,50 @@ export default function Navbar() {
                             ))}
                         </ul>
 
-                        {/* Desktop CTA Button - lebih besar */}
+                        {/* Desktop CTA Button - lebih kecil */}
                         <div className="hidden md:block">
                             <button
                                 onClick={handleWhatsApp}
-                                className="group relative inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white text-sm px-5 py-2.5 rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+                                className="group relative inline-flex items-center gap-1.5 bg-gradient-to-r from-green-500 to-green-600 text-white text-xs px-3 py-1.5 rounded-md transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
                             >
-                                <MessageCircle size={16} />
-                                <span>Hubungi Kami</span>
+                                <MessageCircle size={14} />
+                                <span>Hubungi</span>
                             </button>
                         </div>
 
-                        {/* Mobile Menu Button - ikon lebih besar */}
+                        {/* Mobile Menu Button */}
                         <div className="md:hidden">
                             <button
                                 onClick={() => setMenuOpen(!menuOpen)}
-                                className="p-2 rounded-md transition-all duration-200 hover:bg-blue-50"
+                                className="p-1.5 rounded-md transition-all duration-200 hover:bg-blue-50"
                                 aria-label="Toggle menu"
                             >
                                 {menuOpen ? (
-                                    <X className="w-6 h-6 text-blue-700" />
+                                    <X className="w-5 h-5 text-blue-700" />
                                 ) : (
-                                    <Menu className="w-6 h-6 text-blue-700" />
+                                    <Menu className="w-5 h-5 text-blue-700" />
                                 )}
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {/* Mobile Navigation Menu - lebih panjang ke bawah */}
+                {/* Mobile Navigation Menu - lebih padat tapi tetap ada animasi */}
                 <div
                     className={`
                         md:hidden absolute w-full bg-white/95 backdrop-blur-md shadow-lg
                         transition-all duration-300 ease-in-out overflow-hidden
-                        ${menuOpen ? "max-h-[600px] opacity-100 border-t border-gray-100" : "max-h-0 opacity-0"}
+                        ${menuOpen ? "max-h-96 opacity-100 border-t border-gray-100" : "max-h-0 opacity-0"}
                     `}
                 >
-                    <div className="px-4 py-3 space-y-1">
+                    <div className="px-4 py-2 space-y-0.5">
                         {navLinks.map((item, i) => (
                             <button
                                 key={i}
                                 onClick={() => handleNavigation(item.href)}
                                 className={`
-                                    w-full flex items-center gap-3 px-5 py-3 rounded-lg
-                                    text-base transition-all duration-200
+                                    w-full flex items-center gap-2 px-3 py-2 rounded-md
+                                    text-sm transition-all duration-200
                                     ${location.pathname === item.href
                                         ? "bg-blue-50 text-blue-700 font-medium"
                                         : "text-gray-600 hover:bg-gray-50"
@@ -183,22 +183,21 @@ export default function Navbar() {
                             </button>
                         ))}
 
-                        <div className="border-t border-gray-100 my-2 pt-3">
+                        <div className="border-t border-gray-100 mt-2 pt-2">
                             <button
                                 onClick={handleWhatsApp}
-                                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white text-base py-3 rounded-lg transition-all duration-200 hover:shadow-md"
+                                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white text-sm py-2 rounded-md transition-all duration-200 hover:shadow-md"
                             >
-                                <MessageCircle size={18} />
-                                Hubungi WhatsApp
+                                <MessageCircle size={16} />
+                                WhatsApp
                             </button>
                         </div>
                     </div>
                 </div>
             </nav>
 
-            {/* Spacer disesuaikan dengan tinggi navbar baru */}
-            {/* Spacer minimal */}
-            <div className="h-8 md:h-12"></div>
+            {/* Spacer lebih kecil */}
+            <div className="h-12 md:h-14"></div>
         </>
-    );''
+    );
 }
