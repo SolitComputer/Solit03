@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, MessageCircle, Home, ShoppingBag, Users, Info, Share2, Shield } from "lucide-react";
+import { Menu, X, MessageCircle, Home, ShoppingBag, Users, Info, Share2, Shield, Wrench } from "lucide-react"; // ✅ tambah Wrench
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/solit03.jpeg";
 
@@ -21,25 +21,16 @@ export default function Navbar() {
             } else {
                 setShowNavbar(true);
             }
-
-            if (window.scrollY > 20) {
-                setScrolled(true);
-            } else {
-                setScrolled(false);
-            }
-
+            setScrolled(window.scrollY > 20);
             setLastScrollY(window.scrollY);
         };
-
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, [lastScrollY]);
 
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth >= 768 && menuOpen) {
-                setMenuOpen(false);
-            }
+            if (window.innerWidth >= 768 && menuOpen) setMenuOpen(false);
         };
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
@@ -62,6 +53,7 @@ export default function Navbar() {
         { name: "Tentang", href: "/tentang", icon: <Info size={16} /> },
         { name: "Sosial", href: "/sosial-media", icon: <Share2 size={16} /> },
         { name: "Cek Garansi", href: "/cek-garansi", icon: <Shield size={16} /> },
+        { name: "Cek Antrian", href: "/cek-antrian", icon: <Wrench size={16} /> }, // ✅ NEW
     ];
 
     return (
@@ -78,35 +70,27 @@ export default function Navbar() {
                 `}
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    {/* Tinggi navbar diperbesar dari h-12/h-14 menjadi h-16/h-20 */}
                     <div className="flex justify-between items-center h-16 md:h-20">
 
-                        {/* Logo - lebih besar */}
-                        <button
-                            onClick={() => handleNavigation("/")}
-                            className="group focus:outline-none"
-                        >
+                        {/* Logo */}
+                        <button onClick={() => handleNavigation("/")} className="group focus:outline-none">
                             <div className="flex items-center gap-2">
-                                <img
-                                    src={logo}
-                                    alt="Solit 03"
-                                    className="w-10 h-10 rounded-full shadow-sm object-cover"
-                                />
+                                <img src={logo} alt="Solit 03" className="w-10 h-10 rounded-full shadow-sm object-cover" />
                                 <h1 className="text-base md:text-lg font-semibold text-blue-900 tracking-tight">
                                     Solit<span className="text-blue-600">03</span>
                                 </h1>
                             </div>
                         </button>
 
-                        {/* Desktop Navigation - item lebih besar */}
+                        {/* Desktop Navigation */}
                         <ul className="hidden md:flex gap-1 lg:gap-2 text-gray-500 text-sm md:text-base">
                             {navLinks.map((item, i) => (
                                 <li key={i}>
                                     <button
                                         onClick={() => handleNavigation(item.href)}
                                         className={`
-                                            relative px-4 py-2 rounded-md transition-all duration-200
-                                            flex items-center gap-2
+                                            relative px-3 py-2 rounded-md transition-all duration-200
+                                            flex items-center gap-1.5
                                             ${location.pathname === item.href
                                                 ? "text-blue-700 bg-blue-50/80 font-medium"
                                                 : "text-gray-500 hover:text-blue-600 hover:bg-gray-50"
@@ -116,47 +100,43 @@ export default function Navbar() {
                                         {item.icon}
                                         <span>{item.name}</span>
                                         {location.pathname === item.href && (
-                                            <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-4 h-0.5 bg-blue-600 rounded-full"></span>
+                                            <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-4 h-0.5 bg-blue-600 rounded-full" />
                                         )}
                                     </button>
                                 </li>
                             ))}
                         </ul>
 
-                        {/* Desktop CTA Button - lebih besar */}
+                        {/* Desktop CTA */}
                         <div className="hidden md:block">
                             <button
                                 onClick={handleWhatsApp}
-                                className="group relative inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white text-sm px-5 py-2.5 rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+                                className="group inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white text-sm px-5 py-2.5 rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
                             >
                                 <MessageCircle size={16} />
                                 <span>Hubungi Kami</span>
                             </button>
                         </div>
 
-                        {/* Mobile Menu Button - ikon lebih besar */}
+                        {/* Mobile hamburger */}
                         <div className="md:hidden">
                             <button
                                 onClick={() => setMenuOpen(!menuOpen)}
                                 className="p-2 rounded-md transition-all duration-200 hover:bg-blue-50"
                                 aria-label="Toggle menu"
                             >
-                                {menuOpen ? (
-                                    <X className="w-6 h-6 text-blue-700" />
-                                ) : (
-                                    <Menu className="w-6 h-6 text-blue-700" />
-                                )}
+                                {menuOpen ? <X className="w-6 h-6 text-blue-700" /> : <Menu className="w-6 h-6 text-blue-700" />}
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {/* Mobile Navigation Menu - lebih panjang ke bawah */}
+                {/* Mobile Menu */}
                 <div
                     className={`
                         md:hidden absolute w-full bg-white/95 backdrop-blur-md shadow-lg
                         transition-all duration-300 ease-in-out overflow-hidden
-                        ${menuOpen ? "max-h-[600px] opacity-100 border-t border-gray-100" : "max-h-0 opacity-0"}
+                        ${menuOpen ? "max-h-[700px] opacity-100 border-t border-gray-100" : "max-h-0 opacity-0"}
                     `}
                 >
                     <div className="px-4 py-3 space-y-1">
@@ -177,8 +157,14 @@ export default function Navbar() {
                                     {item.icon}
                                 </span>
                                 {item.name}
+                                {/* Highlight khusus Cek Antrian */}
+                                {item.href === "/cek-antrian" && location.pathname !== "/cek-antrian" && (
+                                    <span className="ml-auto text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">
+                                        Live
+                                    </span>
+                                )}
                                 {location.pathname === item.href && (
-                                    <span className="ml-auto w-1 h-4 bg-blue-600 rounded-full"></span>
+                                    <span className="ml-auto w-1 h-4 bg-blue-600 rounded-full" />
                                 )}
                             </button>
                         ))}
@@ -196,9 +182,7 @@ export default function Navbar() {
                 </div>
             </nav>
 
-            {/* Spacer disesuaikan dengan tinggi navbar baru */}
-            {/* Spacer minimal */}
-            <div className="h-8 md:h-12"></div>
+            <div className="h-8 md:h-12" />
         </>
-    );''
+    );
 }

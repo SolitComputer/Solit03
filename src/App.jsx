@@ -1,3 +1,6 @@
+// C:\Solit03\src\App.jsx
+// Perubahan: tambah import CekAntrian dan Route baru
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./components/layout/MainLayout";
 import Home from "./pages/Home";
@@ -16,6 +19,7 @@ import Brands from "./admin/pages/Brands";
 import Categories from "./admin/pages/Categories";
 import Tags from "./admin/pages/Tags";
 import CekGaransi from "./pages/CekGaransi";
+import CekAntrian from "./pages/CekAntrian_realtime"; // ✅ NEW
 
 function App() {
   return (
@@ -26,16 +30,12 @@ function App() {
           <Route path="/jual-beli" element={<JualBeli />} />
           <Route path="/tentang" element={<Tentang />} />
           <Route path="/sosial-media" element={<SosialMedia />} />
-          {/* Route baru untuk halaman katalog/funnel */}
           <Route path="/katalog" element={<Katalog />} />
-          {/* Bisa juga pakai path /jual-beli/katalog jika diinginkan */}
           <Route path="/cek-garansi" element={<CekGaransi />} />
+          <Route path="/cek-antrian" element={<CekAntrian />} /> {/* ✅ NEW */}
         </Route>
-        <Route
-          path="/admin/login"
-          element={<Login />}
-        />
 
+        <Route path="/admin/login" element={<Login />} />
         <Route
           path="/admin"
           element={
@@ -44,39 +44,13 @@ function App() {
             </ProtectedRoute>
           }
         >
-
-          <Route
-            index
-            element={<Dashboard />}
-          />
-
-          <Route
-            path="products"
-            element={<Products />}
-          />
-          <Route
-            path="brands"
-            element={<Brands />}
-          />
-          <Route
-            path="categories"
-            element={<Categories />}
-          />
-          <Route
-            path="tags"
-            element={<Tags />}
-          />
-
-          <Route
-            path="products/create"
-            element={<CreateProducts />}
-          />
-
-          <Route
-            path="products/edit/:id"
-            element={<EditProducts />}
-          />
-
+          <Route index element={<Dashboard />} />
+          <Route path="products" element={<Products />} />
+          <Route path="brands" element={<Brands />} />
+          <Route path="categories" element={<Categories />} />
+          <Route path="tags" element={<Tags />} />
+          <Route path="products/create" element={<CreateProducts />} />
+          <Route path="products/edit/:id" element={<EditProducts />} />
         </Route>
       </Routes>
     </BrowserRouter>
