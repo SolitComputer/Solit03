@@ -113,8 +113,8 @@ export default function Navbar() {
                                 onClick={handleWhatsApp}
                                 className="group inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white text-sm px-5 py-2.5 rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
                             >
-                                <MessageCircle size={16} />
-                                <span>Hubungi Kami</span>
+                                <MessageCircle size={14} />
+                                <span>Hubungi</span>
                             </button>
                         </div>
 
@@ -122,7 +122,7 @@ export default function Navbar() {
                         <div className="md:hidden">
                             <button
                                 onClick={() => setMenuOpen(!menuOpen)}
-                                className="p-2 rounded-md transition-all duration-200 hover:bg-blue-50"
+                                className="p-1.5 rounded-md transition-all duration-200 hover:bg-blue-50"
                                 aria-label="Toggle menu"
                             >
                                 {menuOpen ? <X className="w-6 h-6 text-blue-700" /> : <Menu className="w-6 h-6 text-blue-700" />}
@@ -139,14 +139,14 @@ export default function Navbar() {
                         ${menuOpen ? "max-h-[700px] opacity-100 border-t border-gray-100" : "max-h-0 opacity-0"}
                     `}
                 >
-                    <div className="px-4 py-3 space-y-1">
+                    <div className="px-4 py-2 space-y-0.5">
                         {navLinks.map((item, i) => (
                             <button
                                 key={i}
                                 onClick={() => handleNavigation(item.href)}
                                 className={`
-                                    w-full flex items-center gap-3 px-5 py-3 rounded-lg
-                                    text-base transition-all duration-200
+                                    w-full flex items-center gap-2 px-3 py-2 rounded-md
+                                    text-sm transition-all duration-200
                                     ${location.pathname === item.href
                                         ? "bg-blue-50 text-blue-700 font-medium"
                                         : "text-gray-600 hover:bg-gray-50"
@@ -169,13 +169,13 @@ export default function Navbar() {
                             </button>
                         ))}
 
-                        <div className="border-t border-gray-100 my-2 pt-3">
+                        <div className="border-t border-gray-100 mt-2 pt-2">
                             <button
                                 onClick={handleWhatsApp}
-                                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white text-base py-3 rounded-lg transition-all duration-200 hover:shadow-md"
+                                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white text-sm py-2 rounded-md transition-all duration-200 hover:shadow-md"
                             >
-                                <MessageCircle size={18} />
-                                Hubungi WhatsApp
+                                <MessageCircle size={16} />
+                                WhatsApp
                             </button>
                         </div>
                     </div>

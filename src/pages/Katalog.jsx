@@ -38,6 +38,23 @@ function useDebounce(value, delay) {
   return debouncedValue;
 }
 
+// Responsive hook untuk deteksi ukuran layar
+function useMediaQuery(query) {
+  const [matches, setMatches] = useState(false);
+  
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    if (media.matches !== matches) {
+      setMatches(media.matches);
+    }
+    const listener = () => setMatches(media.matches);
+    window.addEventListener('resize', listener);
+    return () => window.removeEventListener('resize', listener);
+  }, [matches, query]);
+  
+  return matches;
+}
+
 // Fungsi untuk mendapatkan style warna dari nama warna
 function getTagColorStyle(colorName) {
   const colorMap = {
@@ -94,9 +111,9 @@ function ProductTagBadge({ productTags, allTags }) {
       {tagsToShow.map((tag, idx) => (
         <span
           key={idx}
-          className={`${getTagBadgeColor(tag.color)} text-white text-[8px] font-semibold px-1.5 py-0.5 rounded-full flex items-center gap-0.5 shadow-sm`}
+          className={`${getTagBadgeColor(tag.color)} text-white text-[8px] sm:text-[9px] md:text-[10px] font-semibold px-1 sm:px-1.5 py-0.5 rounded-full flex items-center gap-0.5 shadow-sm`}
         >
-          {tag.name.length > 10 ? tag.name.slice(0, 8) + '...' : tag.name}
+          {tag.name.length > (window.innerWidth < 640 ? 8 : 10) ? tag.name.slice(0, window.innerWidth < 640 ? 6 : 8) + '...' : tag.name}
         </span>
       ))}
     </div>
@@ -139,7 +156,7 @@ function AnimatedProductCard({ product, onClick, index, allTags }) {
 
         {/* Out of Stock Badge */}
         {outOfStock && (
-          <div className="absolute top-2 right-2 px-2 py-0.5 bg-red-500/90 backdrop-blur-sm text-white text-[10px] font-semibold rounded-full z-10 shadow-sm">
+          <div className="absolute top-2 right-2 px-1.5 sm:px-2 py-0.5 bg-red-500/90 backdrop-blur-sm text-white text-[9px] sm:text-[10px] font-semibold rounded-full z-10 shadow-sm">
             Habis
           </div>
         )}
@@ -149,27 +166,28 @@ function AnimatedProductCard({ product, onClick, index, allTags }) {
       </div>
 
       {/* Informasi produk */}
-      <div className="p-3">
+      <div className="p-2 sm:p-3">
         {/* Brand */}
-        <p className="text-[11px] text-slate-500 font-medium mb-0.5 truncate">
+        <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium mb-0.5 truncate">
           {product.brands?.name || "Umum"}
         </p>
 
         {/* Nama produk */}
-        <h3 className="font-bold text-slate-800 text-sm leading-tight line-clamp-2 group-hover:text-blue-600 transition-colors">
+        <h3 className="font-bold text-slate-800 text-xs sm:text-sm leading-tight line-clamp-2 group-hover:text-blue-600 transition-colors">
           {product.name}
         </h3>
 
         {/* Spesifikasi ringkas (processor & ram) dalam satu baris */}
-        <div className="flex flex-wrap items-center gap-1.5 mt-1.5 mb-2">
+        <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 mt-1.5 mb-2">
           {specs.processor && (
-            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[10px] font-medium">
+            <span className="inline-flex items-center gap-0.5 px-1 sm:px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-medium">
               <Cpu size={9} />
-              {specs.processor.split(" ").slice(0, 2).join(" ")}
+              <span className="hidden sm:inline">{specs.processor.split(" ").slice(0, 2).join(" ")}</span>
+              <span className="sm:hidden">{specs.processor.split(" ")[0]}</span>
             </span>
           )}
           {specs.ram && (
-            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[9px] font-medium">
+            <span className="inline-flex items-center gap-0.5 px-1 sm:px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-medium">
               <MemoryStick size={9} />
               {specs.ram}
             </span>
@@ -177,29 +195,29 @@ function AnimatedProductCard({ product, onClick, index, allTags }) {
         </div>
 
         {/* Harga dan tombol */}
-        <div className="flex items-end justify-between pt-2 border-t border-slate-100">
-          <div>
+        <div className="flex items-center justify-between pt-2 border-t border-slate-100 gap-2">
+          <div className="flex-1 min-w-0">
             {hasDiscount ? (
               <>
-                <p className="text-base font-black text-red-600 leading-tight">
+                <p className="text-sm sm:text-base font-black text-red-600 leading-tight truncate">
                   {fmt(finalPrice)}
                 </p>
-                <div className="flex items-center gap-1 mt-0.5">
-                  <p className="text-[10px] text-slate-400 line-through">
+                <div className="flex items-center gap-1 mt-0.5 flex-wrap">
+                  <p className="text-[9px] sm:text-[10px] text-slate-400 line-through truncate">
                     {fmt(product.normal_price)}
                   </p>
-                  <span className="text-[9px] font-bold text-red-600 bg-red-50 px-1 py-px rounded">
+                  <span className="text-[8px] sm:text-[9px] font-bold text-red-600 bg-red-50 px-1 py-px rounded whitespace-nowrap">
                     -{product.discount_percent}%
                   </span>
                 </div>
               </>
             ) : (
-              <p className="text-base font-black text-slate-800 leading-tight">
+              <p className="text-sm sm:text-base font-black text-slate-800 leading-tight truncate">
                 {fmt(product.price)}
               </p>
             )}
           </div>
-          <button className="px-2.5 py-1 bg-white border border-slate-300 hover:border-blue-500 text-slate-700 hover:text-blue-600 text-[11px] font-semibold rounded-lg transition-all hover:shadow-sm">
+          <button className="px-2 sm:px-2.5 py-1 bg-white border border-slate-300 hover:border-blue-500 text-slate-700 hover:text-blue-600 text-[10px] sm:text-[11px] font-semibold rounded-lg transition-all hover:shadow-sm whitespace-nowrap">
             Detail
           </button>
         </div>
@@ -211,6 +229,7 @@ function AnimatedProductCard({ product, onClick, index, allTags }) {
 // Animated Search Bar
 function AnimatedSearchBar({ value, onChange, isLoading, onFocus, onBlur }) {
   const [isFocused, setIsFocused] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 640px)');
 
   return (
     <div className={`relative transition-all duration-300 ${isFocused ? 'scale-[1.02]' : 'scale-100'}`}>
@@ -221,7 +240,7 @@ function AnimatedSearchBar({ value, onChange, isLoading, onFocus, onBlur }) {
 
       <div className="relative">
         <Search
-          size={12}
+          size={isMobile ? 14 : 16}
           className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 transition-all duration-300"
           style={{
             transform: isFocused
@@ -232,7 +251,7 @@ function AnimatedSearchBar({ value, onChange, isLoading, onFocus, onBlur }) {
 
         <input
           type="text"
-          placeholder="Cari produk, brand, atau kategori..."
+          placeholder={isMobile ? "Cari produk..." : "Cari produk, brand, atau kategori..."}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onFocus={() => {
@@ -241,9 +260,9 @@ function AnimatedSearchBar({ value, onChange, isLoading, onFocus, onBlur }) {
           }}
           onBlur={() => {
             setIsFocused(false);
-            onBlur?.(); if (onBlur) onBlur();
+            onBlur?.();
           }}
-          className="w-full pl-8 pr-8 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50 transition-all duration-300"
+          className="w-full pl-8 pr-8 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-slate-50 transition-all duration-300"
         />
 
         {isLoading && <SearchLoadingIndicator />}
@@ -253,7 +272,7 @@ function AnimatedSearchBar({ value, onChange, isLoading, onFocus, onBlur }) {
             onClick={() => onChange("")}
             className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
           >
-            <X size={10} />
+            <X size={isMobile ? 12 : 14} />
           </button>
         )}
       </div>
@@ -270,18 +289,18 @@ function EmptyStateWithAnimation({ onReset, hasFilter, searchTerm }) {
   }, []);
 
   return (
-    <div className={`flex flex-col items-center justify-center py-12 text-center transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-      <div className="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center mb-3 animate-bounce">
+    <div className={`flex flex-col items-center justify-center py-8 sm:py-12 text-center transition-all duration-500 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+      <div className="w-12 h-12 sm:w-14 sm:h-14 bg-slate-100 rounded-full flex items-center justify-center mb-3 animate-bounce">
         {searchTerm ? (
-          <Search size={24} className="text-slate-400" />
+          <Search size={20} className="text-slate-400" />
         ) : (
-          <ShoppingBag size={24} className="text-slate-300" />
+          <ShoppingBag size={20} className="text-slate-300" />
         )}
       </div>
-      <h3 className="text-base font-bold text-slate-700 mb-1">
+      <h3 className="text-sm sm:text-base font-bold text-slate-700 mb-1">
         {searchTerm ? "Produk tidak ditemukan" : "Belum ada produk"}
       </h3>
-      <p className="text-slate-400 text-xs mb-4">
+      <p className="text-slate-400 text-[11px] sm:text-xs mb-4 px-4">
         {searchTerm
           ? `Tidak ada produk yang cocok dengan "${searchTerm}"`
           : hasFilter ? "Coba ubah filter pencarian" : "Belum ada produk tersedia"}
@@ -289,13 +308,13 @@ function EmptyStateWithAnimation({ onReset, hasFilter, searchTerm }) {
       {searchTerm && (
         <button
           onClick={() => onReset()}
-          className="px-4 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition-all hover:scale-105"
+          className="px-3 sm:px-4 py-1.5 bg-blue-600 text-white rounded-lg text-[11px] sm:text-xs font-semibold hover:bg-blue-700 transition-all hover:scale-105"
         >
           Bersihkan Pencarian
         </button>
       )}
       {hasFilter && !searchTerm && (
-        <button onClick={onReset} className="px-4 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition-all hover:scale-105">
+        <button onClick={onReset} className="px-3 sm:px-4 py-1.5 bg-blue-600 text-white rounded-lg text-[11px] sm:text-xs font-semibold hover:bg-blue-700 transition-all hover:scale-105">
           Reset Filter
         </button>
       )}
@@ -326,7 +345,7 @@ function ResultCountWithAnimation({ count, isSearching }) {
       ) : (
         <div className={`w-1.5 h-1.5 rounded-full bg-green-500 transition-all duration-300 ${isAnimating ? 'scale-150' : 'scale-100'}`} />
       )}
-      <p className="text-xs text-slate-500">
+      <p className="text-[11px] sm:text-xs text-slate-500">
         <span className={`font-semibold text-slate-800 transition-all duration-300 ${isAnimating ? 'text-blue-600' : ''}`}>
           {displayCount}
         </span> produk ditemukan
@@ -384,21 +403,23 @@ function DynamicTagFilter({ tags, selectedTagId, onTagChange, onClear, isLoading
             <span className="text-slate-600">Semua Produk</span>
           </label>
 
-          {tags.map((tag) => (
-            <label key={tag.id} className="flex items-center gap-1.5 cursor-pointer text-xs group">
-              <input
-                type="radio"
-                name="productTag"
-                checked={selectedTagId === tag.id}
-                onChange={() => onTagChange(tag.id)}
-                className="w-3 h-3 text-blue-600"
-              />
-              <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full ${getTagColorStyle(tag.color)} transition-all group-hover:scale-105`}>
-                <Tag size={10} />
-                {tag.name}
-              </span>
-            </label>
-          ))}
+          <div className="grid grid-cols-2 gap-1.5">
+            {tags.map((tag) => (
+              <label key={tag.id} className="flex items-center gap-1.5 cursor-pointer text-xs group">
+                <input
+                  type="radio"
+                  name="productTag"
+                  checked={selectedTagId === tag.id}
+                  onChange={() => onTagChange(tag.id)}
+                  className="w-3 h-3 text-blue-600 flex-shrink-0"
+                />
+                <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full ${getTagColorStyle(tag.color)} transition-all group-hover:scale-105 truncate`}>
+                  <Tag size={10} className="flex-shrink-0" />
+                  <span className="truncate">{tag.name}</span>
+                </span>
+              </label>
+            ))}
+          </div>
         </div>
       )}
     </div>
@@ -409,16 +430,16 @@ function SkeletonProductCard() {
   return (
     <div className="bg-white rounded-xl border border-slate-200 overflow-hidden animate-pulse">
       <div className="aspect-video bg-slate-200" />
-      <div className="p-3">
-        <div className="h-2.5 bg-slate-200 rounded w-20 mb-2" />
-        <div className="h-3.5 bg-slate-200 rounded w-3/4 mb-2" />
-        <div className="flex gap-1.5 mb-3">
-          <div className="h-4 bg-slate-200 rounded w-16" />
-          <div className="h-4 bg-slate-200 rounded w-14" />
+      <div className="p-2 sm:p-3">
+        <div className="h-2 bg-slate-200 rounded w-16 sm:w-20 mb-2" />
+        <div className="h-3 bg-slate-200 rounded w-3/4 mb-2" />
+        <div className="flex gap-1 mb-3">
+          <div className="h-3 sm:h-4 bg-slate-200 rounded w-12 sm:w-16" />
+          <div className="h-3 sm:h-4 bg-slate-200 rounded w-10 sm:w-14" />
         </div>
         <div className="flex justify-between items-center">
-          <div className="h-5 bg-slate-200 rounded w-20" />
-          <div className="h-7 bg-slate-200 rounded w-16" />
+          <div className="h-4 sm:h-5 bg-slate-200 rounded w-16 sm:w-20" />
+          <div className="h-6 sm:h-7 bg-slate-200 rounded w-12 sm:w-16" />
         </div>
       </div>
     </div>
@@ -427,7 +448,7 @@ function SkeletonProductCard() {
 
 function SkeletonGrid() {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
       {Array.from({ length: 8 }).map((_, i) => (
         <SkeletonProductCard key={i} />
       ))}
@@ -438,29 +459,29 @@ function SkeletonGrid() {
 // Welcome Screen
 function WelcomeScreen({ onStart }) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900">
+    <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 px-4">
       <div className="relative z-10 text-center px-4 max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-medium mb-6 backdrop-blur-sm">
+        <div className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-[11px] sm:text-xs font-medium mb-4 sm:mb-6 backdrop-blur-sm">
           <Zap size={12} />
           <span>Temukan laptop impianmu</span>
         </div>
-        <h1 className="text-3xl md:text-5xl font-black text-white mb-4 leading-tight tracking-tight">
+        <h1 className="text-2xl sm:text-3xl md:text-5xl font-black text-white mb-3 sm:mb-4 leading-tight tracking-tight">
           Katalog<br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-sky-300">
             Laptop
           </span>
         </h1>
-        <p className="text-slate-400 text-sm md:text-base mb-8 leading-relaxed max-w-lg mx-auto">
+        <p className="text-slate-400 text-xs sm:text-sm md:text-base mb-6 sm:mb-8 leading-relaxed max-w-lg mx-auto px-2">
           Jelajahi koleksi laptop pilihan dari brand‑brand ternama. Temukan yang paling pas untuk kebutuhanmu.
         </p>
         <button
           onClick={onStart}
-          className="group inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/30 hover:shadow-blue-500/50 hover:scale-105 active:scale-95"
+          className="group inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/30 hover:shadow-blue-500/50 hover:scale-105 active:scale-95"
         >
           Mulai Pilih
           <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
         </button>
-        <div className="flex items-center justify-center gap-6 mt-10 text-slate-500 text-xs">
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-8 sm:mt-10 text-slate-500 text-[11px] sm:text-xs">
           {[
             { icon: <Package size={12} />, label: "Produk Lengkap" },
             { icon: <Tag size={12} />, label: "Harga Terbaik" },
@@ -490,25 +511,25 @@ function CategoryScreen({ categories, onSelect, onSkip }) {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-black text-slate-900 mb-2">Pilih Kategori</h2>
-          <p className="text-slate-500 text-sm">Laptop apa yang kamu cari?</p>
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
+        <div className="text-center mb-6 sm:mb-8">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 mb-2">Pilih Kategori</h2>
+          <p className="text-slate-500 text-xs sm:text-sm">Laptop apa yang kamu cari?</p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-5xl mx-auto">
-          {categories.map((cat, idx) => (
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 max-w-5xl mx-auto">
+          {categories.slice(0, 6).map((cat, idx) => (
             <button
               key={cat.id}
               onClick={() => onSelect(cat)}
               className="group relative rounded-xl overflow-hidden text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:scale-95"
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${COLORS[idx % COLORS.length]} opacity-90`} />
-              <div className="relative p-4">
-                <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center mb-3 text-white">
+              <div className="relative p-3 sm:p-4">
+                <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg bg-white/20 flex items-center justify-center mb-2 sm:mb-3 text-white">
                   {getCategoryIcon(cat.name)}
                 </div>
-                <h3 className="text-base font-bold text-white mb-0.5">{cat.name}</h3>
-                <div className="flex items-center gap-0.5 mt-2 text-white/80 text-xs font-medium">
+                <h3 className="text-sm sm:text-base font-bold text-white mb-0.5 truncate">{cat.name}</h3>
+                <div className="flex items-center gap-0.5 mt-1 sm:mt-2 text-white/80 text-[10px] sm:text-xs font-medium">
                   Lihat produk
                   <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
                 </div>
@@ -519,13 +540,13 @@ function CategoryScreen({ categories, onSelect, onSkip }) {
             onClick={onSkip}
             className="group relative rounded-xl overflow-hidden text-left border border-dashed border-slate-300 hover:border-blue-400 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:scale-95 bg-white"
           >
-            <div className="p-4">
-              <div className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center mb-3 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                <ShoppingBag size={20} />
+            <div className="p-3 sm:p-4">
+              <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg bg-slate-100 flex items-center justify-center mb-2 sm:mb-3 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+                <ShoppingBag size={18} />
               </div>
-              <h3 className="text-base font-bold text-slate-700 mb-0.5">Semua Produk</h3>
-              <p className="text-slate-400 text-xs">Jelajahi semua laptop</p>
-              <div className="flex items-center gap-0.5 mt-2 text-blue-600 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+              <h3 className="text-sm sm:text-base font-bold text-slate-700 mb-0.5">Semua Produk</h3>
+              <p className="text-slate-400 text-[10px] sm:text-xs">Jelajahi semua laptop</p>
+              <div className="flex items-center gap-0.5 mt-1 sm:mt-2 text-blue-600 text-[10px] sm:text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                 Lihat semua
                 <ArrowRight size={12} />
               </div>
@@ -540,9 +561,9 @@ function CategoryScreen({ categories, onSelect, onSkip }) {
 // Chip Component
 function Chip({ label, onRemove }) {
   return (
-    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-[10px] font-medium">
-      {label}
-      <button onClick={onRemove} className="hover:text-blue-900">
+    <span className="inline-flex items-center gap-0.5 px-1.5 sm:px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-[9px] sm:text-[10px] font-medium">
+      <span className="truncate max-w-[100px] sm:max-w-none">{label}</span>
+      <button onClick={onRemove} className="hover:text-blue-900 flex-shrink-0">
         <X size={8} />
       </button>
     </span>
@@ -555,7 +576,7 @@ function PageBtn({ children, active, disabled, onClick }) {
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`w-7 h-7 rounded-lg text-xs font-semibold flex items-center justify-center transition-all ${active ? "bg-blue-600 text-white shadow-sm" : disabled ? "text-slate-300 cursor-not-allowed" : "text-slate-600 hover:bg-slate-200"
+      className={`w-6 h-6 sm:w-7 sm:h-7 rounded-lg text-[11px] sm:text-xs font-semibold flex items-center justify-center transition-all ${active ? "bg-blue-600 text-white shadow-sm" : disabled ? "text-slate-300 cursor-not-allowed" : "text-slate-600 hover:bg-slate-200"
         }`}
     >
       {children}
@@ -613,47 +634,47 @@ function ProductModal({ product, onClose, allTags }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-3"
       style={{ backgroundColor: "rgba(0,0,0,0.85)", backdropFilter: "blur(8px)" }}
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl"
+        className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl mx-2 sm:mx-0"
         onClick={e => e.stopPropagation()}
       >
-        <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-slate-100 px-4 py-2.5 flex items-center justify-between">
-          <div className="flex items-center gap-1.5 text-xs">
-            <div className="w-6 h-6 rounded-lg bg-blue-100 flex items-center justify-center">
+        <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-slate-100 px-3 sm:px-4 py-2 flex sm:py-2.5 items-center justify-between">
+          <div className="flex items-center gap-1.5 text-[11px] sm:text-xs">
+            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-blue-100 flex items-center justify-center">
               <Laptop size={14} className="text-blue-600" />
             </div>
-            <div className="flex items-center gap-1 text-slate-500">
-              <span>Detail Produk</span>
+            <div className="flex items-center gap-1 text-slate-500 truncate">
+              <span className="hidden sm:inline">Detail Produk</span>
               {product.brands?.name && (
                 <>
-                  <ChevronRight size={12} className="text-slate-300" />
-                  <span className="text-slate-700 font-medium">{product.brands.name}</span>
+                  <ChevronRight size={12} className="text-slate-300 flex-shrink-0" />
+                  <span className="text-slate-700 font-medium truncate">{product.brands.name}</span>
                 </>
               )}
             </div>
           </div>
-          <button onClick={onClose} className="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-all">
+          <button onClick={onClose} className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-all flex-shrink-0">
             <X size={12} className="text-slate-500" />
           </button>
         </div>
 
         <div className="overflow-y-auto max-h-[calc(90vh-52px)]">
           <div className="grid lg:grid-cols-2 gap-0">
-            <div className="bg-gradient-to-br from-slate-50 to-white p-4">
+            <div className="bg-gradient-to-br from-slate-50 to-white p-3 sm:p-4">
               <div className="relative aspect-square bg-white rounded-xl overflow-hidden shadow-sm border border-slate-100 group">
                 {allImages[imgIdx] ? (
                   <>
-                    <img src={allImages[imgIdx]} alt={product.name} className="w-full h-full object-contain p-4" />
+                    <img src={allImages[imgIdx]} alt={product.name} className="w-full h-full object-contain p-3 sm:p-4" />
                     {allImages.length > 1 && (
                       <>
-                        <button onClick={prevImage} className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 bg-black/60 hover:bg-black/80 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
+                        <button onClick={prevImage} className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 bg-black/60 hover:bg-black/80 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
                           <ChevronLeft size={14} />
                         </button>
-                        <button onClick={nextImage} className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 bg-black/60 hover:bg-black/80 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
+                        <button onClick={nextImage} className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-7 sm:h-7 bg-black/60 hover:bg-black/80 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
                           <ChevronRight size={14} />
                         </button>
                       </>
@@ -667,30 +688,30 @@ function ProductModal({ product, onClose, allTags }) {
               </div>
               {allImages.length > 1 && (
                 <div className="mt-3">
-                  <div className="flex gap-1.5 overflow-x-auto pb-1 justify-center">
+                  <div className="flex gap-1 sm:gap-1.5 overflow-x-auto pb-1 justify-center">
                     {allImages.map((img, i) => (
                       <button
                         key={i}
                         onClick={() => setImgIdx(i)}
-                        className={`flex-shrink-0 w-12 h-12 rounded-lg overflow-hidden border-2 transition-all ${i === imgIdx ? "border-blue-500 ring-1 ring-blue-200" : "border-slate-200"}`}
+                        className={`flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden border-2 transition-all ${i === imgIdx ? "border-blue-500 ring-1 ring-blue-200" : "border-slate-200"}`}
                       >
                         <img src={img} alt="" className="w-full h-full object-cover" />
                       </button>
                     ))}
                   </div>
-                  <p className="text-center text-[10px] text-slate-400 mt-1">{imgIdx + 1} / {allImages.length}</p>
+                  <p className="text-center text-[9px] sm:text-[10px] text-slate-400 mt-1">{imgIdx + 1} / {allImages.length}</p>
                 </div>
               )}
             </div>
 
-            <div className="p-4 lg:p-5">
+            <div className="p-3 sm:p-4 lg:p-5">
               {/* Tags Produk */}
               {tagNames.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mb-3">
                   {tagNames.map((tag, idx) => (
                     <span
                       key={idx}
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${getTagColorStyle(tag.color)}`}
+                      className={`inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold ${getTagColorStyle(tag.color)}`}
                     >
                       <Tag size={10} />
                       {tag.name}
@@ -701,44 +722,46 @@ function ProductModal({ product, onClose, allTags }) {
 
               <div className="flex flex-wrap gap-1.5 mb-3">
                 {product.brands?.name && (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-semibold rounded-full">
+                  <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 bg-blue-50 text-blue-700 text-[9px] sm:text-[10px] font-semibold rounded-full">
                     <Tag size={10} /> {product.brands.name}
                   </span>
                 )}
                 {product.categories?.name && (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 text-slate-600 text-[10px] font-semibold rounded-full">
+                  <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 bg-slate-100 text-slate-600 text-[9px] sm:text-[10px] font-semibold rounded-full">
                     <Laptop size={10} /> {product.categories.name}
                   </span>
                 )}
               </div>
 
-              <h1 className="text-base lg:text-lg font-bold text-slate-900 mb-2 leading-tight">{product.name}</h1>
+              <h1 className="text-base sm:text-lg lg:text-xl font-bold text-slate-900 mb-2 leading-tight">
+                {product.name}
+              </h1>
 
               <div className="mb-3 pb-2 border-b border-slate-100">
                 <div className="flex items-baseline gap-1.5 flex-wrap">
                   {hasDiscount ? (
                     <>
-                      <p className="text-xl lg:text-2xl font-black text-red-600">{fmt(finalPrice)}</p>
-                      <p className="text-xs text-slate-400 line-through">{fmt(originalPrice)}</p>
+                      <p className="text-lg sm:text-xl lg:text-2xl font-black text-red-600">{fmt(finalPrice)}</p>
+                      <p className="text-[10px] sm:text-xs text-slate-400 line-through">{fmt(originalPrice)}</p>
                       <span className="px-1.5 py-0.5 bg-red-100 text-red-700 text-[9px] font-bold rounded-full">
                         -{product.discount_percent}%
                       </span>
                     </>
                   ) : (
-                    <p className="text-xl lg:text-2xl font-black text-blue-700">{fmt(originalPrice)}</p>
+                    <p className="text-lg sm:text-xl lg:text-2xl font-black text-blue-700">{fmt(originalPrice)}</p>
                   )}
                 </div>
               </div>
 
-              <div className={`mb-3 p-2 rounded-lg flex items-center gap-2 text-xs ${product.stock > 0
+              <div className={`mb-3 p-2 rounded-lg flex items-center gap-2 text-[10px] sm:text-xs ${product.stock > 0
                 ? (product.stock < 5 ? "bg-amber-50 border border-amber-100" : "bg-green-50 border border-green-100")
                 : "bg-red-50 border border-red-100"
                 }`}>
-                <div className={`w-2 h-2 rounded-full ${product.stock > 0
+                <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${product.stock > 0
                   ? (product.stock < 5 ? "bg-amber-500 animate-pulse" : "bg-green-500")
                   : "bg-red-500"
                   }`} />
-                <p className={`font-medium text-[10px] ${product.stock > 0
+                <p className={`font-medium text-[9px] sm:text-[10px] ${product.stock > 0
                   ? (product.stock < 5 ? "text-amber-700" : "text-green-700")
                   : "text-red-700"
                   }`}>
@@ -751,19 +774,19 @@ function ProductModal({ product, onClose, allTags }) {
               </div>
 
               {SPEC_ROWS.length > 0 && (
-                <div className="bg-slate-50 rounded-lg p-3 mb-3">
+                <div className="bg-slate-50 rounded-lg p-2 sm:p-3 mb-3">
                   <div className="flex items-center gap-1.5 mb-2">
                     <div className="w-5 h-5 rounded-lg bg-blue-100 flex items-center justify-center">
                       <Cpu size={12} className="text-blue-600" />
                     </div>
-                    <p className="text-[10px] font-semibold text-slate-500 uppercase">Spesifikasi</p>
+                    <p className="text-[9px] sm:text-[10px] font-semibold text-slate-500 uppercase">Spesifikasi</p>
                   </div>
-                  <div className="grid grid-cols-1 gap-1.5 text-xs">
+                  <div className="grid grid-cols-1 gap-1.5 text-[10px] sm:text-xs">
                     {SPEC_ROWS.map(row => (
                       <div key={row.label} className="flex items-start gap-1.5">
-                        <span className="text-slate-400 mt-0.5">{row.icon}</span>
-                        <span className="text-slate-500 w-16 flex-shrink-0 text-[10px]">{row.label}</span>
-                        <span className="text-slate-800 font-medium text-[10px] flex-1">{row.value}</span>
+                        <span className="text-slate-400 mt-0.5 flex-shrink-0">{row.icon}</span>
+                        <span className="text-slate-500 w-12 sm:w-16 flex-shrink-0 text-[9px] sm:text-[10px]">{row.label}</span>
+                        <span className="text-slate-800 font-medium text-[9px] sm:text-[10px] flex-1 break-words">{row.value}</span>
                       </div>
                     ))}
                   </div>
@@ -774,14 +797,14 @@ function ProductModal({ product, onClose, allTags }) {
                 <div className="space-y-3">
                   {product.short_description && (
                     <div>
-                      <p className="text-[10px] font-semibold text-slate-500 uppercase mb-1">Deskripsi</p>
-                      <p className="text-xs text-slate-600 leading-relaxed">{product.short_description}</p>
+                      <p className="text-[9px] sm:text-[10px] font-semibold text-slate-500 uppercase mb-1">Deskripsi</p>
+                      <p className="text-[11px] sm:text-xs text-slate-600 leading-relaxed">{product.short_description}</p>
                     </div>
                   )}
                   {product.description && (
                     <div>
-                      <p className="text-[10px] font-semibold text-slate-500 uppercase mb-1">Informasi Lengkap</p>
-                      <p className="text-xs text-slate-500 leading-relaxed whitespace-pre-line">{product.description}</p>
+                      <p className="text-[9px] sm:text-[10px] font-semibold text-slate-500 uppercase mb-1">Informasi Lengkap</p>
+                      <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed whitespace-pre-line">{product.description}</p>
                     </div>
                   )}
                 </div>
@@ -812,7 +835,11 @@ function ProductScreen({
   const [isLoadingTags, setIsLoadingTags] = useState(false);
   const PER_PAGE = 12;
 
-  // SESUDAH (diperbaiki):
+  // Responsive per page
+  const isMobile = useMediaQuery('(max-width: 640px)');
+  const responsivePerPage = isMobile ? 8 : 12;
+  const actualPerPage = responsivePerPage;
+
   const debouncedSearch = useDebounce(searchInput, 400);
 
   useEffect(() => {
@@ -872,8 +899,8 @@ function ProductScreen({
     return result;
   }, [products, selectedCategory, selectedBrand, selectedTagId, debouncedSearch, priceRange.min, priceRange.max, stockFilter, sortBy]);
 
-  const totalPages = Math.ceil(filtered.length / PER_PAGE);
-  const paged = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+  const totalPages = Math.ceil(filtered.length / actualPerPage);
+  const paged = filtered.slice((page - 1) * actualPerPage, page * actualPerPage);
   const hasFilter = selectedCategory || selectedBrand || selectedTagId || debouncedSearch || priceRange.min || priceRange.max || stockFilter !== "all";
 
   const resetAllFilters = () => {
@@ -938,7 +965,7 @@ function ProductScreen({
               />
               <span className="text-slate-600 flex items-center gap-1">
                 <span className="text-sm">{getCategoryIcon(cat.name)}</span>
-                {cat.name}
+                <span className="truncate">{cat.name}</span>
               </span>
             </label>
           ))}
@@ -967,7 +994,7 @@ function ProductScreen({
                 onChange={() => setSelectedBrand(brand)}
                 className="w-3 h-3 text-blue-600"
               />
-              <span className="text-slate-600">{brand.name}</span>
+              <span className="text-slate-600 truncate">{brand.name}</span>
             </label>
           ))}
         </div>
@@ -1066,20 +1093,30 @@ function ProductScreen({
             0% { background-position: -200% 0; }
             100% { background-position: 200% 0; }
           }
+          
+          /* Responsive utilities */
+          @media (max-width: 640px) {
+            .line-clamp-2 {
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+            }
+          }
         `}</style>
 
-      <div className="relative top-6 md:top-6 z-20 bg-white border-b border-slate-200 shadow-sm">
-        <div className="w-full px-3 py-2">
+      <div className="sticky top-0 z-20 bg-white border-b border-slate-200 shadow-sm">
+        <div className="w-full px-2 sm:px-3 py-2">
           <div className="flex items-center justify-between gap-2">
             <button
               onClick={onBack}
-              className="flex items-center gap-1 text-slate-500 hover:text-slate-800 transition-colors text-xs"
+              className="flex items-center gap-1 text-slate-500 hover:text-slate-800 transition-colors text-[11px] sm:text-xs flex-shrink-0"
             >
               <ChevronLeft size={14} />
               <span className="hidden sm:inline">Kembali</span>
             </button>
 
-            <div className="flex-1 max-w-xs">
+            <div className="flex-1 max-w-[180px] sm:max-w-xs">
               <AnimatedSearchBar
                 value={searchInput}
                 onChange={setSearchInput}
@@ -1087,11 +1124,11 @@ function ProductScreen({
               />
             </div>
 
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1 sm:gap-1.5">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-2 py-1.5 text-xs bg-slate-100 border-0 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer transition-all hover:bg-slate-200"
+                className="px-1.5 sm:px-2 py-1.5 text-[10px] sm:text-xs bg-slate-100 border-0 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer transition-all hover:bg-slate-200"
               >
                 <option value="newest">Terbaru</option>
                 <option value="price_high">Harga Tertinggi</option>
@@ -1101,10 +1138,10 @@ function ProductScreen({
 
               <button
                 onClick={() => setShowMobileFilters(!showMobileFilters)}
-                className="lg:hidden flex items-center gap-1.5 px-2 py-1.5 text-xs bg-slate-100 rounded-lg transition-all hover:bg-slate-200"
+                className="lg:hidden flex items-center gap-1 px-1.5 sm:px-2 py-1.5 text-[10px] sm:text-xs bg-slate-100 rounded-lg transition-all hover:bg-slate-200 flex-shrink-0"
               >
                 <Filter size={12} />
-                Filter
+                <span className="hidden xs:inline">Filter</span>
                 {hasFilter && <span className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse" />}
               </button>
             </div>
@@ -1112,7 +1149,7 @@ function ProductScreen({
         </div>
       </div>
 
-      <div className="w-full px-3 py-10">
+      <div className="w-full px-2 sm:px-3 py-6 sm:py-10">
         <div className="flex gap-4">
           <div className="hidden lg:block w-64 flex-shrink-0">
             <div className="sticky top-16 bg-white rounded-xl border border-slate-200 p-3">
@@ -1122,15 +1159,12 @@ function ProductScreen({
 
           {showMobileFilters && (
             <div className="fixed inset-0 z-50 lg:hidden animate-fadeIn">
-
-              {/* Overlay mulai di bawah navbar */}
               <div
-                className="absolute inset-0 top-16 bg-black/50"
+                className="absolute inset-0 top-14 bg-black/50"
                 onClick={() => setShowMobileFilters(false)}
               />
 
-              {/* Sidebar filter mobile */}
-              <div className="absolute right-0 top-16 bottom-0 w-72 bg-white shadow-xl overflow-y-auto animate-slideInRight rounded-tl-2xl">
+              <div className="absolute right-0 top-14 bottom-0 w-80 max-w-[85vw] bg-white shadow-xl overflow-y-auto animate-slideInRight rounded-tl-2xl">
                 <div className="p-3 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white z-10">
                   <h3 className="font-bold text-slate-800 text-sm">
                     Filter
@@ -1151,12 +1185,12 @@ function ProductScreen({
             </div>
           )}
 
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
               <ResultCountWithAnimation count={filtered.length} isSearching={isSearching} />
 
               {hasFilter && (
-                <div className="flex flex-wrap gap-1.5 animate-slideDown">
+                <div className="flex flex-wrap gap-1.5 animate-slideDown max-w-full">
                   {selectedCategory && (
                     <Chip label={selectedCategory.name} onRemove={() => setSelectedCategory(null)} />
                   )}
@@ -1189,11 +1223,11 @@ function ProductScreen({
             </div>
 
             {isSearching ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
-                {Array.from({ length: 8 }).map((_, i) => (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-2.5">
+                {Array.from({ length: actualPerPage }).map((_, i) => (
                   <div key={i} className="bg-white rounded-xl border border-slate-200 overflow-hidden animate-pulse">
                     <div className="h-32 bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 shimmer-text" />
-                    <div className="p-2.5">
+                    <div className="p-2 sm:p-2.5">
                       <div className="h-2 bg-slate-200 rounded w-16 mb-1.5" />
                       <div className="h-3 bg-slate-200 rounded w-3/4 mb-2" />
                       <div className="flex gap-1 mb-2">
@@ -1216,7 +1250,7 @@ function ProductScreen({
               />
             ) : (
               <>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-2.5">
                   {paged.map((product, idx) => (
                     <AnimatedProductCard
                       key={product.id}
@@ -1229,7 +1263,7 @@ function ProductScreen({
                 </div>
 
                 {totalPages > 1 && (
-                  <div className="flex justify-center mt-6 gap-1 animate-fadeInUp">
+                  <div className="flex justify-center mt-6 gap-1 animate-fadeInUp flex-wrap">
                     <PageBtn onClick={() => setPage(p => Math.max(p - 1, 1))} disabled={page === 1}>
                       <ChevronLeft size={12} />
                     </PageBtn>
@@ -1316,7 +1350,6 @@ export default function Katalog() {
       if (brandsRes.error) throw brandsRes.error;
       if (productsRes.error) throw productsRes.error;
 
-      // Tags & product_tags tidak blocking — gagal pun produk tetap tampil
       let tagsData = [];
       let productTagsData = [];
       try {
@@ -1373,12 +1406,11 @@ export default function Katalog() {
     loadData();
   }, [loadData]);
 
-  // SESUDAH:
   useEffect(() => {
     if (!modalProduct) return;
     const updated = products.find((p) => p.id === modalProduct.id);
     if (updated && updated !== modalProduct) setModalProduct(updated);
-  }, [products]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [products]);
 
   useEffect(() => {
     const channel = supabase
@@ -1397,7 +1429,7 @@ export default function Katalog() {
 
   if (loading && products.length === 0) {
     return (
-      <div className="min-h-screen bg-slate-50 pt-12 px-3">
+      <div className="min-h-screen bg-slate-50 pt-12 px-2 sm:px-3">
         <div className="max-w-7xl mx-auto">
           <SkeletonGrid />
         </div>
@@ -1407,10 +1439,10 @@ export default function Katalog() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
         <div className="text-center">
-          <p className="text-red-500 text-sm mb-2">Gagal memuat data</p>
-          <button onClick={loadData} className="px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg">Coba Lagi</button>
+          <p className="text-red-500 text-xs sm:text-sm mb-2">Gagal memuat data</p>
+          <button onClick={loadData} className="px-3 sm:px-3.5 py-1.5 bg-blue-600 text-white text-xs sm:text-sm rounded-lg">Coba Lagi</button>
         </div>
       </div>
     );
@@ -1432,6 +1464,8 @@ export default function Katalog() {
           name="keywords"
           content="katalog laptop second, harga laptop second, laptop murah depok, laptop bekas bergaransi"
         />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
 
         <link
           rel="canonical"
