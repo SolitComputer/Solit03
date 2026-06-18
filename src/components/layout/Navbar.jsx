@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, MessageCircle, Home, ShoppingBag, Users, Info, Share2, Shield, Wrench } from "lucide-react"; // ✅ tambah Wrench
+import { Menu, X, MessageCircle, Home, ShoppingBag, Users, Info, Share2, Shield, Wrench } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/solit03.jpeg";
 
@@ -46,14 +46,15 @@ export default function Navbar() {
         setMenuOpen(false);
     };
 
+    // ✅ Icon dikecilkan dari 16 → 13
     const navLinks = [
-        { name: "Beranda", href: "/", icon: <Home size={16} /> },
-        { name: "Katalog", href: "/katalog", icon: <ShoppingBag size={16} /> },
-        { name: "Jual-Beli", href: "/jual-beli", icon: <Users size={16} /> },
-        { name: "Tentang", href: "/tentang", icon: <Info size={16} /> },
-        { name: "Sosial", href: "/sosial-media", icon: <Share2 size={16} /> },
-        { name: "Cek Garansi", href: "/cek-garansi", icon: <Shield size={16} /> },
-        { name: "Cek Antrian", href: "/cek-antrian", icon: <Wrench size={16} /> }, // ✅ NEW
+        { name: "Beranda",     href: "/",             icon: <Home size={13} /> },
+        { name: "Katalog",     href: "/katalog",       icon: <ShoppingBag size={13} /> },
+        { name: "Jual-Beli",   href: "/jual-beli",     icon: <Users size={13} /> },
+        { name: "Tentang",     href: "/tentang",       icon: <Info size={13} /> },
+        { name: "Sosial",      href: "/sosial-media",  icon: <Share2 size={13} /> },
+        { name: "Cek Garansi", href: "/cek-garansi",   icon: <Shield size={13} /> },
+        { name: "Cek Antrian", href: "/cek-antrian",   icon: <Wrench size={13} /> },
     ];
 
     return (
@@ -82,15 +83,15 @@ export default function Navbar() {
                             </div>
                         </button>
 
-                        {/* Desktop Navigation */}
-                        <ul className="hidden md:flex gap-1 lg:gap-2 text-gray-500 text-sm md:text-base">
+                        {/* ✅ Desktop nav — text-xs, gap lebih kecil */}
+                        <ul className="hidden md:flex gap-1 text-gray-500 text-xs">
                             {navLinks.map((item, i) => (
                                 <li key={i}>
                                     <button
                                         onClick={() => handleNavigation(item.href)}
                                         className={`
-                                            relative px-3 py-2 rounded-md transition-all duration-200
-                                            flex items-center gap-1.5
+                                            relative px-2.5 py-1.5 rounded-md transition-all duration-200
+                                            flex items-center gap-1
                                             ${location.pathname === item.href
                                                 ? "text-blue-700 bg-blue-50/80 font-medium"
                                                 : "text-gray-500 hover:text-blue-600 hover:bg-gray-50"
@@ -107,18 +108,18 @@ export default function Navbar() {
                             ))}
                         </ul>
 
-                        {/* Desktop CTA */}
+                        {/* Desktop CTA — tetap sama */}
                         <div className="hidden md:block">
                             <button
                                 onClick={handleWhatsApp}
-                                className="group inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white text-sm px-5 py-2.5 rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+                                className="group inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white text-xs px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
                             >
-                                <MessageCircle size={14} />
+                                <MessageCircle size={13} />
                                 <span>Hubungi</span>
                             </button>
                         </div>
 
-                        {/* Mobile hamburger */}
+                        {/* Mobile hamburger — tetap sama */}
                         <div className="md:hidden">
                             <button
                                 onClick={() => setMenuOpen(!menuOpen)}
@@ -131,7 +132,7 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                {/* Mobile Menu */}
+                {/* ✅ Mobile Menu — text-xs */}
                 <div
                     className={`
                         md:hidden absolute w-full bg-white/95 backdrop-blur-md shadow-lg
@@ -146,7 +147,7 @@ export default function Navbar() {
                                 onClick={() => handleNavigation(item.href)}
                                 className={`
                                     w-full flex items-center gap-2 px-3 py-2 rounded-md
-                                    text-sm transition-all duration-200
+                                    text-xs transition-all duration-200
                                     ${location.pathname === item.href
                                         ? "bg-blue-50 text-blue-700 font-medium"
                                         : "text-gray-600 hover:bg-gray-50"
@@ -157,9 +158,8 @@ export default function Navbar() {
                                     {item.icon}
                                 </span>
                                 {item.name}
-                                {/* Highlight khusus Cek Antrian */}
                                 {item.href === "/cek-antrian" && location.pathname !== "/cek-antrian" && (
-                                    <span className="ml-auto text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">
+                                    <span className="ml-auto text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">
                                         Live
                                     </span>
                                 )}
@@ -172,9 +172,9 @@ export default function Navbar() {
                         <div className="border-t border-gray-100 mt-2 pt-2">
                             <button
                                 onClick={handleWhatsApp}
-                                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white text-sm py-2 rounded-md transition-all duration-200 hover:shadow-md"
+                                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white text-xs py-2 rounded-md transition-all duration-200 hover:shadow-md"
                             >
-                                <MessageCircle size={16} />
+                                <MessageCircle size={14} />
                                 WhatsApp
                             </button>
                         </div>
