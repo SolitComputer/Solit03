@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, MessageCircle, Home, ShoppingBag, Users, Info, Share2, Shield, Wrench } from "lucide-react";
+import { Menu, X, MessageCircle, Home, ShoppingBag, Users, Info, Share2, Shield, Wrench, Laptop } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/solit03.jpeg";
 
@@ -49,7 +49,8 @@ export default function Navbar() {
     // ✅ Icon dikecilkan dari 16 → 13
     const navLinks = [
         { name: "Beranda",     href: "/",             icon: <Home size={13} /> },
-        { name: "Katalog",     href: "/katalog",       icon: <ShoppingBag size={13} /> },
+        { name: "Katalog",      href: "/katalog",        icon: <ShoppingBag size={13} /> },
+        { name: "Laptop Ready", href: "/katalog-laptop", icon: <Laptop size={13} /> },
         { name: "Jual-Beli",   href: "/jual-beli",     icon: <Users size={13} /> },
         { name: "Tentang",     href: "/tentang",       icon: <Info size={13} /> },
         { name: "Sosial",      href: "/sosial-media",  icon: <Share2 size={13} /> },

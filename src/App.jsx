@@ -19,8 +19,9 @@ import Brands from "./admin/pages/Brands";
 import Categories from "./admin/pages/Categories";
 import Tags from "./admin/pages/Tags";
 import CekGaransi from "./pages/CekGaransi";
-import CekAntrian from "./pages/CekAntrian_realtime"; // ✅ NEW
-
+import CekAntrian from "./pages/CekAntrian_realtime"; 
+import KatalogLaptop from "./pages/KatalogLaptop";     
+import KatalogFoto from "./admin/pages/KatalogFoto";   
 function App() {
   return (
     <BrowserRouter basename="/">
@@ -33,6 +34,7 @@ function App() {
           <Route path="/katalog" element={<Katalog />} />
           <Route path="/cek-garansi" element={<CekGaransi />} />
           <Route path="/cek-antrian" element={<CekAntrian />} /> {/* ✅ NEW */}
+          <Route path="/katalog-laptop" element={<KatalogLaptop />} /> {/* ✅ NEW */}
         </Route>
 
         <Route path="/admin/login" element={<Login />} />
@@ -51,6 +53,7 @@ function App() {
           <Route path="tags" element={<Tags />} />
           <Route path="products/create" element={<CreateProducts />} />
           <Route path="products/edit/:id" element={<EditProducts />} />
+          <Route path="katalog-foto" element={<KatalogFoto />} />
         </Route>
       </Routes>
     </BrowserRouter>

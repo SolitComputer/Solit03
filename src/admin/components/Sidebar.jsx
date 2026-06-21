@@ -6,7 +6,8 @@ import {
   Shapes,
   ChevronLeft,
   ChevronRight,
-  LogOut
+  LogOut,
+  Camera
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -57,7 +58,8 @@ export default function Sidebar() {
     { name: "Products", icon: Laptop, path: "/admin/products", exact: false },
     { name: "Brands", icon: Tags, path: "/admin/brands", exact: false },
     { name: "Categories", icon: Layers3, path: "/admin/categories", exact: false },
-    { name: "Tags", icon: Shapes, path: "/admin/tags", exact: false }
+    { name: "Tags", icon: Shapes, path: "/admin/tags", exact: false },
+    { name: "Foto Katalog", icon: Camera, path: "/admin/katalog-foto", exact: false },
   ];
 
   const toggleSidebar = () => {
