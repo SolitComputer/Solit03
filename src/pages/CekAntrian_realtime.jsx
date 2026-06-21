@@ -268,7 +268,7 @@ export default function CekAntrian() {
           <button
             onClick={refresh}
             disabled={loading}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-500 hover:text-[#1a1a2e] hover:bg-gray-100 rounded-lg transition disabled:opacity-40"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-edium text-gray-500 hover:text-[#1a1a2e] hover:bg-gray-100 rounded-lg transition disabled:opacity-40"
           >
             <RefreshCw size={11} className={loading ? "animate-spin" : ""} />
             Refresh
