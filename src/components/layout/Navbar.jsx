@@ -1,9 +1,5 @@
 import { useState, useEffect } from "react";
-<<<<<<< HEAD
 import { Menu, X, MessageCircle, Home, ShoppingBag, Users, Info, Share2, Shield, Wrench, Laptop } from "lucide-react";
-=======
-import { Menu, X, MessageCircle, Home, ShoppingBag, Users, Info, Share2, Shield, Wrench, ScanLine } from "lucide-react";
->>>>>>> 3cf8b54 (update)
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/solit03.jpeg";
 
