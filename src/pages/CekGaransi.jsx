@@ -654,6 +654,9 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
                     </div>
                 )}
 
+                {/* Ketentuan Garansi */}
+                <WarrantyTerms />
+
                 <div className="flex flex-col sm:flex-row gap-3 pt-2">
                     <a
                         href={`https://wa.me/6285210647047?text=${encodeURIComponent(`Halo Solit 03, saya ingin bertanya mengenai garansi laptop dengan SN: ${data.serial_number}`)}`}
@@ -676,6 +679,46 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
                     </button>
                 </div>
             </div>
+        </div>
+    );
+}
+
+// ── KETENTUAN GARANSI (reusable) ─────────────────────────────────────────────
+function WarrantyTerms() {
+    const terms = [
+        "Garansi hanya berlaku untuk kerusakan yang BUKAN akibat human error.",
+        "Kerusakan LCD seperti pecah, kena air, terbakar, bergaris, berkedip, gelap/redup, blank putih, dead pixel, berbayang/shadow, warna pudar/tidak akurat, serta bercak hitam/putih TIDAK termasuk garansi.",
+        "Wajib membawa nota pembelian ini saat melakukan klaim garansi.",
+    ];
+
+    return (
+        <div className="rounded-2xl border border-gray-100 bg-white/80 backdrop-blur-sm shadow-sm overflow-hidden">
+            {/* Note: barang tidak bisa dikembalikan/ditukar */}
+            <div className="flex items-start gap-3 bg-amber-50 border-b border-amber-100 px-5 py-3.5">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-sm font-bold mt-0.5">!</span>
+                <p className="text-sm text-amber-800 leading-relaxed">
+                    <span className="font-bold">Note:</span> Barang yang sudah dibeli tidak bisa dikembalikan dan ditukar.
+                </p>
+            </div>
+
+            {/* Header */}
+            <div className="px-5 pt-5 pb-2">
+                <p className="text-sm font-bold text-gray-800 flex items-center gap-2">
+                    <span>🛡️</span> Ketentuan Garansi
+                </p>
+            </div>
+
+            {/* Daftar ketentuan */}
+            <ol className="px-5 pb-5 space-y-3">
+                {terms.map((t, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm text-gray-600 leading-relaxed">
+                        <span className="flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold mt-0.5">
+                            {i + 1}
+                        </span>
+                        <span>{t}</span>
+                    </li>
+                ))}
+            </ol>
         </div>
     );
 }
