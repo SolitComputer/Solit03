@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Wrench, Clock, CheckCircle, Package, RefreshCw, Search, AlertCircle } from "lucide-react";
 
 const POS_BASE = "https://solit-pos.vercel.app";
-const STREAM_URL = `${POS_BASE}/api/service/stream`;
-const FALLBACK_URL = `${POS_BASE}/api/service/public`;
+const ORDERS_URL = `${POS_BASE}/api/service/public`; // endpoint yang sudah ada
+const POLL_INTERVAL = 20_000; // 20 detik — cukup untuk board antrian
 
 const STATUS_CONFIG = {
   ANTRIAN: {
@@ -78,6 +78,7 @@ function formatDate(iso) {
 }
 
 // ── SSE + fallback hook — TIDAK DIUBAH ──────────────────────────────────────
+// ── Polling hook — pengganti SSE, jauh lebih hemat CPU ──────────────────────
 function useServiceOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -85,84 +86,69 @@ function useServiceOrders() {
   const [connected, setConnected] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
 
-  const esRef = useRef(null);
-  const fallbackRef = useRef(null);
-  const reconnectTimer = useRef(null);
+  const timerRef = useRef(null);
+  const activeRef = useRef(true);
 
-  const startFallbackPolling = useCallback(() => {
-    const poll = async () => {
-      try {
-        const res = await fetch(FALLBACK_URL);
-        const json = await res.json();
-        if (json.success) {
-          setOrders(json.data ?? []);
-          setLastUpdated(new Date());
-          setError("");
-        }
-      } catch {
-        setError("Koneksi bermasalah, mencoba lagi...");
-      } finally {
-        setLoading(false);
-      }
-    };
-    poll();
-    fallbackRef.current = setInterval(poll, 15_000);
-  }, []);
-
-  const stopFallbackPolling = useCallback(() => {
-    if (fallbackRef.current) { clearInterval(fallbackRef.current); fallbackRef.current = null; }
-  }, []);
-
-  const connectSSE = useCallback(() => {
-    if (esRef.current) { esRef.current.close(); esRef.current = null; }
-    clearTimeout(reconnectTimer.current);
-
-    if (typeof EventSource === "undefined") { startFallbackPolling(); return; }
-
-    const es = new EventSource(STREAM_URL);
-    esRef.current = es;
-
-    const handleData = (e) => {
-      try {
-        const payload = JSON.parse(e.data);
-        setOrders(payload.orders ?? []);
+  const load = useCallback(async (isManual = false) => {
+    if (isManual) setLoading(true);
+    try {
+      const res = await fetch(ORDERS_URL, { cache: "no-store" });
+      if (!res.ok) throw new Error("bad status");
+      const json = await res.json();
+      if (!activeRef.current) return; // komponen sudah unmount
+      if (json.success) {
+        setOrders(json.data ?? []);
         setLastUpdated(new Date());
         setConnected(true);
-        setLoading(false);
         setError("");
-        stopFallbackPolling();
-      } catch {}
-    };
-
-    es.addEventListener("init", handleData);
-    es.addEventListener("update", handleData);
-    es.addEventListener("error", () => {
+      } else {
+        throw new Error("bad payload");
+      }
+    } catch {
+      if (!activeRef.current) return;
       setConnected(false);
-      es.close();
-      esRef.current = null;
-      reconnectTimer.current = setTimeout(connectSSE, 10_000);
-      if (!fallbackRef.current) startFallbackPolling();
-    });
-  }, [startFallbackPolling, stopFallbackPolling]);
-
-  const refresh = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(FALLBACK_URL);
-      const json = await res.json();
-      if (json.success) { setOrders(json.data ?? []); setLastUpdated(new Date()); setError(""); }
-    } catch { setError("Gagal memuat ulang data"); }
-    finally { setLoading(false); }
+      setError("Koneksi bermasalah, mencoba lagi...");
+    } finally {
+      if (activeRef.current) setLoading(false);
+    }
   }, []);
 
+  const refresh = useCallback(() => load(true), [load]);
+
   useEffect(() => {
-    connectSSE();
-    return () => {
-      esRef.current?.close();
-      stopFallbackPolling();
-      clearTimeout(reconnectTimer.current);
+    activeRef.current = true;
+
+    const startPolling = () => {
+      if (!timerRef.current) timerRef.current = setInterval(load, POLL_INTERVAL);
     };
-  }, [connectSSE, stopFallbackPolling]);
+    const stopPolling = () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+
+    load();
+    startPolling();
+
+    // ✅ Hemat besar: kalau tab/layar di-background, stop polling.
+    //    Layar display toko yang idle / HP di-lock → 0 invocation.
+    const onVisibility = () => {
+      if (document.hidden) {
+        stopPolling();
+      } else {
+        load();
+        startPolling();
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      activeRef.current = false;
+      stopPolling();
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [load]);
 
   return { orders, loading, error, connected, lastUpdated, refresh };
 }
@@ -324,7 +310,7 @@ export default function CekAntrian() {
               </div>
               <p className="text-xs text-gray-400 mt-3 flex items-center gap-1">
                 <span className="inline-block w-4 h-4 bg-blue-100 rounded-full text-center text-blue-600 text-[10px] font-bold">i</span>
-                Data diperbarui otomatis secara real-time via SSE.
+                Data diperbarui otomatis setiap beberapa detik.
               </p>
             </div>
 
