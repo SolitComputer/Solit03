@@ -1,7 +1,30 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, createElement } from "react";
+// ── Konfigurasi ──────────────────────────────────────────────────────────────
+const SOLIT_POS_API =
+    import.meta.env.VITE_SOLIT_POS_URL || "https://solit-pos.store";
 
-// ── Konfigurasi API ──────────────────────────────────────────────────────────
-const SOLIT_POS_API = import.meta.env.VITE_SOLIT_POS_URL || "https://solit-pos.store";
+const WA_NUMBER = "6285210647047";
+const WA_DISPLAY = "+62 852-1064-7047";
+
+const waLink = (text) =>
+    `https://wa.me/${WA_NUMBER}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
+
+// ── ExternalLink ─────────────────────────────────────────────────────────────
+// Anchor dibuat via createElement, BUKAN literal tag, supaya source file aman
+// dari tool copy-paste yang menyaring anchor tag HTML.
+function ExternalLink({ href, className, children, ...rest }) {
+    return createElement(
+        "a",
+        {
+            href,
+            target: "_blank",
+            rel: "noopener noreferrer",
+            className,
+            ...rest,
+        },
+        children
+    );
+}
 
 const STATUS_CONFIG = {
     ACTIVE: {
@@ -44,12 +67,55 @@ const STATUS_CONFIG = {
 
 const fmtDate = (dateStr) => {
     if (!dateStr) return "—";
-    return new Date(dateStr).toLocaleDateString("id-ID", {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return "—";
+    return d.toLocaleDateString("id-ID", {
         day: "numeric",
         month: "long",
         year: "numeric",
     });
 };
+
+// ── Ikon ─────────────────────────────────────────────────────────────────────
+function WhatsAppIcon({ className = "w-4 h-4" }) {
+    return (
+        <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.032 2.001c-5.514 0-10 4.486-10 10 0 1.78.469 3.452 1.283 4.899L2 21.999l5.225-1.312c1.39.794 3.002 1.253 4.713 1.253 5.514 0 10-4.486 10-10s-4.486-10-10-10zm0 18.5c-1.657 0-3.236-.448-4.618-1.277l-.338-.195-3.125.785.84-3.077-.208-.347c-.891-1.449-1.363-3.113-1.363-4.889 0-4.688 3.812-8.5 8.5-8.5s8.5 3.812 8.5 8.5-3.812 8.5-8.5 8.5z" />
+            <path d="M16.75 13.45c-.26-.13-1.54-.76-1.78-.85s-.41-.13-.59.13c-.18.26-.69.85-.85 1.02s-.31.2-.56.07c-.26-.13-1.09-.4-2.07-1.28-.77-.69-1.29-1.54-1.44-1.8-.15-.26-.02-.4.11-.53.13-.13.26-.33.39-.5.13-.17.18-.28.27-.47.09-.19.05-.36-.02-.5s-.59-1.42-.81-1.95c-.21-.52-.43-.45-.59-.46s-.31-.01-.48-.01c-.18 0-.47.07-.71.33-.24.26-.91.89-.91 2.16 0 1.27.93 2.5 1.06 2.67.13.17 1.83 2.79 4.43 3.91.62.27 1.1.43 1.48.55.62.2 1.19.17 1.63.1.5-.07 1.54-.63 1.76-1.24.22-.61.22-1.13.15-1.24-.07-.1-.26-.16-.52-.26z" />
+        </svg>
+    );
+}
+
+function CopyIcon({ className = "w-4 h-4" }) {
+    return (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+        </svg>
+    );
+}
+
+function ResetIcon({ className = "w-4 h-4" }) {
+    return (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <polyline points="1 4 1 10 7 10" />
+            <path d="M3.51 15a9 9 0 102.13-9.36L1 10" />
+        </svg>
+    );
+}
+
+// ── Tombol WhatsApp (reusable) ───────────────────────────────────────────────
+function WhatsAppButton({ text, label = "WhatsApp" }) {
+    return (
+        <ExternalLink
+            href={waLink(text)}
+            className="flex-1 flex items-center justify-center gap-2 h-12 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-sm font-semibold rounded-xl transition-all hover:shadow-md active:scale-95"
+        >
+            <WhatsAppIcon />
+            {label}
+        </ExternalLink>
+    );
+}
 
 // ── KOMPONEN UTAMA ───────────────────────────────────────────────────────────
 export default function CekGaransi() {
@@ -57,8 +123,13 @@ export default function CekGaransi() {
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState(null);
     const [searched, setSearched] = useState(false);
+    const [searchedSn, setSearchedSn] = useState("");
+
     const inputRef = useRef(null);
     const buttonRef = useRef(null);
+    const inFlightRef = useRef(false);
+    const timersRef = useRef([]);
+    const intervalsRef = useRef([]);
 
     const [showConfetti, setShowConfetti] = useState(false);
     const [toastMessage, setToastMessage] = useState(null);
@@ -76,34 +147,57 @@ export default function CekGaransi() {
     const [btnFlash, setBtnFlash] = useState(false);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
+    // Timer yang otomatis ter-cleanup saat unmount
+    const safeTimeout = (fn, ms) => {
+        const id = setTimeout(fn, ms);
+        timersRef.current.push(id);
+        return id;
+    };
+    const safeInterval = (fn, ms) => {
+        const id = setInterval(fn, ms);
+        intervalsRef.current.push(id);
+        return id;
+    };
+
+    useEffect(() => {
+        return () => {
+            timersRef.current.forEach(clearTimeout);
+            intervalsRef.current.forEach(clearInterval);
+        };
+    }, []);
+
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         setIsVisible((prev) => ({ ...prev, [entry.target.id]: true }));
+                        observer.unobserve(entry.target); // animasi hanya sekali
                     }
                 });
             },
-            { threshold: 0.2, triggerOnce: true }
+            { threshold: 0.2 }
         );
-        const sections = ["hero", "card", "info", "cta"];
-        sections.forEach((id) => {
+        ["hero", "card", "info", "cta"].forEach((id) => {
             const el = document.getElementById(id);
             if (el) observer.observe(el);
         });
         return () => observer.disconnect();
-    }, []);
+    }, [searched]);
 
-    const copyToClipboard = (text) => {
-        navigator.clipboard.writeText(text);
-        setToastMessage(`✅ SN "${text}" tersalin!`);
-        setTimeout(() => setToastMessage(null), 2000);
+    const copyToClipboard = async (text) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            setToastMessage(`✅ SN "${text}" tersalin!`);
+        } catch {
+            setToastMessage("⚠️ Gagal menyalin. Salin manual ya.");
+        }
+        safeTimeout(() => setToastMessage(null), 2000);
     };
 
     const triggerConfetti = () => {
         setShowConfetti(true);
-        setTimeout(() => setShowConfetti(false), 3000);
+        safeTimeout(() => setShowConfetti(false), 3000);
     };
 
     const handleCheck = async (e) => {
@@ -114,29 +208,55 @@ export default function CekGaransi() {
             return;
         }
 
+        // Guard request dobel (scanner kirim Enter 2x / user spam klik).
+        // Pakai ref, bukan state `loading`, karena state baru update setelah re-render.
+        if (inFlightRef.current) return;
+        inFlightRef.current = true;
+
         setLoading(true);
         setResult(null);
         setSearched(false);
+        setSearchedSn(trimmed);
+
+        // Timeout 15 detik agar tidak spinner selamanya kalau server hang
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
 
         try {
+            // Tanpa header custom → simple request, browser TIDAK kirim preflight OPTIONS
             const res = await fetch(
                 `${SOLIT_POS_API}/api/warranty/check?sn=${encodeURIComponent(trimmed)}`,
-                {
-                    method: "GET",
-                    mode: "cors",
-                    headers: { "Content-Type": "application/json" },
-                }
+                { method: "GET", signal: controller.signal }
             );
-            const data = await res.json();
+
+            const data = await res.json().catch(() => null);
+
+            if (!data) {
+                setResult({
+                    success: false,
+                    message: "Respons server tidak valid. Coba lagi beberapa saat.",
+                });
+                return;
+            }
+
             setResult(data);
+
             if (data.success && data.data?.status === "ACTIVE") {
                 triggerConfetti();
                 setShowSuccessPopup(true);
-                setTimeout(() => setShowSuccessPopup(false), 2500);
+                safeTimeout(() => setShowSuccessPopup(false), 2500);
             }
-        } catch {
-            setResult({ success: false, message: "Tidak dapat terhubung ke server. Coba lagi beberapa saat." });
+        } catch (err) {
+            setResult({
+                success: false,
+                message:
+                    err?.name === "AbortError"
+                        ? "Server tidak merespons. Coba lagi beberapa saat."
+                        : "Tidak dapat terhubung ke server. Periksa koneksi internet Anda.",
+            });
         } finally {
+            clearTimeout(timeoutId);
+            inFlightRef.current = false;
             setLoading(false);
             setSearched(true);
         }
@@ -144,32 +264,46 @@ export default function CekGaransi() {
 
     const handleClickWithAwesomeAnim = (e) => {
         setIsBtnPressed(true);
-        setTimeout(() => setIsBtnPressed(false), 150);
+        safeTimeout(() => setIsBtnPressed(false), 150);
         setBtnFlash(true);
-        setTimeout(() => setBtnFlash(false), 200);
+        safeTimeout(() => setBtnFlash(false), 200);
 
-        if (buttonRef.current) {
+        // Efek partikel hanya untuk klik mouse.
+        // Submit via Enter tidak punya clientX/clientY → koordinat jadi NaN.
+        const isMouseEvent =
+            buttonRef.current &&
+            typeof e?.clientX === "number" &&
+            typeof e?.clientY === "number" &&
+            (e.clientX !== 0 || e.clientY !== 0);
+
+        if (isMouseEvent) {
             const rect = buttonRef.current.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
+            const baseId = Date.now();
 
             const newRipples = Array.from({ length: 12 }, (_, i) => ({
-                id: Date.now() + i,
-                x, y,
+                id: `r-${baseId}-${i}`,
+                x,
+                y,
                 size: Math.random() * 8 + 4,
                 angle: Math.random() * Math.PI * 2,
             }));
             setClickRipples((prev) => [...prev, ...newRipples]);
-            setTimeout(() => {
-                setClickRipples((prev) => prev.filter((r) => !newRipples.some((nr) => nr.id === r.id)));
+            safeTimeout(() => {
+                setClickRipples((prev) =>
+                    prev.filter((r) => !newRipples.some((nr) => nr.id === r.id))
+                );
             }, 500);
 
-            const waterId = Date.now();
+            const waterId = `w-${baseId}`;
             setWaterRipples((prev) => [...prev, { id: waterId, x, y, radius: 0 }]);
             let radius = 0;
-            const interval = setInterval(() => {
+            const interval = safeInterval(() => {
                 radius += 12;
-                setWaterRipples((prev) => prev.map((r) => (r.id === waterId ? { ...r, radius } : r)));
+                setWaterRipples((prev) =>
+                    prev.map((r) => (r.id === waterId ? { ...r, radius } : r))
+                );
                 if (radius >= 80) {
                     clearInterval(interval);
                     setWaterRipples((prev) => prev.filter((r) => r.id !== waterId));
@@ -177,15 +311,17 @@ export default function CekGaransi() {
             }, 30);
 
             const newSparkles = Array.from({ length: 8 }, (_, i) => ({
-                id: Date.now() + i,
+                id: `s-${baseId}-${i}`,
                 x: x + (Math.random() - 0.5) * 60,
                 y: y + (Math.random() - 0.5) * 40,
                 size: Math.random() * 6 + 3,
                 angle: Math.random() * Math.PI * 2,
             }));
             setSparkles((prev) => [...prev, ...newSparkles]);
-            setTimeout(() => {
-                setSparkles((prev) => prev.filter((s) => !newSparkles.some((ns) => ns.id === s.id)));
+            safeTimeout(() => {
+                setSparkles((prev) =>
+                    prev.filter((s) => !newSparkles.some((ns) => ns.id === s.id))
+                );
             }, 600);
         }
 
@@ -196,10 +332,19 @@ export default function CekGaransi() {
         setSn("");
         setResult(null);
         setSearched(false);
-        setTimeout(() => inputRef.current?.focus(), 50);
+        setSearchedSn("");
+        safeTimeout(() => inputRef.current?.focus(), 50);
     };
 
-    const cfg = result?.data ? STATUS_CONFIG[result.data.status] || STATUS_CONFIG.EXPIRED : null;
+    const cfg = result?.data
+        ? STATUS_CONFIG[result.data.status] || STATUS_CONFIG.EXPIRED
+        : null;
+
+    const infoCards = [
+        { icon: "🔍", title: "Temukan SN", desc: "Lihat stiker bodi laptop atau nota pembelian", bg: "from-blue-50 to-blue-100/50" },
+        { icon: "⌨️", title: "Masukkan SN", desc: "Ketik serial number dengan benar di kolom", bg: "from-indigo-50 to-indigo-100/50" },
+        { icon: "🛡️", title: "Lihat Status", desc: "Sistem akan menampilkan detail garansi Anda", bg: "from-emerald-50 to-emerald-100/50" },
+    ];
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/40 relative overflow-x-hidden">
@@ -213,10 +358,6 @@ export default function CekGaransi() {
                         from { opacity: 0; transform: translateY(30px); }
                         to { opacity: 1; transform: translateY(0); }
                     }
-                    @keyframes scaleIn {
-                        from { opacity: 0; transform: scale(0.96); }
-                        to { opacity: 1; transform: scale(1); }
-                    }
                     @keyframes float {
                         0%, 100% { transform: translateY(0px); }
                         50% { transform: translateY(-10px); }
@@ -224,11 +365,6 @@ export default function CekGaransi() {
                     @keyframes pulse-fast {
                         0%, 100% { opacity: 1; transform: scale(1); }
                         50% { opacity: 0.8; transform: scale(1.02); }
-                    }
-                    @keyframes glow {
-                        0% { box-shadow: 0 0 0 0 rgba(59,130,246,0.5); }
-                        70% { box-shadow: 0 0 0 12px rgba(59,130,246,0); }
-                        100% { box-shadow: 0 0 0 0 rgba(59,130,246,0); }
                     }
                     @keyframes rippleFly {
                         0% { transform: translate(0,0) scale(0.4); opacity: 0.9; }
@@ -252,10 +388,8 @@ export default function CekGaransi() {
                         100% { opacity: 0; transform: scale(0.9); visibility: hidden; }
                     }
                     .animate-fadeSlideUp { animation: fadeSlideUp 0.6s cubic-bezier(0.2,0.9,0.4,1.1) forwards; }
-                    .animate-scaleIn { animation: scaleIn 0.5s ease-out forwards; }
                     .animate-float { animation: float 5s ease-in-out infinite; }
                     .animate-pulse-fast { animation: pulse-fast 1.2s ease-in-out infinite; }
-                    .animate-glow { animation: glow 1.8s ease-in-out infinite; }
                     .btn-ripple-particle {
                         position: absolute;
                         pointer-events: none;
@@ -298,17 +432,28 @@ export default function CekGaransi() {
                     </div>
                 )}
 
-                <div id="hero" className={`text-center mb-16 transition-all duration-700 ${isVisible.hero ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
+                {/* HERO */}
+                <div
+                    id="hero"
+                    className={`text-center mb-16 transition-all duration-700 ${
+                        isVisible.hero ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+                    }`}
+                >
                     <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-md border border-blue-100/80 rounded-full px-4 py-1.5 mb-6 shadow-sm">
                         <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                        <span className="text-[11px] font-semibold text-blue-700 tracking-wider uppercase">Official Solit 03</span>
+                        <span className="text-[11px] font-semibold text-blue-700 tracking-wider uppercase">
+                            Official Solit 03
+                        </span>
                     </div>
                     <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
                         <span className="text-gray-800">Cek Status </span>
-                        <span className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent">Garansi</span>
+                        <span className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent">
+                            Garansi
+                        </span>
                     </h1>
                     <p className="text-gray-500 text-base sm:text-lg md:text-xl max-w-2xl mx-auto mt-4">
-                        Masukkan <span className="font-semibold text-blue-600">Serial Number (SN)</span> laptop Anda untuk mengetahui masa berlaku garansi dengan mudah.
+                        Masukkan <span className="font-semibold text-blue-600">Serial Number (SN)</span> laptop
+                        Anda untuk mengetahui masa berlaku garansi dengan mudah.
                     </p>
                     <div className="flex justify-center gap-3 mt-6">
                         <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-blue-600 rounded-full" />
@@ -316,48 +461,74 @@ export default function CekGaransi() {
                         <div className="w-16 h-0.5 bg-gradient-to-r from-blue-600 via-indigo-400 to-transparent rounded-full" />
                     </div>
                     <div className="absolute left-8 top-24 opacity-30 hidden lg:block animate-float">
-                        <svg className="w-14 h-14 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h16v16H4z" stroke="currentColor" strokeWidth="2" fill="none" /></svg>
+                        <svg className="w-14 h-14 text-blue-400" viewBox="0 0 24 24">
+                            <path d="M4 4h16v16H4z" stroke="currentColor" strokeWidth="2" fill="none" />
+                        </svg>
                     </div>
-                    <div className="absolute right-8 bottom-24 opacity-30 hidden lg:block animate-float" style={{ animationDelay: "2.5s" }}>
-                        <svg className="w-12 h-12 text-indigo-400" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="2" fill="none" /></svg>
+                    <div
+                        className="absolute right-8 bottom-24 opacity-30 hidden lg:block animate-float"
+                        style={{ animationDelay: "2.5s" }}
+                    >
+                        <svg className="w-12 h-12 text-indigo-400" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="2" fill="none" />
+                        </svg>
                     </div>
                 </div>
 
-                <div id="card" className={`transition-all duration-500 delay-100 ${isVisible.card ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}>
+                {/* FORM CARD */}
+                <div
+                    id="card"
+                    className={`transition-all duration-500 delay-100 ${
+                        isVisible.card ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                    }`}
+                >
                     <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/40 shadow-xl hover:shadow-2xl transition-all duration-300 p-6 sm:p-8">
                         <form onSubmit={handleClickWithAwesomeAnim} className="space-y-6">
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">Serial Number (SN)</label>
+                                <label htmlFor="sn-input" className="block text-sm font-semibold text-gray-700 mb-2">
+                                    Serial Number (SN)
+                                </label>
                                 <div className="relative group">
                                     <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                                            <path d="M3 9V6a1 1 0 011-1h2" /><path d="M20 9V6a1 1 0 00-1-1h-2" />
-                                            <path d="M3 15v3a1 1 0 001 1h2" /><path d="M20 15v3a1 1 0 01-1 1h-2" />
+                                            <path d="M3 9V6a1 1 0 011-1h2" />
+                                            <path d="M20 9V6a1 1 0 00-1-1h-2" />
+                                            <path d="M3 15v3a1 1 0 001 1h2" />
+                                            <path d="M20 15v3a1 1 0 01-1 1h-2" />
                                             <path d="M7 8v8M10 8v8M13 8v8M16 8v8" />
                                         </svg>
                                     </div>
                                     <input
+                                        id="sn-input"
                                         ref={inputRef}
                                         type="text"
                                         value={sn}
                                         onChange={(e) => setSn(e.target.value.toUpperCase())}
-                                        onKeyDown={(e) => e.key === "Enter" && handleClickWithAwesomeAnim(e)}
                                         placeholder="Contoh: SN-0006151"
                                         maxLength={60}
                                         className="w-full pl-12 pr-12 py-4 border-2 border-gray-200/80 rounded-xl text-gray-800 font-mono text-base placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all bg-white/60"
                                         autoComplete="off"
                                         spellCheck={false}
+                                        disabled={loading}
                                     />
-                                    {sn && (
-                                        <button type="button" onClick={handleReset} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition p-1 rounded-full hover:bg-gray-100">
+                                    {sn && !loading && (
+                                        <button
+                                            type="button"
+                                            onClick={handleReset}
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition p-1 rounded-full hover:bg-gray-100"
+                                            aria-label="Hapus input"
+                                        >
                                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                                                <line x1="18" y1="6" x2="6" y2="18" />
+                                                <line x1="6" y1="6" x2="18" y2="18" />
                                             </svg>
                                         </button>
                                     )}
                                 </div>
                                 <p className="text-xs text-gray-400 mt-3 flex items-center gap-1">
-                                    <span className="inline-block w-4 h-4 bg-blue-100 rounded-full text-center text-blue-600 text-[10px] font-bold">i</span>
+                                    <span className="inline-block w-4 h-4 bg-blue-100 rounded-full text-center text-blue-600 text-[10px] font-bold">
+                                        i
+                                    </span>
                                     SN dapat ditemukan di stiker bodi laptop atau nota pembelian.
                                 </p>
                             </div>
@@ -371,17 +542,18 @@ export default function CekGaransi() {
                                         isBtnPressed && !loading ? "scale-95 ring-4 ring-blue-400/60" : ""
                                     } ${btnFlash ? "bg-white text-blue-700" : ""}`}
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                                     {loading ? (
                                         <>
                                             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                                             <span className="relative z-10">Memeriksa Garansi...</span>
-                                            <div className="absolute inset-0 rounded-xl bg-blue-500/30 animate-pulse-fast"></div>
+                                            <div className="absolute inset-0 rounded-xl bg-blue-500/30 animate-pulse-fast" />
                                         </>
                                     ) : (
                                         <>
                                             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                                <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+                                                <circle cx="11" cy="11" r="8" />
+                                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
                                             </svg>
                                             <span>Cek Garansi Sekarang</span>
                                         </>
@@ -392,17 +564,48 @@ export default function CekGaransi() {
                                     const dx = Math.cos(p.angle) * 55;
                                     const dy = Math.sin(p.angle) * 45 - 15;
                                     return (
-                                        <div key={p.id} className="btn-ripple-particle" style={{ left: p.x, top: p.y, width: p.size, height: p.size, '--dx': `${dx}px`, '--dy': `${dy}px` }} />
+                                        <div
+                                            key={p.id}
+                                            className="btn-ripple-particle"
+                                            style={{
+                                                left: p.x,
+                                                top: p.y,
+                                                width: p.size,
+                                                height: p.size,
+                                                "--dx": `${dx}px`,
+                                                "--dy": `${dy}px`,
+                                            }}
+                                        />
                                     );
                                 })}
                                 {waterRipples.map((r) => (
-                                    <div key={r.id} className="btn-water-ripple" style={{ left: r.x, top: r.y, width: r.radius * 2, height: r.radius * 2 }} />
+                                    <div
+                                        key={r.id}
+                                        className="btn-water-ripple"
+                                        style={{
+                                            left: r.x,
+                                            top: r.y,
+                                            width: r.radius * 2,
+                                            height: r.radius * 2,
+                                        }}
+                                    />
                                 ))}
                                 {sparkles.map((s) => {
                                     const dx = Math.cos(s.angle) * 45;
                                     const dy = Math.sin(s.angle) * 35 - 10;
                                     return (
-                                        <div key={s.id} className="btn-sparkle" style={{ left: s.x, top: s.y, width: s.size, height: s.size, '--dx': `${dx}px`, '--dy': `${dy}px` }} />
+                                        <div
+                                            key={s.id}
+                                            className="btn-sparkle"
+                                            style={{
+                                                left: s.x,
+                                                top: s.y,
+                                                width: s.size,
+                                                height: s.size,
+                                                "--dx": `${dx}px`,
+                                                "--dy": `${dy}px`,
+                                            }}
+                                        />
                                     );
                                 })}
                             </div>
@@ -411,25 +614,45 @@ export default function CekGaransi() {
                 </div>
 
                 <Confetti active={showConfetti} />
-                {loading && <SkeletonResult />}
+
+                {loading && (
+                    <div className="mt-8">
+                        <SkeletonResult />
+                    </div>
+                )}
+
                 {!loading && searched && (
                     <div className="mt-8 transition-all duration-500 animate-fadeSlideUp">
                         {result?.success && result.data ? (
-                            <WarrantyResult data={result.data} cfg={cfg} onReset={handleReset} onCopy={copyToClipboard} />
+                            <WarrantyResult
+                                data={result.data}
+                                cfg={cfg}
+                                onReset={handleReset}
+                                onCopy={copyToClipboard}
+                            />
                         ) : (
-                            <NotFoundCard message={result?.message} sn={sn} onReset={handleReset} onCopy={copyToClipboard} />
+                            <NotFoundCard
+                                message={result?.message}
+                                sn={searchedSn}
+                                onReset={handleReset}
+                                onCopy={copyToClipboard}
+                            />
                         )}
                     </div>
                 )}
 
-                {!searched && (
-                    <div id="info" className={`grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12 transition-all duration-500 delay-200 ${isVisible.info ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
-                        {[
-                            { icon: "🔍", title: "Temukan SN", desc: "Lihat stiker bodi laptop atau nota pembelian", bg: "from-blue-50 to-blue-100/50" },
-                            { icon: "⌨️", title: "Masukkan SN", desc: "Ketik serial number dengan benar di kolom", bg: "from-indigo-50 to-indigo-100/50" },
-                            { icon: "🛡️", title: "Lihat Status", desc: "Sistem akan menampilkan detail garansi Anda", bg: "from-emerald-50 to-emerald-100/50" },
-                        ].map((item, i) => (
-                            <div key={i} className={`bg-gradient-to-br ${item.bg} rounded-2xl border border-white/60 shadow-sm p-6 text-center transition-all hover:shadow-lg hover:-translate-y-1 duration-300 backdrop-blur-sm`}>
+                {!searched && !loading && (
+                    <div
+                        id="info"
+                        className={`grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12 transition-all duration-500 delay-200 ${
+                            isVisible.info ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+                        }`}
+                    >
+                        {infoCards.map((item, i) => (
+                            <div
+                                key={i}
+                                className={`bg-gradient-to-br ${item.bg} rounded-2xl border border-white/60 shadow-sm p-6 text-center transition-all hover:shadow-lg hover:-translate-y-1 duration-300 backdrop-blur-sm`}
+                            >
                                 <div className="text-4xl mb-3">{item.icon}</div>
                                 <p className="text-md font-bold text-gray-800">{item.title}</p>
                                 <p className="text-sm text-gray-500 mt-2 leading-relaxed">{item.desc}</p>
@@ -438,38 +661,54 @@ export default function CekGaransi() {
                     </div>
                 )}
 
-                <div id="cta" className={`text-center mt-16 transition-all duration-500 delay-300 ${isVisible.cta ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
+                {/* CTA */}
+                <div
+                    id="cta"
+                    className={`text-center mt-16 transition-all duration-500 delay-300 ${
+                        isVisible.cta ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+                    }`}
+                >
                     <div className="relative inline-block">
-                        <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full blur-2xl opacity-50 group-hover:opacity-70 transition duration-500"></div>
-                        <a
-                            href="https://wa.me/6285210647047?text=Halo%20Solit%2003%2C%20saya%20ingin%20bertanya%20tentang%20garansi%20laptop."
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full blur-2xl opacity-50" />
+                        <ExternalLink
+                            href={waLink("Halo Solit 03, saya ingin bertanya tentang garansi laptop.")}
                             className="group relative inline-flex items-center gap-3 px-8 sm:px-10 py-3.5 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-green-500 to-emerald-600 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
                         >
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                            <svg className="relative w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12.032 2.001c-5.514 0-10 4.486-10 10 0 1.78.469 3.452 1.283 4.899L2 21.999l5.225-1.312c1.39.794 3.002 1.253 4.713 1.253 5.514 0 10-4.486 10-10s-4.486-10-10-10zm0 18.5c-1.657 0-3.236-.448-4.618-1.277l-.338-.195-3.125.785.84-3.077-.208-.347c-.891-1.449-1.363-3.113-1.363-4.889 0-4.688 3.812-8.5 8.5-8.5s8.5 3.812 8.5 8.5-3.812 8.5-8.5 8.5z" />
-                                <path d="M16.75 13.45c-.26-.13-1.54-.76-1.78-.85s-.41-.13-.59.13c-.18.26-.69.85-.85 1.02s-.31.2-.56.07c-.26-.13-1.09-.4-2.07-1.28-.77-.69-1.29-1.54-1.44-1.8-.15-.26-.02-.4.11-.53.13-.13.26-.33.39-.5.13-.17.18-.28.27-.47.09-.19.05-.36-.02-.5s-.59-1.42-.81-1.95c-.21-.52-.43-.45-.59-.46s-.31-.01-.48-.01c-.18 0-.47.07-.71.33-.24.26-.91.89-.91 2.16 0 1.27.93 2.5 1.06 2.67.13.17 1.83 2.79 4.43 3.91.62.27 1.1.43 1.48.55.62.2 1.19.17 1.63.1.5-.07 1.54-.63 1.76-1.24.22-.61.22-1.13.15-1.24-.07-.1-.26-.16-.52-.26z" />
-                            </svg>
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                            <WhatsAppIcon className="relative w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
                             <span className="relative">Hubungi Kami via WhatsApp</span>
-                            <svg className="relative w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                            <svg
+                                className="relative w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                strokeWidth="2.5"
+                            >
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                             </svg>
-                        </a>
+                        </ExternalLink>
                     </div>
                     <div className="flex items-center justify-center gap-3 mt-4">
-                        <div className="h-4 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent"></div>
+                        <div className="h-4 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent" />
                         <p className="text-xs text-gray-400">Atau hubungi langsung:</p>
-                        <a href="https://wa.me/6285210647047" target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-green-600 hover:text-green-700 font-medium hover:underline transition">+62 852-1064-7047</a>
-                        <div className="h-4 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent"></div>
+                        <ExternalLink
+                            href={waLink()}
+                            className="text-xs font-mono text-green-600 hover:text-green-700 font-medium hover:underline transition"
+                        >
+                            {WA_DISPLAY}
+                        </ExternalLink>
+                        <div className="h-4 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent" />
                     </div>
                 </div>
 
                 <div className="flex justify-center mt-12">
                     <div className="flex gap-2">
                         {[...Array(3)].map((_, i) => (
-                            <div key={i} className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400 opacity-50 animate-pulse" style={{ animationDelay: `${i * 0.2}s` }} />
+                            <div
+                                key={i}
+                                className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400 opacity-50 animate-pulse"
+                                style={{ animationDelay: `${i * 0.2}s` }}
+                            />
                         ))}
                     </div>
                 </div>
@@ -484,17 +723,21 @@ export default function CekGaransi() {
     );
 }
 
+// ── CONFETTI ─────────────────────────────────────────────────────────────────
 function Confetti({ active }) {
     const canvasRef = useRef(null);
+
     useEffect(() => {
         if (!active) return;
         const canvas = canvasRef.current;
         if (!canvas) return;
         const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        let particles = [];
+        const particles = [];
         for (let i = 0; i < 200; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
@@ -508,11 +751,14 @@ function Confetti({ active }) {
             });
         }
 
-        let animationId;
+        let animationId = null;
+        let cancelled = false;
+
         const animate = () => {
+            if (cancelled) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             let stillActive = false;
-            for (let p of particles) {
+            for (const p of particles) {
                 p.y += p.speedY;
                 p.x += p.speedX;
                 p.rotation += p.rotSpeed;
@@ -526,17 +772,21 @@ function Confetti({ active }) {
             }
             if (stillActive) {
                 animationId = requestAnimationFrame(animate);
-            } else {
-                cancelAnimationFrame(animationId);
             }
         };
-        animate();
-        return () => cancelAnimationFrame(animationId);
+        animationId = requestAnimationFrame(animate);
+
+        return () => {
+            cancelled = true;
+            if (animationId !== null) cancelAnimationFrame(animationId);
+        };
     }, [active]);
+
     if (!active) return null;
     return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-50" />;
 }
 
+// ── SKELETON ─────────────────────────────────────────────────────────────────
 function SkeletonResult() {
     return (
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-100 overflow-hidden shadow-sm animate-pulse">
@@ -551,25 +801,48 @@ function SkeletonResult() {
     );
 }
 
-// ── HASIL GARANSI - DIPERBAIKI UNTUK HP (RAPI) ──────────────────────────────
+// ── HASIL GARANSI ────────────────────────────────────────────────────────────
 function WarrantyResult({ data, cfg, onReset, onCopy }) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const start = new Date(data.warranty_start);
     const end = new Date(data.warranty_end);
-    const totalDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-    const usedDays = Math.ceil((today - start) / (1000 * 60 * 60 * 24));
+
+    const validDates = !isNaN(start.getTime()) && !isNaN(end.getTime());
+    // Math.max(..., 1) mencegah pembagian nol saat warranty_start === warranty_end → pct jadi NaN
+    const totalDays = validDates
+        ? Math.max(Math.ceil((end - start) / (1000 * 60 * 60 * 24)), 1)
+        : 1;
+    const usedDays = validDates ? Math.ceil((today - start) / (1000 * 60 * 60 * 24)) : 0;
     const pct = Math.min(Math.max((usedDays / totalDays) * 100, 0), 100);
-    const daysLeft = data.days_left;
+
+    const daysLeft = Number.isFinite(data.days_left) ? data.days_left : 0;
     const isExpiring = data.status === "EXPIRING_SOON";
 
+    const rows = [
+        { icon: "💻", label: "Laptop", value: data.laptop_name || "—", bold: true },
+        { icon: "🔢", label: "Serial Number", value: data.serial_number || "—", mono: true, copyable: true },
+        { icon: "👤", label: "Nama Pembeli", value: data.customer_name || "—" },
+        { icon: "📅", label: "Tanggal Mulai", value: fmtDate(data.warranty_start) },
+        { icon: "🏁", label: "Garansi Berakhir", value: fmtDate(data.warranty_end), highlight: true },
+    ];
+
+    const valueClass = (row) => {
+        if (row.mono) return "font-mono font-semibold text-gray-800";
+        if (row.bold) return "font-bold text-gray-800";
+        if (row.highlight) return `font-bold ${cfg.text}`;
+        return "text-gray-700";
+    };
+
     return (
-        <div className={`rounded-2xl border ${cfg.border} overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 bg-white transform hover:-translate-y-1`}>
+        <div
+            className={`rounded-2xl border ${cfg.border} overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 bg-white transform hover:-translate-y-1`}
+        >
             <div className={`bg-gradient-to-r ${cfg.gradient} px-6 py-6 relative overflow-hidden`}>
                 <div className="absolute inset-0 bg-white/10 transform -skew-x-12 translate-x-1/2" />
                 <div className="relative flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-5">
-                        <div className="w-14 h-14 bg-white/25 rounded-2xl flex items-center justify-center backdrop-blur-sm shadow-inner">
+                        <div className="w-14 h-14 bg-white/25 rounded-2xl flex items-center justify-center backdrop-blur-sm shadow-inner flex-shrink-0">
                             <span className="text-white font-bold text-2xl">{cfg.icon}</span>
                         </div>
                         <div>
@@ -578,17 +851,24 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
                         </div>
                     </div>
                     {daysLeft >= 0 ? (
-                        <div className={`text-right flex-shrink-0 bg-white/20 rounded-xl px-4 py-2 backdrop-blur-sm ${isExpiring ? "animate-pulse-fast" : ""}`}>
+                        <div
+                            className={`text-right flex-shrink-0 bg-white/20 rounded-xl px-4 py-2 backdrop-blur-sm ${
+                                isExpiring ? "animate-pulse-fast" : ""
+                            }`}
+                        >
                             <p className="text-3xl font-black text-white leading-none">{daysLeft}</p>
                             <p className="text-white/70 text-xs font-semibold">hari lagi</p>
                         </div>
                     ) : (
-                        <div className="bg-white/20 rounded-xl px-4 py-2">
-                            <p className="text-white text-xs font-semibold">Berakhir {Math.abs(daysLeft)} hari lalu</p>
+                        <div className="bg-white/20 rounded-xl px-4 py-2 flex-shrink-0">
+                            <p className="text-white text-xs font-semibold">
+                                Berakhir {Math.abs(daysLeft)} hari lalu
+                            </p>
                         </div>
                     )}
                 </div>
             </div>
+
             <div className="px-6 py-6 space-y-6">
                 {/* Progress Bar */}
                 <div>
@@ -597,7 +877,10 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
                         <span>Berakhir: {fmtDate(data.warranty_end)}</span>
                     </div>
                     <div className="h-3 bg-gray-100 rounded-full overflow-hidden border border-gray-200">
-                        <div className={`h-full rounded-full transition-all duration-1000 ease-out ${cfg.barColor}`} style={{ width: `${pct}%` }} />
+                        <div
+                            className={`h-full rounded-full transition-all duration-1000 ease-out ${cfg.barColor}`}
+                            style={{ width: `${pct}%` }}
+                        />
                     </div>
                     <div className="flex justify-between text-xs text-gray-500 mt-2">
                         <span>0%</span>
@@ -606,38 +889,29 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
                     </div>
                 </div>
 
-                {/* Tabel Detail - Responsif: label dan value dalam satu baris dengan wrap */}
+                {/* Tabel Detail */}
                 <div className="bg-gray-50/80 rounded-xl border border-gray-100 overflow-hidden">
                     <div className="divide-y divide-gray-100">
-                        {[
-                            { icon: "💻", label: "Laptop", value: data.laptop_name, bold: true },
-                            { icon: "🔢", label: "Serial Number", value: data.serial_number, mono: true, copyable: true },
-                            { icon: "👤", label: "Nama Pembeli", value: data.customer_name },
-                            { icon: "📅", label: "Tanggal Mulai", value: fmtDate(data.warranty_start) },
-                            { icon: "🏁", label: "Garansi Berakhir", value: fmtDate(data.warranty_end), highlight: true, cfg },
-                        ].map((row, i) => (
+                        {rows.map((row, i) => (
                             <div key={i} className="px-4 py-3 hover:bg-white transition-colors group">
                                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                                    {/* Ikon dan label dalam satu baris untuk HP */}
                                     <div className="flex items-center gap-2 sm:w-32 flex-shrink-0">
                                         <span className="text-gray-400 text-base w-6 text-center">{row.icon}</span>
                                         <span className="text-xs font-medium text-gray-600">{row.label}</span>
                                     </div>
-                                    {/* Value dan tombol copy */}
-                                    <div className="flex-1 flex items-center justify-between gap-2">
-                                        <span className={`text-sm break-words flex-1 ${row.mono ? "font-mono font-semibold text-gray-800" : row.bold ? "font-bold text-gray-800" : row.highlight ? `font-bold ${cfg.text}` : "text-gray-700"}`}>
+                                    <div className="flex-1 flex items-center justify-between gap-2 min-w-0">
+                                        <span className={`text-sm break-words flex-1 min-w-0 ${valueClass(row)}`}>
                                             {row.value}
                                         </span>
                                         {row.copyable && (
                                             <button
+                                                type="button"
                                                 onClick={() => onCopy(row.value)}
-                                                className="text-gray-400 hover:text-blue-500 transition opacity-0 group-hover:opacity-100 focus:opacity-100 p-1 flex-shrink-0"
+                                                className="text-gray-400 hover:text-blue-500 transition opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 p-1 flex-shrink-0"
                                                 title="Salin SN"
+                                                aria-label="Salin serial number"
                                             >
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                                                </svg>
+                                                <CopyIcon />
                                             </button>
                                         )}
                                     </div>
@@ -649,32 +923,25 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
 
                 {data.notes && (
                     <div className="bg-blue-50/80 border border-blue-100 rounded-xl px-5 py-3">
-                        <p className="text-xs font-bold text-blue-700 mb-1 flex items-center gap-1"><span>📝</span> Catatan</p>
+                        <p className="text-xs font-bold text-blue-700 mb-1 flex items-center gap-1">
+                            <span>📝</span> Catatan
+                        </p>
                         <p className="text-sm text-blue-800">{data.notes}</p>
                     </div>
                 )}
 
-                {/* Ketentuan Garansi */}
                 <WarrantyTerms />
 
                 <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                    <a
-                        href={`https://wa.me/6285210647047?text=${encodeURIComponent(`Halo Solit 03, saya ingin bertanya mengenai garansi laptop dengan SN: ${data.serial_number}`)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-center gap-2 h-12 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-sm font-semibold rounded-xl transition-all hover:shadow-md active:scale-95"
+                    <WhatsAppButton
+                        text={`Halo Solit 03, saya ingin bertanya mengenai garansi laptop dengan SN: ${data.serial_number}`}
+                    />
+                    <button
+                        type="button"
+                        onClick={onReset}
+                        className="flex-1 flex items-center justify-center gap-2 h-12 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-semibold rounded-xl transition-all hover:shadow-sm active:scale-95"
                     >
-                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12.032 2.001c-5.514 0-10 4.486-10 10 0 1.78.469 3.452 1.283 4.899L2 21.999l5.225-1.312c1.39.794 3.002 1.253 4.713 1.253 5.514 0 10-4.486 10-10s-4.486-10-10-10zm0 18.5c-1.657 0-3.236-.448-4.618-1.277l-.338-.195-3.125.785.84-3.077-.208-.347c-.891-1.449-1.363-3.113-1.363-4.889 0-4.688 3.812-8.5 8.5-8.5s8.5 3.812 8.5 8.5-3.812 8.5-8.5 8.5z" />
-                            <path d="M16.75 13.45c-.26-.13-1.54-.76-1.78-.85s-.41-.13-.59.13c-.18.26-.69.85-.85 1.02s-.31.2-.56.07c-.26-.13-1.09-.4-2.07-1.28-.77-.69-1.29-1.54-1.44-1.8-.15-.26-.02-.4.11-.53.13-.13.26-.33.39-.5.13-.17.18-.28.27-.47.09-.19.05-.36-.02-.5s-.59-1.42-.81-1.95c-.21-.52-.43-.45-.59-.46s-.31-.01-.48-.01c-.18 0-.47.07-.71.33-.24.26-.91.89-.91 2.16 0 1.27.93 2.5 1.06 2.67.13.17 1.83 2.79 4.43 3.91.62.27 1.1.43 1.48.55.62.2 1.19.17 1.63.1.5-.07 1.54-.63 1.76-1.24.22-.61.22-1.13.15-1.24-.07-.1-.26-.16-.52-.26z" />
-                        </svg>
-                        WhatsApp
-                    </a>
-                    <button onClick={onReset} className="flex-1 flex items-center justify-center gap-2 h-12 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-semibold rounded-xl transition-all hover:shadow-sm active:scale-95">
-                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                            <polyline points="1 4 1 10 7 10" />
-                            <path d="M3.51 15a9 9 0 102.13-9.36L1 10" />
-                        </svg>
+                        <ResetIcon />
                         Cek SN Lain
                     </button>
                 </div>
@@ -683,7 +950,7 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
     );
 }
 
-// ── KETENTUAN GARANSI (reusable) ─────────────────────────────────────────────
+// ── KETENTUAN GARANSI ────────────────────────────────────────────────────────
 function WarrantyTerms() {
     const terms = [
         "Garansi hanya berlaku untuk kerusakan yang BUKAN akibat human error.",
@@ -693,22 +960,22 @@ function WarrantyTerms() {
 
     return (
         <div className="rounded-2xl border border-gray-100 bg-white/80 backdrop-blur-sm shadow-sm overflow-hidden">
-            {/* Note: barang tidak bisa dikembalikan/ditukar */}
             <div className="flex items-start gap-3 bg-amber-50 border-b border-amber-100 px-5 py-3.5">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-sm font-bold mt-0.5">!</span>
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-sm font-bold mt-0.5">
+                    !
+                </span>
                 <p className="text-sm text-amber-800 leading-relaxed">
-                    <span className="font-bold">Note:</span> Barang yang sudah dibeli tidak bisa dikembalikan dan ditukar.
+                    <span className="font-bold">Note:</span> Barang yang sudah dibeli tidak bisa dikembalikan dan
+                    ditukar.
                 </p>
             </div>
 
-            {/* Header */}
             <div className="px-5 pt-5 pb-2">
                 <p className="text-sm font-bold text-gray-800 flex items-center gap-2">
                     <span>🛡️</span> Ketentuan Garansi
                 </p>
             </div>
 
-            {/* Daftar ketentuan */}
             <ol className="px-5 pb-5 space-y-3">
                 {terms.map((t, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm text-gray-600 leading-relaxed">
@@ -723,13 +990,19 @@ function WarrantyTerms() {
     );
 }
 
-// ── Not Found Card (tetap) ───────────────────────────────────────────────────
+// ── NOT FOUND CARD ───────────────────────────────────────────────────────────
 function NotFoundCard({ message, sn, onReset, onCopy }) {
+    const causes = [
+        "Serial number tidak sesuai — periksa kembali ejaan",
+        "Laptop dibeli sebelum sistem garansi digital diterapkan",
+        "Garansi sudah pernah dicabut (VOID)",
+    ];
+
     return (
         <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="bg-gradient-to-r from-gray-700 to-gray-800 px-6 py-6">
                 <div className="flex items-center gap-5">
-                    <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center">
+                    <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center flex-shrink-0">
                         <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                             <circle cx="12" cy="12" r="10" />
                             <line x1="15" y1="9" x2="9" y2="15" />
@@ -738,56 +1011,65 @@ function NotFoundCard({ message, sn, onReset, onCopy }) {
                     </div>
                     <div>
                         <p className="font-bold text-white text-2xl">Data Tidak Ditemukan</p>
-                        <p className="text-white/70 text-sm">Serial number tidak terdaftar</p>
+                        <p className="text-white/70 text-sm">{message || "Serial number tidak terdaftar"}</p>
                     </div>
                 </div>
             </div>
+
             <div className="px-6 py-6 space-y-6">
-                <div className="bg-gray-50 rounded-xl px-5 py-3 border border-gray-100 flex justify-between items-center group">
-                    <div>
-                        <p className="text-xs text-gray-500 mb-1">SN yang dicari</p>
-                        <p className="font-mono font-bold text-gray-800 text-lg tracking-wide">{sn}</p>
+                {sn && (
+                    <div className="bg-gray-50 rounded-xl px-5 py-3 border border-gray-100 flex justify-between items-center gap-3 group">
+                        <div className="min-w-0">
+                            <p className="text-xs text-gray-500 mb-1">SN yang dicari</p>
+                            <p className="font-mono font-bold text-gray-800 text-lg tracking-wide break-all">{sn}</p>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => onCopy(sn)}
+                            className="text-gray-400 hover:text-blue-500 transition opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 p-1 flex-shrink-0"
+                            title="Salin SN"
+                            aria-label="Salin serial number"
+                        >
+                            <CopyIcon className="w-5 h-5" />
+                        </button>
                     </div>
-                    <button onClick={() => onCopy(sn)} className="text-gray-400 hover:text-blue-500 transition opacity-0 group-hover:opacity-100 focus:opacity-100 p-1" title="Salin SN">
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                        </svg>
-                    </button>
-                </div>
+                )}
+
                 <div className="space-y-3">
-                    <p className="text-sm font-bold text-gray-700 flex items-center gap-2"><span>🔍</span> Kemungkinan penyebab:</p>
+                    <p className="text-sm font-bold text-gray-700 flex items-center gap-2">
+                        <span>🔍</span> Kemungkinan penyebab:
+                    </p>
                     <ul className="space-y-2.5">
-                        {["Serial number tidak sesuai — periksa kembali ejaan", "Laptop dibeli sebelum sistem garansi digital diterapkan", "Garansi sudah pernah dicabut (VOID)"].map((item, i) => (
+                        {causes.map((item, i) => (
                             <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
-                                <span className="w-5 h-5 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold mt-0.5">{i+1}</span>
+                                <span className="w-5 h-5 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold mt-0.5">
+                                    {i + 1}
+                                </span>
                                 {item}
                             </li>
                         ))}
                     </ul>
                 </div>
+
                 <div className="bg-blue-50/80 border border-blue-100 rounded-xl px-5 py-3">
-                    <p className="text-xs font-bold text-blue-700 mb-1 flex items-center gap-1"><span>💬</span> Butuh bantuan?</p>
-                    <p className="text-sm text-blue-600">Hubungi tim Solit 03 via WhatsApp dengan menyebutkan nomor invoice pembelian Anda.</p>
+                    <p className="text-xs font-bold text-blue-700 mb-1 flex items-center gap-1">
+                        <span>💬</span> Butuh bantuan?
+                    </p>
+                    <p className="text-sm text-blue-600">
+                        Hubungi tim Solit 03 via WhatsApp dengan menyebutkan nomor invoice pembelian Anda.
+                    </p>
                 </div>
+
                 <div className="flex flex-col sm:flex-row gap-3">
-                    <a
-                        href={`https://wa.me/6285210647047?text=${encodeURIComponent(`Halo Solit 03, saya ingin mengecek garansi laptop dengan SN: ${sn} tapi tidak ditemukan di sistem.`)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-center gap-2 h-12 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-sm font-semibold rounded-xl transition-all hover:shadow-md active:scale-95"
+                    <WhatsAppButton
+                        text={`Halo Solit 03, saya ingin mengecek garansi laptop dengan SN: ${sn} tapi tidak ditemukan di sistem.`}
+                    />
+                    <button
+                        type="button"
+                        onClick={onReset}
+                        className="flex-1 flex items-center justify-center gap-2 h-12 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-semibold rounded-xl transition-all hover:shadow-sm active:scale-95"
                     >
-                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12.032 2.001c-5.514 0-10 4.486-10 10 0 1.78.469 3.452 1.283 4.899L2 21.999l5.225-1.312c1.39.794 3.002 1.253 4.713 1.253 5.514 0 10-4.486 10-10s-4.486-10-10-10zm0 18.5c-1.657 0-3.236-.448-4.618-1.277l-.338-.195-3.125.785.84-3.077-.208-.347c-.891-1.449-1.363-3.113-1.363-4.889 0-4.688 3.812-8.5 8.5-8.5s8.5 3.812 8.5 8.5-3.812 8.5-8.5 8.5z" />
-                            <path d="M16.75 13.45c-.26-.13-1.54-.76-1.78-.85s-.41-.13-.59.13c-.18.26-.69.85-.85 1.02s-.31.2-.56.07c-.26-.13-1.09-.4-2.07-1.28-.77-.69-1.29-1.54-1.44-1.8-.15-.26-.02-.4.11-.53.13-.13.26-.33.39-.5.13-.17.18-.28.27-.47.09-.19.05-.36-.02-.5s-.59-1.42-.81-1.95c-.21-.52-.43-.45-.59-.46s-.31-.01-.48-.01c-.18 0-.47.07-.71.33-.24.26-.91.89-.91 2.16 0 1.27.93 2.5 1.06 2.67.13.17 1.83 2.79 4.43 3.91.62.27 1.1.43 1.48.55.62.2 1.19.17 1.63.1.5-.07 1.54-.63 1.76-1.24.22-.61.22-1.13.15-1.24-.07-.1-.26-.16-.52-.26z" />
-                        </svg>
-                        WhatsApp
-                    </a>
-                    <button onClick={onReset} className="flex-1 flex items-center justify-center gap-2 h-12 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-semibold rounded-xl transition-all hover:shadow-sm active:scale-95">
-                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                            <polyline points="1 4 1 10 7 10" />
-                            <path d="M3.51 15a9 9 0 102.13-9.36L1 10" />
-                        </svg>
+                        <ResetIcon />
                         Cari Ulang
                     </button>
                 </div>

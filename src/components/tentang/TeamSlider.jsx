@@ -17,7 +17,7 @@ import raesty from "../../assets/raesty.jpg";
 import jaelani from "../../assets/pamud.jpg";
 import mbafitri from "../../assets/mbafitri.jpg";
 import dicky from "../../assets/bangdiki.jpg";
-import revin from "../../assets/bangrevin.jpg";
+
 
 
 export default function TeamSlider() {
@@ -33,15 +33,14 @@ export default function TeamSlider() {
     { name: "Rafi Salim", role: "Pengelola Barang", img: rafisalim },
     { name: "Yoga Adi Prakoso", role: "Finance", img: yoga },
     { name: "Yuna Luscyana Wati", role: "One Point", img: yuna },
-    { name: "Ikmal Fairuz Arabi", role: "Web Developer", img: ikmal },
-    { name: "Fauzan Abdul Ghaffar", role: "Web Developer", img: fauzan },
+    { name: "Ikmal Fairuz Arabi", role: "Programmer", img: ikmal },
+    { name: "Fauzan Abdul Ghaffar", role: "Programmer", img: fauzan },
     { name: "Tengku Muhammad Faturahman", role: "Kurir", img: fatur },
     { name: "Fikri Arryansyah", role: "Penyedia Barang", img: fikri },
     { name: "Dirga Riadmas", role: "Teknisi", img: dirga },
     { name: "Raesty Yuliana", role: "Sales Offline", img: raesty },
     { name: "Achmad Jaelani", role: "Chef", img: jaelani },
     { name: "Ramdhani Suci", role: "Management Sales", img: mbafitri },
-    { name: "Rizki Revinza Saputra", role: "Sales", img: revin },
     { name: "Dicky Pratama Setiawan", role: "Sotech", img: dicky },
   ];
 
