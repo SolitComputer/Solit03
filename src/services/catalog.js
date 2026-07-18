@@ -2,7 +2,7 @@ import { supabase } from "./supabase";
 
 // Base URL solit-pos (set di .env: VITE_POS_API_URL)
 const POS_API =
-  import.meta.env.VITE_POS_API_URL || "https://solit-pos.vercel.app";
+  import.meta.env.VITE_POS_API_URL || "https://solit-pos.store";
 
 export async function fetchCatalogLaptops() {
   const res = await fetch(`${POS_API}/api/public/catalog`, {

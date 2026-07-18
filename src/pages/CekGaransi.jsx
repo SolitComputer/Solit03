@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 
 // ── Konfigurasi API ──────────────────────────────────────────────────────────
-const SOLIT_POS_API = import.meta.env.VITE_SOLIT_POS_URL || "https://solit-pos.vercel.app";
+const SOLIT_POS_API = import.meta.env.VITE_SOLIT_POS_URL || "https://solit-pos.store";
 
 const STATUS_CONFIG = {
     ACTIVE: {

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Wrench, Clock, CheckCircle, Package, RefreshCw, Search, AlertCircle } from "lucide-react";
 
-const POS_BASE = "https://solit-pos.vercel.app";
+const POS_BASE = "https://solit-pos.store";
 const STREAM_URL = `${POS_BASE}/api/service/stream`;
 const FALLBACK_URL = `${POS_BASE}/api/service/public`;
 
