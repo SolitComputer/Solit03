@@ -1,4 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+﻿import { useState, useRef, useEffect } from "react";
+import {
+    Check, AlertTriangle, X, Search, Keyboard, Shield,
+    Laptop, Hash, User, Calendar, Flag, FileText, MessageCircle,
+} from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 // ── Konfigurasi API ──────────────────────────────────────────────────────────
 const SOLIT_POS_API = import.meta.env.VITE_SOLIT_POS_URL || "https://solit-pos.vercel.app";
@@ -7,8 +12,8 @@ const STATUS_CONFIG = {
     ACTIVE: {
         label: "Garansi Aktif",
         sublabel: "Laptop Anda masih dalam masa garansi",
-        icon: "✓",
-        gradient: "from-emerald-500 to-teal-500",
+        icon: Check,
+        gradient: "from-emerald-500 to-emerald-600",
         bg: "bg-emerald-50",
         border: "border-emerald-200",
         text: "text-emerald-700",
@@ -19,8 +24,8 @@ const STATUS_CONFIG = {
     EXPIRING_SOON: {
         label: "Segera Berakhir",
         sublabel: "Masa garansi hampir habis",
-        icon: "!",
-        gradient: "from-amber-500 to-orange-500",
+        icon: AlertTriangle,
+        gradient: "from-amber-500 to-amber-600",
         bg: "bg-amber-50",
         border: "border-amber-200",
         text: "text-amber-700",
@@ -31,8 +36,8 @@ const STATUS_CONFIG = {
     EXPIRED: {
         label: "Masa Garansi Berakhir",
         sublabel: "Garansi sudah tidak berlaku",
-        icon: "✕",
-        gradient: "from-red-500 to-rose-500",
+        icon: X,
+        gradient: "from-red-500 to-red-600",
         bg: "bg-red-50",
         border: "border-red-200",
         text: "text-red-700",
@@ -97,7 +102,7 @@ export default function CekGaransi() {
 
     const copyToClipboard = (text) => {
         navigator.clipboard.writeText(text);
-        setToastMessage(`✅ SN "${text}" tersalin!`);
+        setToastMessage(`SN "${text}" tersalin!`);
         setTimeout(() => setToastMessage(null), 2000);
     };
 
@@ -202,7 +207,15 @@ export default function CekGaransi() {
     const cfg = result?.data ? STATUS_CONFIG[result.data.status] || STATUS_CONFIG.EXPIRED : null;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/40 relative overflow-x-hidden">
+        <div className="min-h-screen bg-slate-50 relative overflow-x-hidden">
+            <Helmet>
+                <title>Cek Garansi Laptop | Solit 03</title>
+                <meta
+                    name="description"
+                    content="Cek status garansi laptop Solit 03 secara online. Masukkan serial number untuk melihat masa berlaku garansi laptop second bergaransi kamu."
+                />
+                <link rel="canonical" href="https://solit03.com/cek-garansi" />
+            </Helmet>
             <div className="fixed inset-0 -z-10 opacity-30">
                 <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:32px_32px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,black,transparent)]" />
             </div>
@@ -284,52 +297,45 @@ export default function CekGaransi() {
 
                 {showSuccessPopup && (
                     <div className="fixed inset-0 flex items-center justify-center z-[200] pointer-events-none">
-                        <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 flex flex-col items-center gap-3 success-popup border border-emerald-200 min-w-[280px]">
-                            <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-lg">
+                        <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-soft-lg p-6 flex flex-col items-center gap-3 success-popup border border-emerald-200 min-w-[280px]">
+                            <div className="w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center shadow-soft">
                                 <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                             <div className="text-center">
-                                <p className="text-2xl font-bold text-gray-800">Selamat!</p>
+                                <p className="text-2xl font-bold text-slate-800">Selamat!</p>
                                 <p className="text-xl font-semibold text-emerald-600">Garansi Anda Aktif</p>
                             </div>
                         </div>
                     </div>
                 )}
 
-                <div id="hero" className={`text-center mb-16 transition-all duration-700 ${isVisible.hero ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
-                    <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-md border border-blue-100/80 rounded-full px-4 py-1.5 mb-6 shadow-sm">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                        <span className="text-[11px] font-semibold text-blue-700 tracking-wider uppercase">Official Solit 03</span>
-                    </div>
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-                        <span className="text-gray-800">Cek Status </span>
-                        <span className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent">Garansi</span>
+                <div id="hero" className={`text-center mb-12 md:mb-16 transition-all duration-700 ${isVisible.hero ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
+                    <span className="eyebrow">
+                        <span className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
+                        Official Solit 03
+                    </span>
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 mt-5">
+                        Cek Status <span className="text-blue-600">Garansi</span>
                     </h1>
-                    <p className="text-gray-500 text-base sm:text-lg md:text-xl max-w-2xl mx-auto mt-4">
+                    <p className="text-sm md:text-base text-slate-500 max-w-2xl mx-auto mt-4">
                         Masukkan <span className="font-semibold text-blue-600">Serial Number (SN)</span> laptop Anda untuk mengetahui masa berlaku garansi dengan mudah.
                     </p>
-                    <div className="flex justify-center gap-3 mt-6">
-                        <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-blue-600 rounded-full" />
-                        <div className="w-3 h-0.5 bg-blue-500 rounded-full" />
-                        <div className="w-16 h-0.5 bg-gradient-to-r from-blue-600 via-indigo-400 to-transparent rounded-full" />
-                    </div>
-                    <div className="absolute left-8 top-24 opacity-30 hidden lg:block animate-float">
-                        <svg className="w-14 h-14 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h16v16H4z" stroke="currentColor" strokeWidth="2" fill="none" /></svg>
-                    </div>
-                    <div className="absolute right-8 bottom-24 opacity-30 hidden lg:block animate-float" style={{ animationDelay: "2.5s" }}>
-                        <svg className="w-12 h-12 text-indigo-400" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="2" fill="none" /></svg>
+                    <div className="flex justify-center items-center gap-2 mt-6">
+                        <div className="w-12 h-0.5 bg-gradient-to-r from-transparent to-blue-400 rounded-full" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                        <div className="w-12 h-0.5 bg-gradient-to-l from-transparent to-blue-400 rounded-full" />
                     </div>
                 </div>
 
                 <div id="card" className={`transition-all duration-500 delay-100 ${isVisible.card ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}>
-                    <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/40 shadow-xl hover:shadow-2xl transition-all duration-300 p-6 sm:p-8">
+                    <div className="bg-white rounded-2xl border border-slate-200 shadow-soft hover:shadow-soft-lg transition-all duration-300 p-6 sm:p-8">
                         <form onSubmit={handleClickWithAwesomeAnim} className="space-y-6">
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">Serial Number (SN)</label>
+                                <label className="block text-sm font-semibold text-slate-700 mb-2">Serial Number (SN)</label>
                                 <div className="relative group">
-                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors">
+                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                                             <path d="M3 9V6a1 1 0 011-1h2" /><path d="M20 9V6a1 1 0 00-1-1h-2" />
                                             <path d="M3 15v3a1 1 0 001 1h2" /><path d="M20 15v3a1 1 0 01-1 1h-2" />
@@ -344,19 +350,19 @@ export default function CekGaransi() {
                                         onKeyDown={(e) => e.key === "Enter" && handleClickWithAwesomeAnim(e)}
                                         placeholder="Contoh: SN-0006151"
                                         maxLength={60}
-                                        className="w-full pl-12 pr-12 py-4 border-2 border-gray-200/80 rounded-xl text-gray-800 font-mono text-base placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all bg-white/60"
+                                        className="w-full pl-12 pr-12 py-4 border-2 border-slate-200 rounded-xl text-slate-800 font-mono text-base placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all bg-slate-50"
                                         autoComplete="off"
                                         spellCheck={false}
                                     />
                                     {sn && (
-                                        <button type="button" onClick={handleReset} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition p-1 rounded-full hover:bg-gray-100">
+                                        <button type="button" onClick={handleReset} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition p-1 rounded-full hover:bg-slate-100">
                                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                                                 <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
                                             </svg>
                                         </button>
                                     )}
                                 </div>
-                                <p className="text-xs text-gray-400 mt-3 flex items-center gap-1">
+                                <p className="text-xs text-slate-400 mt-3 flex items-center gap-1">
                                     <span className="inline-block w-4 h-4 bg-blue-100 rounded-full text-center text-blue-600 text-[10px] font-bold">i</span>
                                     SN dapat ditemukan di stiker bodi laptop atau nota pembelian.
                                 </p>
@@ -367,7 +373,7 @@ export default function CekGaransi() {
                                     ref={buttonRef}
                                     type="submit"
                                     disabled={loading || !sn.trim()}
-                                    className={`group relative w-full h-14 overflow-visible rounded-xl bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white font-semibold text-base transition-all duration-300 hover:shadow-xl hover:shadow-blue-200 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 ${
+                                    className={`group relative w-full h-14 overflow-visible rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-base transition-all duration-300 shadow-soft hover:shadow-soft-lg active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 ${
                                         isBtnPressed && !loading ? "scale-95 ring-4 ring-blue-400/60" : ""
                                     } ${btnFlash ? "bg-white text-blue-700" : ""}`}
                                 >
@@ -425,14 +431,14 @@ export default function CekGaransi() {
                 {!searched && (
                     <div id="info" className={`grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12 transition-all duration-500 delay-200 ${isVisible.info ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
                         {[
-                            { icon: "🔍", title: "Temukan SN", desc: "Lihat stiker bodi laptop atau nota pembelian", bg: "from-blue-50 to-blue-100/50" },
-                            { icon: "⌨️", title: "Masukkan SN", desc: "Ketik serial number dengan benar di kolom", bg: "from-indigo-50 to-indigo-100/50" },
-                            { icon: "🛡️", title: "Lihat Status", desc: "Sistem akan menampilkan detail garansi Anda", bg: "from-emerald-50 to-emerald-100/50" },
+                            { icon: Search, title: "Temukan SN", desc: "Lihat stiker bodi laptop atau nota pembelian" },
+                            { icon: Keyboard, title: "Masukkan SN", desc: "Ketik serial number dengan benar di kolom" },
+                            { icon: Shield, title: "Lihat Status", desc: "Sistem akan menampilkan detail garansi Anda" },
                         ].map((item, i) => (
-                            <div key={i} className={`bg-gradient-to-br ${item.bg} rounded-2xl border border-white/60 shadow-sm p-6 text-center transition-all hover:shadow-lg hover:-translate-y-1 duration-300 backdrop-blur-sm`}>
-                                <div className="text-4xl mb-3">{item.icon}</div>
-                                <p className="text-md font-bold text-gray-800">{item.title}</p>
-                                <p className="text-sm text-gray-500 mt-2 leading-relaxed">{item.desc}</p>
+                            <div key={i} className="card-3d p-6 text-center">
+                                <div className="flex justify-center mb-3"><item.icon className="w-9 h-9 text-blue-600" aria-hidden="true" /></div>
+                                <p className="text-md font-bold text-slate-900">{item.title}</p>
+                                <p className="text-sm text-slate-500 mt-2 leading-relaxed">{item.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -440,15 +446,13 @@ export default function CekGaransi() {
 
                 <div id="cta" className={`text-center mt-16 transition-all duration-500 delay-300 ${isVisible.cta ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
                     <div className="relative inline-block">
-                        <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full blur-2xl opacity-50 group-hover:opacity-70 transition duration-500"></div>
                         <a
                             href="https://wa.me/6285210647047?text=Halo%20Solit%2003%2C%20saya%20ingin%20bertanya%20tentang%20garansi%20laptop."
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group relative inline-flex items-center gap-3 px-8 sm:px-10 py-3.5 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-green-500 to-emerald-600 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+                            className="group inline-flex items-center gap-3 px-8 sm:px-10 py-3 rounded-xl text-sm font-semibold text-white bg-green-500 hover:bg-green-600 shadow-soft hover:shadow-soft-lg hover:-translate-y-0.5 transition-all duration-300"
                         >
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                            <svg className="relative w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12.032 2.001c-5.514 0-10 4.486-10 10 0 1.78.469 3.452 1.283 4.899L2 21.999l5.225-1.312c1.39.794 3.002 1.253 4.713 1.253 5.514 0 10-4.486 10-10s-4.486-10-10-10zm0 18.5c-1.657 0-3.236-.448-4.618-1.277l-.338-.195-3.125.785.84-3.077-.208-.347c-.891-1.449-1.363-3.113-1.363-4.889 0-4.688 3.812-8.5 8.5-8.5s8.5 3.812 8.5 8.5-3.812 8.5-8.5 8.5z" />
                                 <path d="M16.75 13.45c-.26-.13-1.54-.76-1.78-.85s-.41-.13-.59.13c-.18.26-.69.85-.85 1.02s-.31.2-.56.07c-.26-.13-1.09-.4-2.07-1.28-.77-.69-1.29-1.54-1.44-1.8-.15-.26-.02-.4.11-.53.13-.13.26-.33.39-.5.13-.17.18-.28.27-.47.09-.19.05-.36-.02-.5s-.59-1.42-.81-1.95c-.21-.52-.43-.45-.59-.46s-.31-.01-.48-.01c-.18 0-.47.07-.71.33-.24.26-.91.89-.91 2.16 0 1.27.93 2.5 1.06 2.67.13.17 1.83 2.79 4.43 3.91.62.27 1.1.43 1.48.55.62.2 1.19.17 1.63.1.5-.07 1.54-.63 1.76-1.24.22-.61.22-1.13.15-1.24-.07-.1-.26-.16-.52-.26z" />
                             </svg>
@@ -459,24 +463,24 @@ export default function CekGaransi() {
                         </a>
                     </div>
                     <div className="flex items-center justify-center gap-3 mt-4">
-                        <div className="h-4 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent"></div>
-                        <p className="text-xs text-gray-400">Atau hubungi langsung:</p>
+                        <div className="h-4 w-px bg-gradient-to-b from-transparent via-slate-300 to-transparent"></div>
+                        <p className="text-xs text-slate-400">Atau hubungi langsung:</p>
                         <a href="https://wa.me/6285210647047" target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-green-600 hover:text-green-700 font-medium hover:underline transition">+62 852-1064-7047</a>
-                        <div className="h-4 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent"></div>
+                        <div className="h-4 w-px bg-gradient-to-b from-transparent via-slate-300 to-transparent"></div>
                     </div>
                 </div>
 
                 <div className="flex justify-center mt-12">
                     <div className="flex gap-2">
                         {[...Array(3)].map((_, i) => (
-                            <div key={i} className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-blue-400 to-indigo-400 opacity-50 animate-pulse" style={{ animationDelay: `${i * 0.2}s` }} />
+                            <div key={i} className="w-1.5 h-1.5 rounded-full bg-blue-400 opacity-50 animate-pulse" style={{ animationDelay: `${i * 0.2}s` }} />
                         ))}
                     </div>
                 </div>
 
                 {toastMessage && (
-                    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-gray-900/90 backdrop-blur-md text-white px-5 py-2.5 rounded-full shadow-lg text-sm z-50 animate-fadeSlideUp flex items-center gap-2">
-                        <span className="text-emerald-400">✓</span> {toastMessage}
+                    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md text-white px-5 py-2.5 rounded-full shadow-soft-lg text-sm z-50 animate-fadeSlideUp flex items-center gap-2">
+                        <Check className="w-4 h-4 text-emerald-400" aria-hidden="true" /> {toastMessage}
                     </div>
                 )}
             </div>
@@ -539,13 +543,13 @@ function Confetti({ active }) {
 
 function SkeletonResult() {
     return (
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-100 overflow-hidden shadow-sm animate-pulse">
-            <div className="h-32 bg-gradient-to-r from-gray-200 to-gray-100" />
+        <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-soft-sm animate-pulse">
+            <div className="h-32 bg-gradient-to-r from-slate-200 to-slate-100" />
             <div className="p-6 space-y-4">
-                <div className="h-5 bg-gray-200 rounded w-3/4" />
-                <div className="h-5 bg-gray-200 rounded w-1/2" />
-                <div className="h-24 bg-gray-100 rounded-xl" />
-                <div className="h-12 bg-gray-200 rounded-xl" />
+                <div className="h-5 bg-slate-200 rounded w-3/4" />
+                <div className="h-5 bg-slate-200 rounded w-1/2" />
+                <div className="h-24 bg-slate-100 rounded-xl" />
+                <div className="h-12 bg-slate-200 rounded-xl" />
             </div>
         </div>
     );
@@ -564,13 +568,13 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
     const isExpiring = data.status === "EXPIRING_SOON";
 
     return (
-        <div className={`rounded-2xl border ${cfg.border} overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 bg-white transform hover:-translate-y-1`}>
+        <div className={`rounded-2xl border ${cfg.border} overflow-hidden shadow-soft hover:shadow-soft-lg transition-all duration-300 bg-white transform hover:-translate-y-1`}>
             <div className={`bg-gradient-to-r ${cfg.gradient} px-6 py-6 relative overflow-hidden`}>
                 <div className="absolute inset-0 bg-white/10 transform -skew-x-12 translate-x-1/2" />
                 <div className="relative flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-5">
                         <div className="w-14 h-14 bg-white/25 rounded-2xl flex items-center justify-center backdrop-blur-sm shadow-inner">
-                            <span className="text-white font-bold text-2xl">{cfg.icon}</span>
+                            <cfg.icon className="w-7 h-7 text-white" aria-hidden="true" />
                         </div>
                         <div>
                             <p className="font-bold text-white text-2xl leading-tight">{cfg.label}</p>
@@ -592,46 +596,46 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
             <div className="px-6 py-6 space-y-6">
                 {/* Progress Bar */}
                 <div>
-                    <div className="flex justify-between text-xs text-gray-500 mb-2">
+                    <div className="flex justify-between text-xs text-slate-500 mb-2">
                         <span>Mulai: {fmtDate(data.warranty_start)}</span>
                         <span>Berakhir: {fmtDate(data.warranty_end)}</span>
                     </div>
-                    <div className="h-3 bg-gray-100 rounded-full overflow-hidden border border-gray-200">
+                    <div className="h-3 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
                         <div className={`h-full rounded-full transition-all duration-1000 ease-out ${cfg.barColor}`} style={{ width: `${pct}%` }} />
                     </div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-2">
+                    <div className="flex justify-between text-xs text-slate-500 mt-2">
                         <span>0%</span>
-                        <span className="font-medium text-gray-700">{Math.round(pct)}% terpakai</span>
+                        <span className="font-medium text-slate-700">{Math.round(pct)}% terpakai</span>
                         <span>100%</span>
                     </div>
                 </div>
 
                 {/* Tabel Detail - Responsif: label dan value dalam satu baris dengan wrap */}
-                <div className="bg-gray-50/80 rounded-xl border border-gray-100 overflow-hidden">
-                    <div className="divide-y divide-gray-100">
+                <div className="bg-slate-50/80 rounded-xl border border-slate-100 overflow-hidden">
+                    <div className="divide-y divide-slate-100">
                         {[
-                            { icon: "💻", label: "Laptop", value: data.laptop_name, bold: true },
-                            { icon: "🔢", label: "Serial Number", value: data.serial_number, mono: true, copyable: true },
-                            { icon: "👤", label: "Nama Pembeli", value: data.customer_name },
-                            { icon: "📅", label: "Tanggal Mulai", value: fmtDate(data.warranty_start) },
-                            { icon: "🏁", label: "Garansi Berakhir", value: fmtDate(data.warranty_end), highlight: true, cfg },
+                            { icon: Laptop, label: "Laptop", value: data.laptop_name, bold: true },
+                            { icon: Hash, label: "Serial Number", value: data.serial_number, mono: true, copyable: true },
+                            { icon: User, label: "Nama Pembeli", value: data.customer_name },
+                            { icon: Calendar, label: "Tanggal Mulai", value: fmtDate(data.warranty_start) },
+                            { icon: Flag, label: "Garansi Berakhir", value: fmtDate(data.warranty_end), highlight: true, cfg },
                         ].map((row, i) => (
                             <div key={i} className="px-4 py-3 hover:bg-white transition-colors group">
                                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
                                     {/* Ikon dan label dalam satu baris untuk HP */}
                                     <div className="flex items-center gap-2 sm:w-32 flex-shrink-0">
-                                        <span className="text-gray-400 text-base w-6 text-center">{row.icon}</span>
-                                        <span className="text-xs font-medium text-gray-600">{row.label}</span>
+                                        <span className="text-slate-400 w-6 flex justify-center"><row.icon className="w-4 h-4" aria-hidden="true" /></span>
+                                        <span className="text-xs font-medium text-slate-600">{row.label}</span>
                                     </div>
                                     {/* Value dan tombol copy */}
                                     <div className="flex-1 flex items-center justify-between gap-2">
-                                        <span className={`text-sm break-words flex-1 ${row.mono ? "font-mono font-semibold text-gray-800" : row.bold ? "font-bold text-gray-800" : row.highlight ? `font-bold ${cfg.text}` : "text-gray-700"}`}>
+                                        <span className={`text-sm break-words flex-1 ${row.mono ? "font-mono font-semibold text-slate-800" : row.bold ? "font-bold text-slate-800" : row.highlight ? `font-bold ${cfg.text}` : "text-slate-700"}`}>
                                             {row.value}
                                         </span>
                                         {row.copyable && (
                                             <button
                                                 onClick={() => onCopy(row.value)}
-                                                className="text-gray-400 hover:text-blue-500 transition opacity-0 group-hover:opacity-100 focus:opacity-100 p-1 flex-shrink-0"
+                                                className="text-slate-400 hover:text-blue-500 transition opacity-0 group-hover:opacity-100 focus:opacity-100 p-1 flex-shrink-0"
                                                 title="Salin SN"
                                             >
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -649,7 +653,7 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
 
                 {data.notes && (
                     <div className="bg-blue-50/80 border border-blue-100 rounded-xl px-5 py-3">
-                        <p className="text-xs font-bold text-blue-700 mb-1 flex items-center gap-1"><span>📝</span> Catatan</p>
+                        <p className="text-xs font-bold text-blue-700 mb-1 flex items-center gap-1"><FileText className="w-3.5 h-3.5" aria-hidden="true" /> Catatan</p>
                         <p className="text-sm text-blue-800">{data.notes}</p>
                     </div>
                 )}
@@ -662,7 +666,7 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
                         href={`https://wa.me/6285210647047?text=${encodeURIComponent(`Halo Solit 03, saya ingin bertanya mengenai garansi laptop dengan SN: ${data.serial_number}`)}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-center gap-2 h-12 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-sm font-semibold rounded-xl transition-all hover:shadow-md active:scale-95"
+                        className="flex-1 flex items-center justify-center gap-2 h-12 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold rounded-xl transition-all hover:shadow-soft active:scale-95"
                     >
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12.032 2.001c-5.514 0-10 4.486-10 10 0 1.78.469 3.452 1.283 4.899L2 21.999l5.225-1.312c1.39.794 3.002 1.253 4.713 1.253 5.514 0 10-4.486 10-10s-4.486-10-10-10zm0 18.5c-1.657 0-3.236-.448-4.618-1.277l-.338-.195-3.125.785.84-3.077-.208-.347c-.891-1.449-1.363-3.113-1.363-4.889 0-4.688 3.812-8.5 8.5-8.5s8.5 3.812 8.5 8.5-3.812 8.5-8.5 8.5z" />
@@ -670,7 +674,7 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
                         </svg>
                         WhatsApp
                     </a>
-                    <button onClick={onReset} className="flex-1 flex items-center justify-center gap-2 h-12 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-semibold rounded-xl transition-all hover:shadow-sm active:scale-95">
+                    <button onClick={onReset} className="flex-1 flex items-center justify-center gap-2 h-12 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-semibold rounded-xl transition-all hover:shadow-soft-sm active:scale-95">
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                             <polyline points="1 4 1 10 7 10" />
                             <path d="M3.51 15a9 9 0 102.13-9.36L1 10" />
@@ -692,7 +696,7 @@ function WarrantyTerms() {
     ];
 
     return (
-        <div className="rounded-2xl border border-gray-100 bg-white/80 backdrop-blur-sm shadow-sm overflow-hidden">
+        <div className="rounded-2xl border border-slate-200 bg-white shadow-soft-sm overflow-hidden">
             {/* Note: barang tidak bisa dikembalikan/ditukar */}
             <div className="flex items-start gap-3 bg-amber-50 border-b border-amber-100 px-5 py-3.5">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-sm font-bold mt-0.5">!</span>
@@ -703,15 +707,15 @@ function WarrantyTerms() {
 
             {/* Header */}
             <div className="px-5 pt-5 pb-2">
-                <p className="text-sm font-bold text-gray-800 flex items-center gap-2">
-                    <span>🛡️</span> Ketentuan Garansi
+                <p className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                    <Shield className="w-4 h-4" aria-hidden="true" /> Ketentuan Garansi
                 </p>
             </div>
 
             {/* Daftar ketentuan */}
             <ol className="px-5 pb-5 space-y-3">
                 {terms.map((t, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm text-gray-600 leading-relaxed">
+                    <li key={i} className="flex items-start gap-3 text-sm text-slate-600 leading-relaxed">
                         <span className="flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold mt-0.5">
                             {i + 1}
                         </span>
@@ -726,8 +730,8 @@ function WarrantyTerms() {
 // ── Not Found Card (tetap) ───────────────────────────────────────────────────
 function NotFoundCard({ message, sn, onReset, onCopy }) {
     return (
-        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-            <div className="bg-gradient-to-r from-gray-700 to-gray-800 px-6 py-6">
+        <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-soft hover:shadow-soft-lg transition-all duration-300 transform hover:-translate-y-1">
+            <div className="bg-slate-900 px-6 py-6">
                 <div className="flex items-center gap-5">
                     <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center">
                         <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
@@ -743,12 +747,12 @@ function NotFoundCard({ message, sn, onReset, onCopy }) {
                 </div>
             </div>
             <div className="px-6 py-6 space-y-6">
-                <div className="bg-gray-50 rounded-xl px-5 py-3 border border-gray-100 flex justify-between items-center group">
+                <div className="bg-slate-50 rounded-xl px-5 py-3 border border-slate-100 flex justify-between items-center group">
                     <div>
-                        <p className="text-xs text-gray-500 mb-1">SN yang dicari</p>
-                        <p className="font-mono font-bold text-gray-800 text-lg tracking-wide">{sn}</p>
+                        <p className="text-xs text-slate-500 mb-1">SN yang dicari</p>
+                        <p className="font-mono font-bold text-slate-800 text-lg tracking-wide">{sn}</p>
                     </div>
-                    <button onClick={() => onCopy(sn)} className="text-gray-400 hover:text-blue-500 transition opacity-0 group-hover:opacity-100 focus:opacity-100 p-1" title="Salin SN">
+                    <button onClick={() => onCopy(sn)} className="text-slate-400 hover:text-blue-500 transition opacity-0 group-hover:opacity-100 focus:opacity-100 p-1" title="Salin SN">
                         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
@@ -756,18 +760,18 @@ function NotFoundCard({ message, sn, onReset, onCopy }) {
                     </button>
                 </div>
                 <div className="space-y-3">
-                    <p className="text-sm font-bold text-gray-700 flex items-center gap-2"><span>🔍</span> Kemungkinan penyebab:</p>
+                    <p className="text-sm font-bold text-slate-700 flex items-center gap-2"><Search className="w-4 h-4" aria-hidden="true" /> Kemungkinan penyebab:</p>
                     <ul className="space-y-2.5">
                         {["Serial number tidak sesuai — periksa kembali ejaan", "Laptop dibeli sebelum sistem garansi digital diterapkan", "Garansi sudah pernah dicabut (VOID)"].map((item, i) => (
-                            <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
-                                <span className="w-5 h-5 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold mt-0.5">{i+1}</span>
+                            <li key={i} className="flex items-start gap-3 text-sm text-slate-600">
+                                <span className="w-5 h-5 bg-slate-200 text-slate-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold mt-0.5">{i+1}</span>
                                 {item}
                             </li>
                         ))}
                     </ul>
                 </div>
                 <div className="bg-blue-50/80 border border-blue-100 rounded-xl px-5 py-3">
-                    <p className="text-xs font-bold text-blue-700 mb-1 flex items-center gap-1"><span>💬</span> Butuh bantuan?</p>
+                    <p className="text-xs font-bold text-blue-700 mb-1 flex items-center gap-1"><MessageCircle className="w-3.5 h-3.5" aria-hidden="true" /> Butuh bantuan?</p>
                     <p className="text-sm text-blue-600">Hubungi tim Solit 03 via WhatsApp dengan menyebutkan nomor invoice pembelian Anda.</p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3">
@@ -775,7 +779,7 @@ function NotFoundCard({ message, sn, onReset, onCopy }) {
                         href={`https://wa.me/6285210647047?text=${encodeURIComponent(`Halo Solit 03, saya ingin mengecek garansi laptop dengan SN: ${sn} tapi tidak ditemukan di sistem.`)}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-center gap-2 h-12 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-sm font-semibold rounded-xl transition-all hover:shadow-md active:scale-95"
+                        className="flex-1 flex items-center justify-center gap-2 h-12 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold rounded-xl transition-all hover:shadow-soft active:scale-95"
                     >
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12.032 2.001c-5.514 0-10 4.486-10 10 0 1.78.469 3.452 1.283 4.899L2 21.999l5.225-1.312c1.39.794 3.002 1.253 4.713 1.253 5.514 0 10-4.486 10-10s-4.486-10-10-10zm0 18.5c-1.657 0-3.236-.448-4.618-1.277l-.338-.195-3.125.785.84-3.077-.208-.347c-.891-1.449-1.363-3.113-1.363-4.889 0-4.688 3.812-8.5 8.5-8.5s8.5 3.812 8.5 8.5-3.812 8.5-8.5 8.5z" />
@@ -783,7 +787,7 @@ function NotFoundCard({ message, sn, onReset, onCopy }) {
                         </svg>
                         WhatsApp
                     </a>
-                    <button onClick={onReset} className="flex-1 flex items-center justify-center gap-2 h-12 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-semibold rounded-xl transition-all hover:shadow-sm active:scale-95">
+                    <button onClick={onReset} className="flex-1 flex items-center justify-center gap-2 h-12 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-semibold rounded-xl transition-all hover:shadow-soft-sm active:scale-95">
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                             <polyline points="1 4 1 10 7 10" />
                             <path d="M3.51 15a9 9 0 102.13-9.36L1 10" />

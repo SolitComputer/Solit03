@@ -1,4 +1,5 @@
 import React from 'react';
+import { MapPin, ChevronLeft } from 'lucide-react';
 
 function Topbar({ onBack, path, currentPanel, filters }) {
   const getPriceRangeLabel = () => {
@@ -27,22 +28,22 @@ function Topbar({ onBack, path, currentPanel, filters }) {
     return crumbs.map((crumb, index) => (
       <span 
         key={index} 
-        className="chip bg-[#e1eeff] border border-[#a3c5ff] px-3 py-1.5 rounded-full font-semibold text-[#1e90ff] text-xs shadow-sm hover:-translate-y-0.5 transition-all flex-shrink-0"
+        className="chip bg-blue-50 border border-blue-200 px-3 py-1.5 rounded-full font-semibold text-blue-600 text-xs shadow-soft-sm hover:-translate-y-0.5 transition-all flex-shrink-0"
         {...(index === crumbs.length - 1 ? { 'aria-current': 'page' } : {})}
       >
-        <span className="chip-icon text-base mr-1">📍</span> {crumb.label}
+        <span className="chip-icon mr-1 inline-flex"><MapPin className="w-4 h-4" aria-hidden="true" /></span> {crumb.label}
       </span>
     ));
   };
 
   return (
-    <div className="topbar sticky top-0 z-[2000] flex items-center gap-2 mb-2 p-2.5 rounded-[20px] backdrop-blur-[20px] backdrop-saturate-[1.8] bg-white/90 border border-white/40 shadow-md">
+    <div className="topbar sticky top-0 z-[2000] flex items-center gap-2 mb-2 p-2.5 rounded-2xl backdrop-blur-[20px] backdrop-saturate-[1.8] bg-white/90 border border-slate-200 shadow-soft">
       <div className="topbar-actions flex justify-between w-full gap-2">
-        <button 
-          onClick={onBack} 
-          className="btn secondary bg-white text-[#0a2540] border border-[#a3c5ff] px-3 py-1.5 rounded-xl font-bold shadow-sm hover:-translate-y-0.5 transition-all text-xs"
+        <button
+          onClick={onBack}
+          className="btn btn-outline px-3 py-1.5 text-xs inline-flex items-center gap-1"
         >
-          ← Kembali
+          <ChevronLeft className="w-4 h-4" aria-hidden="true" /> Kembali
         </button>
       </div>
       <div className="crumbs flex items-center gap-1.5 flex-1 min-w-0 whitespace-nowrap overflow-x-auto overflow-y-hidden no-scrollbar py-1">

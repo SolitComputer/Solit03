@@ -2,6 +2,7 @@ import Navbar from "../components/layout/Navbar";
 import Hero from "../components/Hero";
 import BestSeller from "../components/LatestProduct";
 import About from "../components/About";
+import StatsStrip from "../components/StatsStrip";
 import Services from "../components/Services";
 import Promo from "../components/Promo";
 import SocialMedia from "../components/SocialMedia";
@@ -35,6 +36,7 @@ export default function Home() {
         <Hero />
         <BestSeller />
         <About />
+        <StatsStrip />
         <Services />
         <Promo />
         <SocialMedia />
@@ -45,4 +47,4 @@ export default function Home() {
       </main>
     </>
   );
-}
+}  

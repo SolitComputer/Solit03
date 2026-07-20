@@ -1,29 +1,31 @@
 import { useEffect, useState, useCallback } from "react";
 import {
   Plus, Search, Edit, Trash2, Layers3, RefreshCw,
-  ChevronLeft, ChevronRight, X, ChevronDown, Save, AlertTriangle
+  ChevronLeft, ChevronRight, X, ChevronDown, Save, AlertTriangle,
+  Laptop, Gamepad2, BarChart3, Palette, BookOpen, Star, Wallet, Sparkles,
+  Folder, Files, Eye, CalendarDays
 } from "lucide-react";
 import { getCategories, createCategory, updateCategory, deleteCategory } from "../services/AdminCategories";
 import { useToast } from "../context/ToastContext";
 import { useDebounce } from "../hooks/useDebounce";
 
 const iconOptions = [
-  { value: "Laptop",    emoji: "💻", bg: "from-blue-100 to-blue-200", text: "text-blue-600" },
-  { value: "Gaming",    emoji: "🎮", bg: "from-purple-100 to-purple-200", text: "text-purple-600" },
-  { value: "Office",    emoji: "📊", bg: "from-green-100 to-green-200", text: "text-green-600" },
-  { value: "Design",    emoji: "🎨", bg: "from-pink-100 to-pink-200", text: "text-pink-600" },
-  { value: "Student",   emoji: "📚", bg: "from-yellow-100 to-yellow-200", text: "text-yellow-600" },
-  { value: "Premium",   emoji: "⭐", bg: "from-amber-100 to-amber-200", text: "text-amber-600" },
-  { value: "Budget",    emoji: "💰", bg: "from-emerald-100 to-emerald-200", text: "text-emerald-600" },
-  { value: "Ultrabook", emoji: "✨", bg: "from-indigo-100 to-indigo-200", text: "text-indigo-600" },
+  { value: "Laptop",    Icon: Laptop,    bg: "from-blue-100 to-blue-200", text: "text-blue-600" },
+  { value: "Gaming",    Icon: Gamepad2,  bg: "from-purple-100 to-purple-200", text: "text-purple-600" },
+  { value: "Office",    Icon: BarChart3, bg: "from-green-100 to-green-200", text: "text-green-600" },
+  { value: "Design",    Icon: Palette,   bg: "from-pink-100 to-pink-200", text: "text-pink-600" },
+  { value: "Student",   Icon: BookOpen,  bg: "from-yellow-100 to-yellow-200", text: "text-yellow-600" },
+  { value: "Premium",   Icon: Star,      bg: "from-amber-100 to-amber-200", text: "text-amber-600" },
+  { value: "Budget",    Icon: Wallet,    bg: "from-emerald-100 to-emerald-200", text: "text-emerald-600" },
+  { value: "Ultrabook", Icon: Sparkles,  bg: "from-indigo-100 to-indigo-200", text: "text-indigo-600" },
 ];
 
 function slugify(name) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
-function getEmoji(icon) {
-  return iconOptions.find(o => o.value === icon)?.emoji || "📁";
+function getIcon(icon) {
+  return iconOptions.find(o => o.value === icon)?.Icon || Folder;
 }
 
 function getIconStyle(icon) {
@@ -91,6 +93,7 @@ function CategoryModal({ isOpen, onClose, onSubmit, title, initialData, isEditin
   };
 
   const iconStyle = getIconStyle(form.icon);
+  const FormIcon = getIcon(form.icon);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -126,7 +129,7 @@ function CategoryModal({ isOpen, onClose, onSubmit, title, initialData, isEditin
               className={`w-full bg-gray-50 border-2 rounded-xl text-sm px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all duration-200
                 ${errors.name ? "border-red-400 focus:ring-red-500" : "border-gray-200 hover:border-gray-300"}`} 
             />
-            {errors.name && <p className="text-xs text-red-500 flex items-center gap-1">⚠️ {errors.name}</p>}
+            {errors.name && <p className="text-xs text-red-500 flex items-center gap-1"><AlertTriangle className="w-3.5 h-3.5" aria-hidden="true" /> {errors.name}</p>}
           </div>
 
           {/* Slug */}
@@ -163,7 +166,7 @@ function CategoryModal({ isOpen, onClose, onSubmit, title, initialData, isEditin
                     ${form.icon === opt.value 
                       ? `bg-gradient-to-br ${opt.bg} ring-2 ring-purple-500 shadow-md transform scale-105` 
                       : "bg-gray-50 border-2 border-gray-200 hover:bg-gray-100 hover:border-gray-300"}`}>
-                  <span className="text-2xl">{opt.emoji}</span>
+                  <opt.Icon className="w-6 h-6" aria-hidden="true" />
                   <span className={`text-[10px] font-medium ${form.icon === opt.value ? opt.text : "text-gray-500"}`}>
                     {opt.value}
                   </span>
@@ -177,7 +180,7 @@ function CategoryModal({ isOpen, onClose, onSubmit, title, initialData, isEditin
             <p className="text-xs font-semibold text-gray-600 mb-2">Preview Kategori</p>
             <div className="flex items-center gap-3">
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md bg-white`}>
-                <span className="text-2xl">{getEmoji(form.icon)}</span>
+                <FormIcon className={`w-6 h-6 ${iconStyle.text}`} aria-hidden="true" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold text-gray-800 truncate">{form.name || "Nama Kategori"}</p>
@@ -345,13 +348,13 @@ export default function Categories() {
       {/* Stats Cards */}
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: "Total Kategori", value: categories.length, icon: "📑", gradient: "from-purple-500 to-pink-500" },
-          { label: "Ditampilkan", value: paginated.length, icon: "👁️", gradient: "from-gray-500 to-gray-600" },
-          { label: "Filter Aktif", value: search ? "Ya" : "Tidak", icon: "🔍", gradient: "from-blue-500 to-blue-600" },
-        ].map(({ label, value, icon, gradient }) => (
+          { label: "Total Kategori", value: categories.length, icon: Files, gradient: "from-purple-500 to-pink-500" },
+          { label: "Ditampilkan", value: paginated.length, icon: Eye, gradient: "from-gray-500 to-gray-600" },
+          { label: "Filter Aktif", value: search ? "Ya" : "Tidak", icon: Search, gradient: "from-blue-500 to-blue-600" },
+        ].map(({ label, value, icon: Icon, gradient }) => (
           <div key={label} className="bg-white rounded-xl shadow-md p-5 hover:shadow-lg transition-shadow duration-200 border border-gray-100">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-2xl">{icon}</span>
+              <Icon className="w-6 h-6 text-gray-600" aria-hidden="true" />
               <span className={`text-xs font-semibold px-2 py-1 rounded-full bg-gradient-to-r ${gradient} text-white`}>
                 {typeof value === 'number' ? `${value} item` : value}
               </span>
@@ -378,7 +381,7 @@ export default function Categories() {
           </div>
           <div className="flex gap-2">
             {[
-              { val: sortBy, set: setSortBy, opts: [["newest","📅 Terbaru"],["oldest","📅 Terlama"],["name_asc","🔤 A-Z"],["name_desc","🔤 Z-A"]] },
+              { val: sortBy, set: setSortBy, opts: [["newest","Terbaru"],["oldest","Terlama"],["name_asc","A-Z"],["name_desc","Z-A"]] },
               { val: perPage, set: v => { setPerPage(Number(v)); setPage(1); }, opts: [[10,"10 per halaman"],[25,"25 per halaman"],[50,"50 per halaman"]] },
             ].map((s, i) => (
               <div key={i} className="relative">
@@ -428,10 +431,11 @@ export default function Categories() {
           <div className="divide-y divide-gray-100">
             {paginated.map(cat => {
               const iconStyle = getIconStyle(cat.icon);
+              const CatIcon = getIcon(cat.icon);
               return (
                 <div key={cat.id} className="flex items-center gap-4 px-5 py-4 hover:bg-gradient-to-r hover:from-gray-50 hover:to-white transition-all duration-200 group">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md bg-gradient-to-br ${iconStyle.bg}`}>
-                    <span className="text-xl">{getEmoji(cat.icon)}</span>
+                    <CatIcon className={`w-5 h-5 ${iconStyle.text}`} aria-hidden="true" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
@@ -444,7 +448,7 @@ export default function Categories() {
                   </div>
                   {cat.created_at && (
                     <p className="text-xs text-gray-400 hidden md:block flex-shrink-0">
-                      🗓️ {new Date(cat.created_at).toLocaleDateString("id-ID", { day: 'numeric', month: 'short', year: 'numeric' })}
+                      <CalendarDays className="w-3.5 h-3.5 inline" aria-hidden="true" /> {new Date(cat.created_at).toLocaleDateString("id-ID", { day: 'numeric', month: 'short', year: 'numeric' })}
                     </p>
                   )}
                   <div className="flex gap-1 flex-shrink-0">

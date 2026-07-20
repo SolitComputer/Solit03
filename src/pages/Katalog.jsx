@@ -9,6 +9,7 @@ import {
   TrendingUp, Flame, Gift, Award
 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
+import Tilt from "react-parallax-tilt";
 
 const CATEGORY_ICONS = {
   gaming: <Gamepad2 size={20} />,
@@ -111,7 +112,7 @@ function ProductTagBadge({ productTags, allTags }) {
       {tagsToShow.map((tag, idx) => (
         <span
           key={idx}
-          className={`${getTagBadgeColor(tag.color)} text-white text-[8px] sm:text-[9px] md:text-[10px] font-semibold px-1 sm:px-1.5 py-0.5 rounded-full flex items-center gap-0.5 shadow-sm`}
+          className={`${getTagBadgeColor(tag.color)} text-white text-[8px] sm:text-[9px] md:text-[10px] font-semibold px-1 sm:px-1.5 py-0.5 rounded-full flex items-center gap-0.5 shadow-soft-sm`}
         >
           {tag.name.length > (window.innerWidth < 640 ? 8 : 10) ? tag.name.slice(0, window.innerWidth < 640 ? 6 : 8) + '...' : tag.name}
         </span>
@@ -122,6 +123,7 @@ function ProductTagBadge({ productTags, allTags }) {
 
 function AnimatedProductCard({ product, onClick, index, allTags }) {
   const [imgError, setImgError] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 640px)');
   const specs = product.product_specs?.[0] || {};
   const outOfStock = product.stock <= 0;
   const hasDiscount = product.discount_percent > 0;
@@ -129,10 +131,10 @@ function AnimatedProductCard({ product, onClick, index, allTags }) {
     ? product.price * (1 - product.discount_percent / 100)
     : product.price;
 
-  return (
+  const card = (
     <div
       onClick={onClick}
-      className="group bg-white rounded-xl border border-slate-200 hover:border-blue-400 overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg animate-fadeInUp"
+      className="group card-3d overflow-hidden cursor-pointer animate-fadeInUp h-full"
       style={{ animationDelay: `${index * 50}ms` }}
     >
       {/* Container gambar dengan aspect ratio video (16:9) */}
@@ -156,7 +158,7 @@ function AnimatedProductCard({ product, onClick, index, allTags }) {
 
         {/* Out of Stock Badge */}
         {outOfStock && (
-          <div className="absolute top-2 right-2 px-1.5 sm:px-2 py-0.5 bg-red-500/90 backdrop-blur-sm text-white text-[9px] sm:text-[10px] font-semibold rounded-full z-10 shadow-sm">
+          <div className="absolute top-2 right-2 px-1.5 sm:px-2 py-0.5 bg-red-500/90 backdrop-blur-sm text-white text-[9px] sm:text-[10px] font-semibold rounded-full z-10 shadow-soft-sm">
             Habis
           </div>
         )}
@@ -217,12 +219,28 @@ function AnimatedProductCard({ product, onClick, index, allTags }) {
               </p>
             )}
           </div>
-          <button className="px-2 sm:px-2.5 py-1 bg-white border border-slate-300 hover:border-blue-500 text-slate-700 hover:text-blue-600 text-[10px] sm:text-[11px] font-semibold rounded-lg transition-all hover:shadow-sm whitespace-nowrap">
+          <button className="px-2 sm:px-2.5 py-1 bg-white border border-slate-300 hover:border-blue-500 text-slate-700 hover:text-blue-600 text-[10px] sm:text-[11px] font-semibold rounded-lg transition-all hover:shadow-soft-sm whitespace-nowrap">
             Detail
           </button>
         </div>
       </div>
     </div>
+  );
+
+  // Tilt 3D halus di desktop; mobile tanpa tilt agar ringan & scroll mulus
+  if (isMobile) return card;
+
+  return (
+    <Tilt
+      tiltMaxAngleX={5}
+      tiltMaxAngleY={5}
+      scale={1.03}
+      transitionSpeed={800}
+      gyroscope={false}
+      className="h-full [transform-style:preserve-3d]"
+    >
+      {card}
+    </Tilt>
   );
 }
 
@@ -467,7 +485,7 @@ function WelcomeScreen({ onStart }) {
         </div>
         <h1 className="text-2xl sm:text-3xl md:text-5xl font-black text-white mb-3 sm:mb-4 leading-tight tracking-tight">
           Katalog<br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-sky-300">
+          <span className="text-blue-400">
             Laptop
           </span>
         </h1>
@@ -476,7 +494,7 @@ function WelcomeScreen({ onStart }) {
         </p>
         <button
           onClick={onStart}
-          className="group inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/30 hover:shadow-blue-500/50 hover:scale-105 active:scale-95"
+          className="group btn btn-primary px-4 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm active:scale-95"
         >
           Mulai Pilih
           <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
@@ -502,11 +520,11 @@ function WelcomeScreen({ onStart }) {
 function CategoryScreen({ categories, onSelect, onSkip }) {
   const COLORS = [
     "from-blue-500 to-blue-700",
-    "from-indigo-500 to-indigo-700",
-    "from-violet-500 to-violet-700",
+    "from-blue-600 to-blue-800",
     "from-sky-500 to-sky-700",
-    "from-cyan-500 to-cyan-700",
-    "from-teal-500 to-teal-700",
+    "from-sky-600 to-blue-700",
+    "from-blue-500 to-sky-600",
+    "from-blue-700 to-blue-900",
   ];
 
   return (
@@ -521,7 +539,7 @@ function CategoryScreen({ categories, onSelect, onSkip }) {
             <button
               key={cat.id}
               onClick={() => onSelect(cat)}
-              className="group relative rounded-xl overflow-hidden text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:scale-95"
+              className="group relative rounded-xl overflow-hidden text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg active:scale-95"
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${COLORS[idx % COLORS.length]} opacity-90`} />
               <div className="relative p-3 sm:p-4">
@@ -538,7 +556,7 @@ function CategoryScreen({ categories, onSelect, onSkip }) {
           ))}
           <button
             onClick={onSkip}
-            className="group relative rounded-xl overflow-hidden text-left border border-dashed border-slate-300 hover:border-blue-400 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:scale-95 bg-white"
+            className="group relative rounded-xl overflow-hidden text-left border border-dashed border-slate-300 hover:border-blue-400 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg active:scale-95 bg-white"
           >
             <div className="p-3 sm:p-4">
               <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg bg-slate-100 flex items-center justify-center mb-2 sm:mb-3 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
@@ -576,7 +594,7 @@ function PageBtn({ children, active, disabled, onClick }) {
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`w-6 h-6 sm:w-7 sm:h-7 rounded-lg text-[11px] sm:text-xs font-semibold flex items-center justify-center transition-all ${active ? "bg-blue-600 text-white shadow-sm" : disabled ? "text-slate-300 cursor-not-allowed" : "text-slate-600 hover:bg-slate-200"
+      className={`w-6 h-6 sm:w-7 sm:h-7 rounded-lg text-[11px] sm:text-xs font-semibold flex items-center justify-center transition-all ${active ? "bg-blue-600 text-white shadow-soft-sm" : disabled ? "text-slate-300 cursor-not-allowed" : "text-slate-600 hover:bg-slate-200"
         }`}
     >
       {children}
@@ -639,7 +657,7 @@ function ProductModal({ product, onClose, allTags }) {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl mx-2 sm:mx-0"
+        className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-soft-lg mx-2 sm:mx-0"
         onClick={e => e.stopPropagation()}
       >
         <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-slate-100 px-3 sm:px-4 py-2 flex sm:py-2.5 items-center justify-between">
@@ -665,7 +683,7 @@ function ProductModal({ product, onClose, allTags }) {
         <div className="overflow-y-auto max-h-[calc(90vh-52px)]">
           <div className="grid lg:grid-cols-2 gap-0">
             <div className="bg-gradient-to-br from-slate-50 to-white p-3 sm:p-4">
-              <div className="relative aspect-square bg-white rounded-xl overflow-hidden shadow-sm border border-slate-100 group">
+              <div className="relative aspect-square bg-white rounded-xl overflow-hidden shadow-soft-sm border border-slate-100 group">
                 {allImages[imgIdx] ? (
                   <>
                     <img src={allImages[imgIdx]} alt={product.name} className="w-full h-full object-contain p-3 sm:p-4" />
@@ -767,9 +785,9 @@ function ProductModal({ product, onClose, allTags }) {
                   }`}>
                   {product.stock > 0
                     ? (product.stock < 5
-                      ? `⚠ Stok ${product.stock}`
-                      : `✓ Tersedia (${product.stock})`)
-                    : "✕ Stok habis"}
+                      ? `Stok ${product.stock}`
+                      : `Tersedia (${product.stock})`)
+                    : "Stok habis"}
                 </p>
               </div>
 
@@ -1105,8 +1123,8 @@ function ProductScreen({
           }
         `}</style>
 
-      <div className="sticky top-0 z-20 bg-white border-b border-slate-200 shadow-sm">
-        <div className="w-full px-2 sm:px-3 py-2">
+      <div className="w-full px-2 sm:px-3 pt-4 sm:pt-6">
+        <div className="bg-white rounded-xl border border-slate-200 shadow-soft-sm px-2 sm:px-3 py-2">
           <div className="flex items-center justify-between gap-2">
             <button
               onClick={onBack}
@@ -1152,7 +1170,7 @@ function ProductScreen({
       <div className="w-full px-2 sm:px-3 py-6 sm:py-10">
         <div className="flex gap-4">
           <div className="hidden lg:block w-64 flex-shrink-0">
-            <div className="sticky top-16 bg-white rounded-xl border border-slate-200 p-3">
+            <div className="sticky top-16 bg-white rounded-2xl border border-slate-200 shadow-soft-sm p-3">
               <FilterSidebar />
             </div>
           </div>
@@ -1164,7 +1182,7 @@ function ProductScreen({
                 onClick={() => setShowMobileFilters(false)}
               />
 
-              <div className="absolute right-0 top-14 bottom-0 w-80 max-w-[85vw] bg-white shadow-xl overflow-y-auto animate-slideInRight rounded-tl-2xl">
+              <div className="absolute right-0 top-14 bottom-0 w-80 max-w-[85vw] bg-white shadow-soft-lg overflow-y-auto animate-slideInRight rounded-tl-2xl">
                 <div className="p-3 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white z-10">
                   <h3 className="font-bold text-slate-800 text-sm">
                     Filter

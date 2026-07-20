@@ -2,16 +2,17 @@ import React from 'react';
 import { useFunnelContext } from '../../context/FunnelContext';
 import { useProducts } from '../../hooks/useProducts';
 import ProgressBar from './ProgressBar';
+import { Flame, PartyPopper, Sparkles, Wallet, Building2, FolderOpen, ArrowDownAZ } from 'lucide-react';
 
 const HUB_OPTIONS = [
-    { action: 'bestSeller', icon: '🔥', title: 'Best Seller', desc: 'Laptop paling laris dan populer', tabName: 'bestseller' },
-    { action: 'promoToday', icon: '🎉', title: 'Promo Hari Ini', desc: 'Diskon khusus untuk hari ini', tabName: 'promo' },
-    { action: 'newStock', icon: '🆕', title: 'Stok Terbaru', desc: 'Produk Terbaru', tabName: 'new' },
-    { action: 'byPrice', icon: '💰', title: 'Sesuaikan Budget', desc: 'Pilih laptop sesuai kemampuan', tabName: 'price' },
-    { action: 'byBrand', icon: '🏢', title: 'Pilih Merek', desc: 'Lenovo, Dell, HP, ASUS, dll', tabName: 'brand' },
-    { action: 'byInterest', icon: '✨', title: 'Untuk Apa?', desc: 'Kantor, Sekolah, Gaming, dll', tabName: 'interest' },
-    { action: 'byCategory', icon: '📂', title: 'Kategori Produk', desc: 'PC, Monitor, Proyektor, Dus, Bracket', tabName: 'category' },
-    { action: 'allAZ', icon: '🔤', title: 'Semua Produk A–Z', desc: 'Urut nama A sampai Z', tabName: 'az' }
+    { action: 'bestSeller', icon: Flame, title: 'Best Seller', desc: 'Laptop paling laris dan populer', tabName: 'bestseller' },
+    { action: 'promoToday', icon: PartyPopper, title: 'Promo Hari Ini', desc: 'Diskon khusus untuk hari ini', tabName: 'promo' },
+    { action: 'newStock', icon: Sparkles, title: 'Stok Terbaru', desc: 'Produk Terbaru', tabName: 'new' },
+    { action: 'byPrice', icon: Wallet, title: 'Sesuaikan Budget', desc: 'Pilih laptop sesuai kemampuan', tabName: 'price' },
+    { action: 'byBrand', icon: Building2, title: 'Pilih Merek', desc: 'Lenovo, Dell, HP, ASUS, dll', tabName: 'brand' },
+    { action: 'byInterest', icon: Sparkles, title: 'Untuk Apa?', desc: 'Kantor, Sekolah, Gaming, dll', tabName: 'interest' },
+    { action: 'byCategory', icon: FolderOpen, title: 'Kategori Produk', desc: 'PC, Monitor, Proyektor, Dus, Bracket', tabName: 'category' },
+    { action: 'allAZ', icon: ArrowDownAZ, title: 'Semua Produk A–Z', desc: 'Urut nama A sampai Z', tabName: 'az' }
 ];
 
 const LAPTOP_TAG = 'laptop';
@@ -96,7 +97,7 @@ function PanelHub() {
                 {HUB_OPTIONS.map((option, idx) => (
                     <article
                         key={option.action}
-                        className="big-button flex flex-col items-center gap-3.5 p-5 rounded-2xl bg-white border-2 border-[#a3c5ff] hover:border-[#1e90ff] hover:-translate-y-1 hover:shadow-lg transition-all cursor-pointer text-center relative overflow-hidden"
+                        className="big-button card-3d flex flex-col items-center gap-3.5 p-5 hover:border-blue-400 cursor-pointer text-center relative overflow-hidden"
                         onClick={() => handleOptionClick(option.action, option.tabName)}
                         role="button"
                         tabIndex={0}
@@ -107,11 +108,11 @@ function PanelHub() {
                             }
                         }}
                     >
-                        <div className="icon w-[60px] h-[60px] rounded-xl grid place-items-center text-[28px] bg-[#1e90ff]/20 text-[#1e90ff] border border-[#1e90ff]/40">
-                            {option.icon}
+                        <div className="icon w-[60px] h-[60px] rounded-xl grid place-items-center bg-blue-50 text-blue-600 border border-blue-100">
+                            <option.icon className="w-7 h-7" aria-hidden="true" />
                         </div>
-                        <div className="title font-bold text-lg">{option.title}</div>
-                        <div className="desc text-sm text-gray-600">{option.desc}</div>
+                        <div className="title font-bold text-lg text-slate-900">{option.title}</div>
+                        <div className="desc text-sm text-slate-500">{option.desc}</div>
                     </article>
                 ))}
             </div>

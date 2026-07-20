@@ -7,15 +7,15 @@ export default function Tabs({ activeTab, setActiveTab }) {
 
   return (
     <div className="flex justify-center">
-      <div className="bg-gray-100 p-0.5 rounded-lg flex gap-0.5">
+      <div className="bg-slate-100 border border-slate-200 p-1 rounded-xl flex gap-1">
         {tabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`px-3 py-1.5 text-[11px] font-medium rounded-md transition-all duration-200 ${
+            className={`px-3.5 py-1.5 text-[11px] font-semibold rounded-lg transition-all duration-200 ${
               activeTab === tab.key
-                ? "bg-blue-600 text-white shadow-sm"
-                : "text-gray-500 hover:text-blue-600 hover:bg-gray-50"
+                ? "bg-blue-600 text-white shadow-soft-sm"
+                : "text-slate-500 hover:text-blue-600 hover:bg-white"
             }`}
           >
             {tab.label}

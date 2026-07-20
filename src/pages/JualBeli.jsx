@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Banknote, Building2, Laptop } from "lucide-react";
 import Tabs from "../components/jualbeli/Tabs";
 import StepCard from "../components/jualbeli/StepCard";
 import Gallery from "../components/jualbeli/Gallery";
@@ -75,7 +76,7 @@ export default function JualBeli() {
           href="https://solit03.com/jual-beli"
         />
       </Helmet>
-      <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-blue-50/30">
+      <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-blue-50/40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 md:py-14">
           <style>{`
           @keyframes fadeSlideUp {
@@ -114,8 +115,8 @@ export default function JualBeli() {
               }`}
           >
             {/* Decorative Badge */}
-            <div className="inline-flex items-center gap-1.5 bg-white/80 backdrop-blur-sm border border-blue-100 rounded-full px-3 py-1 mb-4 shadow-sm">
-              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
+            <div className="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-100 rounded-full px-3 py-1 mb-4 shadow-soft-sm">
+              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
               <span className="text-[10px] font-semibold text-blue-700 tracking-wider uppercase">
                 Solusi Terpercaya
               </span>
@@ -123,17 +124,17 @@ export default function JualBeli() {
 
             {/* Main Title */}
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
-              <span className="text-gray-900">Solusi Laptop & </span>
-              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              <span className="text-slate-900">Solusi Laptop & </span>
+              <span className="text-blue-600">
                 Aset Kantor
               </span>
               <br />
-              <span className="text-gray-800">Kamu</span>
+              <span className="text-slate-800">Kamu</span>
             </h1>
 
             {/* Subtitle with Animation */}
             <div className="mt-4">
-              <p className="text-gray-500 text-sm sm:text-base md:text-lg">
+              <p className="text-slate-500 text-sm sm:text-base md:text-lg">
                 Jadi Cuan di{" "}
                 <span className="relative inline-block">
                   <span className="absolute inset-x-0 bottom-0 h-2 bg-blue-200/50 rounded-full -z-10"></span>
@@ -158,7 +159,7 @@ export default function JualBeli() {
               </svg>
             </div>
             <div className="absolute right-4 bottom-20 opacity-20 hidden lg:block animate-float" style={{ animationDelay: "2s" }}>
-              <svg className="w-10 h-10 text-indigo-400" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-10 h-10 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
                 <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="2" fill="none" />
               </svg>
             </div>
@@ -192,11 +193,11 @@ export default function JualBeli() {
           >
             {/* Background Glow Effect */}
             <div className="relative inline-block">
-              <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full blur-xl opacity-40 group-hover:opacity-60 transition duration-500"></div>
+              <div className="absolute inset-0 bg-green-400/40 rounded-full blur-xl opacity-50 group-hover:opacity-70 transition duration-500"></div>
 
               <button
                 onClick={handleWhatsApp}
-                className="group relative inline-flex items-center gap-2 px-6 sm:px-8 py-2.5 rounded-full text-sm font-medium text-white bg-gradient-to-r from-green-500 to-emerald-600 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500/50 overflow-hidden"
+                className="group relative inline-flex items-center gap-2 px-6 sm:px-8 py-2.5 rounded-full text-sm font-medium text-white bg-green-500 hover:bg-green-600 shadow-soft hover:shadow-soft-lg hover:-translate-y-1 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500/50 overflow-hidden"
               >
                 {/* Shimmer Effect on Hover */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
@@ -206,10 +207,10 @@ export default function JualBeli() {
                   <path d="M16.75 13.45c-.26-.13-1.54-.76-1.78-.85s-.41-.13-.59.13c-.18.26-.69.85-.85 1.02s-.31.2-.56.07c-.26-.13-1.09-.4-2.07-1.28-.77-.69-1.29-1.54-1.44-1.8-.15-.26-.02-.4.11-.53.13-.13.26-.33.39-.5.13-.17.18-.28.27-.47.09-.19.05-.36-.02-.5s-.59-1.42-.81-1.95c-.21-.52-.43-.45-.59-.46s-.31-.01-.48-.01c-.18 0-.47.07-.71.33-.24.26-.91.89-.91 2.16 0 1.27.93 2.5 1.06 2.67.13.17 1.83 2.79 4.43 3.91.62.27 1.1.43 1.48.55.62.2 1.19.17 1.63.1.5-.07 1.54-.63 1.76-1.24.22-.61.22-1.13.15-1.24-.07-.1-.26-.16-.52-.26z" />
                 </svg>
 
-                <span className="relative font-semibold">
-                  {activeTab === "jual" && "💸 Jual Laptop Sekarang"}
-                  {activeTab === "lelang" && "🏢 Lelang Aset Kantor"}
-                  {activeTab === "sewa" && "💻 Sewa Laptop Sekarang"}
+                <span className="relative font-semibold inline-flex items-center gap-1.5">
+                  {activeTab === "jual" && <><Banknote className="w-4 h-4" aria-hidden="true" /> Jual Laptop Sekarang</>}
+                  {activeTab === "lelang" && <><Building2 className="w-4 h-4" aria-hidden="true" /> Lelang Aset Kantor</>}
+                  {activeTab === "sewa" && <><Laptop className="w-4 h-4" aria-hidden="true" /> Sewa Laptop Sekarang</>}
                 </span>
 
                 <svg
@@ -226,8 +227,8 @@ export default function JualBeli() {
 
             {/* Contact Info with Icon */}
             <div className="flex items-center justify-center gap-2 mt-3">
-              <div className="h-3 w-px bg-gray-300"></div>
-              <p className="text-[11px] text-gray-400">
+              <div className="h-3 w-px bg-slate-300"></div>
+              <p className="text-[11px] text-slate-400">
                 Atau hubungi langsung:
               </p>
               <a
@@ -238,7 +239,7 @@ export default function JualBeli() {
               >
                 +62 852-1064-7047
               </a>
-              <div className="h-3 w-px bg-gray-300"></div>
+              <div className="h-3 w-px bg-slate-300"></div>
             </div>
           </div>
 
@@ -251,7 +252,7 @@ export default function JualBeli() {
             <div className="relative">
               {/* Decorative Title for Gallery */}
               <div className="text-center mb-6">
-                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">
+                <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">
                   Galeri Produk
                 </h3>
                 <div className="flex justify-center gap-1 mt-1">
@@ -272,7 +273,7 @@ export default function JualBeli() {
               {[...Array(3)].map((_, i) => (
                 <div
                   key={i}
-                  className="w-1 h-1 rounded-full bg-gradient-to-r from-blue-300 to-indigo-300 opacity-40"
+                  className="w-1 h-1 rounded-full bg-blue-300 opacity-40"
                   style={{ animationDelay: `${i * 0.2}s` }}
                 />
               ))}

@@ -2,14 +2,15 @@ import React from 'react';
 import { useFunnelContext } from '../../context/FunnelContext';
 import { useProducts } from '../../hooks/useProducts';
 import ProgressBar from './ProgressBar';
+import { Briefcase, GraduationCap, Gamepad2, Palette, Feather, Pointer } from 'lucide-react';
 
 const INTERESTS = [
-  { id: "kantor", label: "Kantor", icon: "👨‍💼", tag: "kantor" },
-  { id: "sekolah", label: "Sekolah/Kuliah", icon: "🎓", tag: "sekolah" },
-  { id: "gaming", label: "Gaming", icon: "🎮", tag: "gaming" },
-  { id: "desain", label: "Desain Grafis", icon: "🎨", tag: "desain-grafis" },
-  { id: "tipis", label: "Tipis & Ringan", icon: "🪶", tag: "tipis-ringan" },
-  { id: "touch", label: "Touchscreen", icon: "👆", tag: "touchscreen" }
+  { id: "kantor", label: "Kantor", icon: Briefcase, tag: "kantor" },
+  { id: "sekolah", label: "Sekolah/Kuliah", icon: GraduationCap, tag: "sekolah" },
+  { id: "gaming", label: "Gaming", icon: Gamepad2, tag: "gaming" },
+  { id: "desain", label: "Desain Grafis", icon: Palette, tag: "desain-grafis" },
+  { id: "tipis", label: "Tipis & Ringan", icon: Feather, tag: "tipis-ringan" },
+  { id: "touch", label: "Touchscreen", icon: Pointer, tag: "touchscreen" }
 ];
 
 function PanelInterest() {
@@ -43,7 +44,7 @@ function PanelInterest() {
           return (
             <article
               key={interest.id}
-              className={`big-button flex flex-col items-center gap-3.5 p-5 rounded-2xl bg-white border-2 transition-all cursor-pointer text-center relative overflow-hidden opacity-0 scale-90 animate-[zoomOut_0.5s_forwards] hover:border-[#1e90ff] hover:-translate-y-1 hover:shadow-lg ${isSelected ? 'border-[#1e90ff] shadow-md' : 'border-[#a3c5ff]'}`}
+              className={`big-button card-3d flex flex-col items-center gap-3.5 p-5 cursor-pointer text-center relative overflow-hidden opacity-0 scale-90 animate-[zoomOut_0.5s_forwards] hover:border-blue-400 ${isSelected ? 'border-blue-500' : ''}`}
               style={{ animationDelay: `${idx * 0.05}s` }}
               onClick={() => handleInterestSelect(interest)}
               role="button"
@@ -56,11 +57,11 @@ function PanelInterest() {
                 }
               }}
             >
-              <div className="icon w-[60px] h-[60px] rounded-xl grid place-items-center text-[28px] bg-[#1e90ff]/20 text-[#1e90ff] border border-[#1e90ff]/40">
-                {interest.icon}
+              <div className="icon w-[60px] h-[60px] rounded-xl grid place-items-center bg-blue-50 text-blue-600 border border-blue-100">
+                <interest.icon className="w-7 h-7" aria-hidden="true" />
               </div>
-              <div className="title font-bold text-lg">{interest.label}</div>
-              <div className="desc text-sm text-gray-600">Untuk keperluan {interest.label}</div>
+              <div className="title font-bold text-lg text-slate-900">{interest.label}</div>
+              <div className="desc text-sm text-slate-500">Untuk keperluan {interest.label}</div>
             </article>
           );
         })}

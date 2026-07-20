@@ -1,12 +1,14 @@
+import Reveal from "./ui/Reveal";
+
 export default function Location() {
   return (
-    <section className="px-4 sm:px-6 py-10 md:py-12 bg-gray-50 text-center">
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-blue-900 mb-6 md:mb-10">
-        Lokasi Toko Offline
-      </h2>
+    <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-white text-center">
+      <Reveal as="h2" className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-10 md:mb-12">
+        Lokasi <span className="text-blue-600">Toko Offline</span>
+      </Reveal>
 
-      <div className="flex justify-center">
-        <div className="w-full max-w-4xl rounded-xl overflow-hidden shadow-md">
+      <Reveal delay={0.1} className="flex justify-center">
+        <div className="w-full max-w-4xl rounded-2xl overflow-hidden border border-slate-200 shadow-soft">
           <iframe
             src="https://www.google.com/maps?q=Solit%2003%20Depok%20Sawangan&output=embed"
             width="100%"
@@ -18,7 +20,7 @@ export default function Location() {
             className="w-full"
           ></iframe>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

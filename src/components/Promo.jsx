@@ -1,24 +1,24 @@
 import { useState, useEffect, useRef } from "react";
 import { Image } from "lucide-react";
-import promo1 from "../assets/promo11.jpeg";
-import promo2 from "../assets/promo22.jpeg";
-import promo3 from "../assets/promo33.jpeg";
-import promo4 from "../assets/promo44.jpeg";
-import promo5 from "../assets/promo55.jpeg";
-import promo6 from "../assets/promo66.jpeg";
+
+// Ambil semua gambar dari folder assets/laptop secara otomatis
+const laptopImages = import.meta.glob("../assets/laptop/*.{png,jpg,jpeg,webp}", {
+  eager: true,
+  import: "default",
+});
+
+const showcases = Object.entries(laptopImages)
+  // Urutkan berdasarkan angka pada nama file (1.png, 2.png, ... 10.png)
+  .sort(([a], [b]) => {
+    const na = parseInt(a.match(/(\d+)\.\w+$/)?.[1] ?? 0, 10);
+    const nb = parseInt(b.match(/(\d+)\.\w+$/)?.[1] ?? 0, 10);
+    return na - nb;
+  })
+  .map(([, img]) => ({ img }));
 
 export default function Promo() {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
-
-  const showcases = [
-    { img: promo1, },
-    { img: promo2, },
-    { img: promo3, },
-    { img: promo4, },
-    { img: promo5, },
-    { img: promo6, },
-  ];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -44,27 +44,23 @@ export default function Promo() {
   return (
     <section
       ref={sectionRef}
-      className="px-4 sm:px-6 lg:px-8 py-10 md:py-12 bg-white"
+      className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-slate-50"
     >
-      {/* Title - Teks diperbesar */}
-      <div className="text-center mb-8 md:mb-10">
-        <div className="inline-flex items-center gap-1.5 bg-gray-100 rounded-full px-3 py-1 mb-3">
-          <Image className="w-3 h-3 text-gray-500" /> {/* Ikon lebih besar */}
-          <span className="text-[11px] sm:text-xs text-gray-600 font-medium tracking-wide">
-            KOLEKSI POSTER LAPTOP
-          </span>
-        </div>
+      {/* Title */}
+      <div className="text-center mb-12 md:mb-16">
+        <span className="eyebrow">
+          <Image className="w-3.5 h-3.5" />
+          KOLEKSI POSTER LAPTOP
+        </span>
 
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-light tracking-tight text-gray-900">
-          Showcase <span className="font-semibold text-gray-900">Laptop</span>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mt-5">
+          Showcase <span className="text-blue-600">Laptop</span>
         </h2>
 
-        <p className="text-sm sm:text-base text-gray-500 mt-3 max-w-lg mx-auto">
+        <p className="text-sm md:text-base text-slate-500 mt-4 max-w-2xl mx-auto">
           Beberapa koleksi laptop pilihan dari Solit03 dengan desain modern,
           performa terbaik, dan kualitas yang siap menemani aktivitas harianmu.
         </p>
-
-        <div className="w-12 h-0.5 bg-gray-300 mx-auto mt-3 rounded-full" /> {/* Garis lebih lebar */}
       </div>
 
       {/* Grid */}
@@ -81,7 +77,7 @@ export default function Promo() {
             style={{ transitionDelay: `${index * 80}ms` }}
           >
             {/* Image */}
-            <div className="relative rounded-lg overflow-hidden bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+            <div className="relative rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-soft-sm hover:shadow-soft transition-all duration-300">
               <img
                 src={item.img}
                 alt={item.title}
@@ -90,11 +86,11 @@ export default function Promo() {
               />
 
               {/* Overlay */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300" />
+              <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/10 transition-all duration-300" />
             </div>
 
-            {/* Title - lebih besar */}
-            <p className="text-center text-sm sm:text-base font-medium text-gray-500 mt-2 group-hover:text-gray-900 transition-colors">
+            {/* Title */}
+            <p className="text-center text-sm sm:text-base font-medium text-slate-500 mt-2 group-hover:text-slate-900 transition-colors">
               {item.title}
             </p>
           </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { useFunnelContext } from '../../context/FunnelContext';
 import { useProducts } from '../../hooks/useProducts';
 import ProgressBar from './ProgressBar';
+import { Wallet } from 'lucide-react';
 
 const PRICE_RANGES = [
   { id: "<=1", label: "≤ 1 Juta", min: 0, max: 1000000 },
@@ -44,7 +45,7 @@ function PanelPrice() {
           return (
             <article
               key={range.id}
-              className={`big-button flex flex-col items-center gap-3.5 p-5 rounded-2xl bg-white border-2 transition-all cursor-pointer text-center relative overflow-hidden opacity-0 scale-90 animate-[zoomOut_0.5s_forwards] hover:border-[#1e90ff] hover:-translate-y-1 hover:shadow-lg ${isSelected ? 'border-[#1e90ff] shadow-md' : 'border-[#a3c5ff]'}`}
+              className={`big-button card-3d flex flex-col items-center gap-3.5 p-5 cursor-pointer text-center relative overflow-hidden opacity-0 scale-90 animate-[zoomOut_0.5s_forwards] hover:border-blue-400 ${isSelected ? 'border-blue-500' : ''}`}
               style={{ animationDelay: `${idx * 0.05}s` }}
               onClick={() => handlePriceSelect(range)}
               role="button"
@@ -57,11 +58,11 @@ function PanelPrice() {
                 }
               }}
             >
-              <div className="icon w-[60px] h-[60px] rounded-xl grid place-items-center text-[28px] bg-[#1e90ff]/20 text-[#1e90ff] border border-[#1e90ff]/40">
-                💰
+              <div className="icon w-[60px] h-[60px] rounded-xl grid place-items-center bg-blue-50 text-blue-600 border border-blue-100">
+                <Wallet className="w-7 h-7" aria-hidden="true" />
               </div>
-              <div className="title font-bold text-lg">{range.label}</div>
-              <div className="desc text-sm text-gray-600">Kisaran harga {range.label}</div>
+              <div className="title font-bold text-lg text-slate-900">{range.label}</div>
+              <div className="desc text-sm text-slate-500">Kisaran harga {range.label}</div>
             </article>
           );
         })}

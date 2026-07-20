@@ -2,33 +2,33 @@
 /* Mulai dari :root sampai akhir */
 
 :root {
-    --bg: #e6f2ff;
-    --ink: #0a2540;
-    --muted: #4a5568;
-    --border: #a3c5ff;
+    --bg: #f8fafc;
+    --ink: #0f172a;
+    --muted: #64748b;
+    --border: #e2e8f0;
     --card: #ffffff;
-    --surface: #e1eeff;
-    --primary: #1e90ff;
-    --primary-600: #1870d0;
-    --accent: #00bfff;
+    --surface: #eff6ff;
+    --primary: #2563eb;
+    --primary-600: #1d4ed8;
+    --accent: #3b82f6;
     --warn: #ffa500;
     --danger: #ff4757;
     --success: #2ed573;
     --radius: 16px;
     --radius-lg: 20px;
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    --shadow-hover: 0 8px 20px rgba(30, 144, 255, 0.18);
-    --gradient-1: linear-gradient(135deg, #4da6ff 0%, #1e90ff 100%);
-    --gradient-2: linear-gradient(135deg, #33ccff 0%, #00bfff 100%);
+    --shadow: 0 2px 4px rgba(15, 23, 42, 0.04), 0 6px 16px rgba(15, 23, 42, 0.06);
+    --shadow-hover: 0 4px 8px rgba(15, 23, 42, 0.05), 0 16px 32px rgba(37, 99, 235, 0.14);
+    --gradient-1: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    --gradient-2: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
     --hero-bg-image: url('https://solit03.com/wp-content/uploads/2025/09/WhatsApp-Image-2025-09-10-at-00.00.18_362f612d.jpg');
-    --hero-overlay: linear-gradient(180deg, rgba(10, 37, 64, 0.65) 0%, rgba(10, 37, 64, 0.45) 60%, rgba(10, 37, 64, 0.35) 100%);
+    --hero-overlay: linear-gradient(180deg, rgba(15, 23, 42, 0.7) 0%, rgba(15, 23, 42, 0.5) 60%, rgba(15, 23, 42, 0.4) 100%);
     --container-max: min(1800px, 96vw);
     --page-pad: clamp(16px, 2vw, 30px);
     --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --vh: 1vh;
     --topbar-h: 60px;
-    --grad-blue-a: #4da6ff;
-    --grad-blue-b: #1e90ff;
+    --grad-blue-a: #3b82f6;
+    --grad-blue-b: #2563eb;
     --grad-gold-a: #FFD700;
     --grad-gold-b: #FFA500;
     --grad-pink-a: #FF416C;
@@ -49,7 +49,8 @@ body {
 body {
     background: var(--bg);
     color: var(--ink);
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    letter-spacing: -0.005em;
 }
 
 #solit03-funnel,
@@ -157,14 +158,14 @@ body {
     display: flex;
     align-items: center;
     gap: 6px;
-    box-shadow: 0 2px 6px rgba(30, 144, 255, 0.1);
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
     transition: all 0.3s;
     flex-shrink: 0;
 }
 
 .chip:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(30, 144, 255, 0.2);
+    box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
 }
 
 .chip-icon {
@@ -184,7 +185,7 @@ body {
     color: #fff;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(30, 144, 255, 0.3);
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
     transition: transform 0.2s;
     font-size: 14px;
     flex-shrink: 0;
@@ -213,7 +214,7 @@ body {
 
 .btn:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.25);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
 }
 
 .hide {
@@ -316,7 +317,7 @@ body {
 }
 
 .hero-list .star-icon {
-    color: #FFD700;
+    color: #60a5fa;
     margin-right: 12px;
     font-size: clamp(18px, 1.4vw, 22px);
 }
@@ -540,9 +541,9 @@ body {
     display: grid;
     place-items: center;
     font-size: 28px;
-    background: rgba(30, 144, 255, 0.12);
+    background: rgba(37, 99, 235, 0.12);
     color: var(--primary);
-    border: 1px solid rgba(30, 144, 255, 0.25);
+    border: 1px solid rgba(37, 99, 235, 0.25);
 }
 
 .big-button {
@@ -774,9 +775,9 @@ body {
 }
 
 .stock-badge.backorder {
-    background: #eef2ff;
-    border-color: #c7d2fe;
-    color: #3730a3;
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1e40af;
 }
 
 .bestseller-card {
@@ -800,7 +801,7 @@ body {
 .default-card {
     background: linear-gradient(white, white) padding-box, linear-gradient(135deg, #4da6ff, #1e90ff) border-box;
     border: 2px solid transparent;
-    box-shadow: 0 8px 20px rgba(30, 144, 255, 0.2);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
 }
 
 .view-toggle {

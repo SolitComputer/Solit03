@@ -1,6 +1,8 @@
 // components/katalog/ProductCard.jsx
 import React, { useRef, useEffect, useState } from 'react';
+import Tilt from 'react-parallax-tilt';
 import { fmtIDR } from '../../services/api';
+import { Crown, Flame, Sparkles } from 'lucide-react';
 
 function ProductCard({ product, viewMode, mode, stock }) {
     const imgRef = useRef(null);
@@ -25,7 +27,7 @@ function ProductCard({ product, viewMode, mode, stock }) {
     const soldCount = showBestUI ? getSoldCount() : null;
 
     const getStockBadge = () => {
-        if (!stock) return <span className="text-[10px] text-gray-400">Tersedia</span>;
+        if (!stock) return <span className="text-[10px] text-slate-400">Tersedia</span>;
         if (stock.in_stock === false || stock.stock_status === 'outofstock') {
             return <span className="text-[10px] text-red-500">Habis</span>;
         }
@@ -36,17 +38,17 @@ function ProductCard({ product, viewMode, mode, stock }) {
 
         if (Number.isFinite(qty)) {
             const low = qty <= 5;
-            return <span className={`text-[10px] ${low ? 'text-orange-500' : 'text-green-600'}`}>Sisa {qty}</span>;
+            return <span className={`text-[10px] ${low ? 'text-amber-500' : 'text-green-600'}`}>Sisa {qty}</span>;
         }
-        return <span className="text-[10px] text-gray-400">Tersedia</span>;
+        return <span className="text-[10px] text-slate-400">Tersedia</span>;
     };
 
     const getCardClassName = () => {
-        let baseClass = "group relative bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden";
-        if (mode === 'bestseller') return `${baseClass} border border-yellow-200`;
-        if (mode === 'promo') return `${baseClass} border border-pink-200`;
-        if (mode === 'new') return `${baseClass} border border-green-200`;
-        return `${baseClass} border border-gray-100`;
+        let baseClass = "group relative card-3d overflow-hidden";
+        if (mode === 'bestseller') return `${baseClass} border-amber-200`;
+        if (mode === 'promo') return `${baseClass} border-red-200`;
+        if (mode === 'new') return `${baseClass} border-emerald-200`;
+        return baseClass;
     };
 
     const buildProductUrl = () => {
@@ -74,22 +76,22 @@ function ProductCard({ product, viewMode, mode, stock }) {
         <>
             {showBestUI && (
                 <div className="absolute top-1.5 left-1.5 z-10">
-                    <span className="inline-flex items-center gap-0.5 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
-                        👑 Best
+                    <span className="inline-flex items-center gap-0.5 bg-amber-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-soft-sm">
+                        <Crown className="w-2.5 h-2.5" aria-hidden="true" /> Best
                     </span>
                 </div>
             )}
             {showDiscountUI && (
                 <div className="absolute top-1.5 right-1.5 z-10">
-                    <span className="inline-flex items-center gap-0.5 bg-gradient-to-r from-pink-500 to-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
-                        🔥 -{discount}%
+                    <span className="inline-flex items-center gap-0.5 bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-soft-sm">
+                        <Flame className="w-2.5 h-2.5" aria-hidden="true" /> -{discount}%
                     </span>
                 </div>
             )}
             {showNewUI && (
                 <div className="absolute bottom-1.5 left-1.5 z-10">
-                    <span className="inline-flex items-center gap-0.5 bg-gradient-to-r from-emerald-500 to-green-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
-                        🆕 New
+                    <span className="inline-flex items-center gap-0.5 bg-emerald-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-soft-sm">
+                        <Sparkles className="w-2.5 h-2.5" aria-hidden="true" /> New
                     </span>
                 </div>
             )}
@@ -102,8 +104,8 @@ function ProductCard({ product, viewMode, mode, stock }) {
             <article className={getCardClassName()}>
                 <div className="flex gap-2.5 p-2.5">
                     {/* Image */}
-                    <div className="relative w-16 h-16 flex-shrink-0 bg-gray-50 rounded-lg overflow-hidden">
-                        {!imageLoaded && <div className="absolute inset-0 bg-gray-100 animate-pulse"></div>}
+                    <div className="relative w-16 h-16 flex-shrink-0 bg-slate-50 rounded-lg overflow-hidden">
+                        {!imageLoaded && <div className="absolute inset-0 bg-slate-100 animate-pulse"></div>}
                         <img
                             ref={imgRef}
                             className={`w-full h-full object-cover transition-opacity duration-200 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
@@ -117,16 +119,16 @@ function ProductCard({ product, viewMode, mode, stock }) {
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
-                        <h4 className="text-xs font-semibold text-gray-800 line-clamp-2 mb-0.5">
+                        <h4 className="text-xs font-semibold text-slate-800 line-clamp-2 mb-0.5">
                             {product.name}
                         </h4>
                         {showBestUI && soldCount && (
-                            <p className="text-[9px] text-gray-400 mb-0.5">Terjual {soldCount}</p>
+                            <p className="text-[9px] text-slate-400 mb-0.5">Terjual {soldCount}</p>
                         )}
                         <div className="flex items-center gap-1.5 flex-wrap">
-                            <span className="text-xs font-bold text-gray-900">{fmtIDR(nowPrice, minor)}</span>
+                            <span className="text-xs font-bold text-slate-900">{fmtIDR(nowPrice, minor)}</span>
                             {showDiscountUI && (
-                                <span className="text-[9px] line-through text-gray-400">{fmtIDR(regularPrice, minor)}</span>
+                                <span className="text-[9px] line-through text-slate-400">{fmtIDR(regularPrice, minor)}</span>
                             )}
                             {getStockBadge()}
                         </div>
@@ -138,11 +140,11 @@ function ProductCard({ product, viewMode, mode, stock }) {
     }
 
     // GRID VIEW (Compact)
-    return (
+    const gridCard = (
         <article className={getCardClassName()}>
             {/* Image Container */}
-            <div className="relative bg-gray-50 aspect-square overflow-hidden">
-                {!imageLoaded && <div className="absolute inset-0 bg-gray-100 animate-pulse"></div>}
+            <div className="relative bg-slate-50 aspect-square overflow-hidden">
+                {!imageLoaded && <div className="absolute inset-0 bg-slate-100 animate-pulse"></div>}
                 <img
                     ref={imgRef}
                     className={`w-full h-full object-cover transition-all duration-300 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
@@ -156,19 +158,19 @@ function ProductCard({ product, viewMode, mode, stock }) {
 
             {/* Content - Compact */}
             <div className="p-2.5">
-                <h4 className="text-xs font-semibold text-gray-800 line-clamp-2 min-h-[2rem] mb-0.5">
+                <h4 className="text-xs font-semibold text-slate-800 line-clamp-2 min-h-[2rem] mb-0.5">
                     {product.name}
                 </h4>
 
                 {showBestUI && soldCount && (
-                    <p className="text-[9px] text-gray-400 mb-1">Terjual {soldCount}</p>
+                    <p className="text-[9px] text-slate-400 mb-1">Terjual {soldCount}</p>
                 )}
 
                 <div className="flex items-center justify-between gap-1.5 mt-1.5">
                     <div>
-                        <span className="text-xs font-bold text-gray-900">{fmtIDR(nowPrice, minor)}</span>
+                        <span className="text-xs font-bold text-slate-900">{fmtIDR(nowPrice, minor)}</span>
                         {showDiscountUI && (
-                            <span className="text-[9px] line-through text-gray-400 ml-1">{fmtIDR(regularPrice, minor)}</span>
+                            <span className="text-[9px] line-through text-slate-400 ml-1">{fmtIDR(regularPrice, minor)}</span>
                         )}
                     </div>
                     {getStockBadge()}
@@ -177,6 +179,22 @@ function ProductCard({ product, viewMode, mode, stock }) {
 
             <a className="absolute inset-0 z-10" href={buildProductUrl()} aria-label={`Buka ${product.name}`} />
         </article>
+    );
+
+    // Tilt halus hanya di desktop (mobile: tanpa tilt agar ringan & scroll mulus)
+    if (isMobile) return gridCard;
+
+    return (
+        <Tilt
+            tiltMaxAngleX={5}
+            tiltMaxAngleY={5}
+            scale={1.03}
+            transitionSpeed={800}
+            gyroscope={false}
+            className="h-full [transform-style:preserve-3d]"
+        >
+            {gridCard}
+        </Tilt>
     );
 }
 

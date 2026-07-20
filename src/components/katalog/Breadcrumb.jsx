@@ -1,4 +1,5 @@
 import React from 'react';
+import { MapPin } from 'lucide-react';
 
 function Breadcrumb({ path, currentPanel, filters }) {
   const getPriceRangeLabel = () => {
@@ -27,7 +28,7 @@ function Breadcrumb({ path, currentPanel, filters }) {
     <div className="crumbs" aria-label="Breadcrumb">
       {displayPath.map((crumb, index) => (
         <span key={index} className="chip" {...(index === displayPath.length - 1 ? { 'aria-current': 'page' } : {})}>
-          <span className="chip-icon">📍</span> {crumb.label}
+          <span className="chip-icon inline-flex"><MapPin className="w-4 h-4" aria-hidden="true" /></span> {crumb.label}
         </span>
       ))}
     </div>

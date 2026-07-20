@@ -8,6 +8,20 @@ export default defineConfig({
     tailwindcss(),
   ],
 
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Library besar dipisah biar bisa di-cache & tidak nge-block halaman
+          "react-vendor": ["react", "react-dom", "react-router-dom"],
+          "motion": ["framer-motion", "react-parallax-tilt", "aos", "lenis"],
+          "supabase": ["@supabase/supabase-js"],
+          "icons": ["lucide-react", "simple-icons", "react-simple-icons"],
+        },
+      },
+    },
+  },
+
   server: {
     proxy: {
       "/wp-json": {

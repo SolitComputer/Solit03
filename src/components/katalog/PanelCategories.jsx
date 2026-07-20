@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useFunnelContext } from '../../context/FunnelContext';
 import ProgressBar from './ProgressBar';
 import { CategoriesGridSkeleton } from './LoadingSkeleton';
+import { Monitor, Presentation, Package, Magnet } from 'lucide-react';
 
 const CATEGORIES = [
-    { id: "pc", label: "PC", icon: "🖥️", type: "tag", tags: ["pc"] },
-    { id: "monitor", label: "Monitor", icon: "🖲️", type: "tag", tags: ["monitor"] },
-    { id: "proyektor", label: "Proyektor", icon: "📽️", type: "tag", tags: ["proyektor"] },
-    { id: "dus", label: "Dus", icon: "📦", type: "tag", tags: ["dus"] },
-    { id: "bracket", label: "Bracket Monitor", icon: "🧲", type: "tag", tags: ["bracket-monitor"] },
+    { id: "pc", label: "PC", icon: Monitor, type: "tag", tags: ["pc"] },
+    { id: "monitor", label: "Monitor", icon: Monitor, type: "tag", tags: ["monitor"] },
+    { id: "proyektor", label: "Proyektor", icon: Presentation, type: "tag", tags: ["proyektor"] },
+    { id: "dus", label: "Dus", icon: Package, type: "tag", tags: ["dus"] },
+    { id: "bracket", label: "Bracket Monitor", icon: Magnet, type: "tag", tags: ["bracket-monitor"] },
 ];
 
 function PanelCategories() {
@@ -64,14 +65,14 @@ function PanelCategories() {
                 {CATEGORIES.map((category) => (
                     <div
                         key={category.id}
-                        className="flex flex-col items-center gap-3.5 p-5 rounded-2xl bg-white border-2 border-[#a3c5ff] hover:border-[#1e90ff] hover:-translate-y-1 hover:shadow-lg transition-all cursor-pointer text-center"
+                        className="card-3d flex flex-col items-center gap-3.5 p-5 hover:border-blue-400 cursor-pointer text-center"
                         onClick={() => handleCategoryClick(category)}
                     >
-                        <div className="w-[60px] h-[60px] rounded-xl grid place-items-center text-[28px] bg-blue-100 text-[#1e90ff] border border-blue-200">
-                            {category.icon}
+                        <div className="w-[60px] h-[60px] rounded-xl grid place-items-center bg-blue-50 text-blue-600 border border-blue-100">
+                            <category.icon className="w-7 h-7" aria-hidden="true" />
                         </div>
-                        <div className="font-bold text-lg">{category.label}</div>
-                        <div className="text-sm text-gray-500">
+                        <div className="font-bold text-lg text-slate-900">{category.label}</div>
+                        <div className="text-sm text-slate-500">
                             Tag: {category.tags.join(', ')}
                         </div>
                     </div>

@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import {
   Plus, Search, Edit, Trash2, Tags, RefreshCw,
-  ChevronLeft, ChevronRight, X, ChevronDown, Save, AlertTriangle
+  ChevronLeft, ChevronRight, X, ChevronDown, Save, AlertTriangle,
+  Tag, Eye, CalendarDays
 } from "lucide-react";
 import { getBrands, createBrand, updateBrand, deleteBrand } from "../services/AdminBrands";
 import { useToast } from "../context/ToastContext";
@@ -113,7 +114,7 @@ function BrandModal({ isOpen, onClose, onSubmit, title, initialData, isEditing }
               className={`w-full bg-gray-50 border-2 rounded-xl text-sm px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200
                 ${errors.name ? "border-red-400 focus:ring-red-500" : "border-gray-200 hover:border-gray-300"}`}
             />
-            {errors.name && <p className="text-xs text-red-500 flex items-center gap-1">⚠️ {errors.name}</p>}
+            {errors.name && <p className="text-xs text-red-500 flex items-center gap-1"><AlertTriangle className="w-3.5 h-3.5" aria-hidden="true" /> {errors.name}</p>}
           </div>
 
           {/* Slug */}
@@ -328,13 +329,13 @@ export default function Brands() {
       {/* Stats Cards */}
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: "Total Brand", value: brands.length, icon: "🏷️", gradient: "from-blue-500 to-blue-600" },
-          { label: "Ditampilkan", value: paginated.length, icon: "👁️", gradient: "from-gray-500 to-gray-600" },
-          { label: "Filter Aktif", value: search ? "Ya" : "Tidak", icon: "🔍", gradient: "from-purple-500 to-purple-600" },
-        ].map(({ label, value, icon, gradient }) => (
+          { label: "Total Brand", value: brands.length, icon: Tag, gradient: "from-blue-500 to-blue-600" },
+          { label: "Ditampilkan", value: paginated.length, icon: Eye, gradient: "from-gray-500 to-gray-600" },
+          { label: "Filter Aktif", value: search ? "Ya" : "Tidak", icon: Search, gradient: "from-purple-500 to-purple-600" },
+        ].map(({ label, value, icon: Icon, gradient }) => (
           <div key={label} className="bg-white rounded-xl shadow-md p-5 hover:shadow-lg transition-shadow duration-200 border border-gray-100">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-2xl">{icon}</span>
+              <Icon className="w-6 h-6 text-gray-600" aria-hidden="true" />
               <span className={`text-xs font-semibold px-2 py-1 rounded-full bg-gradient-to-r ${gradient} text-white`}>
                 {typeof value === 'number' ? `${value} item` : value}
               </span>
@@ -361,7 +362,7 @@ export default function Brands() {
           </div>
           <div className="flex gap-2">
             {[
-              { val: sortBy, set: setSortBy, opts: [["newest","📅 Terbaru"],["oldest","📅 Terlama"],["name_asc","🔤 A-Z"],["name_desc","🔤 Z-A"]] },
+              { val: sortBy, set: setSortBy, opts: [["newest","Terbaru"],["oldest","Terlama"],["name_asc","A-Z"],["name_desc","Z-A"]] },
               { val: perPage, set: v => { setPerPage(Number(v)); setPage(1); }, opts: [[10,"10 per halaman"],[25,"25 per halaman"],[50,"50 per halaman"]] },
             ].map((s, i) => (
               <div key={i} className="relative">
@@ -425,7 +426,7 @@ export default function Brands() {
                   </div>
                   {brand.created_at && (
                     <p className="text-xs text-gray-400 hidden md:block flex-shrink-0">
-                      🗓️ {new Date(brand.created_at).toLocaleDateString("id-ID", { day: 'numeric', month: 'short', year: 'numeric' })}
+                      <CalendarDays className="w-3.5 h-3.5 inline" aria-hidden="true" /> {new Date(brand.created_at).toLocaleDateString("id-ID", { day: 'numeric', month: 'short', year: 'numeric' })}
                     </p>
                   )}
                   <div className="flex gap-1 flex-shrink-0">

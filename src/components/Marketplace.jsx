@@ -1,27 +1,30 @@
 import shopeeImg from "../assets/shopee_solit.webp";
 import tokopediaImg from "../assets/tokopedia_solit.webp";
+import Reveal from "./ui/Reveal";
 
 export default function Marketplace() {
   return (
-    <section className="py-10 md:py-12 bg-white">
-      <div className="container mx-auto px-4 sm:px-6">
-        {/* Title - diperbesar */}
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 text-center tracking-tight mb-6 md:mb-10">
-          Marketplace Kami
-        </h2>
+    <section className="py-16 md:py-24 bg-slate-50">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Title */}
+        <Reveal as="h2" className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 text-center tracking-tight mb-10 md:mb-12">
+          Marketplace <span className="text-blue-600">Kami</span>
+        </Reveal>
 
         {/* Grid */}
         <div className="flex flex-col sm:flex-row justify-center items-stretch gap-5 md:gap-6 max-w-4xl mx-auto">
           {/* Shopee */}
-          <a
+          <Reveal
+            as="a"
+            delay={0.05}
             href="https://shopee.co.id/solit_03?entryPoint=ShopBySearch&searchKeyword=solit03"
             target="_blank"
             rel="noopener noreferrer"
-            className="group block flex-1 transition duration-300 hover:-translate-y-0.5"
+            className="group block flex-1"
           >
-            <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
-              <div className="p-2.5 pb-1 text-center">
-                <p className="text-base sm:text-lg font-medium text-gray-800">
+            <div className="card-3d overflow-hidden">
+              <div className="p-3 pb-1.5 text-center">
+                <p className="text-base sm:text-lg font-semibold text-slate-900">
                   Shopee
                 </p>
               </div>
@@ -34,18 +37,20 @@ export default function Marketplace() {
                 />
               </div>
             </div>
-          </a>
+          </Reveal>
 
           {/* Tokopedia */}
-          <a
+          <Reveal
+            as="a"
+            delay={0.15}
             href="https://www.tokopedia.com/solit03"
             target="_blank"
             rel="noopener noreferrer"
-            className="group block flex-1 transition duration-300 hover:-translate-y-0.5"
+            className="group block flex-1"
           >
-            <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
-              <div className="p-2.5 pb-1 text-center">
-                <p className="text-base sm:text-lg font-medium text-gray-800">
+            <div className="card-3d overflow-hidden">
+              <div className="p-3 pb-1.5 text-center">
+                <p className="text-base sm:text-lg font-semibold text-slate-900">
                   Tokopedia
                 </p>
               </div>
@@ -58,7 +63,7 @@ export default function Marketplace() {
                 />
               </div>
             </div>
-          </a>
+          </Reveal>
         </div>
       </div>
     </section>

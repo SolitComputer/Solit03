@@ -50,7 +50,7 @@ export default function Navbar() {
     const navLinks = [
         { name: "Beranda",     href: "/",             icon: <Home size={13} /> },
         { name: "Katalog",      href: "/katalog",        icon: <ShoppingBag size={13} /> },
-        { name: "Laptop Ready", href: "/katalog-laptop", icon: <Laptop size={13} /> },
+        // { name: "Laptop Ready", href: "/katalog-laptop", icon: <Laptop size={13} /> },
         { name: "Jual-Beli",   href: "/jual-beli",     icon: <Users size={13} /> },
         { name: "Tentang",     href: "/tentang",       icon: <Info size={13} /> },
         { name: "Sosial",      href: "/sosial-media",  icon: <Share2 size={13} /> },
@@ -67,8 +67,8 @@ export default function Navbar() {
                     transition-all duration-300 ease-in-out
                     ${showNavbar ? "translate-y-0" : "-translate-y-full"}
                     ${scrolled
-                        ? "bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm"
-                        : "bg-white/60 backdrop-blur-sm border-b border-gray-50"
+                        ? "bg-white/85 backdrop-blur-md border-b border-slate-200 shadow-soft-sm"
+                        : "bg-white/60 backdrop-blur-sm border-b border-transparent"
                     }
                 `}
             >
@@ -78,25 +78,25 @@ export default function Navbar() {
                         {/* Logo */}
                         <button onClick={() => handleNavigation("/")} className="group focus:outline-none">
                             <div className="flex items-center gap-2">
-                                <img src={logo} alt="Solit 03" className="w-10 h-10 rounded-full shadow-sm object-cover" />
-                                <h1 className="text-base md:text-lg font-semibold text-blue-900 tracking-tight">
+                                <img src={logo} alt="Solit 03" className="w-10 h-10 rounded-full shadow-soft-sm object-cover ring-1 ring-slate-200" />
+                                <h1 className="text-base md:text-lg font-semibold text-slate-900 tracking-tight">
                                     Solit<span className="text-blue-600">03</span>
                                 </h1>
                             </div>
                         </button>
 
                         {/* ✅ Desktop nav — text-xs, gap lebih kecil */}
-                        <ul className="hidden md:flex gap-1 text-gray-500 text-xs">
+                        <ul className="hidden md:flex gap-0.5 text-slate-500 text-xs">
                             {navLinks.map((item, i) => (
                                 <li key={i}>
                                     <button
                                         onClick={() => handleNavigation(item.href)}
                                         className={`
-                                            relative px-2.5 py-1.5 rounded-md transition-all duration-200
+                                            relative px-2.5 py-1.5 rounded-lg transition-all duration-200
                                             flex items-center gap-1
                                             ${location.pathname === item.href
-                                                ? "text-blue-700 bg-blue-50/80 font-medium"
-                                                : "text-gray-500 hover:text-blue-600 hover:bg-gray-50"
+                                                ? "text-blue-700 bg-blue-50 font-semibold"
+                                                : "text-slate-500 hover:text-blue-600 hover:bg-slate-50"
                                             }
                                         `}
                                     >
@@ -114,7 +114,7 @@ export default function Navbar() {
                         <div className="hidden md:block">
                             <button
                                 onClick={handleWhatsApp}
-                                className="group inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white text-xs px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+                                className="btn btn-primary text-xs px-4 py-2"
                             >
                                 <MessageCircle size={13} />
                                 <span>Hubungi</span>
@@ -137,9 +137,9 @@ export default function Navbar() {
                 {/* ✅ Mobile Menu — text-xs */}
                 <div
                     className={`
-                        md:hidden absolute w-full bg-white/95 backdrop-blur-md shadow-lg
+                        md:hidden absolute w-full bg-white/95 backdrop-blur-md shadow-soft-lg
                         transition-all duration-300 ease-in-out overflow-hidden
-                        ${menuOpen ? "max-h-[700px] opacity-100 border-t border-gray-100" : "max-h-0 opacity-0"}
+                        ${menuOpen ? "max-h-[700px] opacity-100 border-t border-slate-200" : "max-h-0 opacity-0"}
                     `}
                 >
                     <div className="px-4 py-2 space-y-0.5">
@@ -151,12 +151,12 @@ export default function Navbar() {
                                     w-full flex items-center gap-2 px-3 py-2 rounded-md
                                     text-xs transition-all duration-200
                                     ${location.pathname === item.href
-                                        ? "bg-blue-50 text-blue-700 font-medium"
-                                        : "text-gray-600 hover:bg-gray-50"
+                                        ? "bg-blue-50 text-blue-700 font-semibold"
+                                        : "text-slate-600 hover:bg-slate-50"
                                     }
                                 `}
                             >
-                                <span className={location.pathname === item.href ? "text-blue-600" : "text-gray-400"}>
+                                <span className={location.pathname === item.href ? "text-blue-600" : "text-slate-400"}>
                                     {item.icon}
                                 </span>
                                 {item.name}
@@ -171,10 +171,10 @@ export default function Navbar() {
                             </button>
                         ))}
 
-                        <div className="border-t border-gray-100 mt-2 pt-2">
+                        <div className="border-t border-slate-100 mt-2 pt-2">
                             <button
                                 onClick={handleWhatsApp}
-                                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white text-xs py-2 rounded-md transition-all duration-200 hover:shadow-md"
+                                className="btn btn-primary w-full text-xs py-2.5"
                             >
                                 <MessageCircle size={14} />
                                 WhatsApp

@@ -1,23 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import reinaldy from "../../assets/reinaldy.webp";
-import bangimron from "../../assets/bangimron.jpg";
-import nuralim from "../../assets/bangalim.jpg";
-import novita from "../../assets/owiiii.jpg";
-import rayhan from "../../assets/Raihan.jpg";
-import romadhon from "../../assets/bangsalam.jpg";
-import rafisalim from "../../assets/rafi.jpg";
-import yoga from "../../assets/masyoga.jpg";
-import yuna from "../../assets/kayuna.jpg";
-import ikmal from "../../assets/ikmall.jpg";
-import fauzan from "../../assets/fauzan.jpg";
-import fatur from "../../assets/tengkuu.jpg";
-import fikri from "../../assets/fikri.jpg";
-import dirga from "../../assets/dirga.jpg";
-import raesty from "../../assets/raesty.jpg";
-import jaelani from "../../assets/pamud.jpg";
-import mbafitri from "../../assets/mbafitri.jpg";
-import dicky from "../../assets/bangdiki.jpg";
-import revin from "../../assets/bangrevin.jpg";
+import bangimron from "../../assets/bangimron.webp";
+import nuralim from "../../assets/bangalim.webp";
+import novita from "../../assets/owiiii.webp";
+import rayhan from "../../assets/Raihan.webp";
+import romadhon from "../../assets/bangsalam.webp";
+import rafisalim from "../../assets/rafi.webp";
+import yoga from "../../assets/masyoga.webp";
+import yuna from "../../assets/kayuna.webp";
+import ikmal from "../../assets/ikmall.webp";
+import fauzan from "../../assets/fauzan.webp";
+import fatur from "../../assets/tengkuu.webp";
+import fikri from "../../assets/fikri.webp";
+import dirga from "../../assets/dirga.webp";
+import raesty from "../../assets/raesty.webp";
+import jaelani from "../../assets/pamud.webp";
+import mbafitri from "../../assets/mbafitri.webp";
+import dicky from "../../assets/bangdiki.webp";
+import revin from "../../assets/bangrevin.webp";
 
 
 export default function TeamSlider() {
@@ -45,23 +46,69 @@ export default function TeamSlider() {
     { name: "Dicky Pratama Setiawan", role: "Sotech", img: dicky },
   ];
 
-  const prev = () => {
+  const prev = useCallback(() => {
     setIndex((prev) => (prev - 1 + members.length) % members.length);
+  }, [members.length]);
+
+  const next = useCallback(() => {
+    setIndex((prev) => (prev + 1) % members.length);
+  }, [members.length]);
+
+  // ========== TOUCH / SWIPE ==========
+  const touchRef = useRef({ startX: 0, startY: 0, swiping: false });
+
+  const onTouchStart = (e) => {
+    const t = e.touches[0];
+    touchRef.current = { startX: t.clientX, startY: t.clientY, swiping: true };
+    paused.current = true; // pause auto-slide saat touch
   };
 
-  const next = () => {
-    setIndex((prev) => (prev + 1) % members.length);
+  const onTouchEnd = (e) => {
+    if (!touchRef.current.swiping) return;
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+    const diffX = endX - touchRef.current.startX;
+    const diffY = endY - touchRef.current.startY;
+
+    // Only swipe if horizontal movement > vertical (prevent conflict with page scroll)
+    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX < 0) next();
+      else prev();
+    }
+
+    touchRef.current.swiping = false;
+    // Resume auto-slide setelah 2 detik
+    setTimeout(() => { paused.current = false; }, 2000);
   };
+
+  // Auto-geser tiap 3.5 detik — berhenti saat kursor di atas slider
+  const paused = useRef(false);
+  useEffect(() => {
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+    const id = setInterval(() => {
+      if (!paused.current) {
+        setIndex((prev) => (prev + 1) % members.length);
+      }
+    }, 3500);
+    return () => clearInterval(id);
+  }, [members.length]);
 
   return (
-    <section className="text-center overflow-hidden">
+    <section
+      className="text-center overflow-hidden"
+      onMouseEnter={() => (paused.current = true)}
+      onMouseLeave={() => (paused.current = false)}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
       <h2 className="text-2xl md:text-3xl font-bold mb-16">
         Team Solit
       </h2>
 
-      {/* 3D */}
+      {/* ===== DESKTOP: 3D Carousel (md+) ===== */}
       <div
-        className="relative flex items-center justify-center"
+        className="relative hidden md:flex items-center justify-center"
         style={{ perspective: "1400px" }}
       >
         <div className="relative w-full max-w-6xl h-[420px] flex items-center justify-center">
@@ -100,19 +147,22 @@ export default function TeamSlider() {
                 }}
               >
                 <div
-                  className={`bg-white rounded-2xl shadow-2xl p-4 w-64 md:w-72 transition ${!isCenter ? "cursor-pointer" : ""
+                  className={`card-3d p-4 w-64 md:w-72 ${!isCenter ? "cursor-pointer" : ""
                     }`}
                 >
                   <img
                     src={member.img}
+                    alt={member.name}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-72 object-cover rounded-xl"
                   />
 
-                  <h3 className="mt-4 font-bold text-lg">
+                  <h3 className="mt-4 font-bold text-lg text-slate-900">
                     {member.name}
                   </h3>
 
-                  <p className="text-gray-500 text-sm">
+                  <p className="text-slate-500 text-sm">
                     {member.role}
                   </p>
                 </div>
@@ -122,21 +172,70 @@ export default function TeamSlider() {
         </div>
       </div>
 
-      {/* BUTTON */}
-      <div className="flex justify-center gap-4 mt-12">
-        <button
-          onClick={prev}
-          className="px-5 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
-        >
-          ←
-        </button>
+      {/* ===== MOBILE: Swipeable single card (< md) ===== */}
+      <div className="md:hidden relative px-4">
+        <div className="relative flex items-center justify-center min-h-[420px]">
+          {members.map((member, i) => {
+            let offset = i - index;
+            if (offset > members.length / 2) offset -= members.length;
+            if (offset < -members.length / 2) offset += members.length;
 
-        <button
-          onClick={next}
-          className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-        >
-          →
-        </button>
+            // Only render current + adjacent for perf
+            if (Math.abs(offset) > 1) return null;
+
+            const isCenter = offset === 0;
+
+            return (
+              <div
+                key={i}
+                className="absolute w-full max-w-[280px] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                style={{
+                  transform: `translateX(${offset * 110}%) scale(${isCenter ? 1 : 0.85})`,
+                  opacity: isCenter ? 1 : 0.3,
+                  zIndex: isCenter ? 10 : 5,
+                  pointerEvents: isCenter ? "auto" : "none",
+                }}
+              >
+                <div className="card-3d p-4">
+                  <img
+                    src={member.img}
+                    alt={member.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-72 object-cover rounded-xl"
+                  />
+                  <h3 className="mt-4 font-bold text-lg text-slate-900">
+                    {member.name}
+                  </h3>
+                  <p className="text-slate-500 text-sm">
+                    {member.role}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Dot indicators — mobile only */}
+        <div className="flex justify-center gap-1.5 mt-4">
+          {members.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIndex(i)}
+              aria-label={`Go to member ${i + 1}`}
+              className={`rounded-full transition-all duration-300 ${
+                i === index
+                  ? "w-6 h-2 bg-blue-500"
+                  : "w-2 h-2 bg-slate-300 hover:bg-slate-400"
+              }`}
+            />
+          ))}
+        </div>
+
+        {/* Swipe hint — shows briefly */}
+        <p className="text-[10px] text-slate-400 mt-3 animate-pulse">
+          ← Geser untuk lihat tim →
+        </p>
       </div>
     </section>
   );

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "../services/supabase";
 import { 
   MessageCircle, 
@@ -79,13 +80,13 @@ export default function ChatBot() {
         {
           id: 1,
           type: "bot",
-          text: "Halo! 👋 Saya Asisten Virtual Solit 03. Ada yang bisa saya bantu?",
+          text: "Halo! Saya Asisten Virtual Solit 03. Ada yang bisa saya bantu?",
           timestamp: new Date(),
         },
         {
           id: 2,
           type: "bot",
-          text: `Saya siap membantu Anda mencari laptop second berkualitas! Saat ini ada ${products.length} produk tersedia. 😊`,
+          text: `Saya siap membantu Anda mencari laptop second berkualitas! Saat ini ada ${products.length} produk tersedia.`,
           timestamp: new Date(),
         },
       ]);
@@ -191,7 +192,7 @@ export default function ChatBot() {
           const prices = products.map(p => p.normal_price || p.price).filter(p => p);
           const minPrice = Math.min(...prices);
           const maxPrice = Math.max(...prices);
-          response = `💰 Informasi Harga Laptop Solit 03:\n\n`;
+          response = `Informasi Harga Laptop Solit 03:\n\n`;
           response += `Harga termurah: Rp ${minPrice?.toLocaleString('id-ID')}\n`;
           response += `Harga termahal: Rp ${maxPrice?.toLocaleString('id-ID')}\n`;
           response += `Rata-rata harga: Rp ${Math.round(prices.reduce((a,b) => a + b, 0) / prices.length).toLocaleString('id-ID')}\n\n`;
@@ -214,7 +215,7 @@ export default function ChatBot() {
           );
           
           if (searchResults.length > 0) {
-            response = `🔍 Hasil pencarian untuk "${searchKeyword}":\n\n`;
+            response = `Hasil pencarian untuk "${searchKeyword}":\n\n`;
             searchResults.slice(0, 5).forEach((p, idx) => {
               const price = p.normal_price || p.price;
               response += `${idx + 1}. ${p.name} - ${p.brands?.name} - Rp ${price?.toLocaleString('id-ID')}\n`;
@@ -232,7 +233,7 @@ export default function ChatBot() {
           break;
           
         case "brands":
-          response = `🏷️ Brand Laptop yang tersedia:\n\n`;
+          response = `Brand Laptop yang tersedia:\n\n`;
           brands.forEach((b, idx) => {
             const productCount = products.filter(p => p.brand_id === b.id).length;
             response += `${idx + 1}. ${b.name} (${productCount} produk)\n`;
@@ -246,7 +247,7 @@ export default function ChatBot() {
           
         case "brand_specific":
           const brandProducts = products.filter(p => p.brand_id === brand.id);
-          response = `✨ Produk ${brand.name} yang tersedia:\n\n`;
+          response = `Produk ${brand.name} yang tersedia:\n\n`;
           brandProducts.slice(0, 5).forEach((p, idx) => {
             const price = p.normal_price || p.price;
             response += `${idx + 1}. ${p.name} - Rp ${price?.toLocaleString('id-ID')}\n`;
@@ -261,8 +262,8 @@ export default function ChatBot() {
           break;
           
         case "warranty":
-          response = `✅ Informasi Garansi Solit 03:\n\n`;
-          response += `• Garansi 1 tahun penuh untuk kerusakan komponen\n`;
+          response = `Informasi Garansi Solit 03:\n\n`;
+          response += `• Garansi 1 bulan untuk kerusakan komponen (hardware)\n`;
           response += `• Garansi berlaku di seluruh Indonesia\n`;
           response += `• Service center resmi tersedia\n`;
           response += `• Support online 24/7 untuk konsultasi\n\n`;
@@ -274,7 +275,7 @@ export default function ChatBot() {
           break;
           
         case "shipping":
-          response = `🚚 Informasi Pengiriman:\n\n`;
+          response = `Informasi Pengiriman:\n\n`;
           response += `• FREE ONGKIR untuk area Depok, Jakarta, Bogor, Tangerang, Bekasi\n`;
           response += `• Luar kota: biaya disesuaikan dengan lokasi\n`;
           response += `• Packing aman dan double bubble wrap\n`;
@@ -287,14 +288,14 @@ export default function ChatBot() {
           break;
           
         case "store":
-          response = `📍 Alamat Toko Solit 03:\n\n`;
+          response = `Alamat Toko Solit 03:\n\n`;
           response += `Jl. Kavling Adhi Karya No. 77\n`;
           response += `Rangkapan Jaya Lama, Pancoran Mas\n`;
           response += `Kota Depok, Jawa Barat\n\n`;
-          response += `⏰ Jam Operasional:\n`;
+          response += `Jam Operasional:\n`;
           response += `Senin - Sabtu: 09.00 - 17.00\n`;
           response += `Minggu: Tutup\n\n`;
-          response += `📞 Telepon: +62 852-1064-7047`;
+          response += `Telepon: +62 852-1064-7047`;
           addBotMessage(response);
           setTimeout(() => {
             addBotMessageWithWhatsApp();
@@ -302,7 +303,7 @@ export default function ChatBot() {
           break;
           
         case "whatsapp":
-          response = `💬 Hubungi Kami via WhatsApp:\n\n`;
+          response = `Hubungi Kami via WhatsApp:\n\n`;
           response += `Nomor: +62 852-1064-7047\n\n`;
           response += `Klik tombol di bawah untuk chat langsung dengan admin kami.`;
           addBotMessage(response);
@@ -312,12 +313,12 @@ export default function ChatBot() {
           break;
           
         case "specifications":
-          response = `📋 Spesifikasi Laptop Solit 03:\n\n`;
+          response = `Spesifikasi Laptop Solit 03:\n\n`;
           response += `Laptop kami dilengkapi dengan spesifikasi:\n`;
           response += `• Processor: Intel Core i5/i7/Ryzen\n`;
           response += `• RAM: 8GB - 32GB\n`;
           response += `• Storage: 256GB - 1TB SSD\n`;
-          response += `• Garansi 1 tahun\n\n`;
+          response += `• Garansi 1 bulan\n\n`;
           response += `Untuk detail spesifikasi produk tertentu, silakan lihat di katalog ya!`;
           addBotMessage(response);
           setTimeout(() => {
@@ -326,7 +327,7 @@ export default function ChatBot() {
           break;
           
         default:
-          response = `Maaf, saya belum mengerti pertanyaan Anda. 😊\n\nSilakan pilih salah satu topik di bawah atau hubungi kami langsung via WhatsApp ya!`;
+          response = `Maaf, saya belum mengerti pertanyaan Anda.\n\nSilakan pilih salah satu topik di bawah atau hubungi kami langsung via WhatsApp ya!`;
           addBotMessage(response);
           setTimeout(() => {
             setShowQuickReplies(true);
@@ -412,222 +413,216 @@ export default function ChatBot() {
     window.open("https://wa.me/6285210647047?text=Halo%20Solit%2003%2C%20saya%20butuh%20bantuan%20untuk%20laptop", "_blank");
   };
 
-  if (!isOpen) {
-    return (
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-50 group"
-      >
-        <div className="relative">
-          <div className="absolute inset-0 bg-blue-500 rounded-full animate-ping opacity-75"></div>
-          <div className="relative bg-gradient-to-r from-blue-600 to-blue-500 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110">
-            <MessageCircle size={24} />
-          </div>
-          <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
-        </div>
-      </button>
-    );
-  }
-
   return (
-    <div className="fixed bottom-6 right-6 z-50 w-full max-w-[95vw] sm:max-w-[400px] animate-slideUp">
-      <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-700 to-blue-600 px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-              <Bot size={16} className="text-white" />
-            </div>
-            <div>
-              <h3 className="text-white font-semibold text-sm">Solit 03 Assistant</h3>
-              <p className="text-blue-100 text-[10px]">Online • ${products.length} produk tersedia</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => setIsMinimized(!isMinimized)}
-              className="p-1.5 hover:bg-white/10 rounded-lg transition text-white"
-            >
-              {isMinimized ? <Plus size={16} /> : <Minus size={16} />}
-            </button>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="p-1.5 hover:bg-white/10 rounded-lg transition text-white"
-            >
-              <X size={16} />
-            </button>
-          </div>
-        </div>
+    <>
+      {/* Tombol pemicu */}
+      <AnimatePresence>
+        {!isOpen && (
+          <motion.button
+            key="chat-launcher"
+            onClick={() => setIsOpen(true)}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 400, damping: 22 }}
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.94 }}
+            className="fixed bottom-6 right-6 z-[60]"
+            aria-label="Buka chat asisten"
+          >
+            <span className="relative block bg-blue-600 text-white p-4 rounded-full shadow-soft-lg">
+              <MessageCircle size={24} />
+              <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-white" />
+            </span>
+          </motion.button>
+        )}
+      </AnimatePresence>
 
-        {!isMinimized && (
-          <>
-            {/* Messages Area */}
-            <div className="h-[400px] overflow-y-auto p-4 bg-gradient-to-b from-gray-50 to-white">
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`mb-3 flex ${message.type === "user" ? "justify-end" : "justify-start"} animate-fadeIn`}
-                >
-                  <div className={`flex items-start gap-2 max-w-[85%] ${message.type === "user" ? "flex-row-reverse" : ""}`}>
-                    <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
-                      message.type === "user" 
-                        ? "bg-blue-100" 
-                        : "bg-gradient-to-br from-blue-500 to-blue-600"
-                    }`}>
-                      {message.type === "user" 
-                        ? <User size={14} className="text-blue-600" />
-                        : <Bot size={14} className="text-white" />
-                      }
-                    </div>
-                    <div>
-                      {message.text && (
-                        <div className={`px-3 py-2 rounded-2xl ${
-                          message.type === "user"
-                            ? "bg-blue-600 text-white rounded-tr-none"
-                            : "bg-white border border-gray-200 text-gray-700 rounded-tl-none shadow-sm"
-                        }`}>
-                          <p className="text-xs whitespace-pre-line">{message.text}</p>
-                        </div>
-                      )}
-                      
-                      {/* Button for catalog */}
-                      {message.hasButton && (
-                        <button
-                          onClick={goToCatalog}
-                          className="mt-2 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded-lg transition-all hover:scale-105 flex items-center gap-1"
-                        >
-                          <Laptop size={12} />
-                          {message.buttonText || "Lihat Katalog Sekarang"}
-                        </button>
-                      )}
-
-                      {/* WhatsApp button */}
-                      {message.hasWhatsApp && (
-                        <button
-                          onClick={openWhatsApp}
-                          className="mt-2 px-4 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs rounded-lg transition-all hover:scale-105 flex items-center gap-1"
-                        >
-                          <MessageSquare size={12} />
-                          Chat via WhatsApp
-                        </button>
-                      )}
-                      
-                      <p className="text-[9px] text-gray-400 mt-1">
-                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </p>
-                    </div>
+      {/* Panel chat */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            key="chat-panel"
+            initial={{ opacity: 0, y: 24, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 24, scale: 0.96 }}
+            transition={{ type: "spring", stiffness: 300, damping: 26 }}
+            style={{ transformOrigin: "bottom right" }}
+            className="fixed bottom-6 right-6 z-[60] w-[calc(100vw-3rem)] sm:w-[400px]"
+          >
+            <div
+              className={`flex flex-col bg-white rounded-2xl shadow-soft-lg overflow-hidden border border-slate-200 ${
+                isMinimized ? "" : "h-[min(600px,calc(100dvh-6rem))]"
+              }`}
+            >
+              {/* Header */}
+              <div className="shrink-0 bg-blue-600 px-4 py-3 flex items-center justify-between">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center shrink-0">
+                    <Bot size={16} className="text-white" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-white font-semibold text-sm truncate">Solit 03 Assistant</h3>
+                    <p className="text-blue-100 text-[10px] flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      Online • {products.length} produk tersedia
+                    </p>
                   </div>
                 </div>
-              ))}
+                <div className="flex items-center gap-1 shrink-0">
+                  <button
+                    onClick={() => setIsMinimized(!isMinimized)}
+                    className="p-1.5 hover:bg-white/10 rounded-lg transition text-white"
+                    aria-label={isMinimized ? "Perbesar chat" : "Perkecil chat"}
+                  >
+                    {isMinimized ? <Plus size={16} /> : <Minus size={16} />}
+                  </button>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="p-1.5 hover:bg-white/10 rounded-lg transition text-white"
+                    aria-label="Tutup chat"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              </div>
 
-              {isTyping && (
-                <div className="flex justify-start mb-3 animate-fadeIn">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
-                      <Bot size={14} className="text-white" />
-                    </div>
-                    <div className="bg-white border border-gray-200 rounded-2xl rounded-tl-none px-3 py-2 shadow-sm">
-                      <div className="flex gap-1">
-                        <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
-                        <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                        <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+              {!isMinimized && (
+                <>
+                  {/* Area pesan — scroll internal, tidak dibajak Lenis */}
+                  <div
+                    data-lenis-prevent
+                    className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-4 bg-slate-50"
+                  >
+                    {messages.map((message) => (
+                      <motion.div
+                        key={message.id}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.25 }}
+                        className={`mb-3 flex ${message.type === "user" ? "justify-end" : "justify-start"}`}
+                      >
+                        <div className={`flex items-start gap-2 max-w-[85%] ${message.type === "user" ? "flex-row-reverse" : ""}`}>
+                          <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
+                            message.type === "user" ? "bg-blue-100" : "bg-blue-600"
+                          }`}>
+                            {message.type === "user"
+                              ? <User size={14} className="text-blue-600" />
+                              : <Bot size={14} className="text-white" />}
+                          </div>
+                          <div className="min-w-0">
+                            {message.text && (
+                              <div className={`px-3 py-2 rounded-2xl ${
+                                message.type === "user"
+                                  ? "bg-blue-600 text-white rounded-tr-none"
+                                  : "bg-white border border-slate-200 text-slate-700 rounded-tl-none shadow-soft-sm"
+                              }`}>
+                                <p className="text-xs whitespace-pre-line break-words">{message.text}</p>
+                              </div>
+                            )}
+
+                            {message.hasButton && (
+                              <button
+                                onClick={goToCatalog}
+                                className="mt-2 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded-lg transition-all hover:scale-105 flex items-center gap-1"
+                              >
+                                <Laptop size={12} />
+                                {message.buttonText || "Lihat Katalog Sekarang"}
+                              </button>
+                            )}
+
+                            {message.hasWhatsApp && (
+                              <button
+                                onClick={openWhatsApp}
+                                className="mt-2 px-4 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs rounded-lg transition-all hover:scale-105 flex items-center gap-1"
+                              >
+                                <MessageSquare size={12} />
+                                Chat via WhatsApp
+                              </button>
+                            )}
+
+                            <p className="text-[9px] text-slate-400 mt-1">
+                              {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+
+                    {isTyping && (
+                      <div className="flex justify-start mb-3">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 bg-blue-600 rounded-full flex items-center justify-center">
+                            <Bot size={14} className="text-white" />
+                          </div>
+                          <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-none px-3 py-2 shadow-soft-sm">
+                            <div className="flex gap-1">
+                              <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce-custom" style={{ animationDelay: "0s" }} />
+                              <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce-custom" style={{ animationDelay: "0.15s" }} />
+                              <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce-custom" style={{ animationDelay: "0.3s" }} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div ref={messagesEndRef} />
+                  </div>
+
+                  {/* Quick Replies */}
+                  {showQuickReplies && (
+                    <div className="shrink-0 px-4 py-2 border-t border-slate-100 bg-slate-50">
+                      <p className="text-[10px] text-slate-500 mb-2 flex items-center gap-1">
+                        <Sparkles size={10} className="text-blue-500" />
+                        Pilih topik yang ingin ditanyakan:
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {quickReplies.map((reply, index) => (
+                          <button
+                            key={index}
+                            onClick={() => handleQuickReply(reply.action)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-full text-xs text-slate-700 hover:border-blue-500 hover:text-blue-600 transition-all hover:scale-105"
+                          >
+                            {reply.icon}
+                            {reply.text}
+                          </button>
+                        ))}
                       </div>
                     </div>
+                  )}
+
+                  {/* Input */}
+                  <div className="shrink-0 p-3 border-t border-slate-100 bg-white">
+                    <div className="flex gap-2 items-end">
+                      <textarea
+                        ref={inputRef}
+                        value={inputMessage}
+                        onChange={(e) => setInputMessage(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        placeholder="Tanya apa saja tentang laptop..."
+                        rows="1"
+                        className="flex-1 px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                        style={{ maxHeight: "80px" }}
+                      />
+                      <button
+                        onClick={handleSendMessage}
+                        disabled={!inputMessage.trim() || isTyping}
+                        className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 shrink-0"
+                        aria-label="Kirim pesan"
+                      >
+                        <Send size={16} />
+                      </button>
+                    </div>
+                    <p className="text-[9px] text-slate-400 text-center mt-2">
+                      Tips: Coba tanyakan "cari laptop Lenovo" atau "harga termurah"
+                    </p>
                   </div>
-                </div>
+                </>
               )}
-
-              <div ref={messagesEndRef} />
             </div>
-
-            {/* Quick Replies */}
-            {showQuickReplies && (
-              <div className="px-4 py-2 border-t border-gray-100 bg-gray-50">
-                <p className="text-[10px] text-gray-500 mb-2 flex items-center gap-1">
-                  <Sparkles size={10} className="text-yellow-500" />
-                  Pilih topik yang ingin ditanyakan:
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {quickReplies.map((reply, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleQuickReply(reply.action)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs text-gray-700 hover:border-blue-500 hover:text-blue-600 transition-all hover:scale-105"
-                    >
-                      {reply.icon}
-                      {reply.text}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Input Area */}
-            <div className="p-3 border-t border-gray-100 bg-white">
-              <div className="flex gap-2">
-                <div className="flex-1 relative">
-                  <textarea
-                    ref={inputRef}
-                    value={inputMessage}
-                    onChange={(e) => setInputMessage(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    placeholder="Tanya apa saja tentang laptop..."
-                    rows="1"
-                    className="w-full px-3 py-2 text-xs border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                    style={{ maxHeight: "80px" }}
-                  />
-                </div>
-                <button
-                  onClick={handleSendMessage}
-                  disabled={!inputMessage.trim() || isTyping}
-                  className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105"
-                >
-                  <Send size={16} />
-                </button>
-              </div>
-              <p className="text-[9px] text-gray-400 text-center mt-2">
-                💡 Tips: Coba tanyakan "cari laptop Lenovo" atau "harga termurah"
-              </p>
-            </div>
-          </>
+          </motion.div>
         )}
-      </div>
-
-      <style jsx>{`
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        @keyframes bounce {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-3px); }
-        }
-        .animate-slideUp {
-          animation: slideUp 0.3s ease-out;
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-out;
-        }
-        .animate-bounce {
-          animation: bounce 0.6s infinite;
-        }
-      `}</style>
-    </div>
+      </AnimatePresence>
+    </>
   );
 }

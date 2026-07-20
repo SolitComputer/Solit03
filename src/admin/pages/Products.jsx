@@ -242,8 +242,8 @@ export default function Products() {
                   onChange={(e) => setFilterBrand(e.target.value)}
                   className="bg-gray-50 border border-gray-200 rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-gray-600"
                 >
-                  <option value="all">🏷️ Semua Brand</option>
-                  {brands.map(b => <option key={b.id} value={b.id}>🏷️ {b.name}</option>)}
+                  <option value="all">Semua Brand</option>
+                  {brands.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
                 </select>
                 <ChevronDown size="12" className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
               </div>
@@ -254,9 +254,9 @@ export default function Products() {
                   onChange={(e) => setFilterStock(e.target.value)}
                   className="bg-gray-50 border border-gray-200 rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-gray-600"
                 >
-                  <option value="all">📦 Semua Stok</option>
-                  <option value="available">✅ Tersedia</option>
-                  <option value="outofstock">❌ Habis</option>
+                  <option value="all">Semua Stok</option>
+                  <option value="available">Tersedia</option>
+                  <option value="outofstock">Habis</option>
                 </select>
                 <ChevronDown size="12" className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
               </div>
@@ -267,11 +267,11 @@ export default function Products() {
                   onChange={(e) => setSortBy(e.target.value)}
                   className="bg-gray-50 border border-gray-200 rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-gray-600"
                 >
-                  <option value="newest">🕐 Terbaru</option>
-                  <option value="oldest">🕐 Terlama</option>
-                  <option value="price_high">💰 Harga Tertinggi</option>
-                  <option value="price_low">💰 Harga Terendah</option>
-                  <option value="name_asc">📝 A-Z</option>
+                  <option value="newest">Terbaru</option>
+                  <option value="oldest">Terlama</option>
+                  <option value="price_high">Harga Tertinggi</option>
+                  <option value="price_low">Harga Terendah</option>
+                  <option value="name_asc">A-Z</option>
                 </select>
                 <ChevronDown size="12" className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
               </div>
@@ -282,10 +282,10 @@ export default function Products() {
                   onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}
                   className="bg-gray-50 border border-gray-200 rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-gray-600"
                 >
-                  <option value={10}>📄 10 per halaman</option>
-                  <option value={25}>📄 25 per halaman</option>
-                  <option value={50}>📄 50 per halaman</option>
-                  <option value={100}>📄 100 per halaman</option>
+                  <option value={10}>10 per halaman</option>
+                  <option value={25}>25 per halaman</option>
+                  <option value={50}>50 per halaman</option>
+                  <option value={100}>100 per halaman</option>
                 </select>
                 <ChevronDown size="12" className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
               </div>

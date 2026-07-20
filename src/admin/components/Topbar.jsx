@@ -1,4 +1,4 @@
-import { Bell, Search, ArrowLeft, Home, Phone, MessageCircle, Menu, X } from "lucide-react";
+import { Bell, Search, ArrowLeft, Home, Phone, MessageCircle, Menu, X, Laptop, Wallet, BookOpen, Smartphone } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import logo from "../../assets/solit03.jpeg";
@@ -59,11 +59,11 @@ export default function Topbar() {
 
   // Navigation items for non-admin pages
   const navItems = [
-    { name: "Beranda", path: "/", icon: "🏠" },
-    { name: "Katalog", path: "/katalog", icon: "💻" },
-    { name: "Jual Beli", path: "/jual-beli", icon: "💰" },
-    { name: "Tentang", path: "/tentang", icon: "📖" },
-    { name: "Sosial Media", path: "/sosial-media", icon: "📱" },
+    { name: "Beranda", path: "/", icon: Home },
+    { name: "Katalog", path: "/katalog", icon: Laptop },
+    { name: "Jual Beli", path: "/jual-beli", icon: Wallet },
+    { name: "Tentang", path: "/tentang", icon: BookOpen },
+    { name: "Sosial Media", path: "/sosial-media", icon: Smartphone },
   ];
 
   return (
@@ -123,7 +123,7 @@ export default function Topbar() {
                   }`}
               >
                 <span className="flex items-center gap-1.5">
-                  <span>{item.icon}</span>
+                  <item.icon className="w-4 h-4" aria-hidden="true" />
                   <span>{item.name}</span>
                 </span>
               </button>
@@ -189,7 +189,7 @@ export default function Topbar() {
                     : "text-gray-700 hover:bg-gray-50"
                   }`}
               >
-                <span className="text-lg">{item.icon}</span>
+                <item.icon className="w-5 h-5" aria-hidden="true" />
                 <span>{item.name}</span>
               </button>
             ))}

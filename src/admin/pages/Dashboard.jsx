@@ -362,7 +362,7 @@ export default function Dashboard() {
           {/* Motivational quote */}
           <div className="mt-4 pt-4 border-t border-gray-100">
             <p className="text-[10px] text-gray-400 text-center">
-              ✨ Terus kembangkan koleksi laptop terbaikmu!
+              Terus kembangkan koleksi laptop terbaikmu!
             </p>
           </div>
         </div>
@@ -454,7 +454,7 @@ export default function Dashboard() {
             {lowStockProducts.length === 0 ? (
               <div className="py-12 text-center">
                 <Award size="40" className="mx-auto text-emerald-200 mb-3" />
-                <p className="text-sm text-gray-400">Semua stok dalam kondisi aman ✨</p>
+                <p className="text-sm text-gray-400">Semua stok dalam kondisi aman</p>
               </div>
             ) : lowStockProducts.map((p) => (
               <div key={p.id} className="px-6 py-4 hover:bg-amber-50/30 transition-all duration-300">

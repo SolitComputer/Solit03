@@ -33,14 +33,11 @@ export default function WhatsAppButton() {
       >
         <div className="relative group">
           {/* Tooltip */}
-          <div className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-gray-900 text-white text-xs rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+          <div className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-slate-900 text-white text-xs rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
             Hubungi Kami via WhatsApp
-            <div className="absolute top-full right-4 -mt-1 border-4 border-transparent border-t-gray-900"></div>
+            <div className="absolute top-full right-4 -mt-1 border-4 border-transparent border-t-slate-900"></div>
           </div>
 
-          {/* Pulse Animation */}
-          <div className="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-75"></div>
-          
           {/* Main Button */}
           <a
             href={`${WHATSAPP_URL}?text=${encodeURIComponent(defaultMessage)}`}
@@ -48,12 +45,12 @@ export default function WhatsAppButton() {
             rel="noopener noreferrer"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="relative flex items-center justify-center w-14 h-14 bg-gradient-to-br from-green-400 to-green-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 group"
+            className="relative flex items-center justify-center w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full shadow-soft-lg transition-all duration-300 hover:scale-105 group"
           >
             <MessageCircle className="w-7 h-7 text-white" />
-            
+
             {/* Notification Badge */}
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-pulse"></span>
+            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-red-500 rounded-full border-2 border-white"></span>
           </a>
         </div>
       </div>
@@ -64,9 +61,9 @@ export default function WhatsAppButton() {
           isHovered && isVisible ? "translate-x-0 opacity-100" : "translate-x-96 opacity-0"
         }`}
       >
-        <div className="bg-white rounded-2xl shadow-2xl w-80 overflow-hidden border border-gray-100">
+        <div className="bg-white rounded-2xl shadow-soft-lg w-80 overflow-hidden border border-slate-200">
           {/* Header */}
-          <div className="bg-gradient-to-r from-green-500 to-green-600 px-4 py-3">
+          <div className="bg-green-500 px-4 py-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
                 <MessageCircle className="w-5 h-5 text-green-600" />
@@ -80,9 +77,9 @@ export default function WhatsAppButton() {
           
           {/* Body */}
           <div className="p-4">
-            <div className="bg-gray-50 rounded-lg p-3 mb-3">
-              <p className="text-xs text-gray-600">
-                👋 Halo! Ada yang bisa kami bantu? Silakan klik tombol di bawah untuk memulai chat via WhatsApp.
+            <div className="bg-slate-50 rounded-lg p-3 mb-3">
+              <p className="text-xs text-slate-600">
+                Halo! Ada yang bisa kami bantu? Silakan klik tombol di bawah untuk memulai chat via WhatsApp.
               </p>
             </div>
             

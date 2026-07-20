@@ -7,7 +7,7 @@ import { supabase } from "../../services/supabase";
 import {
     Upload, X, Image as ImageIcon, Cpu, MemoryStick,
     HardDrive, Monitor, Gamepad2, Laptop, Tag,
-    Package, DollarSign, Layers, Link2, Percent, Sparkles, ChevronDown
+    Package, DollarSign, Layers, Link2, Percent, Sparkles, ChevronDown, Check
 } from "lucide-react";
 import { useToast } from "../context/ToastContext";
 
@@ -347,7 +347,7 @@ export default function ProductForm({ form, setForm, onSubmit, buttonText }) {
                                     <div className="flex items-center gap-3">
                                         <img src={form.thumbnail} alt="" className="w-20 h-20 rounded-lg object-cover border border-gray-200" />
                                         <div>
-                                            <p className="text-xs text-green-600 font-medium mb-1.5">✓ Terupload</p>
+                                            <p className="text-xs text-green-600 font-medium mb-1.5 flex items-center gap-1"><Check className="w-3.5 h-3.5" aria-hidden="true" /> Terupload</p>
                                             <button
                                                 type="button"
                                                 onClick={() => setForm({ ...form, thumbnail: "" })}

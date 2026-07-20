@@ -79,12 +79,12 @@ function PhotoCarousel({ photos, name }) {
 function LaptopCard({ laptop, onClick, index }) {
     return (
         <div onClick={onClick}
-            className="group bg-white rounded-xl border border-slate-200 hover:border-blue-400 overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg animate-fadeInUp"
+            className="group card-3d overflow-hidden cursor-pointer animate-fadeInUp"
             style={{ animationDelay: `${index * 50}ms` }}>
             <div className="relative">
                 <PhotoCarousel photos={laptop.photos} name={laptop.laptop_name} />
                 {laptop.stock > 0 && (
-                    <span className="absolute top-2 left-2 z-10 px-1.5 sm:px-2 py-0.5 bg-green-500 text-white text-[9px] sm:text-[10px] font-semibold rounded-full shadow-sm">
+                    <span className="absolute top-2 left-2 z-10 px-1.5 sm:px-2 py-0.5 bg-green-500 text-white text-[9px] sm:text-[10px] font-semibold rounded-full shadow-soft-sm">
                         Ready {laptop.stock}
                     </span>
                 )}
@@ -115,7 +115,7 @@ function LaptopCard({ laptop, onClick, index }) {
                             {priceLabel(laptop.price)}
                         </p>
                     </div>
-                    <button className="px-2 sm:px-2.5 py-1 bg-white border border-slate-300 hover:border-blue-500 text-slate-700 hover:text-blue-600 text-[10px] sm:text-[11px] font-semibold rounded-lg transition-all hover:shadow-sm whitespace-nowrap">
+                    <button className="px-2 sm:px-2.5 py-1 bg-white border border-slate-300 hover:border-blue-500 text-slate-700 hover:text-blue-600 text-[10px] sm:text-[11px] font-semibold rounded-lg transition-all hover:shadow-soft-sm whitespace-nowrap">
                         Detail
                     </button>
                 </div>
@@ -271,7 +271,7 @@ function FilterSidebar({ brands, selectedBrand, setSelectedBrand, priceRange, se
             </div>
 
             {hasFilter && (
-                <button onClick={onReset} className="w-full py-1.5 text-xs font-medium text-red-600 hover:text-red-700 border border-red-200 rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center gap-1.5">
+                <button onClick={onReset} className="w-full py-1.5 text-xs font-medium text-slate-600 hover:text-blue-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors flex items-center justify-center gap-1.5">
                     <RotateCcw size={10} /> Reset Filter
                 </button>
             )}
@@ -306,7 +306,7 @@ function DetailModal({ laptop, onClose }) {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-3" style={{ backgroundColor: "rgba(0,0,0,0.85)", backdropFilter: "blur(8px)" }} onClick={onClose}>
-            <div className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl mx-2 sm:mx-0" onClick={(e) => e.stopPropagation()}>
+            <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-soft-lg mx-2 sm:mx-0" onClick={(e) => e.stopPropagation()}>
                 <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-slate-100 px-3 sm:px-4 py-2 flex sm:py-2.5 items-center justify-between">
                     <div className="flex items-center gap-1.5 text-[11px] sm:text-xs">
                         <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-blue-100 flex items-center justify-center"><Laptop size={14} className="text-blue-600" /></div>
@@ -323,7 +323,7 @@ function DetailModal({ laptop, onClose }) {
                 <div className="overflow-y-auto max-h-[calc(90vh-52px)]">
                     <div className="grid lg:grid-cols-2 gap-0">
                         <div className="bg-gradient-to-br from-slate-50 to-white p-3 sm:p-4">
-                            <div className="relative aspect-square bg-white rounded-xl overflow-hidden shadow-sm border border-slate-100 group">
+                            <div className="relative aspect-square bg-white rounded-xl overflow-hidden shadow-soft-sm border border-slate-100 group">
                                 {images[imgIdx] ? (
                                     <>
                                         <img src={images[imgIdx]} alt={laptop.laptop_name} className="w-full h-full object-contain p-3 sm:p-4" />
@@ -369,7 +369,7 @@ function DetailModal({ laptop, onClose }) {
                             <div className={`mb-3 p-2 rounded-lg flex items-center gap-2 text-[10px] sm:text-xs ${stock > 0 ? (stock < 5 ? "bg-amber-50 border border-amber-100" : "bg-green-50 border border-green-100") : "bg-red-50 border border-red-100"}`}>
                                 <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${stock > 0 ? (stock < 5 ? "bg-amber-500 animate-pulse" : "bg-green-500") : "bg-red-500"}`} />
                                 <p className={`font-medium text-[9px] sm:text-[10px] ${stock > 0 ? (stock < 5 ? "text-amber-700" : "text-green-700") : "text-red-700"}`}>
-                                    {stock > 0 ? (stock < 5 ? `⚠ Sisa ${stock} unit` : `✓ Tersedia (${stock} unit)`) : "✕ Stok habis"}
+                                    {stock > 0 ? (stock < 5 ? `Sisa ${stock} unit` : `Tersedia (${stock} unit)`) : "Stok habis"}
                                 </p>
                             </div>
 
@@ -399,7 +399,7 @@ function DetailModal({ laptop, onClose }) {
                             )}
 
                             <a href={waLink(laptop)} target="_blank" rel="noopener noreferrer"
-                                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-green-600 hover:shadow-md text-white text-sm font-semibold py-2.5 rounded-lg transition-all">
+                                className="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 hover:shadow-soft text-white text-sm font-semibold py-2.5 rounded-xl transition-all">
                                 <MessageCircle size={16} /> Tanya / Pesan via WhatsApp
                             </a>
                         </div>
@@ -526,7 +526,7 @@ export default function KatalogLaptop() {
         `}</style>
 
                 {/* Toolbar */}
-                <div className="sticky top-0 z-20 bg-white border-b border-slate-200 shadow-sm">
+                <div className="sticky top-0 z-20 bg-white border-b border-slate-200 shadow-soft-sm">
                     <div className="w-full px-2 sm:px-3 py-2">
                         <div className="flex items-center justify-between gap-2">
                             <div className="flex items-center gap-1.5 text-slate-700 flex-shrink-0">
@@ -571,7 +571,7 @@ export default function KatalogLaptop() {
                         {showMobileFilters && (
                             <div className="fixed inset-0 z-50 lg:hidden animate-fadeIn">
                                 <div className="absolute inset-0 top-16 md:top-20 bg-black/50" onClick={() => setShowMobileFilters(false)} />
-                                <div className="absolute right-0 top-16 md:top-20 bottom-0 w-80 max-w-[85vw] bg-white shadow-xl overflow-y-auto animate-slideInRight rounded-tl-2xl">
+                                <div className="absolute right-0 top-16 md:top-20 bottom-0 w-80 max-w-[85vw] bg-white shadow-soft-lg overflow-y-auto animate-slideInRight rounded-tl-2xl">
                                     <div className="p-3 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white z-10">
                                         <h3 className="font-bold text-slate-800 text-sm">Filter</h3>
                                         <button onClick={() => setShowMobileFilters(false)} className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors"><X size={14} /></button>
