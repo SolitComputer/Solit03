@@ -1,7 +1,4 @@
-import { useEffect } from "react";
 import { motion } from "framer-motion";
-import AOS from "aos";
-import "aos/dist/aos.css";
 import TeamSlider from "../components/tentang/TeamSlider";
 import TimeTravelStory from "../components/tentang/TimeTravelStory";
 import teamBg from "../assets/team-bg.webp";
@@ -9,13 +6,6 @@ import teknisi from "../assets/teknisi.webp";
 import { Helmet } from "react-helmet-async";
 
 export default function Tentang() {
-  useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: true,
-      offset: 100,
-    });
-  }, []);
 
   // Variants untuk animasi
   const fadeInUp = {

@@ -1,32 +1,21 @@
 import { useState, useEffect } from "react";
-import { Menu, X, MessageCircle, Home, ShoppingBag, Users, Info, Share2, Shield, Wrench, Laptop } from "lucide-react";
+import { Menu, X, Bell } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/solit03.jpeg";
-
-const WHATSAPP_NUMBER = "6285210647047";
-const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
 export default function Navbar() {
     const navigate = useNavigate();
     const location = useLocation();
-    const [showNavbar, setShowNavbar] = useState(true);
-    const [lastScrollY, setLastScrollY] = useState(0);
     const [menuOpen, setMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > lastScrollY && window.scrollY > 100) {
-                setShowNavbar(false);
-            } else {
-                setShowNavbar(true);
-            }
-            setScrolled(window.scrollY > 20);
-            setLastScrollY(window.scrollY);
+            setScrolled(window.scrollY > 10);
         };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, [lastScrollY]);
+    }, []);
 
     useEffect(() => {
         const handleResize = () => {
@@ -36,155 +25,106 @@ export default function Navbar() {
         return () => window.removeEventListener("resize", handleResize);
     }, [menuOpen]);
 
-    const handleWhatsApp = () => {
-        const message = "Halo Solit 03, saya ingin bertanya tentang produk dan layanan Anda.";
-        window.open(`${WHATSAPP_URL}?text=${encodeURIComponent(message)}`, "_blank");
-    };
-
     const handleNavigation = (href) => {
         navigate(href);
         setMenuOpen(false);
     };
 
-    // ✅ Icon dikecilkan dari 16 → 13
     const navLinks = [
-        { name: "Beranda",     href: "/",             icon: <Home size={13} /> },
-        { name: "Katalog",      href: "/katalog",        icon: <ShoppingBag size={13} /> },
-        // { name: "Laptop Ready", href: "/katalog-laptop", icon: <Laptop size={13} /> },
-        { name: "Jual-Beli",   href: "/jual-beli",     icon: <Users size={13} /> },
-        { name: "Tentang",     href: "/tentang",       icon: <Info size={13} /> },
-        { name: "Sosial",      href: "/sosial-media",  icon: <Share2 size={13} /> },
-        { name: "Cek Garansi", href: "/cek-garansi",   icon: <Shield size={13} /> },
-        { name: "Cek Antrian", href: "/cek-antrian",   icon: <Wrench size={13} /> },
-        
+        { name: "Beranda",     href: "/" },
+        { name: "Katalog",      href: "/katalog" },
+        { name: "Berita",       href: "/berita" },
+        { name: "Jual-Beli",   href: "/jual-beli" },
+        { name: "Tentang",     href: "/tentang" },
+        { name: "Sosial",      href: "/sosial-media" },
+        { name: "Garansi",     href: "/cek-garansi" },
+        { name: "Antrian",     href: "/cek-antrian" },
     ];
 
     return (
-        <>
-            <nav
+        <nav
+            className={`
+                relative w-full z-50
+                transition-all duration-200 ease-in-out
+                bg-[#0f172a] text-white border-b border-slate-800
+                ${scrolled ? "shadow-md bg-[#0f172a]" : ""}
+            `}
+        >
+            {/* Main Nav Row */}
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-1.5 pb-0.5">
+                <div className="flex justify-between items-center h-11 md:h-12 border-b border-white/80 pb-1">
+
+                    {/* Logo Verge Style */}
+                    <button onClick={() => handleNavigation("/")} className="group focus:outline-none flex items-center gap-2">
+                        <img src={logo} alt="Solit 03" className="w-7 h-7 md:w-8 md:h-8 rounded-full object-cover ring-2 ring-slate-700 group-hover:ring-blue-500 transition-all shadow-md" />
+                        <span className="text-lg md:text-xl font-black tracking-tight text-white font-['Hanken_Grotesk',sans-serif] uppercase flex items-center">
+                            SOLIT<span className="text-blue-500 font-black ml-0.5">03</span>
+                        </span>
+                    </button>
+
+                    {/* Desktop Navigation with Slashes `/` */}
+                    <ul className="hidden md:flex items-center gap-2.5 text-xs md:text-[13px] font-medium text-slate-300">
+                        {navLinks.map((item, i) => (
+                            <li key={i} className="flex items-center gap-2.5">
+                                <span className="text-slate-600 font-light select-none">/</span>
+                                <button
+                                    onClick={() => handleNavigation(item.href)}
+                                    className={`
+                                        transition-colors duration-150 py-0.5 px-0.5 relative
+                                        ${location.pathname === item.href
+                                            ? "text-white font-bold tracking-tight underline decoration-blue-500 underline-offset-6 decoration-2"
+                                            : "text-slate-300 hover:text-white"
+                                        }
+                                    `}
+                                >
+                                    {item.name}
+                                </button>
+                            </li>
+                        ))}
+                        
+                    </ul>
+
+                    {/* Mobile Actions */}
+                    <div className="flex md:hidden items-center gap-2">
+                        <button
+                            onClick={() => setMenuOpen(!menuOpen)}
+                            className="p-1.5 rounded-md text-slate-200 hover:text-white hover:bg-slate-800"
+                            aria-label="Toggle menu"
+                        >
+                            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Mobile Dropdown Menu (Dark Verge Style) */}
+            <div
                 className={`
-                    fixed top-0 left-0 w-full z-40
-                    transition-all duration-300 ease-in-out
-                    ${showNavbar ? "translate-y-0" : "-translate-y-full"}
-                    ${scrolled
-                        ? "bg-white/85 backdrop-blur-md border-b border-slate-200 shadow-soft-sm"
-                        : "bg-white/60 backdrop-blur-sm border-b border-transparent"
-                    }
+                    md:hidden absolute w-full bg-[#0f172a] text-white border-t border-slate-800 shadow-2xl
+                    transition-all duration-300 ease-in-out overflow-hidden
+                    ${menuOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"}
                 `}
             >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-16 md:h-20">
-
-                        {/* Logo */}
-                        <button onClick={() => handleNavigation("/")} className="group focus:outline-none">
-                            <div className="flex items-center gap-2">
-                                <img src={logo} alt="Solit 03" className="w-10 h-10 rounded-full shadow-soft-sm object-cover ring-1 ring-slate-200" />
-                                <h1 className="text-base md:text-lg font-semibold text-slate-900 tracking-tight">
-                                    Solit<span className="text-blue-600">03</span>
-                                </h1>
-                            </div>
+                <div className="px-4 py-3 space-y-1">
+                    {navLinks.map((item, i) => (
+                        <button
+                            key={i}
+                            onClick={() => handleNavigation(item.href)}
+                            className={`
+                                w-full flex items-center gap-3 px-3 py-2.5 rounded-md
+                                text-xs font-semibold tracking-wide transition-all text-left
+                                ${location.pathname === item.href
+                                    ? "bg-slate-800 text-blue-400 font-bold"
+                                    : "text-slate-300 hover:bg-slate-800/60 hover:text-white"
+                                }
+                            `}
+                        >
+                            <span className="text-slate-600 font-mono">/</span>
+                            <span>{item.name}</span>
                         </button>
-
-                        {/* ✅ Desktop nav — text-xs, gap lebih kecil */}
-                        <ul className="hidden md:flex gap-0.5 text-slate-500 text-xs">
-                            {navLinks.map((item, i) => (
-                                <li key={i}>
-                                    <button
-                                        onClick={() => handleNavigation(item.href)}
-                                        className={`
-                                            relative px-2.5 py-1.5 rounded-lg transition-all duration-200
-                                            flex items-center gap-1
-                                            ${location.pathname === item.href
-                                                ? "text-blue-700 bg-blue-50 font-semibold"
-                                                : "text-slate-500 hover:text-blue-600 hover:bg-slate-50"
-                                            }
-                                        `}
-                                    >
-                                        {item.icon}
-                                        <span>{item.name}</span>
-                                        {location.pathname === item.href && (
-                                            <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-4 h-0.5 bg-blue-600 rounded-full" />
-                                        )}
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-
-                        {/* Desktop CTA — tetap sama */}
-                        <div className="hidden md:block">
-                            <button
-                                onClick={handleWhatsApp}
-                                className="btn btn-primary text-xs px-4 py-2"
-                            >
-                                <MessageCircle size={13} />
-                                <span>Hubungi</span>
-                            </button>
-                        </div>
-
-                        {/* Mobile hamburger — tetap sama */}
-                        <div className="md:hidden">
-                            <button
-                                onClick={() => setMenuOpen(!menuOpen)}
-                                className="p-1.5 rounded-md transition-all duration-200 hover:bg-blue-50"
-                                aria-label="Toggle menu"
-                            >
-                                {menuOpen ? <X className="w-6 h-6 text-blue-700" /> : <Menu className="w-6 h-6 text-blue-700" />}
-                            </button>
-                        </div>
-                    </div>
+                    ))}
                 </div>
-
-                {/* ✅ Mobile Menu — text-xs */}
-                <div
-                    className={`
-                        md:hidden absolute w-full bg-white/95 backdrop-blur-md shadow-soft-lg
-                        transition-all duration-300 ease-in-out overflow-hidden
-                        ${menuOpen ? "max-h-[700px] opacity-100 border-t border-slate-200" : "max-h-0 opacity-0"}
-                    `}
-                >
-                    <div className="px-4 py-2 space-y-0.5">
-                        {navLinks.map((item, i) => (
-                            <button
-                                key={i}
-                                onClick={() => handleNavigation(item.href)}
-                                className={`
-                                    w-full flex items-center gap-2 px-3 py-2 rounded-md
-                                    text-xs transition-all duration-200
-                                    ${location.pathname === item.href
-                                        ? "bg-blue-50 text-blue-700 font-semibold"
-                                        : "text-slate-600 hover:bg-slate-50"
-                                    }
-                                `}
-                            >
-                                <span className={location.pathname === item.href ? "text-blue-600" : "text-slate-400"}>
-                                    {item.icon}
-                                </span>
-                                {item.name}
-                                {item.href === "/cek-antrian" && location.pathname !== "/cek-antrian" && (
-                                    <span className="ml-auto text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">
-                                        Live
-                                    </span>
-                                )}
-                                {location.pathname === item.href && (
-                                    <span className="ml-auto w-1 h-4 bg-blue-600 rounded-full" />
-                                )}
-                            </button>
-                        ))}
-
-                        <div className="border-t border-slate-100 mt-2 pt-2">
-                            <button
-                                onClick={handleWhatsApp}
-                                className="btn btn-primary w-full text-xs py-2.5"
-                            >
-                                <MessageCircle size={14} />
-                                WhatsApp
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-
-            <div className="h-8 md:h-12" />
-        </>
+            </div>
+        </nav>
     );
 }

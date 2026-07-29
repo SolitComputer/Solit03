@@ -1,7 +1,28 @@
+import { useState, useEffect } from "react";
 import { MessageCircle, Mail, MapPin } from "lucide-react";
+import { getSiteSettings } from "../../services/siteContent";
+
+const DEFAULT_CONTACT = {
+  phone_display: "+62 852-1064-7047",
+  email: "solit03@gmail.com",
+  address: "Depok, Indonesia",
+  instagram_url: "https://instagram.com/solit.comp",
+  tiktok_url: "https://tiktok.com/@solit03",
+  shopee_url: "https://shopee.co.id/solit_03?entryPoint=ShopBySearch&searchKeyword=solit03",
+  tokopedia_url: "https://www.tokopedia.com/solit03",
+};
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [contact, setContact] = useState(DEFAULT_CONTACT);
+
+  useEffect(() => {
+    getSiteSettings()
+      .then((settings) => {
+        if (settings.contact) setContact({ ...DEFAULT_CONTACT, ...settings.contact });
+      })
+      .catch(() => {});
+  }, []);
 
   const menu = [
     { label: "Beranda", href: "/" },
@@ -11,14 +32,14 @@ export default function Footer() {
   ];
 
   const socials = [
-    { label: "Instagram", href: "https://instagram.com/solit.comp" },
-    { label: "TikTok", href: "https://tiktok.com/@solusi_it03" },
-    { label: "Shopee", href: "https://shopee.co.id/solit_03?entryPoint=ShopBySearch&searchKeyword=solit03" },
-    { label: "Tokopedia", href: "https://www.tokopedia.com/solit03" },
-  ];
+    { label: "Instagram", href: contact.instagram_url },
+    { label: "TikTok", href: contact.tiktok_url },
+    { label: "Shopee", href: contact.shopee_url },
+    { label: "Tokopedia", href: contact.tokopedia_url },
+  ].filter((s) => s.href);
 
   return (
-    <footer className="bg-slate-900 text-slate-300 px-4 sm:px-6 py-12 md:py-14 mt-12">
+    <footer className="bg-[#0f172a] border-t border-slate-800 text-slate-300 px-4 sm:px-6 py-12 md:py-14">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
 
@@ -53,15 +74,15 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-slate-400">
               <li className="flex items-center gap-2.5">
                 <MessageCircle size={15} className="text-blue-400 shrink-0" />
-                <span className="break-words">+62 852-1064-7047</span>
+                <span className="break-words">{contact.phone_display}</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail size={15} className="text-blue-400 shrink-0" />
-                <span className="break-words">solit03@gmail.com</span>
+                <span className="break-words">{contact.email}</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <MapPin size={15} className="text-blue-400 shrink-0" />
-                <span>Depok, Indonesia</span>
+                <span>{contact.address}</span>
               </li>
             </ul>
           </div>
@@ -87,8 +108,15 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="border-t border-white/10 mt-10 pt-6 text-center text-xs text-slate-500">
-          © {currentYear} Solit 03. All rights reserved.
+        <div className="border-t border-white/10 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-center gap-2 text-center text-xs text-slate-500">
+          <span>© {currentYear} Solit 03. All rights reserved.</span>
+          <span className="hidden sm:inline">·</span>
+          <button
+            onClick={() => window.dispatchEvent(new Event("open-cookie-settings"))}
+            className="text-slate-400 hover:text-white underline underline-offset-2 transition-colors"
+          >
+            Pengaturan Cookie
+          </button>
         </div>
       </div>
     </footer>

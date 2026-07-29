@@ -1,15 +1,49 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronRight, Shield, Truck, Clock, Award, Sparkles } from "lucide-react";
+import { ArrowRight, ChevronRight, Sparkles } from "lucide-react";
 import bgHero from "../assets/background.webp";
 import solitLogo from "../assets/solit03.jpeg";
 import InteractiveBackground from "./ui/InteractiveBackground";
+import { getSiteSettings } from "../services/siteContent";
+import { getServiceIcon } from "../utils/serviceIcons";
+
+const DEFAULT_HERO = {
+    badge: "Tepercaya Sejak 2020",
+    title_prefix: "Solit",
+    title_suffix: "03",
+    subtitle: "Laptop Second Rasa Baru, Harga Bersahabat",
+    description: "Setiap unit lolos quality control dan bergaransi resmi. Performa ngebut untuk kuliah, kerja, hingga gaming — tanpa bikin dompet menjerit.",
+    cta_primary_label: "Lihat Katalog",
+    cta_secondary_label: "Hubungi Kami",
+    trust: [
+        { icon: "Shield", label: "Garansi 1 Bulan" },
+        { icon: "Truck", label: "Gratis Antar Jabodetabek" },
+        { icon: "Clock", label: "Service Cepat & Rapi" },
+        { icon: "Award", label: "Tepercaya Sejak 2020" },
+    ],
+};
+
+const DEFAULT_CONTACT = {
+    whatsapp_number: "6285210647047",
+    whatsapp_message: "Halo Solit 03, saya tertarik dengan laptopnya. Apakah ada yang bisa dibantu?",
+};
 
 export default function Hero() {
     const [isVisible, setIsVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [hero, setHero] = useState(DEFAULT_HERO);
+    const [contact, setContact] = useState(DEFAULT_CONTACT);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        getSiteSettings()
+            .then((settings) => {
+                if (settings.hero) setHero({ ...DEFAULT_HERO, ...settings.hero });
+                if (settings.contact) setContact({ ...DEFAULT_CONTACT, ...settings.contact });
+            })
+            .catch(() => {});
+    }, []);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -25,9 +59,7 @@ export default function Hero() {
     };
 
     const handleWhatsApp = () => {
-        const phoneNumber = "6285210647047";
-        const message = "Halo Solit 03, saya tertarik dengan laptopnya. Apakah ada yang bisa dibantu?";
-        window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+        window.open(`https://wa.me/${contact.whatsapp_number}?text=${encodeURIComponent(contact.whatsapp_message)}`, '_blank');
     };
 
     // ========== LOADING SCREEN — minimalis ==========
@@ -63,12 +95,7 @@ export default function Hero() {
     }
 
     // ========== HERO ==========
-    const trust = [
-        { icon: Shield, label: "Garansi 1 Bulan" },
-        { icon: Truck, label: "Gratis Antar Jabodetabek" },
-        { icon: Clock, label: "Service Cepat & Rapi" },
-        { icon: Award, label: "Tepercaya Sejak 2020" },
-    ];
+    const trust = hero.trust?.length ? hero.trust : DEFAULT_HERO.trust;
 
     return (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-900">
@@ -91,24 +118,23 @@ export default function Hero() {
                     <div className="flex justify-center">
                         <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-1.5 border border-white/15 text-xs sm:text-sm text-white/90 font-medium">
                             <Sparkles className="w-3.5 h-3.5 text-blue-300" />
-                            Tepercaya Sejak 2020
+                            {hero.badge}
                         </span>
                     </div>
 
                     {/* Title */}
                     <div className="space-y-4">
                         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white">
-                            Solit<span className="text-shimmer">03</span>
+                            {hero.title_prefix}<span className="text-shimmer">{hero.title_suffix}</span>
                         </h1>
                         <p className="text-lg sm:text-xl md:text-2xl text-slate-200 font-light">
-                            Laptop Second Rasa Baru, Harga Bersahabat
+                            {hero.subtitle}
                         </p>
                     </div>
 
                     {/* Description */}
                     <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-                        Setiap unit lolos quality control dan bergaransi resmi. Performa ngebut
-                        untuk kuliah, kerja, hingga gaming — tanpa bikin dompet menjerit.
+                        {hero.description}
                     </p>
 
                     {/* CTA */}
@@ -120,7 +146,7 @@ export default function Hero() {
                             transition={{ type: "spring", stiffness: 400, damping: 22 }}
                             className="btn btn-primary px-8 py-3.5 text-sm sm:text-base group"
                         >
-                            Lihat Katalog
+                            {hero.cta_primary_label}
                             <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                         </motion.button>
                         <motion.button
@@ -130,22 +156,25 @@ export default function Hero() {
                             transition={{ type: "spring", stiffness: 400, damping: 22 }}
                             className="btn px-8 py-3.5 text-sm sm:text-base text-white bg-white/10 backdrop-blur-md border border-white/25 hover:bg-white hover:text-slate-900 group"
                         >
-                            Hubungi Kami
+                            {hero.cta_secondary_label}
                             <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
                         </motion.button>
                     </div>
 
                     {/* Trust indicators */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-8">
-                        {trust.map((item, idx) => (
-                            <div
-                                key={idx}
-                                className="flex items-center justify-center gap-2 bg-white/[0.07] backdrop-blur-md rounded-xl px-3 py-3 border border-white/10 hover:bg-white/[0.12] hover:-translate-y-0.5 transition-all duration-300"
-                            >
-                                <item.icon className="w-4.5 h-4.5 text-blue-300 shrink-0" />
-                                <span className="text-xs text-white/90 font-medium">{item.label}</span>
-                            </div>
-                        ))}
+                        {trust.map((item, idx) => {
+                            const Icon = getServiceIcon(item.icon);
+                            return (
+                                <div
+                                    key={idx}
+                                    className="flex items-center justify-center gap-2 bg-white/[0.07] backdrop-blur-md rounded-xl px-3 py-3 border border-white/10 hover:bg-white/[0.12] hover:-translate-y-0.5 transition-all duration-300"
+                                >
+                                    <Icon className="w-4.5 h-4.5 text-blue-300 shrink-0" />
+                                    <span className="text-xs text-white/90 font-medium">{item.label}</span>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

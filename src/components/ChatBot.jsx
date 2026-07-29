@@ -489,9 +489,8 @@ export default function ChatBot() {
 
               {!isMinimized && (
                 <>
-                  {/* Area pesan — scroll internal, tidak dibajak Lenis */}
+                  {/* Area pesan — scroll internal */}
                   <div
-                    data-lenis-prevent
                     className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-4 bg-slate-50"
                   >
                     {messages.map((message) => (

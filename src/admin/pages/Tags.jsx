@@ -314,13 +314,13 @@ export default function Tags() {
       {/* Header Section */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+          <h1 className="text-2xl font-bold text-gray-800">
             Manajemen Tags
           </h1>
           <p className="text-sm text-gray-500 mt-1">Kelola semua tag produk Anda</p>
         </div>
         <button onClick={() => setCreateOpen(true)}
-          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105">
+          className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-md transition-all duration-200 hover:scale-105">
           <Plus size={18} /> Tambah Tag
         </button>
       </div>

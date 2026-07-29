@@ -1,11 +1,23 @@
+import { useState, useEffect } from "react";
 import Reveal from "./ui/Reveal";
+import { getTestimonials } from "../services/siteContent";
+
+const DEFAULT_VIDEOS = [
+  { id: "d1", video_url: "/videos/video1.mp4" },
+  { id: "d2", video_url: "/videos/video2.mp4" },
+  { id: "d3", video_url: "/videos/video3.mp4" },
+];
 
 export default function Testimoni() {
-  const videos = [
-    { src: "/videos/video1.mp4" },
-    { src: "/videos/video2.mp4" },
-    { src: "/videos/video3.mp4" },
-  ];
+  const [videos, setVideos] = useState(DEFAULT_VIDEOS);
+
+  useEffect(() => {
+    getTestimonials()
+      .then((data) => { if (data.length) setVideos(data); })
+      .catch(() => {});
+  }, []);
+
+  if (videos.length === 0) return null;
 
   return (
     <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-slate-50 text-center">
@@ -19,12 +31,12 @@ export default function Testimoni() {
 
         {videos.map((item, index) => (
           <Reveal
-            key={index}
+            key={item.id}
             delay={index * 0.12}
             className="rounded-2xl overflow-hidden border border-slate-200 shadow-soft hover:shadow-soft-lg transition duration-300 hover:-translate-y-1 w-full sm:w-auto"
           >
             <video
-              src={item.src}
+              src={item.video_url}
               controls
               className="w-full sm:w-48 md:w-52 h-80 sm:h-96 object-cover"
             />

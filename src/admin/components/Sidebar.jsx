@@ -7,7 +7,14 @@ import {
   ChevronLeft,
   ChevronRight,
   LogOut,
-  Camera
+  Newspaper,
+  FolderKanban,
+  Cookie,
+  Home,
+  Wrench,
+  Image as ImageIcon,
+  Video,
+  Megaphone
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -55,11 +62,19 @@ export default function Sidebar() {
 
   const menus = [
     { name: "Dashboard", icon: LayoutDashboard, path: "/admin", exact: true },
+    { name: "Konten Homepage", icon: Home, path: "/admin/site-content", exact: false },
+    { name: "Layanan", icon: Wrench, path: "/admin/services", exact: false },
+    { name: "Showcase Laptop", icon: ImageIcon, path: "/admin/promo-images", exact: false },
+    { name: "Video Testimoni", icon: Video, path: "/admin/testimonials", exact: false },
     { name: "Products", icon: Laptop, path: "/admin/products", exact: false },
     { name: "Brands", icon: Tags, path: "/admin/brands", exact: false },
     { name: "Categories", icon: Layers3, path: "/admin/categories", exact: false },
     { name: "Tags", icon: Shapes, path: "/admin/tags", exact: false },
-    { name: "Foto Katalog", icon: Camera, path: "/admin/katalog-foto", exact: false },
+    { name: "Artikel", icon: Newspaper, path: "/admin/articles", exact: false },
+    { name: "Kategori Artikel", icon: FolderKanban, path: "/admin/article-categories", exact: false },
+    { name: "Tag Artikel", icon: Shapes, path: "/admin/article-tags", exact: false },
+    { name: "Iklan Artikel", icon: Megaphone, path: "/admin/article-ads", exact: false },
+    { name: "Cookie Tracking", icon: Cookie, path: "/admin/cookie-tracking", exact: false },
   ];
 
   const toggleSidebar = () => {

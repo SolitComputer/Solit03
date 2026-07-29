@@ -1,12 +1,22 @@
-import { MessageCircle, Phone, Send } from "lucide-react";
+import { MessageCircle, Send } from "lucide-react";
 import { useState, useEffect } from "react";
+import { getSiteSettings } from "../services/siteContent";
 
-const WHATSAPP_NUMBER = "6285210647047"; // Nomor WhatsApp tanpa +
-const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
+const DEFAULT_NUMBER = "6285210647047";
+const DEFAULT_MESSAGE = "Halo Solit 03, saya ingin bertanya tentang...";
 
 export default function WhatsAppButton() {
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [whatsappNumber, setWhatsappNumber] = useState(DEFAULT_NUMBER);
+
+  useEffect(() => {
+    getSiteSettings()
+      .then((settings) => {
+        if (settings.contact?.whatsapp_number) setWhatsappNumber(settings.contact.whatsapp_number);
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,7 +31,7 @@ export default function WhatsAppButton() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const defaultMessage = "Halo Solit 03, saya ingin bertanya tentang...";
+  const whatsappUrl = `https://wa.me/${whatsappNumber}`;
 
   return (
     <>
@@ -40,7 +50,7 @@ export default function WhatsAppButton() {
 
           {/* Main Button */}
           <a
-            href={`${WHATSAPP_URL}?text=${encodeURIComponent(defaultMessage)}`}
+            href={`${whatsappUrl}?text=${encodeURIComponent(DEFAULT_MESSAGE)}`}
             target="_blank"
             rel="noopener noreferrer"
             onMouseEnter={() => setIsHovered(true)}
@@ -74,7 +84,7 @@ export default function WhatsAppButton() {
               </div>
             </div>
           </div>
-          
+
           {/* Body */}
           <div className="p-4">
             <div className="bg-slate-50 rounded-lg p-3 mb-3">
@@ -82,9 +92,9 @@ export default function WhatsAppButton() {
                 Halo! Ada yang bisa kami bantu? Silakan klik tombol di bawah untuk memulai chat via WhatsApp.
               </p>
             </div>
-            
+
             <a
-              href={`${WHATSAPP_URL}?text=${encodeURIComponent(defaultMessage)}`}
+              href={`${whatsappUrl}?text=${encodeURIComponent(DEFAULT_MESSAGE)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 w-full bg-green-500 hover:bg-green-600 text-white text-sm font-medium py-2.5 rounded-lg transition-all duration-300"

@@ -1,4 +1,3 @@
-import Navbar from "../components/layout/Navbar";
 import Hero from "../components/Hero";
 import BestSeller from "../components/LatestProduct";
 import About from "../components/About";
@@ -11,6 +10,7 @@ import Location from "../components/Location";
 import Marketplace from "../components/Marketplace";
 import Footer from "../components/layout/Footer";
 import ChatBot from "../components/ChatBot";
+import LatestArticles from "../components/berita/LatestArticles";
 import { Helmet } from "react-helmet-async";
 
 export default function Home() {
@@ -32,13 +32,13 @@ export default function Home() {
         />
       </Helmet>
       <main className="overflow-x-hidden">
-        <Navbar />
         <Hero />
         <BestSeller />
         <About />
         <StatsStrip />
         <Services />
         <Promo />
+        <LatestArticles />
         <SocialMedia />
         <Testimoni />
         <Location />

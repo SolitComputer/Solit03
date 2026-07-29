@@ -9,7 +9,6 @@ import {
   TrendingUp, Flame, Gift, Award
 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
-import Tilt from "react-parallax-tilt";
 
 const CATEGORY_ICONS = {
   gaming: <Gamepad2 size={20} />,
@@ -227,21 +226,7 @@ function AnimatedProductCard({ product, onClick, index, allTags }) {
     </div>
   );
 
-  // Tilt 3D halus di desktop; mobile tanpa tilt agar ringan & scroll mulus
-  if (isMobile) return card;
-
-  return (
-    <Tilt
-      tiltMaxAngleX={5}
-      tiltMaxAngleY={5}
-      scale={1.03}
-      transitionSpeed={800}
-      gyroscope={false}
-      className="h-full [transform-style:preserve-3d]"
-    >
-      {card}
-    </Tilt>
-  );
+  return card;
 }
 
 // Animated Search Bar
