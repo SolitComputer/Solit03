@@ -1,24 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 import { Image } from "lucide-react";
-
-// Ambil semua gambar dari folder assets/laptop secara otomatis
-const laptopImages = import.meta.glob("../assets/laptop/*.{png,jpg,jpeg,webp}", {
-  eager: true,
-  import: "default",
-});
-
-const showcases = Object.entries(laptopImages)
-  // Urutkan berdasarkan angka pada nama file (1.png, 2.png, ... 10.png)
-  .sort(([a], [b]) => {
-    const na = parseInt(a.match(/(\d+)\.\w+$/)?.[1] ?? 0, 10);
-    const nb = parseInt(b.match(/(\d+)\.\w+$/)?.[1] ?? 0, 10);
-    return na - nb;
-  })
-  .map(([, img]) => ({ img }));
+import { getPromoImages } from "../services/siteContent";
+import { DEFAULT_SHOWCASE_IMAGES } from "../utils/defaultShowcaseImages";
 
 export default function Promo() {
   const [isVisible, setIsVisible] = useState(false);
+  const [showcases, setShowcases] = useState(DEFAULT_SHOWCASE_IMAGES);
   const sectionRef = useRef(null);
+
+  useEffect(() => {
+    getPromoImages()
+      .then((data) => { if (data.length) setShowcases(data); })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -40,6 +34,8 @@ export default function Promo() {
       }
     };
   }, []);
+
+  if (showcases.length === 0) return null;
 
   return (
     <section
@@ -72,15 +68,15 @@ export default function Promo() {
       >
         {showcases.map((item, index) => (
           <div
-            key={index}
+            key={item.id}
             className="group cursor-pointer"
             style={{ transitionDelay: `${index * 80}ms` }}
           >
             {/* Image */}
             <div className="relative rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-soft-sm hover:shadow-soft transition-all duration-300">
               <img
-                src={item.img}
-                alt={item.title}
+                src={item.image_url}
+                alt={item.title || "Laptop Solit 03"}
                 className="w-full aspect-square object-cover transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
               />
@@ -90,9 +86,11 @@ export default function Promo() {
             </div>
 
             {/* Title */}
-            <p className="text-center text-sm sm:text-base font-medium text-slate-500 mt-2 group-hover:text-slate-900 transition-colors">
-              {item.title}
-            </p>
+            {item.title && (
+              <p className="text-center text-sm sm:text-base font-medium text-slate-500 mt-2 group-hover:text-slate-900 transition-colors">
+                {item.title}
+              </p>
+            )}
           </div>
         ))}
       </div>

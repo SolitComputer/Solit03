@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import Tilt from "react-parallax-tilt";
 import { ShoppingBag, Laptop, Clock, TrendingUp, Sparkles, ArrowRight, Zap, ShieldCheck, Flame } from "lucide-react";
 import { supabase } from "../services/supabase";
 
@@ -205,18 +204,8 @@ export default function LatestProducts() {
                 }`}
               style={{ transitionDelay: `${index * 120}ms`, transitionTimingFunction: 'cubic-bezier(0.2, 0.9, 0.4, 1.1)' }}
             >
-            <Tilt
-              tiltMaxAngleX={6}
-              tiltMaxAngleY={6}
-              scale={1.02}
-              transitionSpeed={900}
-              glareEnable
-              glareMaxOpacity={0.12}
-              glareColor="#ffffff"
-              glarePosition="all"
-              glareBorderRadius="16px"
-              gyroscope={false}
-              className="group card-3d overflow-hidden cursor-pointer h-full [transform-style:preserve-3d]"
+            <div
+              className="group card-3d overflow-hidden cursor-pointer h-full"
               onClick={() => handleProductClick(item.slug)}
             >
               {/* Image Section */}
@@ -321,7 +310,7 @@ export default function LatestProducts() {
                   </div>
                 </div>
               </div>
-            </Tilt>
+            </div>
             </div>
           ))
         )}

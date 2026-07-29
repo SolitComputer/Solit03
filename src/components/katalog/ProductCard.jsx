@@ -1,6 +1,5 @@
 // components/katalog/ProductCard.jsx
 import React, { useRef, useEffect, useState } from 'react';
-import Tilt from 'react-parallax-tilt';
 import { fmtIDR } from '../../services/api';
 import { Crown, Flame, Sparkles } from 'lucide-react';
 
@@ -181,21 +180,7 @@ function ProductCard({ product, viewMode, mode, stock }) {
         </article>
     );
 
-    // Tilt halus hanya di desktop (mobile: tanpa tilt agar ringan & scroll mulus)
-    if (isMobile) return gridCard;
-
-    return (
-        <Tilt
-            tiltMaxAngleX={5}
-            tiltMaxAngleY={5}
-            scale={1.03}
-            transitionSpeed={800}
-            gyroscope={false}
-            className="h-full [transform-style:preserve-3d]"
-        >
-            {gridCard}
-        </Tilt>
-    );
+    return gridCard;
 }
 
 export default ProductCard;

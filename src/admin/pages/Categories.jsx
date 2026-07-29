@@ -98,13 +98,13 @@ function CategoryModal({ isOpen, onClose, onSubmit, title, initialData, isEditin
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md" style={{ maxHeight: "90vh", overflowY: "auto" }}>
-        {/* Header with gradient accent */}
+        {/* Header with blue accent */}
         <div className="relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-pink-500" />
+          <div className="absolute top-0 left-0 right-0 h-1 bg-blue-600" />
           <div className="flex items-center justify-between px-6 py-4">
             <div className="flex items-center gap-2">
-              <div className="p-1.5 bg-purple-100 rounded-lg">
-                <Layers3 size={16} className="text-purple-600" />
+              <div className="p-1.5 bg-blue-100 rounded-lg">
+                <Layers3 size={16} className="text-blue-600" />
               </div>
               <h2 className="text-base font-bold text-gray-800">{title}</h2>
             </div>
@@ -126,7 +126,7 @@ function CategoryModal({ isOpen, onClose, onSubmit, title, initialData, isEditin
               placeholder="Contoh: Gaming Laptop, Office, Premium" 
               value={form.name} 
               onChange={handleName}
-              className={`w-full bg-gray-50 border-2 rounded-xl text-sm px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all duration-200
+              className={`w-full bg-gray-50 border-2 rounded-xl text-sm px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200
                 ${errors.name ? "border-red-400 focus:ring-red-500" : "border-gray-200 hover:border-gray-300"}`} 
             />
             {errors.name && <p className="text-xs text-red-500 flex items-center gap-1"><AlertTriangle className="w-3.5 h-3.5" aria-hidden="true" /> {errors.name}</p>}
@@ -141,11 +141,11 @@ function CategoryModal({ isOpen, onClose, onSubmit, title, initialData, isEditin
                 placeholder="slug-kategori-otomatis"
                 value={form.slug}
                 onChange={e => { setSlugManual(true); setForm(f => ({ ...f, slug: e.target.value })); }}
-                className="w-full bg-gray-50 border-2 border-gray-200 rounded-xl text-sm font-mono px-4 py-2.5 pr-16 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all duration-200 text-gray-600" 
+                className="w-full bg-gray-50 border-2 border-gray-200 rounded-xl text-sm font-mono px-4 py-2.5 pr-16 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200 text-gray-600" 
               />
               {slugManual && (
                 <button type="button" onClick={() => { setSlugManual(false); setForm(f => ({ ...f, slug: slugify(f.name) })); }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-medium text-purple-600 hover:text-purple-700 bg-white px-2 py-1 rounded-lg shadow-sm">
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-medium text-blue-600 hover:text-blue-700 bg-white px-2 py-1 rounded-lg shadow-sm">
                   Auto
                 </button>
               )}
@@ -164,10 +164,10 @@ function CategoryModal({ isOpen, onClose, onSubmit, title, initialData, isEditin
                   onClick={() => handleIconSelect(opt.value)}
                   className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all duration-200
                     ${form.icon === opt.value 
-                      ? `bg-gradient-to-br ${opt.bg} ring-2 ring-purple-500 shadow-md transform scale-105` 
+                      ? `bg-blue-50 ring-2 ring-blue-500 shadow-md transform scale-105` 
                       : "bg-gray-50 border-2 border-gray-200 hover:bg-gray-100 hover:border-gray-300"}`}>
                   <opt.Icon className="w-6 h-6" aria-hidden="true" />
-                  <span className={`text-[10px] font-medium ${form.icon === opt.value ? opt.text : "text-gray-500"}`}>
+                  <span className={`text-[10px] font-medium ${form.icon === opt.value ? "text-blue-600 font-bold" : "text-gray-500"}`}>
                     {opt.value}
                   </span>
                 </button>
@@ -176,17 +176,17 @@ function CategoryModal({ isOpen, onClose, onSubmit, title, initialData, isEditin
           </div>
 
           {/* Preview Card */}
-          <div className={`border-2 rounded-xl p-4 bg-gradient-to-r ${iconStyle.bg} border-${iconStyle.text.split('-')[1]}-200`}>
+          <div className="border-2 border-blue-200 rounded-xl p-4 bg-blue-50/50">
             <p className="text-xs font-semibold text-gray-600 mb-2">Preview Kategori</p>
             <div className="flex items-center gap-3">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md bg-white`}>
-                <FormIcon className={`w-6 h-6 ${iconStyle.text}`} aria-hidden="true" />
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md bg-white">
+                <FormIcon className="w-6 h-6 text-blue-600" aria-hidden="true" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold text-gray-800 truncate">{form.name || "Nama Kategori"}</p>
                 <p className="text-xs text-gray-500 font-mono truncate">{form.slug || "slug-kategori"}</p>
               </div>
-              <div className={`px-2 py-1 rounded-lg text-xs font-medium ${iconStyle.text} bg-white shadow-sm`}>
+              <div className="px-2.5 py-1 rounded-lg text-xs font-bold text-blue-700 bg-white shadow-sm">
                 {form.icon || "Icon"}
               </div>
             </div>
@@ -199,7 +199,7 @@ function CategoryModal({ isOpen, onClose, onSubmit, title, initialData, isEditin
               Batal
             </button>
             <button type="submit"
-              className="flex-1 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
+              className="flex-1 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
               <Save size={16} /> {isEditing ? "Update Kategori" : "Simpan Kategori"}
             </button>
           </div>
@@ -334,13 +334,13 @@ export default function Categories() {
       {/* Header Section */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl font-bold text-gray-800">
             Manajemen Kategori
           </h1>
           <p className="text-sm text-gray-500 mt-1">Kelola semua kategori produk Anda</p>
         </div>
         <button onClick={() => setCreateOpen(true)}
-          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-sm font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105">
+          className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-md transition-all duration-200 hover:scale-105">
           <Plus size={18} /> Tambah Kategori
         </button>
       </div>
@@ -348,14 +348,14 @@ export default function Categories() {
       {/* Stats Cards */}
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: "Total Kategori", value: categories.length, icon: Files, gradient: "from-purple-500 to-pink-500" },
-          { label: "Ditampilkan", value: paginated.length, icon: Eye, gradient: "from-gray-500 to-gray-600" },
-          { label: "Filter Aktif", value: search ? "Ya" : "Tidak", icon: Search, gradient: "from-blue-500 to-blue-600" },
-        ].map(({ label, value, icon: Icon, gradient }) => (
-          <div key={label} className="bg-white rounded-xl shadow-md p-5 hover:shadow-lg transition-shadow duration-200 border border-gray-100">
+          { label: "Total Kategori", value: categories.length, icon: Files, badgeBg: "bg-blue-600" },
+          { label: "Ditampilkan", value: paginated.length, icon: Eye, badgeBg: "bg-gray-700" },
+          { label: "Filter Aktif", value: search ? "Ya" : "Tidak", icon: Search, badgeBg: "bg-blue-600" },
+        ].map(({ label, value, icon: Icon, badgeBg }) => (
+          <div key={label} className="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
             <div className="flex items-center justify-between mb-2">
               <Icon className="w-6 h-6 text-gray-600" aria-hidden="true" />
-              <span className={`text-xs font-semibold px-2 py-1 rounded-full bg-gradient-to-r ${gradient} text-white`}>
+              <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${badgeBg} text-white`}>
                 {typeof value === 'number' ? `${value} item` : value}
               </span>
             </div>
@@ -366,7 +366,7 @@ export default function Categories() {
       </div>
 
       {/* Toolbar */}
-      <div className="bg-white rounded-xl shadow-md border border-gray-100 p-4">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
             <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -375,7 +375,7 @@ export default function Categories() {
               placeholder="Cari kategori berdasarkan nama atau slug..." 
               value={search} 
               onChange={e => setSearch(e.target.value)}
-              className="w-full bg-gray-50 border-2 border-gray-200 rounded-xl text-sm pl-10 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all duration-200" 
+              className="w-full bg-gray-50 border-2 border-gray-200 rounded-xl text-sm pl-10 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200" 
             />
             {search && <button onClick={() => setSearch("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"><X size={14} /></button>}
           </div>
@@ -386,7 +386,7 @@ export default function Categories() {
             ].map((s, i) => (
               <div key={i} className="relative">
                 <select value={s.val} onChange={e => s.set(e.target.value)}
-                  className="bg-gray-50 border-2 border-gray-200 rounded-xl text-sm pl-3 pr-8 py-2.5 focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none cursor-pointer text-gray-700 font-medium hover:border-gray-300 transition-all duration-200">
+                  className="bg-gray-50 border-2 border-gray-200 rounded-xl text-sm pl-3 pr-8 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-gray-700 font-medium hover:border-gray-300 transition-all duration-200">
                   {s.opts.map(([v,l]) => <option key={v} value={v}>{l}</option>)}
                 </select>
                 <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
@@ -487,7 +487,7 @@ export default function Categories() {
                     <button key={n} onClick={() => setPage(n)}
                       className={`min-w-[32px] h-8 rounded-lg text-sm font-semibold transition-all duration-200 
                         ${page===n 
-                          ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md" 
+                          ? "bg-blue-600 text-white shadow-sm font-bold" 
                           : "text-gray-600 hover:bg-gray-100 border-2 border-transparent hover:border-gray-200"}`}>
                       {n}
                     </button>
