@@ -97,6 +97,9 @@ export default function ArtikelDetail() {
   const topAd = allAds.find((a) => a.banner_size === "billboard" || a.banner_size === "leaderboard") || allAds[0];
   const sidebarAd = allAds.find((a) => a.banner_size === "medium_rectangle") || (allAds.length > 1 ? allAds[1] : (allAds[0] !== topAd ? allAds[0] : null));
   const contentAd = allAds.length > 2 ? allAds[2] : (allAds.find((a) => a !== topAd && a !== sidebarAd) || null);
+  const flankAds = allAds.filter((a) => a.banner_size === "sidebar_flank");
+  const flankLeftAd = flankAds[0] || null;
+  const flankRightAd = flankAds[1] || null;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -142,15 +145,27 @@ export default function ArtikelDetail() {
         </div>
       </div>
 
-      {/* ============ IKLAN FLANKING — viewport 2xl ============ */}
-      {allAds[3] && (
-        <div className="hidden 2xl:block fixed left-4 top-28 w-[220px] z-20">
-          <AdCard ad={allAds[3]} />
+      {/* ============ IKLAN KANAN-KIRI — desktop layar lebar (>= 1720px) ============ */}
+      {flankLeftAd && (
+        <div
+          className="hidden min-[1720px]:block fixed top-28 z-20"
+          style={{
+            right: "calc(50vw + 592px)",
+            width: Math.min(flankLeftAd.custom_width || 260, 300),
+          }}
+        >
+          <AdCard ad={flankLeftAd} />
         </div>
       )}
-      {allAds[4] && (
-        <div className="hidden 2xl:block fixed right-4 top-28 w-[220px] z-20">
-          <AdCard ad={allAds[4]} />
+      {flankRightAd && (
+        <div
+          className="hidden min-[1720px]:block fixed top-28 z-20"
+          style={{
+            left: "calc(50vw + 592px)",
+            width: Math.min(flankRightAd.custom_width || 260, 300),
+          }}
+        >
+          <AdCard ad={flankRightAd} />
         </div>
       )}
 

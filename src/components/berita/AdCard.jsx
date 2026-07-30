@@ -4,6 +4,8 @@ import { AD_BANNER_SIZES } from "../../utils/adBannerSizes";
 export default function AdCard({ ad }) {
   if (!ad) return null;
   const spec = AD_BANNER_SIZES[ad.banner_size] || AD_BANNER_SIZES.billboard;
+  const width = spec.customSize ? ad.custom_width || spec.width : spec.width;
+  const height = spec.customSize ? ad.custom_height || spec.height : spec.height;
   const isExternal = /^https?:\/\//i.test(ad.cta_url || "");
 
   return (
@@ -12,7 +14,7 @@ export default function AdCard({ ad }) {
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
       className="group relative block w-full bg-slate-100 rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-blue-300 transition-all duration-300"
-      style={{ aspectRatio: `${spec.width} / ${spec.height}` }}
+      style={{ aspectRatio: `${width} / ${height}` }}
     >
       <img
         src={ad.image_url}
