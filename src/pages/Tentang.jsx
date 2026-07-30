@@ -53,7 +53,7 @@ export default function Tentang() {
         <link rel="canonical" href="https://solit03.com/tentang" />
       </Helmet>
 
-      <main className="pt-8 bg-white overflow-hidden">
+      <main className="pt-8 bg-surface overflow-hidden">
         {/* HERO - dengan animasi zoom dan fade */}
         <motion.section
           initial={{ opacity: 0 }}
@@ -110,7 +110,7 @@ export default function Tentang() {
             variants={fadeInUp}
             className="text-center max-w-3xl mx-auto"
           >
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-content mb-4">
               Berawal dari Kepercayaan, Tumbuh Berkat Kualitas
             </h2>
             <motion.div
@@ -119,7 +119,7 @@ export default function Tentang() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="h-0.5 bg-blue-500/60 mx-auto mb-5 rounded-full"
             />
-            <p className="text-slate-500 leading-relaxed text-base md:text-lg">
+            <p className="text-content-muted leading-relaxed text-base md:text-lg">
               Solit 03 hadir dari satu keresahan sederhana: mengapa laptop
               berkualitas tinggi harus selalu mahal? Kami percaya semua orang
               berhak mendapatkan perangkat terbaik tanpa harus mengorbankan
@@ -163,7 +163,7 @@ export default function Tentang() {
                 initial={{ x: -20, opacity: 0 }}
                 whileInView={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.4 }}
-                className="text-slate-500 leading-relaxed text-sm md:text-base mb-4"
+                className="text-content-muted leading-relaxed text-sm md:text-base mb-4"
               >
                 Setiap laptop yang masuk ke Solit 03 melewati proses Quality
                 Control (QC) berlapis untuk memastikan performa, fisik, dan
@@ -173,7 +173,7 @@ export default function Tentang() {
                 initial={{ x: -20, opacity: 0 }}
                 whileInView={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="text-slate-500 leading-relaxed text-sm md:text-base"
+                className="text-content-muted leading-relaxed text-sm md:text-base"
               >
                 Kami tidak hanya menjual laptop bekas — kami menghadirkan
                 kembali kualitas, kenyamanan, dan rasa percaya bagi setiap
@@ -212,7 +212,7 @@ export default function Tentang() {
               </motion.div>
 
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">
-                <span className="text-slate-900">
+                <span className="text-content">
                   Visi &
                 </span>
                 <span className="text-blue-600 ml-2">
@@ -238,13 +238,13 @@ export default function Tentang() {
                 variants={fadeInLeft}
                 whileHover={{ y: -5, scale: 1.02 }}
                 transition={{ duration: 0.3 }}
-                className="group relative bg-white rounded-2xl border border-slate-200 shadow-soft hover:shadow-soft-lg overflow-hidden"
+                className="group relative bg-surface rounded-2xl border border-border shadow-soft hover:shadow-soft-lg overflow-hidden"
               >
                 <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl" />
                 <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl" />
 
                 <div className="absolute inset-0 bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl -z-10" />
-                <div className="absolute inset-[1px] bg-white rounded-2xl -z-10" />
+                <div className="absolute inset-[1px] bg-surface rounded-2xl -z-10" />
 
                 <div className="p-5 md:p-6 text-center relative">
                   <motion.div
@@ -282,7 +282,7 @@ export default function Tentang() {
                     </span>
                   </h3>
 
-                  <p className="text-slate-600 leading-relaxed text-sm">
+                  <p className="text-content-soft leading-relaxed text-sm">
                     Menjadi perusahaan teknologi terpercaya yang menghadirkan
                     laptop berkualitas tinggi dengan harga yang terjangkau untuk
                     semua kalangan.
@@ -295,13 +295,13 @@ export default function Tentang() {
                 variants={fadeInRight}
                 whileHover={{ y: -5, scale: 1.02 }}
                 transition={{ duration: 0.3 }}
-                className="group relative bg-white rounded-2xl border border-slate-200 shadow-soft hover:shadow-soft-lg overflow-hidden"
+                className="group relative bg-surface rounded-2xl border border-border shadow-soft hover:shadow-soft-lg overflow-hidden"
               >
                 <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl" />
                 <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl" />
 
                 <div className="absolute inset-0 bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl -z-10" />
-                <div className="absolute inset-[1px] bg-white rounded-2xl -z-10" />
+                <div className="absolute inset-[1px] bg-surface rounded-2xl -z-10" />
 
                 <div className="p-5 md:p-6">
                   <motion.div
@@ -371,7 +371,7 @@ export default function Tentang() {
                             </svg>
                           </motion.div>
                         </div>
-                        <span className="text-slate-600 text-xs md:text-sm leading-relaxed">
+                        <span className="text-content-soft text-xs md:text-sm leading-relaxed">
                           {item}
                         </span>
                       </motion.li>
@@ -398,7 +398,7 @@ export default function Tentang() {
                   Core Values
                 </span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-3">
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-content mb-3">
                 Nilai-Nilai Kami
               </h2>
               <motion.div
@@ -407,7 +407,7 @@ export default function Tentang() {
                 transition={{ duration: 0.6 }}
                 className="h-1 w-16 bg-gradient-to-r from-blue-500 to-blue-700 rounded-full mx-auto mb-4"
               />
-              <p className="text-slate-500 text-base md:text-lg max-w-2xl mx-auto">
+              <p className="text-content-muted text-base md:text-lg max-w-2xl mx-auto">
                 Prinsip yang menjadi fondasi setiap langkah kami dalam melayani
                 pelanggan.
               </p>
@@ -485,7 +485,7 @@ export default function Tentang() {
                 variants={scaleIn}
                 whileHover={{ y: -8, scale: 1.02 }}
                 transition={{ duration: 0.3 }}
-                className="group bg-white rounded-2xl border border-slate-200 shadow-soft hover:shadow-soft-lg overflow-hidden"
+                className="group bg-surface rounded-2xl border border-border shadow-soft hover:shadow-soft-lg overflow-hidden"
               >
                 <div className="p-6 md:p-7 text-center">
                   <motion.div
@@ -495,10 +495,10 @@ export default function Tentang() {
                   >
                     {item.icon}
                   </motion.div>
-                  <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-2">
+                  <h3 className="text-lg md:text-xl font-bold text-content mb-2">
                     {item.title}
                   </h3>
-                  <p className="text-slate-500 text-sm md:text-base leading-relaxed">
+                  <p className="text-content-muted text-sm md:text-base leading-relaxed">
                     {item.desc}
                   </p>
                 </div>
@@ -513,7 +513,7 @@ export default function Tentang() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="bg-slate-50 py-12 md:py-16"
+          className="bg-surface-muted py-12 md:py-16"
         >
           <div className="max-w-6xl mx-auto px-4">
             <motion.div
@@ -525,7 +525,7 @@ export default function Tentang() {
             >
               <motion.h2
                 variants={fadeInUp}
-                className="text-2xl md:text-3xl font-bold text-slate-900 mb-3"
+                className="text-2xl md:text-3xl font-bold text-content mb-3"
               >
                 Tim Kami
               </motion.h2>
@@ -537,7 +537,7 @@ export default function Tentang() {
               />
               <motion.p
                 variants={fadeInUp}
-                className="text-slate-500 text-sm md:text-base max-w-2xl mx-auto"
+                className="text-content-muted text-sm md:text-base max-w-2xl mx-auto"
               >
                 Profesional yang berdedikasi memberikan pelayanan terbaik untuk
                 setiap pelanggan.

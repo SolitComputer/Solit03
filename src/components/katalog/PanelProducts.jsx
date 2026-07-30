@@ -113,10 +113,10 @@ function PanelProducts({ viewMode, setViewMode }) {
             {/* Header dengan font lebih kecil */}
             <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
                 <div>
-                    <h3 className="text-sm sm:text-base font-semibold text-slate-800 m-0">
+                    <h3 className="text-sm sm:text-base font-semibold text-content m-0">
                         {getTitle}
                     </h3>
-                    <p className="text-[11px] text-slate-400 mt-0.5">
+                    <p className="text-[11px] text-content-muted mt-0.5">
                         {products.length} produk ditemukan
                     </p>
                 </div>
@@ -125,8 +125,8 @@ function PanelProducts({ viewMode, setViewMode }) {
                     <div className="flex gap-1 bg-slate-100 rounded-lg p-0.5">
                         <button
                             className={`px-2.5 py-1 text-[11px] font-medium rounded-md transition-all ${viewMode === 'grid'
-                                ? 'bg-white shadow-soft-sm text-blue-600'
-                                : 'text-slate-500 hover:text-slate-700'
+                                ? 'bg-surface shadow-soft-sm text-blue-600'
+                                : 'text-content-muted hover:text-content-soft'
                                 }`}
                             onClick={() => setViewMode('grid')}
                         >
@@ -136,8 +136,8 @@ function PanelProducts({ viewMode, setViewMode }) {
                         </button>
                         <button
                             className={`px-2.5 py-1 text-[11px] font-medium rounded-md transition-all ${viewMode === 'list'
-                                ? 'bg-white shadow-soft-sm text-blue-600'
-                                : 'text-slate-500 hover:text-slate-700'
+                                ? 'bg-surface shadow-soft-sm text-blue-600'
+                                : 'text-content-muted hover:text-content-soft'
                                 }`}
                             onClick={() => setViewMode('list')}
                         >
@@ -171,8 +171,8 @@ function PanelProducts({ viewMode, setViewMode }) {
             {products.length === 0 && !loading && (
                 <div className="text-center py-12">
                     <div className="flex justify-center mb-3"><Search className="w-12 h-12 text-slate-300" aria-hidden="true" /></div>
-                    <p className="text-slate-500 text-sm">Tidak ada produk yang ditemukan</p>
-                    <p className="text-slate-400 text-xs mt-1">Coba pilih kategori atau filter lain</p>
+                    <p className="text-content-muted text-sm">Tidak ada produk yang ditemukan</p>
+                    <p className="text-content-muted text-xs mt-1">Coba pilih kategori atau filter lain</p>
                 </div>
             )}
         </div>

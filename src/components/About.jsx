@@ -41,7 +41,7 @@ export default function About() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative px-4 sm:px-6 lg:px-8 py-16 md:py-24 overflow-hidden bg-slate-50">
+    <section ref={sectionRef} className="relative px-4 sm:px-6 lg:px-8 py-16 md:py-24 overflow-hidden bg-surface-muted">
       {/* Subtle decorative orb */}
       <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-100/40 rounded-full blur-3xl pointer-events-none" />
 
@@ -53,7 +53,7 @@ export default function About() {
         </span>
 
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mt-5">
-          <span className="text-slate-900">{about.heading_normal}</span>
+          <span className="text-content">{about.heading_normal}</span>
           <span className="text-blue-600">{about.heading_accent}</span>
         </h2>
 
@@ -63,7 +63,7 @@ export default function About() {
           <div className="w-12 h-0.5 bg-gradient-to-l from-transparent to-blue-400 rounded-full" />
         </div>
 
-        <p className="text-sm md:text-base text-slate-500 mt-6 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-sm md:text-base text-content-muted mt-6 max-w-2xl mx-auto leading-relaxed">
           {about.description}
         </p>
       </div>

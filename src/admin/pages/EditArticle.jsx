@@ -67,7 +67,7 @@ export default function EditArticle() {
     return (
       <div className="flex flex-col items-center justify-center h-96 gap-3">
         <div className="w-10 h-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
-        <p className="text-xs font-semibold text-gray-400">Memuat data artikel...</p>
+        <p className="text-xs font-semibold text-content-muted">Memuat data artikel...</p>
       </div>
     );
   }
@@ -75,7 +75,7 @@ export default function EditArticle() {
   return (
     <section className="space-y-6">
       {/* Header with Back Button */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface p-5 rounded-2xl border border-border shadow-sm">
         <div>
           <Link 
             to="/admin/articles" 
@@ -88,8 +88,8 @@ export default function EditArticle() {
               <Edit3 size={20} />
             </div>
             <div>
-              <h1 className="text-xl md:text-2xl font-bold text-gray-800">Edit Artikel</h1>
-              <p className="text-xs text-gray-400">Perbarui informasi, konten, atau status artikel</p>
+              <h1 className="text-xl md:text-2xl font-bold text-content">Edit Artikel</h1>
+              <p className="text-xs text-content-muted">Perbarui informasi, konten, atau status artikel</p>
             </div>
           </div>
         </div>

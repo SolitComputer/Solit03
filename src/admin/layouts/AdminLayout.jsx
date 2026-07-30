@@ -4,7 +4,7 @@ import Topbar from "../components/Topbar";
 
 export default function AdminLayout() {
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
+    <div className="flex h-screen overflow-hidden bg-surface-muted">
       {/* Sidebar */}
       <Sidebar />
 

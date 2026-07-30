@@ -6,7 +6,7 @@
  * @param {number} daysThreshold - Jumlah hari batas (default 3 hari)
  * @returns {boolean}
  */
-export const isNewProduct = (dateInput, daysThreshold = 3) => {
+export const isNewProduct = (dateInput, daysThreshold = 30) => {
   if (!dateInput) return false;
   const createdDate = new Date(dateInput).getTime();
   if (isNaN(createdDate)) return false;

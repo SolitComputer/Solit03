@@ -63,7 +63,7 @@ export default function LatestArticles() {
   const list = rest.slice(0, 4);
 
   return (
-    <section className="bg-white border-t border-slate-100">
+    <section className="bg-surface border-t border-border">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 md:py-20">
         {/* Header ala The Verge: eyebrow + judul besar + CTA */}
         <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
@@ -71,13 +71,13 @@ export default function LatestArticles() {
             <div className="flex items-center gap-2 text-blue-600 text-xs font-bold uppercase tracking-widest mb-2">
               <Newspaper size={14} /> Berita &amp; Artikel
             </div>
-            <h2 className="font-display text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
+            <h2 className="font-display text-3xl md:text-4xl font-black text-content tracking-tight">
               Yang terbaru dari Solit 03
             </h2>
           </div>
           <Link
             to="/berita"
-            className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-slate-600 hover:text-blue-600 transition"
+            className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-content-soft hover:text-blue-600 transition"
           >
             Lihat semua artikel <ArrowRight size={15} />
           </Link>
@@ -85,11 +85,11 @@ export default function LatestArticles() {
 
         {/* Category rail */}
         {categories.length > 0 && (
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar mb-8 border-b border-slate-200 pb-4">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar mb-8 border-b border-border pb-4">
             <button
               onClick={() => setActiveCat("")}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition ${
-                !activeCat ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition border ${
+                !activeCat ? "bg-content text-surface border-content" : "bg-surface-muted text-content-soft border-border hover:border-content/50"
               }`}
             >
               Semua
@@ -98,8 +98,8 @@ export default function LatestArticles() {
               <button
                 key={c.id}
                 onClick={() => setActiveCat(c.slug)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition ${
-                  activeCat === c.slug ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition border ${
+                  activeCat === c.slug ? "bg-content text-surface border-content" : "bg-surface-muted text-content-soft border-border hover:border-content/50"
                 }`}
               >
                 {c.name}
@@ -118,7 +118,7 @@ export default function LatestArticles() {
         ) : articles.length === 0 ? (
           <div className="text-center py-16">
             <Newspaper size={36} className="mx-auto mb-3 text-slate-300" />
-            <p className="text-sm text-slate-500">Belum ada artikel di kategori ini</p>
+            <p className="text-sm text-content-muted">Belum ada artikel di kategori ini</p>
           </div>
         ) : (
           <div className="grid lg:grid-cols-3 gap-x-10 gap-y-8">
@@ -144,13 +144,13 @@ export default function LatestArticles() {
                       {lead.article_categories.name}
                     </span>
                   )}
-                  <h3 className="font-display text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight mt-1.5 group-hover:text-blue-600 transition-colors">
+                  <h3 className="font-display text-2xl md:text-3xl font-extrabold text-content tracking-tight leading-tight mt-1.5 group-hover:text-blue-600 transition-colors">
                     {lead.title}
                   </h3>
                   {lead.excerpt && (
-                    <p className="text-slate-500 text-sm mt-2 line-clamp-2 max-w-xl">{lead.excerpt}</p>
+                    <p className="text-content-muted text-sm mt-2 line-clamp-2 max-w-xl">{lead.excerpt}</p>
                   )}
-                  <p className="text-xs text-slate-400 mt-3">{timeAgo(lead.published_at)}</p>
+                  <p className="text-xs text-content-muted mt-3">{timeAgo(lead.published_at)}</p>
                 </div>
               </Link>
             )}
@@ -175,10 +175,10 @@ export default function LatestArticles() {
                           {a.article_categories.name}
                         </span>
                       )}
-                      <h4 className="font-semibold text-slate-900 text-sm leading-snug mt-1 line-clamp-3 group-hover:text-blue-600 transition-colors">
+                      <h4 className="font-semibold text-content text-sm leading-snug mt-1 line-clamp-3 group-hover:text-blue-600 transition-colors">
                         {a.title}
                       </h4>
-                      <p className="text-[11px] text-slate-400 mt-1.5">{timeAgo(a.published_at)}</p>
+                      <p className="text-[11px] text-content-muted mt-1.5">{timeAgo(a.published_at)}</p>
                     </div>
                     {a.cover_image && (
                       <img
@@ -214,7 +214,7 @@ export default function LatestArticles() {
 
         <Link
           to="/berita"
-          className="sm:hidden mt-8 flex items-center justify-center gap-1.5 text-sm font-semibold text-blue-600 border border-slate-200 rounded-xl py-2.5"
+          className="sm:hidden mt-8 flex items-center justify-center gap-1.5 text-sm font-semibold text-blue-600 border border-border rounded-xl py-2.5"
         >
           Lihat semua artikel <ArrowRight size={15} />
         </Link>

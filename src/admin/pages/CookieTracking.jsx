@@ -109,14 +109,14 @@ export default function CookieTracking() {
         <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
           Cookie Consent Tracking
         </h1>
-        <p className="text-sm text-gray-500 mt-1">Pantau preferensi cookie yang dipilih pengunjung situs</p>
+        <p className="text-sm text-content-muted mt-1">Pantau preferensi cookie yang dipilih pengunjung situs</p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
         {loading
           ? [1, 2, 3, 4].map((i) => (
-              <div key={i} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm space-y-3">
+              <div key={i} className="bg-surface border border-border rounded-2xl p-5 shadow-sm space-y-3">
                 <Skeleton className="w-10 h-10 rounded-xl" />
                 <Skeleton className="w-20 h-3" />
                 <Skeleton className="w-14 h-6" />
@@ -125,15 +125,15 @@ export default function CookieTracking() {
           : cards.map(({ label, value, icon: Icon, color, pct }) => {
               const c = colorMap[color];
               return (
-                <div key={label} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+                <div key={label} className="bg-surface border border-border rounded-2xl p-5 shadow-sm">
                   <div className="flex items-center justify-between mb-4">
                     <div className={`w-11 h-11 rounded-xl ${c.bg} ${c.text} flex items-center justify-center`}>
                       <Icon size={20} strokeWidth={1.5} />
                     </div>
                     <span className={`text-[10px] font-semibold px-2 py-1 rounded-full ${c.bg} ${c.text}`}>{pct}%</span>
                   </div>
-                  <p className="text-[11px] text-gray-400 font-medium uppercase tracking-wider">{label}</p>
-                  <p className="text-2xl font-bold text-gray-800 mt-1">{value.toLocaleString()}</p>
+                  <p className="text-[11px] text-content-muted font-medium uppercase tracking-wider">{label}</p>
+                  <p className="text-2xl font-bold text-content mt-1">{value.toLocaleString()}</p>
                   <div className="mt-3 h-1 bg-gray-100 rounded-full overflow-hidden">
                     <div className={`h-full bg-gradient-to-r ${c.bar} rounded-full`} style={{ width: `${pct}%` }} />
                   </div>
@@ -144,10 +144,10 @@ export default function CookieTracking() {
 
       <div className="grid lg:grid-cols-3 gap-5">
         {/* Trend chart */}
-        <div className="lg:col-span-2 bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+        <div className="lg:col-span-2 bg-surface border border-border rounded-2xl p-6 shadow-sm">
           <div className="flex items-center gap-2 mb-6">
-            <BarChart3 size={18} className="text-gray-600" />
-            <h2 className="text-base font-semibold text-gray-800">Tren 7 Hari Terakhir</h2>
+            <BarChart3 size={18} className="text-content-soft" />
+            <h2 className="text-base font-semibold text-content">Tren 7 Hari Terakhir</h2>
           </div>
           {loading ? (
             <Skeleton className="w-full h-40" />
@@ -164,8 +164,8 @@ export default function CookieTracking() {
                         title={`${t.count} consent`}
                       />
                     </div>
-                    <span className="text-[10px] text-gray-500 font-semibold">{t.count}</span>
-                    <span className="text-[10px] text-gray-400">
+                    <span className="text-[10px] text-content-muted font-semibold">{t.count}</span>
+                    <span className="text-[10px] text-content-muted">
                       {new Date(t.day).toLocaleDateString("id-ID", { day: "numeric", month: "short" })}
                     </span>
                   </div>
@@ -176,10 +176,10 @@ export default function CookieTracking() {
         </div>
 
         {/* Opt-in breakdown */}
-        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+        <div className="bg-surface border border-border rounded-2xl p-6 shadow-sm">
           <div className="flex items-center gap-2 mb-5">
-            <Activity size={18} className="text-gray-600" />
-            <h2 className="text-base font-semibold text-gray-800">Opt-in Kategori</h2>
+            <Activity size={18} className="text-content-soft" />
+            <h2 className="text-base font-semibold text-content">Opt-in Kategori</h2>
           </div>
           {loading ? (
             <div className="space-y-4">
@@ -197,8 +197,8 @@ export default function CookieTracking() {
                 return (
                   <div key={label}>
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-medium text-gray-700">{label}</span>
-                      <span className="text-xs font-semibold text-gray-600">{value} ({pct}%)</span>
+                      <span className="text-xs font-medium text-content-soft">{label}</span>
+                      <span className="text-xs font-semibold text-content-soft">{value} ({pct}%)</span>
                     </div>
                     <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
                       <div className={`h-full bg-gradient-to-r ${c.bar} rounded-full transition-all duration-700`} style={{ width: `${pct}%` }} />
@@ -212,10 +212,10 @@ export default function CookieTracking() {
       </div>
 
       {/* Log table */}
-      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-        <div className="px-5 py-4 border-b-2 border-gray-100 flex items-center justify-between bg-gradient-to-r from-gray-50 to-white">
-          <p className="text-sm font-bold text-gray-700">Log Consent</p>
-          <p className="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">{total} tercatat</p>
+      <div className="bg-surface border border-border rounded-2xl shadow-sm overflow-hidden">
+        <div className="px-5 py-4 border-b-2 border-border flex items-center justify-between bg-gradient-to-r from-gray-50 to-white">
+          <p className="text-sm font-bold text-content-soft">Log Consent</p>
+          <p className="text-xs font-semibold text-content-muted bg-gray-100 px-2 py-1 rounded-lg">{total} tercatat</p>
         </div>
 
         {logLoading ? (
@@ -231,13 +231,13 @@ export default function CookieTracking() {
         ) : log.length === 0 ? (
           <div className="py-16 text-center">
             <Cookie size={40} className="mx-auto text-gray-200 mb-3" />
-            <p className="text-sm text-gray-400">Belum ada data consent yang tercatat</p>
+            <p className="text-sm text-content-muted">Belum ada data consent yang tercatat</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-[11px] uppercase tracking-wider text-gray-400 border-b border-gray-100">
+                <tr className="text-left text-[11px] uppercase tracking-wider text-content-muted border-b border-border">
                   <th className="px-5 py-3 font-semibold">Waktu</th>
                   <th className="px-5 py-3 font-semibold">Aksi</th>
                   <th className="px-5 py-3 font-semibold">Analitik</th>
@@ -249,20 +249,20 @@ export default function CookieTracking() {
                 {log.map((r) => {
                   const badge = actionBadge[r.action] || actionBadge.custom;
                   return (
-                    <tr key={r.id} className="hover:bg-gray-50/80 transition">
-                      <td className="px-5 py-3 text-xs text-gray-500 whitespace-nowrap">
+                    <tr key={r.id} className="hover:bg-surface-muted/80 transition">
+                      <td className="px-5 py-3 text-xs text-content-muted whitespace-nowrap">
                         {new Date(r.created_at).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" })}
                       </td>
                       <td className="px-5 py-3">
                         <span className={`text-[11px] font-semibold px-2 py-1 rounded-full ${badge.cls}`}>{badge.label}</span>
                       </td>
                       <td className="px-5 py-3 text-xs">
-                        {r.analytics ? <span className="text-emerald-600 font-semibold">Ya</span> : <span className="text-gray-400">Tidak</span>}
+                        {r.analytics ? <span className="text-emerald-600 font-semibold">Ya</span> : <span className="text-content-muted">Tidak</span>}
                       </td>
                       <td className="px-5 py-3 text-xs">
-                        {r.marketing ? <span className="text-emerald-600 font-semibold">Ya</span> : <span className="text-gray-400">Tidak</span>}
+                        {r.marketing ? <span className="text-emerald-600 font-semibold">Ya</span> : <span className="text-content-muted">Tidak</span>}
                       </td>
-                      <td className="px-5 py-3 text-xs text-gray-500">
+                      <td className="px-5 py-3 text-xs text-content-muted">
                         <span className="inline-flex items-center gap-1">
                           <Globe size={12} className="text-gray-300" />
                           {r.page_url || "-"}
@@ -277,20 +277,20 @@ export default function CookieTracking() {
         )}
 
         {totalPages > 1 && (
-          <div className="px-5 py-4 border-t-2 border-gray-100 bg-gray-50 flex items-center justify-between">
-            <p className="text-xs font-medium text-gray-600">Halaman {page} dari {totalPages}</p>
+          <div className="px-5 py-4 border-t-2 border-border bg-surface-muted flex items-center justify-between">
+            <p className="text-xs font-medium text-content-soft">Halaman {page} dari {totalPages}</p>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setPage((p) => Math.max(p - 1, 1))}
                 disabled={page === 1}
-                className="p-2 rounded-lg border-2 border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
+                className="p-2 rounded-lg border-2 border-border bg-surface text-content-soft hover:bg-surface-muted disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <ChevronLeft size={14} />
               </button>
               <button
                 onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
                 disabled={page === totalPages}
-                className="p-2 rounded-lg border-2 border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
+                className="p-2 rounded-lg border-2 border-border bg-surface text-content-soft hover:bg-surface-muted disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <ChevronRight size={14} />
               </button>

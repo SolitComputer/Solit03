@@ -207,7 +207,7 @@ export default function CekGaransi() {
     const cfg = result?.data ? STATUS_CONFIG[result.data.status] || STATUS_CONFIG.EXPIRED : null;
 
     return (
-        <div className="min-h-screen bg-slate-50 relative overflow-x-hidden">
+        <div className="min-h-screen bg-surface-muted relative overflow-x-hidden">
             <Helmet>
                 <title>Cek Garansi Laptop | Solit 03</title>
                 <meta
@@ -297,14 +297,14 @@ export default function CekGaransi() {
 
                 {showSuccessPopup && (
                     <div className="fixed inset-0 flex items-center justify-center z-[200] pointer-events-none">
-                        <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-soft-lg p-6 flex flex-col items-center gap-3 success-popup border border-emerald-200 min-w-[280px]">
+                        <div className="bg-surface/95 backdrop-blur-md rounded-2xl shadow-soft-lg p-6 flex flex-col items-center gap-3 success-popup border border-emerald-200 min-w-[280px]">
                             <div className="w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center shadow-soft">
                                 <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                             <div className="text-center">
-                                <p className="text-2xl font-bold text-slate-800">Selamat!</p>
+                                <p className="text-2xl font-bold text-content">Selamat!</p>
                                 <p className="text-xl font-semibold text-emerald-600">Garansi Anda Aktif</p>
                             </div>
                         </div>
@@ -316,10 +316,10 @@ export default function CekGaransi() {
                         <span className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
                         Official Solit 03
                     </span>
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 mt-5">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-content mt-5">
                         Cek Status <span className="text-blue-600">Garansi</span>
                     </h1>
-                    <p className="text-sm md:text-base text-slate-500 max-w-2xl mx-auto mt-4">
+                    <p className="text-sm md:text-base text-content-muted max-w-2xl mx-auto mt-4">
                         Masukkan <span className="font-semibold text-blue-600">Serial Number (SN)</span> laptop Anda untuk mengetahui masa berlaku garansi dengan mudah.
                     </p>
                     <div className="flex justify-center items-center gap-2 mt-6">
@@ -330,12 +330,12 @@ export default function CekGaransi() {
                 </div>
 
                 <div id="card" className={`transition-all duration-500 delay-100 ${isVisible.card ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}>
-                    <div className="bg-white rounded-2xl border border-slate-200 shadow-soft hover:shadow-soft-lg transition-all duration-300 p-6 sm:p-8">
+                    <div className="bg-surface rounded-2xl border border-border shadow-soft hover:shadow-soft-lg transition-all duration-300 p-6 sm:p-8">
                         <form onSubmit={handleClickWithAwesomeAnim} className="space-y-6">
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Serial Number (SN)</label>
+                                <label className="block text-sm font-semibold text-content-soft mb-2">Serial Number (SN)</label>
                                 <div className="relative group">
-                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-content-muted group-focus-within:text-blue-500 transition-colors">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                                             <path d="M3 9V6a1 1 0 011-1h2" /><path d="M20 9V6a1 1 0 00-1-1h-2" />
                                             <path d="M3 15v3a1 1 0 001 1h2" /><path d="M20 15v3a1 1 0 01-1 1h-2" />
@@ -350,19 +350,19 @@ export default function CekGaransi() {
                                         onKeyDown={(e) => e.key === "Enter" && handleClickWithAwesomeAnim(e)}
                                         placeholder="Contoh: SN-0006151"
                                         maxLength={60}
-                                        className="w-full pl-12 pr-12 py-4 border-2 border-slate-200 rounded-xl text-slate-800 font-mono text-base placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all bg-slate-50"
+                                        className="w-full pl-12 pr-12 py-4 border-2 border-border rounded-xl text-content font-mono text-base placeholder:text-content-muted focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all bg-surface-muted"
                                         autoComplete="off"
                                         spellCheck={false}
                                     />
                                     {sn && (
-                                        <button type="button" onClick={handleReset} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition p-1 rounded-full hover:bg-slate-100">
+                                        <button type="button" onClick={handleReset} className="absolute right-4 top-1/2 -translate-y-1/2 text-content-muted hover:text-content-soft transition p-1 rounded-full hover:bg-slate-100">
                                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                                                 <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
                                             </svg>
                                         </button>
                                     )}
                                 </div>
-                                <p className="text-xs text-slate-400 mt-3 flex items-center gap-1">
+                                <p className="text-xs text-content-muted mt-3 flex items-center gap-1">
                                     <span className="inline-block w-4 h-4 bg-blue-100 rounded-full text-center text-blue-600 text-[10px] font-bold">i</span>
                                     SN dapat ditemukan di stiker bodi laptop atau nota pembelian.
                                 </p>
@@ -375,7 +375,7 @@ export default function CekGaransi() {
                                     disabled={loading || !sn.trim()}
                                     className={`group relative w-full h-14 overflow-visible rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-base transition-all duration-300 shadow-soft hover:shadow-soft-lg active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 ${
                                         isBtnPressed && !loading ? "scale-95 ring-4 ring-blue-400/60" : ""
-                                    } ${btnFlash ? "bg-white text-blue-700" : ""}`}
+                                    } ${btnFlash ? "bg-surface text-blue-700" : ""}`}
                                 >
                                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                                     {loading ? (
@@ -437,8 +437,8 @@ export default function CekGaransi() {
                         ].map((item, i) => (
                             <div key={i} className="card-3d p-6 text-center">
                                 <div className="flex justify-center mb-3"><item.icon className="w-9 h-9 text-blue-600" aria-hidden="true" /></div>
-                                <p className="text-md font-bold text-slate-900">{item.title}</p>
-                                <p className="text-sm text-slate-500 mt-2 leading-relaxed">{item.desc}</p>
+                                <p className="text-md font-bold text-content">{item.title}</p>
+                                <p className="text-sm text-content-muted mt-2 leading-relaxed">{item.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -464,7 +464,7 @@ export default function CekGaransi() {
                     </div>
                     <div className="flex items-center justify-center gap-3 mt-4">
                         <div className="h-4 w-px bg-gradient-to-b from-transparent via-slate-300 to-transparent"></div>
-                        <p className="text-xs text-slate-400">Atau hubungi langsung:</p>
+                        <p className="text-xs text-content-muted">Atau hubungi langsung:</p>
                         <a href="https://wa.me/6285210647047" target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-green-600 hover:text-green-700 font-medium hover:underline transition">+62 852-1064-7047</a>
                         <div className="h-4 w-px bg-gradient-to-b from-transparent via-slate-300 to-transparent"></div>
                     </div>
@@ -543,7 +543,7 @@ function Confetti({ active }) {
 
 function SkeletonResult() {
     return (
-        <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-soft-sm animate-pulse">
+        <div className="bg-surface rounded-2xl border border-border overflow-hidden shadow-soft-sm animate-pulse">
             <div className="h-32 bg-gradient-to-r from-slate-200 to-slate-100" />
             <div className="p-6 space-y-4">
                 <div className="h-5 bg-slate-200 rounded w-3/4" />
@@ -568,12 +568,12 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
     const isExpiring = data.status === "EXPIRING_SOON";
 
     return (
-        <div className={`rounded-2xl border ${cfg.border} overflow-hidden shadow-soft hover:shadow-soft-lg transition-all duration-300 bg-white transform hover:-translate-y-1`}>
+        <div className={`rounded-2xl border ${cfg.border} overflow-hidden shadow-soft hover:shadow-soft-lg transition-all duration-300 bg-surface transform hover:-translate-y-1`}>
             <div className={`bg-gradient-to-r ${cfg.gradient} px-6 py-6 relative overflow-hidden`}>
-                <div className="absolute inset-0 bg-white/10 transform -skew-x-12 translate-x-1/2" />
+                <div className="absolute inset-0 bg-surface/10 transform -skew-x-12 translate-x-1/2" />
                 <div className="relative flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-5">
-                        <div className="w-14 h-14 bg-white/25 rounded-2xl flex items-center justify-center backdrop-blur-sm shadow-inner">
+                        <div className="w-14 h-14 bg-surface/25 rounded-2xl flex items-center justify-center backdrop-blur-sm shadow-inner">
                             <cfg.icon className="w-7 h-7 text-white" aria-hidden="true" />
                         </div>
                         <div>
@@ -582,12 +582,12 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
                         </div>
                     </div>
                     {daysLeft >= 0 ? (
-                        <div className={`text-right flex-shrink-0 bg-white/20 rounded-xl px-4 py-2 backdrop-blur-sm ${isExpiring ? "animate-pulse-fast" : ""}`}>
+                        <div className={`text-right flex-shrink-0 bg-surface/20 rounded-xl px-4 py-2 backdrop-blur-sm ${isExpiring ? "animate-pulse-fast" : ""}`}>
                             <p className="text-3xl font-black text-white leading-none">{daysLeft}</p>
                             <p className="text-white/70 text-xs font-semibold">hari lagi</p>
                         </div>
                     ) : (
-                        <div className="bg-white/20 rounded-xl px-4 py-2">
+                        <div className="bg-surface/20 rounded-xl px-4 py-2">
                             <p className="text-white text-xs font-semibold">Berakhir {Math.abs(daysLeft)} hari lalu</p>
                         </div>
                     )}
@@ -596,22 +596,22 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
             <div className="px-6 py-6 space-y-6">
                 {/* Progress Bar */}
                 <div>
-                    <div className="flex justify-between text-xs text-slate-500 mb-2">
+                    <div className="flex justify-between text-xs text-content-muted mb-2">
                         <span>Mulai: {fmtDate(data.warranty_start)}</span>
                         <span>Berakhir: {fmtDate(data.warranty_end)}</span>
                     </div>
-                    <div className="h-3 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                    <div className="h-3 bg-slate-100 rounded-full overflow-hidden border border-border">
                         <div className={`h-full rounded-full transition-all duration-1000 ease-out ${cfg.barColor}`} style={{ width: `${pct}%` }} />
                     </div>
-                    <div className="flex justify-between text-xs text-slate-500 mt-2">
+                    <div className="flex justify-between text-xs text-content-muted mt-2">
                         <span>0%</span>
-                        <span className="font-medium text-slate-700">{Math.round(pct)}% terpakai</span>
+                        <span className="font-medium text-content-soft">{Math.round(pct)}% terpakai</span>
                         <span>100%</span>
                     </div>
                 </div>
 
                 {/* Tabel Detail - Responsif: label dan value dalam satu baris dengan wrap */}
-                <div className="bg-slate-50/80 rounded-xl border border-slate-100 overflow-hidden">
+                <div className="bg-surface-muted/80 rounded-xl border border-border overflow-hidden">
                     <div className="divide-y divide-slate-100">
                         {[
                             { icon: Laptop, label: "Laptop", value: data.laptop_name, bold: true },
@@ -620,22 +620,22 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
                             { icon: Calendar, label: "Tanggal Mulai", value: fmtDate(data.warranty_start) },
                             { icon: Flag, label: "Garansi Berakhir", value: fmtDate(data.warranty_end), highlight: true, cfg },
                         ].map((row, i) => (
-                            <div key={i} className="px-4 py-3 hover:bg-white transition-colors group">
+                            <div key={i} className="px-4 py-3 hover:bg-surface transition-colors group">
                                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
                                     {/* Ikon dan label dalam satu baris untuk HP */}
                                     <div className="flex items-center gap-2 sm:w-32 flex-shrink-0">
-                                        <span className="text-slate-400 w-6 flex justify-center"><row.icon className="w-4 h-4" aria-hidden="true" /></span>
-                                        <span className="text-xs font-medium text-slate-600">{row.label}</span>
+                                        <span className="text-content-muted w-6 flex justify-center"><row.icon className="w-4 h-4" aria-hidden="true" /></span>
+                                        <span className="text-xs font-medium text-content-soft">{row.label}</span>
                                     </div>
                                     {/* Value dan tombol copy */}
                                     <div className="flex-1 flex items-center justify-between gap-2">
-                                        <span className={`text-sm break-words flex-1 ${row.mono ? "font-mono font-semibold text-slate-800" : row.bold ? "font-bold text-slate-800" : row.highlight ? `font-bold ${cfg.text}` : "text-slate-700"}`}>
+                                        <span className={`text-sm break-words flex-1 ${row.mono ? "font-mono font-semibold text-content" : row.bold ? "font-bold text-content" : row.highlight ? `font-bold ${cfg.text}` : "text-content-soft"}`}>
                                             {row.value}
                                         </span>
                                         {row.copyable && (
                                             <button
                                                 onClick={() => onCopy(row.value)}
-                                                className="text-slate-400 hover:text-blue-500 transition opacity-0 group-hover:opacity-100 focus:opacity-100 p-1 flex-shrink-0"
+                                                className="text-content-muted hover:text-blue-500 transition opacity-0 group-hover:opacity-100 focus:opacity-100 p-1 flex-shrink-0"
                                                 title="Salin SN"
                                             >
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -674,7 +674,7 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
                         </svg>
                         WhatsApp
                     </a>
-                    <button onClick={onReset} className="flex-1 flex items-center justify-center gap-2 h-12 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-semibold rounded-xl transition-all hover:shadow-soft-sm active:scale-95">
+                    <button onClick={onReset} className="flex-1 flex items-center justify-center gap-2 h-12 bg-surface border border-border hover:bg-surface-muted text-content-soft text-sm font-semibold rounded-xl transition-all hover:shadow-soft-sm active:scale-95">
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                             <polyline points="1 4 1 10 7 10" />
                             <path d="M3.51 15a9 9 0 102.13-9.36L1 10" />
@@ -696,7 +696,7 @@ function WarrantyTerms() {
     ];
 
     return (
-        <div className="rounded-2xl border border-slate-200 bg-white shadow-soft-sm overflow-hidden">
+        <div className="rounded-2xl border border-border bg-surface shadow-soft-sm overflow-hidden">
             {/* Note: barang tidak bisa dikembalikan/ditukar */}
             <div className="flex items-start gap-3 bg-amber-50 border-b border-amber-100 px-5 py-3.5">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-sm font-bold mt-0.5">!</span>
@@ -707,7 +707,7 @@ function WarrantyTerms() {
 
             {/* Header */}
             <div className="px-5 pt-5 pb-2">
-                <p className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                <p className="text-sm font-bold text-content flex items-center gap-2">
                     <Shield className="w-4 h-4" aria-hidden="true" /> Ketentuan Garansi
                 </p>
             </div>
@@ -715,7 +715,7 @@ function WarrantyTerms() {
             {/* Daftar ketentuan */}
             <ol className="px-5 pb-5 space-y-3">
                 {terms.map((t, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm text-slate-600 leading-relaxed">
+                    <li key={i} className="flex items-start gap-3 text-sm text-content-soft leading-relaxed">
                         <span className="flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold mt-0.5">
                             {i + 1}
                         </span>
@@ -730,10 +730,10 @@ function WarrantyTerms() {
 // ── Not Found Card (tetap) ───────────────────────────────────────────────────
 function NotFoundCard({ message, sn, onReset, onCopy }) {
     return (
-        <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-soft hover:shadow-soft-lg transition-all duration-300 transform hover:-translate-y-1">
+        <div className="bg-surface rounded-2xl border border-border overflow-hidden shadow-soft hover:shadow-soft-lg transition-all duration-300 transform hover:-translate-y-1">
             <div className="bg-slate-900 px-6 py-6">
                 <div className="flex items-center gap-5">
-                    <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center">
+                    <div className="w-14 h-14 bg-surface/20 rounded-2xl flex items-center justify-center">
                         <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                             <circle cx="12" cy="12" r="10" />
                             <line x1="15" y1="9" x2="9" y2="15" />
@@ -747,12 +747,12 @@ function NotFoundCard({ message, sn, onReset, onCopy }) {
                 </div>
             </div>
             <div className="px-6 py-6 space-y-6">
-                <div className="bg-slate-50 rounded-xl px-5 py-3 border border-slate-100 flex justify-between items-center group">
+                <div className="bg-surface-muted rounded-xl px-5 py-3 border border-border flex justify-between items-center group">
                     <div>
-                        <p className="text-xs text-slate-500 mb-1">SN yang dicari</p>
-                        <p className="font-mono font-bold text-slate-800 text-lg tracking-wide">{sn}</p>
+                        <p className="text-xs text-content-muted mb-1">SN yang dicari</p>
+                        <p className="font-mono font-bold text-content text-lg tracking-wide">{sn}</p>
                     </div>
-                    <button onClick={() => onCopy(sn)} className="text-slate-400 hover:text-blue-500 transition opacity-0 group-hover:opacity-100 focus:opacity-100 p-1" title="Salin SN">
+                    <button onClick={() => onCopy(sn)} className="text-content-muted hover:text-blue-500 transition opacity-0 group-hover:opacity-100 focus:opacity-100 p-1" title="Salin SN">
                         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
@@ -760,11 +760,11 @@ function NotFoundCard({ message, sn, onReset, onCopy }) {
                     </button>
                 </div>
                 <div className="space-y-3">
-                    <p className="text-sm font-bold text-slate-700 flex items-center gap-2"><Search className="w-4 h-4" aria-hidden="true" /> Kemungkinan penyebab:</p>
+                    <p className="text-sm font-bold text-content-soft flex items-center gap-2"><Search className="w-4 h-4" aria-hidden="true" /> Kemungkinan penyebab:</p>
                     <ul className="space-y-2.5">
                         {["Serial number tidak sesuai — periksa kembali ejaan", "Laptop dibeli sebelum sistem garansi digital diterapkan", "Garansi sudah pernah dicabut (VOID)"].map((item, i) => (
-                            <li key={i} className="flex items-start gap-3 text-sm text-slate-600">
-                                <span className="w-5 h-5 bg-slate-200 text-slate-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold mt-0.5">{i+1}</span>
+                            <li key={i} className="flex items-start gap-3 text-sm text-content-soft">
+                                <span className="w-5 h-5 bg-slate-200 text-content-soft rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold mt-0.5">{i+1}</span>
                                 {item}
                             </li>
                         ))}
@@ -787,7 +787,7 @@ function NotFoundCard({ message, sn, onReset, onCopy }) {
                         </svg>
                         WhatsApp
                     </a>
-                    <button onClick={onReset} className="flex-1 flex items-center justify-center gap-2 h-12 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-semibold rounded-xl transition-all hover:shadow-soft-sm active:scale-95">
+                    <button onClick={onReset} className="flex-1 flex items-center justify-center gap-2 h-12 bg-surface border border-border hover:bg-surface-muted text-content-soft text-sm font-semibold rounded-xl transition-all hover:shadow-soft-sm active:scale-95">
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                             <polyline points="1 4 1 10 7 10" />
                             <path d="M3.51 15a9 9 0 102.13-9.36L1 10" />

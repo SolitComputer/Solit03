@@ -5,7 +5,7 @@ import { useToast } from "../context/ToastContext";
 import { SERVICE_ICON_OPTIONS, getServiceIcon } from "../../utils/serviceIcons";
 
 const ICON_OPTIONS = SERVICE_ICON_OPTIONS;
-const inputCls = "bg-gray-50 border-2 border-gray-200 rounded-xl text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all";
+const inputCls = "bg-surface-muted border-2 border-border rounded-xl text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-surface transition-all";
 
 export default function ServicesAdmin() {
   const [items, setItems] = useState([]);
@@ -66,12 +66,12 @@ export default function ServicesAdmin() {
         <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
           Layanan (Services)
         </h1>
-        <p className="text-sm text-gray-500 mt-1">Kelola daftar layanan yang tampil di homepage</p>
+        <p className="text-sm text-content-muted mt-1">Kelola daftar layanan yang tampil di homepage</p>
       </div>
 
       {/* Add new */}
-      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
-        <p className="text-xs font-semibold text-gray-700 mb-3">Tambah Layanan Baru</p>
+      <div className="bg-surface border border-border rounded-2xl shadow-sm p-5">
+        <p className="text-xs font-semibold text-content-soft mb-3">Tambah Layanan Baru</p>
         <div className="flex flex-wrap items-center gap-2">
           <select value={newItem.icon} onChange={(e) => setNewItem({ ...newItem, icon: e.target.value })} className={inputCls}>
             {ICON_OPTIONS.map((ic) => <option key={ic} value={ic}>{ic}</option>)}
@@ -85,11 +85,11 @@ export default function ServicesAdmin() {
       </div>
 
       {/* List */}
-      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+      <div className="bg-surface border border-border rounded-2xl shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-16"><Loader2 size={24} className="animate-spin text-blue-500" /></div>
         ) : items.length === 0 ? (
-          <p className="text-center text-sm text-gray-400 py-16">Belum ada layanan</p>
+          <p className="text-center text-sm text-content-muted py-16">Belum ada layanan</p>
         ) : (
           <div className="divide-y divide-gray-100">
             {items.map((item) => {
@@ -115,7 +115,7 @@ export default function ServicesAdmin() {
                 <button
                   onClick={() => updateLocal(item.id, "is_active", !item.is_active)}
                   title={item.is_active ? "Aktif — klik untuk sembunyikan" : "Tersembunyi — klik untuk aktifkan"}
-                  className={`p-2 rounded-lg transition ${item.is_active ? "text-emerald-600 hover:bg-emerald-50" : "text-gray-400 hover:bg-gray-100"}`}
+                  className={`p-2 rounded-lg transition ${item.is_active ? "text-emerald-600 hover:bg-emerald-50" : "text-content-muted hover:bg-gray-100"}`}
                 >
                   {item.is_active ? <Eye size={16} /> : <EyeOff size={16} />}
                 </button>

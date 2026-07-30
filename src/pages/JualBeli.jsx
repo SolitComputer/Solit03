@@ -124,17 +124,17 @@ export default function JualBeli() {
 
             {/* Main Title */}
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
-              <span className="text-slate-900">Solusi Laptop & </span>
+              <span className="text-content">Solusi Laptop & </span>
               <span className="text-blue-600">
                 Aset Kantor
               </span>
               <br />
-              <span className="text-slate-800">Kamu</span>
+              <span className="text-content">Kamu</span>
             </h1>
 
             {/* Subtitle with Animation */}
             <div className="mt-4">
-              <p className="text-slate-500 text-sm sm:text-base md:text-lg">
+              <p className="text-content-muted text-sm sm:text-base md:text-lg">
                 Jadi Cuan di{" "}
                 <span className="relative inline-block">
                   <span className="absolute inset-x-0 bottom-0 h-2 bg-blue-200/50 rounded-full -z-10"></span>
@@ -228,7 +228,7 @@ export default function JualBeli() {
             {/* Contact Info with Icon */}
             <div className="flex items-center justify-center gap-2 mt-3">
               <div className="h-3 w-px bg-slate-300"></div>
-              <p className="text-[11px] text-slate-400">
+              <p className="text-[11px] text-content-muted">
                 Atau hubungi langsung:
               </p>
               <a
@@ -252,7 +252,7 @@ export default function JualBeli() {
             <div className="relative">
               {/* Decorative Title for Gallery */}
               <div className="text-center mb-6">
-                <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">
+                <h3 className="text-sm font-semibold text-content-muted uppercase tracking-wider">
                   Galeri Produk
                 </h3>
                 <div className="flex justify-center gap-1 mt-1">

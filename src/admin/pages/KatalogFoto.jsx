@@ -44,11 +44,11 @@ function LaptopPhotoCard({ laptop, onChanged }) {
   }
 
   return (
-    <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
-      <div className="p-3 border-b border-gray-50 flex items-start justify-between gap-2">
+    <div className="bg-surface border border-border rounded-xl shadow-sm overflow-hidden">
+      <div className="p-3 border-b border-border flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-gray-800 truncate">{laptop.laptop_name}</p>
-          <p className="text-[11px] text-gray-400">{laptop.brand || "—"} · {fmt(laptop.price)} · Ready {laptop.stock}</p>
+          <p className="text-sm font-semibold text-content truncate">{laptop.laptop_name}</p>
+          <p className="text-[11px] text-content-muted">{laptop.brand || "—"} · {fmt(laptop.price)} · Ready {laptop.stock}</p>
         </div>
         {photos.length > 0 ? (
           <span className="flex items-center gap-1 text-[10px] font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-full flex-shrink-0">
@@ -66,7 +66,7 @@ function LaptopPhotoCard({ laptop, onChanged }) {
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-3">
             {photos.map((p) => (
               <div key={p.id} className="relative group aspect-square">
-                <img src={p.image_url} alt="" className="w-full h-full object-cover rounded-lg border border-gray-100" />
+                <img src={p.image_url} alt="" className="w-full h-full object-cover rounded-lg border border-border" />
                 <button onClick={() => handleDelete(p.id)} disabled={deletingId === p.id}
                   className="absolute top-1 right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition disabled:opacity-50" title="Hapus">
                   {deletingId === p.id
@@ -78,7 +78,7 @@ function LaptopPhotoCard({ laptop, onChanged }) {
           </div>
         )}
 
-        <label className={`flex flex-col items-center justify-center border-2 border-dashed rounded-lg py-4 cursor-pointer transition ${uploading ? "border-blue-300 bg-blue-50/50" : "border-gray-200 hover:border-blue-400 hover:bg-blue-50/50"}`}>
+        <label className={`flex flex-col items-center justify-center border-2 border-dashed rounded-lg py-4 cursor-pointer transition ${uploading ? "border-blue-300 bg-blue-50/50" : "border-border hover:border-blue-400 hover:bg-blue-50/50"}`}>
           {uploading ? (
             <>
               <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mb-1.5" />
@@ -87,7 +87,7 @@ function LaptopPhotoCard({ laptop, onChanged }) {
           ) : (
             <>
               <Camera size={18} className="text-gray-300 mb-1.5" />
-              <span className="text-xs text-gray-400">Tambah foto (bisa banyak sekaligus)</span>
+              <span className="text-xs text-content-muted">Tambah foto (bisa banyak sekaligus)</span>
               <span className="text-[10px] text-gray-300 mt-0.5">PNG, JPG, WEBP · maks 5MB</span>
             </>
           )}
@@ -150,27 +150,27 @@ export default function KatalogFoto() {
           { label: "Sudah Ada Foto", value: stats.withPhoto },
           { label: "Belum Ada Foto", value: stats.without },
         ].map((s) => (
-          <div key={s.label} className="bg-white border border-gray-100 rounded-xl p-3 shadow-sm">
-            <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">{s.label}</p>
-            <p className="text-2xl font-bold text-gray-800 mt-0.5">{s.value}</p>
+          <div key={s.label} className="bg-surface border border-border rounded-xl p-3 shadow-sm">
+            <p className="text-[10px] text-content-muted font-medium uppercase tracking-wider">{s.label}</p>
+            <p className="text-2xl font-bold text-content mt-0.5">{s.value}</p>
           </div>
         ))}
       </div>
 
-      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-3 flex flex-col sm:flex-row gap-2">
+      <div className="bg-surface border border-border rounded-xl shadow-sm p-3 flex flex-col sm:flex-row gap-2">
         <div className="relative flex-1">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-content-muted" />
           <input type="text" placeholder="Cari nama atau brand laptop..." value={search} onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+            className="w-full bg-surface-muted border border-border rounded-lg pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
         </div>
         <div className="flex gap-2">
           <select value={filter} onChange={(e) => setFilter(e.target.value)}
-            className="bg-gray-50 border border-gray-200 rounded-lg text-sm px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer text-gray-600">
+            className="bg-surface-muted border border-border rounded-lg text-sm px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer text-content-soft">
             <option value="ALL">Semua</option>
             <option value="WITHOUT">Belum ada foto</option>
             <option value="WITH">Sudah ada foto</option>
           </select>
-          <button onClick={load} className="px-3 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm text-gray-600 flex items-center gap-1.5">
+          <button onClick={load} className="px-3 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm text-content-soft flex items-center gap-1.5">
             <RefreshCw size={14} /> Refresh
           </button>
         </div>
@@ -178,12 +178,12 @@ export default function KatalogFoto() {
 
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {Array.from({ length: 6 }).map((_, i) => <div key={i} className="bg-white border border-gray-100 rounded-xl animate-pulse h-56" />)}
+          {Array.from({ length: 6 }).map((_, i) => <div key={i} className="bg-surface border border-border rounded-xl animate-pulse h-56" />)}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white border border-gray-100 rounded-xl py-16 text-center">
+        <div className="bg-surface border border-border rounded-xl py-16 text-center">
           <Laptop size={40} className="mx-auto mb-3 text-gray-200" />
-          <p className="text-sm text-gray-500">{laptops.length === 0 ? "Belum ada laptop siap jual di solit-pos" : "Tidak ada laptop yang cocok"}</p>
+          <p className="text-sm text-content-muted">{laptops.length === 0 ? "Belum ada laptop siap jual di solit-pos" : "Tidak ada laptop yang cocok"}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">

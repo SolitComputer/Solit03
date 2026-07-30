@@ -222,7 +222,7 @@ export default function CekAntrian() {
   }, {});
 
   return (
-    <div className="min-h-screen bg-slate-50 relative overflow-x-hidden">
+    <div className="min-h-screen bg-surface-muted relative overflow-x-hidden">
       <Helmet>
         <title>Cek Antrian Servis Laptop Realtime | Solit 03</title>
         <meta
@@ -270,10 +270,10 @@ export default function CekAntrian() {
             Official Solit 03
           </span>
 
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 mt-5">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-content mt-5">
             Antrian <span className="text-blue-600">Servis</span>
           </h1>
-          <p className="text-sm md:text-base text-slate-500 max-w-2xl mx-auto mt-4">
+          <p className="text-sm md:text-base text-content-muted max-w-2xl mx-auto mt-4">
             Pantau status perbaikan laptop kamu secara{" "}
             <span className="font-semibold text-blue-600">real-time</span> tanpa perlu menunggu di tempat.
           </p>
@@ -291,12 +291,12 @@ export default function CekAntrian() {
           id="stats"
           className={`transition-all duration-500 delay-100 ${isVisible.stats ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
         >
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-soft hover:shadow-soft-lg transition-all duration-300 p-6 sm:p-8 mb-8">
+          <div className="bg-surface rounded-2xl border border-border shadow-soft hover:shadow-soft-lg transition-all duration-300 p-6 sm:p-8 mb-8">
             {/* Search input */}
             <div className="mb-6">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Cari Antrian</label>
+              <label className="block text-sm font-semibold text-content-soft mb-2">Cari Antrian</label>
               <div className="relative group">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-content-muted group-focus-within:text-blue-500 transition-colors">
                   <Search size={18} />
                 </div>
                 <input
@@ -304,12 +304,12 @@ export default function CekAntrian() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Cari nama, nomor urut, atau tipe laptop..."
-                  className="w-full pl-12 pr-12 py-4 border-2 border-slate-200/80 rounded-xl text-slate-800 text-base placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all bg-white/60"
+                  className="w-full pl-12 pr-12 py-4 border-2 border-border/80 rounded-xl text-content text-base placeholder:text-content-muted focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all bg-surface/60"
                 />
                 {search && (
                   <button
                     onClick={() => setSearch("")}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition p-1 rounded-full hover:bg-slate-100"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-content-muted hover:text-content-soft transition p-1 rounded-full hover:bg-slate-100"
                   >
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <line x1="18" y1="6" x2="6" y2="18" />
@@ -318,7 +318,7 @@ export default function CekAntrian() {
                   </button>
                 )}
               </div>
-              <p className="text-xs text-slate-400 mt-3 flex items-center gap-1">
+              <p className="text-xs text-content-muted mt-3 flex items-center gap-1">
                 <span className="inline-block w-4 h-4 bg-blue-100 rounded-full text-center text-blue-600 text-[10px] font-bold">i</span>
                 Data diperbarui otomatis secara real-time via SSE.
               </p>
@@ -339,7 +339,7 @@ export default function CekAntrian() {
                       <span className="text-[11px] font-semibold truncate">{cfg.label}</span>
                     </div>
                     <p className={`text-3xl font-black ${cfg.text}`}>{count}</p>
-                    <p className="text-[10px] text-slate-400 mt-0.5 truncate">{cfg.desc}</p>
+                    <p className="text-[10px] text-content-muted mt-0.5 truncate">{cfg.desc}</p>
                   </div>
                 );
               })}
@@ -359,18 +359,18 @@ export default function CekAntrian() {
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2">
             <div className={`w-2 h-2 rounded-full ${connected ? "bg-emerald-500 animate-pulse" : "bg-slate-300"}`} />
-            <span className="text-xs text-slate-400">{connected ? "Terhubung real-time" : "Mode polling"}</span>
+            <span className="text-xs text-content-muted">{connected ? "Terhubung real-time" : "Mode polling"}</span>
           </div>
           <div className="flex items-center gap-2">
             {lastUpdated && (
-              <span className="text-[11px] text-slate-400 font-mono">
+              <span className="text-[11px] text-content-muted font-mono">
                 Update: {lastUpdated.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
               </span>
             )}
             <button
               onClick={refresh}
               disabled={loading}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg border border-slate-200 transition disabled:opacity-40"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-content-muted hover:text-blue-600 hover:bg-blue-50 rounded-lg border border-border transition disabled:opacity-40"
             >
               <RefreshCw size={11} className={loading ? "animate-spin" : ""} />
               Refresh
@@ -385,7 +385,7 @@ export default function CekAntrian() {
         >
           {/* Loading skeleton — gaya CekGaransi */}
           {loading && orders.length === 0 && (
-            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-soft-sm animate-pulse">
+            <div className="bg-surface rounded-2xl border border-border overflow-hidden shadow-soft-sm animate-pulse">
               <div className="h-24 bg-gradient-to-r from-slate-200 to-slate-100" />
               <div className="p-6 space-y-4">
                 <div className="h-5 bg-slate-200 rounded w-3/4" />
@@ -398,14 +398,14 @@ export default function CekAntrian() {
 
           {/* Empty state */}
           {!loading && filtered.length === 0 && !error && (
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-soft p-12 text-center animate-fadeSlideUp">
+            <div className="bg-surface rounded-2xl border border-border shadow-soft p-12 text-center animate-fadeSlideUp">
               <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Wrench size={28} className="text-blue-400" />
               </div>
-              <p className="text-slate-700 font-bold text-base">
+              <p className="text-content-soft font-bold text-base">
                 {search ? `Tidak ada hasil untuk "${search}"` : "Belum ada antrian servis"}
               </p>
-              <p className="text-slate-400 text-sm mt-2">
+              <p className="text-content-muted text-sm mt-2">
                 {search ? "Coba kata kunci lain" : "Data akan muncul otomatis saat ada order masuk"}
               </p>
               {search && (
@@ -439,22 +439,22 @@ export default function CekAntrian() {
                         </span>
                       </div>
                       <div className="flex-1 h-px bg-gradient-to-r from-slate-200 to-transparent" />
-                      <span className="text-[10px] text-slate-400 hidden sm:block">{cfg.desc}</span>
+                      <span className="text-[10px] text-content-muted hidden sm:block">{cfg.desc}</span>
                     </div>
 
                     {/* Card container — gaya CekGaransi */}
-                    <div className="bg-white rounded-2xl border border-slate-200 shadow-soft hover:shadow-soft-lg transition-all duration-300 overflow-hidden">
+                    <div className="bg-surface rounded-2xl border border-border shadow-soft hover:shadow-soft-lg transition-all duration-300 overflow-hidden">
                       {/* Colored top bar */}
                       <div className={`h-1 bg-gradient-to-r ${cfg.gradient}`} />
 
                       {items.length > 3 ? (
                         // Table view untuk >3 item
                         <div className="divide-y divide-slate-50/80">
-                          <div className="grid grid-cols-12 gap-2 px-5 py-2.5 bg-slate-50/60">
-                            <span className="col-span-1 text-[10px] font-bold text-slate-400 uppercase">No</span>
-                            <span className="col-span-4 text-[10px] font-bold text-slate-400 uppercase">Nama</span>
-                            <span className="col-span-4 text-[10px] font-bold text-slate-400 uppercase">Laptop</span>
-                            <span className="col-span-3 text-[10px] font-bold text-slate-400 uppercase text-right">Masuk</span>
+                          <div className="grid grid-cols-12 gap-2 px-5 py-2.5 bg-surface-muted/60">
+                            <span className="col-span-1 text-[10px] font-bold text-content-muted uppercase">No</span>
+                            <span className="col-span-4 text-[10px] font-bold text-content-muted uppercase">Nama</span>
+                            <span className="col-span-4 text-[10px] font-bold text-content-muted uppercase">Laptop</span>
+                            <span className="col-span-3 text-[10px] font-bold text-content-muted uppercase text-right">Masuk</span>
                           </div>
                           {items.map((order) => {
                             const isNew = newIds.has(order.no_urut);
@@ -469,16 +469,16 @@ export default function CekAntrian() {
                                   </span>
                                 </div>
                                 <div className="col-span-4 min-w-0">
-                                  <p className="text-sm font-semibold text-slate-800 truncate">{order.nama}</p>
+                                  <p className="text-sm font-semibold text-content truncate">{order.nama}</p>
                                   {isNew && (
                                     <span className="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full font-semibold">Baru</span>
                                   )}
                                 </div>
                                 <div className="col-span-4 min-w-0">
-                                  <p className="text-xs text-slate-600 truncate">{order.type_laptop}</p>
+                                  <p className="text-xs text-content-soft truncate">{order.type_laptop}</p>
                                 </div>
                                 <div className="col-span-3 text-right">
-                                  <p className="text-[11px] text-slate-400 font-mono">
+                                  <p className="text-[11px] text-content-muted font-mono">
                                     {new Date(order.tanggal_masuk).toLocaleString("id-ID", {
                                       day: "2-digit", month: "short",
                                       hour: "2-digit", minute: "2-digit", hour12: false,
@@ -507,7 +507,7 @@ export default function CekAntrian() {
                                 {/* Info */}
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
-                                    <p className="font-bold text-slate-800 text-sm">{order.nama}</p>
+                                    <p className="font-bold text-content text-sm">{order.nama}</p>
                                     {isNew && (
                                       <span className="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full font-semibold animate-pulse">
                                         Baru
@@ -519,8 +519,8 @@ export default function CekAntrian() {
                                       </span>
                                     )}
                                   </div>
-                                  <p className="text-xs text-slate-500 truncate">{order.type_laptop}</p>
-                                  <p className="text-[11px] text-slate-400 mt-0.5 font-mono">
+                                  <p className="text-xs text-content-muted truncate">{order.type_laptop}</p>
+                                  <p className="text-[11px] text-content-muted mt-0.5 font-mono">
                                     Masuk {formatDate(order.tanggal_masuk)}
                                     {order.tanggal_selesai && (
                                       <span className="ml-2 text-emerald-600">· Selesai {formatDate(order.tanggal_selesai)}</span>
@@ -553,8 +553,8 @@ export default function CekAntrian() {
             ].map((item, i) => (
               <div key={i} className="card-3d p-6 text-center">
                 <div className="flex justify-center mb-3"><item.icon className="w-9 h-9 text-blue-600" aria-hidden="true" /></div>
-                <p className="text-md font-bold text-slate-900">{item.title}</p>
-                <p className="text-sm text-slate-500 mt-2 leading-relaxed">{item.desc}</p>
+                <p className="text-md font-bold text-content">{item.title}</p>
+                <p className="text-sm text-content-muted mt-2 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -584,7 +584,7 @@ export default function CekAntrian() {
           </div>
           <div className="flex items-center justify-center gap-3 mt-4">
             <div className="h-4 w-px bg-gradient-to-b from-transparent via-slate-300 to-transparent" />
-            <p className="text-xs text-slate-400">Atau hubungi langsung:</p>
+            <p className="text-xs text-content-muted">Atau hubungi langsung:</p>
             <a
               href="https://wa.me/6289680400022"
               target="_blank"

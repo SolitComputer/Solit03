@@ -90,7 +90,7 @@ function Milestone({ item, index, reduce }) {
             {item.year}
           </span>
 
-          <div className="relative rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-md p-5 md:p-6 shadow-[0_8px_40px_rgba(2,6,23,0.5)] hover:border-blue-400/40 transition-colors duration-300">
+          <div className="relative rounded-2xl border border-white/10 bg-surface/[0.04] backdrop-blur-md p-5 md:p-6 shadow-[0_8px_40px_rgba(2,6,23,0.5)] hover:border-blue-400/40 transition-colors duration-300">
             <div
               className={`flex items-center gap-2 mb-2 ${
                 isLeft ? "md:justify-end" : "md:justify-start"
@@ -157,7 +157,7 @@ export default function TimeTravelStory() {
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-blue-300"
+            className="inline-flex items-center gap-2 rounded-full bg-surface/5 border border-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-blue-300"
           >
             <Sparkles className="w-3.5 h-3.5" />
             Perjalanan Waktu
@@ -179,7 +179,7 @@ export default function TimeTravelStory() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="mt-4 text-slate-400 max-w-2xl mx-auto text-sm md:text-base"
+            className="mt-4 text-content-muted max-w-2xl mx-auto text-sm md:text-base"
           >
             Scroll dan ikuti setiap babak perjalanan kami — dari satu langkah
             kecil hingga menjadi tujuan tepercaya untuk laptop berkualitas.
@@ -189,7 +189,7 @@ export default function TimeTravelStory() {
         {/* Timeline */}
         <div ref={containerRef} className="relative">
           {/* Garis dasar */}
-          <div className="absolute left-[27px] md:left-1/2 top-0 bottom-0 w-0.5 md:-translate-x-1/2 bg-white/10" />
+          <div className="absolute left-[27px] md:left-1/2 top-0 bottom-0 w-0.5 md:-translate-x-1/2 bg-surface/10" />
           {/* Garis progress (mengisi saat scroll) */}
           <motion.div
             style={{ scaleY: reduce ? 1 : lineScale }}

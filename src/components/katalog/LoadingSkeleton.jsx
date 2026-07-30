@@ -2,7 +2,7 @@ import React from 'react';
 
 export const ProductCardSkeleton = () => {
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-soft-sm p-2 animate-pulse">
+    <div className="bg-surface rounded-xl border border-border shadow-soft-sm p-2 animate-pulse">
       <div className="bg-slate-200 rounded-lg aspect-square w-full mb-2"></div>
       <div className="h-3 bg-slate-200 rounded w-3/4 mb-1.5"></div>
       <div className="h-2.5 bg-slate-200 rounded w-1/2 mb-2"></div>
@@ -28,7 +28,7 @@ export const ProductsListSkeleton = ({ count = 5 }) => {
   return (
     <div className="space-y-2">
       {[...Array(count)].map((_, i) => (
-        <div key={i} className="bg-white rounded-xl border border-slate-200 shadow-soft-sm p-2.5 animate-pulse">
+        <div key={i} className="bg-surface rounded-xl border border-border shadow-soft-sm p-2.5 animate-pulse">
           <div className="flex gap-2.5">
             <div className="w-16 h-16 bg-slate-200 rounded-lg"></div>
             <div className="flex-1">
@@ -50,7 +50,7 @@ export const BrandsGridSkeleton = ({ count = 6 }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {[...Array(count)].map((_, i) => (
-        <div key={i} className="bg-white rounded-xl border border-slate-200 shadow-soft-sm p-4 animate-pulse">
+        <div key={i} className="bg-surface rounded-xl border border-border shadow-soft-sm p-4 animate-pulse">
           <div className="w-20 h-20 bg-slate-200 rounded-full mx-auto mb-3"></div>
           <div className="h-4 bg-slate-200 rounded w-24 mx-auto mb-2"></div>
           <div className="h-3 bg-slate-200 rounded w-16 mx-auto"></div>
@@ -64,7 +64,7 @@ export const CategoriesGridSkeleton = ({ count = 5 }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {[...Array(count)].map((_, i) => (
-        <div key={i} className="bg-white rounded-2xl border border-slate-200 shadow-soft-sm p-5 animate-pulse">
+        <div key={i} className="bg-surface rounded-2xl border border-border shadow-soft-sm p-5 animate-pulse">
           <div className="w-[60px] h-[60px] bg-slate-200 rounded-xl mx-auto mb-3"></div>
           <div className="h-5 bg-slate-200 rounded w-24 mx-auto mb-2"></div>
           <div className="h-3 bg-slate-200 rounded w-32 mx-auto"></div>
@@ -95,7 +95,7 @@ export const HubSkeleton = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {[...Array(8)].map((_, i) => (
-        <div key={i} className="bg-white rounded-2xl border border-slate-200 shadow-soft-sm p-5 animate-pulse">
+        <div key={i} className="bg-surface rounded-2xl border border-border shadow-soft-sm p-5 animate-pulse">
           <div className="w-[60px] h-[60px] bg-slate-200 rounded-xl mx-auto mb-3"></div>
           <div className="h-5 bg-slate-200 rounded w-28 mx-auto mb-2"></div>
           <div className="h-3 bg-slate-200 rounded w-36 mx-auto"></div>
@@ -109,7 +109,7 @@ export const PriceGridSkeleton = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {[...Array(5)].map((_, i) => (
-        <div key={i} className="bg-white rounded-2xl border border-slate-200 shadow-soft-sm p-5 animate-pulse">
+        <div key={i} className="bg-surface rounded-2xl border border-border shadow-soft-sm p-5 animate-pulse">
           <div className="w-[60px] h-[60px] bg-slate-200 rounded-xl mx-auto mb-3"></div>
           <div className="h-5 bg-slate-200 rounded w-24 mx-auto mb-2"></div>
           <div className="h-3 bg-slate-200 rounded w-32 mx-auto"></div>
@@ -123,7 +123,7 @@ export const InterestGridSkeleton = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {[...Array(6)].map((_, i) => (
-        <div key={i} className="bg-white rounded-2xl border border-slate-200 shadow-soft-sm p-5 animate-pulse">
+        <div key={i} className="bg-surface rounded-2xl border border-border shadow-soft-sm p-5 animate-pulse">
           <div className="w-[60px] h-[60px] bg-slate-200 rounded-xl mx-auto mb-3"></div>
           <div className="h-5 bg-slate-200 rounded w-28 mx-auto mb-2"></div>
           <div className="h-3 bg-slate-200 rounded w-36 mx-auto"></div>
@@ -137,9 +137,9 @@ export const LoadingWithMessage = ({ message = "Memuat data..." }) => {
   return (
     <div className="flex flex-col items-center justify-center py-12">
       <div className="relative">
-        <div className="w-16 h-16 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin"></div>
+        <div className="w-16 h-16 border-4 border-border border-t-blue-600 rounded-full animate-spin"></div>
       </div>
-      <p className="mt-4 text-sm text-slate-500">{message}</p>
+      <p className="mt-4 text-sm text-content-muted">{message}</p>
     </div>
   );
 };

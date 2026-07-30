@@ -71,8 +71,8 @@ function PanelCategories() {
                         <div className="w-[60px] h-[60px] rounded-xl grid place-items-center bg-blue-50 text-blue-600 border border-blue-100">
                             <category.icon className="w-7 h-7" aria-hidden="true" />
                         </div>
-                        <div className="font-bold text-lg text-slate-900">{category.label}</div>
-                        <div className="text-sm text-slate-500">
+                        <div className="font-bold text-lg text-content">{category.label}</div>
+                        <div className="text-sm text-content-muted">
                             Tag: {category.tags.join(', ')}
                         </div>
                     </div>

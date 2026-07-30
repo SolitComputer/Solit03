@@ -40,7 +40,7 @@ export default function Promo() {
   return (
     <section
       ref={sectionRef}
-      className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-slate-50"
+      className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-surface-muted"
     >
       {/* Title */}
       <div className="text-center mb-12 md:mb-16">
@@ -49,11 +49,11 @@ export default function Promo() {
           KOLEKSI POSTER LAPTOP
         </span>
 
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mt-5">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-content mt-5">
           Showcase <span className="text-blue-600">Laptop</span>
         </h2>
 
-        <p className="text-sm md:text-base text-slate-500 mt-4 max-w-2xl mx-auto">
+        <p className="text-sm md:text-base text-content-muted mt-4 max-w-2xl mx-auto">
           Beberapa koleksi laptop pilihan dari Solit03 dengan desain modern,
           performa terbaik, dan kualitas yang siap menemani aktivitas harianmu.
         </p>
@@ -73,7 +73,7 @@ export default function Promo() {
             style={{ transitionDelay: `${index * 80}ms` }}
           >
             {/* Image */}
-            <div className="relative rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-soft-sm hover:shadow-soft transition-all duration-300">
+            <div className="relative rounded-2xl overflow-hidden bg-surface border border-border shadow-soft-sm hover:shadow-soft transition-all duration-300">
               <img
                 src={item.image_url}
                 alt={item.title || "Laptop Solit 03"}
@@ -87,7 +87,7 @@ export default function Promo() {
 
             {/* Title */}
             {item.title && (
-              <p className="text-center text-sm sm:text-base font-medium text-slate-500 mt-2 group-hover:text-slate-900 transition-colors">
+              <p className="text-center text-sm sm:text-base font-medium text-content-muted mt-2 group-hover:text-content transition-colors">
                 {item.title}
               </p>
             )}

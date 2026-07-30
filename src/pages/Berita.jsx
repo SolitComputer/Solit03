@@ -64,7 +64,7 @@ export default function Berita() {
   const listArticles = featured ? articles.filter((a) => a.id !== featured.id) : articles;
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-surface-muted">
       <Helmet>
         <title>Berita &amp; Artikel — Solit 03</title>
         <meta name="description" content="Berita, tips, dan promo terbaru seputar laptop dan teknologi dari Solit 03." />
@@ -81,16 +81,16 @@ export default function Berita() {
           </h1>
 
           <div className="relative mt-6 max-w-md">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-content-muted" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Cari artikel..."
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-9 pr-9 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-9 pr-9 py-2.5 text-sm text-white placeholder:text-content-muted focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             />
             {search && (
-              <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
+              <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-content-muted hover:text-white">
                 <X size={14} />
               </button>
             )}
@@ -101,7 +101,7 @@ export default function Berita() {
       {/* Category filter bar */}
       <div className="bg-[#0f172a] border-t border-b border-slate-800 text-slate-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 overflow-x-auto no-scrollbar">
-          <div className="flex items-center gap-1.5 pr-3 mr-1 border-r border-slate-800 text-slate-400 text-xs font-bold uppercase tracking-wider shrink-0 select-none">
+          <div className="flex items-center gap-1.5 pr-3 mr-1 border-r border-slate-800 text-content-muted text-xs font-bold uppercase tracking-wider shrink-0 select-none">
             <SlidersHorizontal size={13} className="text-blue-400" /> Kategori
           </div>
 
@@ -146,7 +146,7 @@ export default function Berita() {
         ) : listArticles.length === 0 ? (
           <div className="text-center py-24">
             <Newspaper size={40} className="mx-auto mb-3 text-slate-300" />
-            <p className="text-slate-500 text-sm">Belum ada artikel ditemukan</p>
+            <p className="text-content-muted text-sm">Belum ada artikel ditemukan</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -162,7 +162,7 @@ export default function Berita() {
                   if (ad) {
                     nodes.push(
                       <div key={`ad-${i}`} className="col-span-full py-4 my-2">
-                        <div className="flex items-center justify-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
+                        <div className="flex items-center justify-center gap-1.5 text-[10px] font-bold text-content-muted uppercase tracking-widest mb-2">
                           <Megaphone size={11} className="text-blue-500" /> SPONSORED PROMO
                         </div>
                         <div className="max-w-4xl mx-auto">
@@ -184,15 +184,15 @@ export default function Berita() {
             <button
               onClick={() => setPage(Math.max(page - 1, 1))}
               disabled={page === 1}
-              className="p-2 rounded-lg border border-slate-200 text-slate-500 hover:bg-white transition disabled:opacity-30"
+              className="p-2 rounded-lg border border-border text-content-muted hover:bg-surface transition disabled:opacity-30"
             >
               <ChevronLeft size={16} />
             </button>
-            <span className="text-sm text-slate-500 px-3">Halaman {page} dari {totalPages}</span>
+            <span className="text-sm text-content-muted px-3">Halaman {page} dari {totalPages}</span>
             <button
               onClick={() => setPage(Math.min(page + 1, totalPages))}
               disabled={page === totalPages}
-              className="p-2 rounded-lg border border-slate-200 text-slate-500 hover:bg-white transition disabled:opacity-30"
+              className="p-2 rounded-lg border border-border text-content-muted hover:bg-surface transition disabled:opacity-30"
             >
               <ChevronRight size={16} />
             </button>

@@ -63,7 +63,7 @@ export default function TestimonialsAdmin() {
           <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
             Video Testimoni
           </h1>
-          <p className="text-sm text-gray-500 mt-1">Kelola video bukti kepuasan pelanggan di homepage</p>
+          <p className="text-sm text-content-muted mt-1">Kelola video bukti kepuasan pelanggan di homepage</p>
         </div>
         <label className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-semibold rounded-xl shadow-md hover:shadow-lg transition cursor-pointer">
           {uploading ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
@@ -75,14 +75,14 @@ export default function TestimonialsAdmin() {
       {loading ? (
         <div className="flex items-center justify-center py-24"><Loader2 size={24} className="animate-spin text-blue-500" /></div>
       ) : items.length === 0 ? (
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm py-20 text-center">
+        <div className="bg-surface border border-border rounded-2xl shadow-sm py-20 text-center">
           <VideoIcon size={36} className="mx-auto text-gray-200 mb-3" />
-          <p className="text-sm text-gray-400">Belum ada video testimoni</p>
+          <p className="text-sm text-content-muted">Belum ada video testimoni</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {items.map((item) => (
-            <div key={item.id} className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
+            <div key={item.id} className="bg-surface border border-border rounded-xl shadow-sm overflow-hidden">
               <video src={item.video_url} controls className={`w-full aspect-[3/4] object-cover bg-black ${!item.is_active ? "opacity-40" : ""}`} />
               <div className="p-2.5 space-y-2">
                 <input
@@ -90,10 +90,10 @@ export default function TestimonialsAdmin() {
                   value={item.customer_name || ""}
                   onChange={(e) => updateName(item, e.target.value)}
                   onBlur={() => saveName(item)}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-lg text-xs px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full bg-surface-muted border border-border rounded-lg text-xs px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <div className="flex items-center justify-between">
-                  <button onClick={() => toggleActive(item)} className={`flex items-center gap-1 text-[11px] font-semibold ${item.is_active ? "text-emerald-600" : "text-gray-400"}`}>
+                  <button onClick={() => toggleActive(item)} className={`flex items-center gap-1 text-[11px] font-semibold ${item.is_active ? "text-emerald-600" : "text-content-muted"}`}>
                     {item.is_active ? <Eye size={12} /> : <EyeOff size={12} />}
                     {item.is_active ? "Aktif" : "Tersembunyi"}
                   </button>

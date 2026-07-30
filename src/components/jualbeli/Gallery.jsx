@@ -4,7 +4,7 @@ export default function Gallery({ images }) {
       {images.map((img, i) => (
         <div
           key={i}
-          className="w-full h-[360px] overflow-hidden rounded-2xl border border-slate-200 shadow-soft hover:shadow-soft-lg transition duration-300 group"
+          className="w-full h-[360px] overflow-hidden rounded-2xl border border-border shadow-soft hover:shadow-soft-lg transition duration-300 group"
         >
           <img
             src={img}

@@ -94,26 +94,26 @@ export default function Articles() {
           </div>
           <Link
             to="/admin/articles/create"
-            className="flex items-center gap-2 px-4 py-2 bg-white text-blue-600 hover:bg-blue-50 text-sm font-semibold rounded-xl shadow-lg transition hover:scale-105 active:scale-95"
+            className="flex items-center gap-2 px-4 py-2 bg-surface text-blue-600 hover:bg-blue-50 text-sm font-semibold rounded-xl shadow-lg transition hover:scale-105 active:scale-95"
           >
             <Plus size={16} /> Tulis Artikel
           </Link>
         </div>
       </div>
 
-      <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-gray-50 flex flex-col lg:flex-row gap-3">
+      <div className="bg-surface border border-border rounded-xl shadow-sm overflow-hidden">
+        <div className="p-4 border-b border-border flex flex-col lg:flex-row gap-3">
           <div className="relative flex-1">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-content-muted" />
             <input
               type="text"
               placeholder="Cari judul artikel..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-9 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              className="w-full bg-surface-muted border border-border rounded-lg pl-9 pr-9 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             />
             {searchTerm && (
-              <button onClick={() => setSearchTerm("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+              <button onClick={() => setSearchTerm("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-content-muted hover:text-content-soft">
                 <X size={14} />
               </button>
             )}
@@ -122,33 +122,33 @@ export default function Articles() {
           <div className="flex gap-2 flex-wrap">
             <div className="relative">
               <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}
-                className="bg-gray-50 border border-gray-200 rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-gray-600">
+                className="bg-surface-muted border border-border rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-content-soft">
                 <option value="all">Semua Kategori</option>
                 {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
-              <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-content-muted pointer-events-none" />
             </div>
             <div className="relative">
               <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}
-                className="bg-gray-50 border border-gray-200 rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-gray-600">
+                className="bg-surface-muted border border-border rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-content-soft">
                 <option value="all">Semua Status</option>
                 <option value="published">Published</option>
                 <option value="draft">Draft</option>
               </select>
-              <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-content-muted pointer-events-none" />
             </div>
             <div className="relative">
               <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}
-                className="bg-gray-50 border border-gray-200 rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-gray-600">
+                className="bg-surface-muted border border-border rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-content-soft">
                 <option value="newest">Terbaru</option>
                 <option value="oldest">Terlama</option>
                 <option value="title_asc">A-Z</option>
                 <option value="most_viewed">Terpopuler</option>
               </select>
-              <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-content-muted pointer-events-none" />
             </div>
             {hasFilters && (
-              <button onClick={resetFilters} className="px-3 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm text-gray-600 transition flex items-center gap-1.5">
+              <button onClick={resetFilters} className="px-3 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm text-content-soft transition flex items-center gap-1.5">
                 <RefreshCw size={14} /> Reset
               </button>
             )}
@@ -157,14 +157,14 @@ export default function Articles() {
 
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-100">
+            <thead className="bg-gradient-to-r from-gray-50 to-white border-b border-border">
               <tr>
-                <th className="text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Artikel</th>
-                <th className="text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Kategori</th>
-                <th className="text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Views</th>
-                <th className="text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Tanggal</th>
-                <th className="text-center px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Aksi</th>
+                <th className="text-left px-4 py-3 text-[11px] font-semibold text-content-muted uppercase tracking-wider">Artikel</th>
+                <th className="text-left px-4 py-3 text-[11px] font-semibold text-content-muted uppercase tracking-wider">Kategori</th>
+                <th className="text-left px-4 py-3 text-[11px] font-semibold text-content-muted uppercase tracking-wider">Status</th>
+                <th className="text-left px-4 py-3 text-[11px] font-semibold text-content-muted uppercase tracking-wider">Views</th>
+                <th className="text-left px-4 py-3 text-[11px] font-semibold text-content-muted uppercase tracking-wider">Tanggal</th>
+                <th className="text-center px-4 py-3 text-[11px] font-semibold text-content-muted uppercase tracking-wider">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
@@ -175,7 +175,7 @@ export default function Articles() {
               ) : articles.length === 0 ? (
                 <tr><td colSpan={6} className="py-20 text-center">
                   <Newspaper size={48} className="mx-auto mb-3 text-gray-200" />
-                  <p className="text-sm text-gray-400">Belum ada artikel</p>
+                  <p className="text-sm text-content-muted">Belum ada artikel</p>
                 </td></tr>
               ) : (
                 articles.map((a) => (
@@ -183,51 +183,51 @@ export default function Articles() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         {a.cover_image ? (
-                          <img src={a.cover_image} alt={a.title} className="w-12 h-9 rounded-lg object-cover border border-gray-100" />
+                          <img src={a.cover_image} alt={a.title} className="w-12 h-9 rounded-lg object-cover border border-border" />
                         ) : (
                           <div className="w-12 h-9 bg-gray-100 rounded-lg flex items-center justify-center">
                             <Newspaper size={14} className="text-gray-300" />
                           </div>
                         )}
                         <div className="min-w-0">
-                          <p className="text-sm font-semibold text-gray-800 group-hover:text-blue-600 transition line-clamp-1 flex items-center gap-1.5">
+                          <p className="text-sm font-semibold text-content group-hover:text-blue-600 transition line-clamp-1 flex items-center gap-1.5">
                             {a.is_featured && <Star size={12} className="text-amber-500 flex-shrink-0" fill="currentColor" />}
                             {a.title}
                           </p>
-                          <p className="text-[10px] text-gray-400 font-mono">{a.slug}</p>
+                          <p className="text-[10px] text-content-muted font-mono">{a.slug}</p>
                         </div>
                       </div>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="inline-flex items-center gap-1.5 text-sm text-gray-600">
+                      <span className="inline-flex items-center gap-1.5 text-sm text-content-soft">
                         <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
                         {a.article_categories?.name || "—"}
                       </span>
                     </td>
                     <td className="px-4 py-3">
                       <span className={`inline-flex px-2 py-1 rounded-lg text-[10px] font-semibold ${
-                        a.status === "published" ? "bg-green-50 text-green-600 border border-green-100" : "bg-gray-100 text-gray-500 border border-gray-200"
+                        a.status === "published" ? "bg-green-50 text-green-600 border border-green-100" : "bg-gray-100 text-content-muted border border-border"
                       }`}>
                         {a.status === "published" ? "Published" : "Draft"}
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="inline-flex items-center gap-1 text-sm text-gray-500">
+                      <span className="inline-flex items-center gap-1 text-sm text-content-muted">
                         <Eye size={12} /> {(a.views || 0).toLocaleString()}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-500">
+                    <td className="px-4 py-3 text-sm text-content-muted">
                       {new Date(a.created_at).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-center gap-1">
-                        <Link to={`/admin/articles/edit/${a.id}`} className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition">
+                        <Link to={`/admin/articles/edit/${a.id}`} className="p-2 text-content-muted hover:text-blue-600 hover:bg-blue-50 rounded-lg transition">
                           <Edit size={14} />
                         </Link>
                         <button
                           onClick={() => handleDelete(a.id)}
                           disabled={deletingId === a.id}
-                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-40"
+                          className="p-2 text-content-muted hover:text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-40"
                         >
                           {deletingId === a.id ? (
                             <div className="w-3.5 h-3.5 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
@@ -243,15 +243,15 @@ export default function Articles() {
         </div>
 
         {totalCount > 0 && (
-          <div className="px-4 py-3 border-t border-gray-100 bg-gray-50/30 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-xs text-gray-500">
-              Menampilkan <span className="font-semibold text-gray-700">{(currentPage - 1) * itemsPerPage + 1}</span>–
-              <span className="font-semibold text-gray-700">{Math.min(currentPage * itemsPerPage, totalCount)}</span> dari{" "}
-              <span className="font-semibold text-gray-700">{totalCount}</span> artikel
+          <div className="px-4 py-3 border-t border-border bg-surface-muted/30 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-xs text-content-muted">
+              Menampilkan <span className="font-semibold text-content-soft">{(currentPage - 1) * itemsPerPage + 1}</span>–
+              <span className="font-semibold text-content-soft">{Math.min(currentPage * itemsPerPage, totalCount)}</span> dari{" "}
+              <span className="font-semibold text-content-soft">{totalCount}</span> artikel
             </p>
             <div className="flex items-center gap-1.5">
               <button onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))} disabled={currentPage === 1}
-                className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:bg-white transition disabled:opacity-30">
+                className="p-2 rounded-lg border border-border text-content-muted hover:bg-surface transition disabled:opacity-30">
                 <ChevronLeft size={14} />
               </button>
               {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -263,14 +263,14 @@ export default function Articles() {
                 return (
                   <button key={n} onClick={() => setCurrentPage(n)}
                     className={`min-w-[34px] h-8 rounded-lg text-sm font-medium transition-all ${
-                      currentPage === n ? "bg-blue-600 text-white shadow-sm" : "text-gray-600 hover:bg-gray-200"
+                      currentPage === n ? "bg-blue-600 text-white shadow-sm" : "text-content-soft hover:bg-gray-200"
                     }`}>
                     {n}
                   </button>
                 );
               })}
               <button onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages}
-                className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:bg-white transition disabled:opacity-30">
+                className="p-2 rounded-lg border border-border text-content-muted hover:bg-surface transition disabled:opacity-30">
                 <ChevronRight size={14} />
               </button>
             </div>

@@ -96,25 +96,25 @@ export default function Login() {
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent">
             Solit Admin
           </h1>
-          <p className="text-gray-500 mt-2">Kelola toko laptop Anda dengan mudah</p>
+          <p className="text-content-muted mt-2">Kelola toko laptop Anda dengan mudah</p>
         </div>
 
         {/* Form Card */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-gray-100">
+        <div className="bg-surface/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-border">
           <div className="mb-6">
-            <h2 className="text-2xl font-semibold text-gray-800">Selamat Datang</h2>
-            <p className="text-gray-500 text-sm mt-1">Silakan login untuk melanjutkan</p>
+            <h2 className="text-2xl font-semibold text-content">Selamat Datang</h2>
+            <p className="text-content-muted text-sm mt-1">Silakan login untuk melanjutkan</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-5">
             {/* Email Field */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-content-soft mb-2">
                 Email Address
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
+                  <Mail className="h-5 w-5 text-content-muted" />
                 </div>
                 <input
                   type="email"
@@ -124,7 +124,7 @@ export default function Login() {
                     if (errors.email) setErrors({ ...errors, email: "" });
                   }}
                   className={`block w-full pl-10 pr-3 py-3 border ${
-                    errors.email ? "border-red-500 focus:ring-red-500" : "border-gray-200 focus:ring-blue-500"
+                    errors.email ? "border-red-500 focus:ring-red-500" : "border-border focus:ring-blue-500"
                   } rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition`}
                   placeholder="admin@example.com"
                 />
@@ -139,12 +139,12 @@ export default function Login() {
 
             {/* Password Field */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-content-soft mb-2">
                 Password
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
+                  <Lock className="h-5 w-5 text-content-muted" />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
@@ -154,7 +154,7 @@ export default function Login() {
                     if (errors.password) setErrors({ ...errors, password: "" });
                   }}
                   className={`block w-full pl-10 pr-10 py-3 border ${
-                    errors.password ? "border-red-500 focus:ring-red-500" : "border-gray-200 focus:ring-blue-500"
+                    errors.password ? "border-red-500 focus:ring-red-500" : "border-border focus:ring-blue-500"
                   } rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition`}
                   placeholder="••••••••"
                 />
@@ -164,9 +164,9 @@ export default function Login() {
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 transition" />
+                    <EyeOff className="h-5 w-5 text-content-muted hover:text-content-soft transition" />
                   ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600 transition" />
+                    <Eye className="h-5 w-5 text-content-muted hover:text-content-soft transition" />
                   )}
                 </button>
               </div>
@@ -185,9 +185,9 @@ export default function Login() {
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="w-4 h-4 rounded border-gray-300 text-blue-700 focus:ring-blue-700"
+                  className="w-4 h-4 rounded border-border text-blue-700 focus:ring-blue-700"
                 />
-                <span className="text-sm text-gray-600">Ingat saya</span>
+                <span className="text-sm text-content-soft">Ingat saya</span>
               </label>
             </div>
 
@@ -210,7 +210,7 @@ export default function Login() {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs text-gray-400 mt-6">
+        <p className="text-center text-xs text-content-muted mt-6">
           &copy; 2024 Solit Admin Panel. All rights reserved.
         </p>
       </div>

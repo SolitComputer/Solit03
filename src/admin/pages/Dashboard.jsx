@@ -119,7 +119,7 @@ export default function Dashboard() {
         </div>
         <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="bg-white border border-gray-100 rounded-2xl p-5 space-y-4 shadow-sm">
+            <div key={i} className="bg-surface border border-border rounded-2xl p-5 space-y-4 shadow-sm">
               <div className="flex items-center justify-between">
                 <Skeleton className="w-10 h-10 rounded-xl" />
                 <Skeleton className="w-16 h-4" />
@@ -130,7 +130,7 @@ export default function Dashboard() {
           ))}
         </div>
         <div className="grid lg:grid-cols-3 gap-5">
-          <div className="lg:col-span-2 bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+          <div className="lg:col-span-2 bg-surface border border-border rounded-2xl p-6 shadow-sm">
             <Skeleton className="w-40 h-5 mb-6" />
             {[1, 2, 3, 4, 5].map(i => (
               <div key={i} className="flex gap-4 items-center mb-4">
@@ -139,7 +139,7 @@ export default function Dashboard() {
               </div>
             ))}
           </div>
-          <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+          <div className="bg-surface border border-border rounded-2xl p-6 shadow-sm">
             <Skeleton className="w-32 h-5 mb-4" />
             {[1, 2, 3].map(i => (
               <div key={i} className="flex gap-3 items-center p-3">
@@ -154,12 +154,12 @@ export default function Dashboard() {
         </div>
         <div className="grid lg:grid-cols-2 gap-5">
           {[1, 2].map(i => (
-            <div key={i} className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-100">
+            <div key={i} className="bg-surface border border-border rounded-2xl shadow-sm overflow-hidden">
+              <div className="px-6 py-4 border-b border-border">
                 <Skeleton className="w-36 h-5" />
               </div>
               {[1, 2, 3, 4].map(j => (
-                <div key={j} className="px-6 py-4 flex items-center gap-4 border-b border-gray-50">
+                <div key={j} className="px-6 py-4 flex items-center gap-4 border-b border-border">
                   <Skeleton className="w-10 h-10 rounded-xl" />
                   <div className="flex-1 space-y-2">
                     <Skeleton className="w-40 h-3" />
@@ -235,10 +235,10 @@ export default function Dashboard() {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <div className="w-1 h-7 bg-gradient-to-b from-blue-500 to-violet-500 rounded-full"></div>
-            <h1 className="text-xl font-bold text-gray-800">Dashboard Overview</h1>
+            <h1 className="text-xl font-bold text-content">Dashboard Overview</h1>
            
           </div>
-          <p className="text-sm text-gray-500 ml-3">
+          <p className="text-sm text-content-muted ml-3">
             Selamat datang Di Dashboard Admin
           </p>
         </div>
@@ -253,7 +253,7 @@ export default function Dashboard() {
           return (
             <div 
               key={label} 
-              className="stat-card bg-white border border-gray-100 rounded-2xl p-5 shadow-sm card-hover cursor-pointer animate-slide-up"
+              className="stat-card bg-surface border border-border rounded-2xl p-5 shadow-sm card-hover cursor-pointer animate-slide-up"
               style={{ animationDelay: `${idx * 100}ms` }}
             >
               <div className="flex items-center justify-between mb-4">
@@ -268,9 +268,9 @@ export default function Dashboard() {
                 </div>
               </div>
               <div>
-                <p className="text-[11px] text-gray-400 font-medium uppercase tracking-wider">{label}</p>
-                <p className="text-2xl font-bold text-gray-800 mt-1">{value.toLocaleString()}</p>
-                <p className="text-[10px] text-gray-400 mt-1">{stats.find(s => s.label === label)?.subtitle}</p>
+                <p className="text-[11px] text-content-muted font-medium uppercase tracking-wider">{label}</p>
+                <p className="text-2xl font-bold text-content mt-1">{value.toLocaleString()}</p>
+                <p className="text-[10px] text-content-muted mt-1">{stats.find(s => s.label === label)?.subtitle}</p>
               </div>
               {/* Progress bar mini */}
               <div className="mt-3 h-1 bg-gray-100 rounded-full overflow-hidden">
@@ -287,16 +287,16 @@ export default function Dashboard() {
       {/* Chart + Quick Actions dengan desain premium */}
       <div className="grid lg:grid-cols-3 gap-5">
         {/* Stock Bar Chart */}
-        <div className="lg:col-span-2 bg-white border border-gray-100 rounded-2xl p-6 shadow-sm card-hover animate-slide-left">
+        <div className="lg:col-span-2 bg-surface border border-border rounded-2xl p-6 shadow-sm card-hover animate-slide-left">
           <div className="flex items-center justify-between mb-6">
             <div>
               <div className="flex items-center gap-2">
-                <BarChart3 size="18" className="text-gray-600" />
-                <h2 className="text-base font-semibold text-gray-800">Distribusi Stok</h2>
+                <BarChart3 size="18" className="text-content-soft" />
+                <h2 className="text-base font-semibold text-content">Distribusi Stok</h2>
               </div>
-              <p className="text-xs text-gray-400 mt-1">Visualisasi stok 5 produk teratas</p>
+              <p className="text-xs text-content-muted mt-1">Visualisasi stok 5 produk teratas</p>
             </div>
-            <div className="flex items-center gap-1 text-[10px] text-gray-400">
+            <div className="flex items-center gap-1 text-[10px] text-content-muted">
               <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
               <span>Unit tersedia</span>
             </div>
@@ -309,10 +309,10 @@ export default function Dashboard() {
                 <div key={i} className="group">
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-semibold text-gray-400 w-6">{i+1}</span>
-                      <span className="text-xs font-medium text-gray-700 truncate max-w-[120px]">{p.name}</span>
+                      <span className="text-[10px] font-semibold text-content-muted w-6">{i+1}</span>
+                      <span className="text-xs font-medium text-content-soft truncate max-w-[120px]">{p.name}</span>
                     </div>
-                    <span className="text-xs font-semibold text-gray-600">{p.stock} unit</span>
+                    <span className="text-xs font-semibold text-content-soft">{p.stock} unit</span>
                   </div>
                   <div className="relative h-7 bg-gray-100 rounded-lg overflow-hidden">
                     <div
@@ -329,10 +329,10 @@ export default function Dashboard() {
         </div>
 
         {/* Quick Actions dengan ikon premium */}
-        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm card-hover animate-slide-left">
+        <div className="bg-surface border border-border rounded-2xl p-6 shadow-sm card-hover animate-slide-left">
           <div className="flex items-center gap-2 mb-4">
             <Zap size="18" className="text-amber-500" />
-            <h2 className="text-base font-semibold text-gray-800">Aksi Cepat</h2>
+            <h2 className="text-base font-semibold text-content">Aksi Cepat</h2>
           </div>
           <div className="space-y-3">
             {[
@@ -347,12 +347,12 @@ export default function Dashboard() {
                   to={to} 
                   className={`flex items-center gap-4 p-3 rounded-xl ${c.bg} transition-all duration-300 group hover:shadow-md`}
                 >
-                  <div className={`w-10 h-10 bg-white rounded-xl flex items-center justify-center ${c.text} shadow-sm group-hover:scale-110 transition`}>
+                  <div className={`w-10 h-10 bg-surface rounded-xl flex items-center justify-center ${c.text} shadow-sm group-hover:scale-110 transition`}>
                     <Icon size="18" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-semibold text-gray-800">{label}</p>
-                    <p className="text-[11px] text-gray-500">{desc}</p>
+                    <p className="text-sm font-semibold text-content">{label}</p>
+                    <p className="text-[11px] text-content-muted">{desc}</p>
                   </div>
                   <ChevronRight size="16" className={`${c.text} opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-1`} />
                 </Link>
@@ -360,8 +360,8 @@ export default function Dashboard() {
             })}
           </div>
           {/* Motivational quote */}
-          <div className="mt-4 pt-4 border-t border-gray-100">
-            <p className="text-[10px] text-gray-400 text-center">
+          <div className="mt-4 pt-4 border-t border-border">
+            <p className="text-[10px] text-content-muted text-center">
               Terus kembangkan koleksi laptop terbaikmu!
             </p>
           </div>
@@ -371,15 +371,15 @@ export default function Dashboard() {
       {/* Tables dengan desain modern */}
       <div className="grid lg:grid-cols-2 gap-5">
         {/* Recent Products */}
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden card-hover">
-          <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+        <div className="bg-surface border border-border rounded-2xl shadow-sm overflow-hidden card-hover">
+          <div className="px-6 py-4 border-b border-border bg-gradient-to-r from-gray-50 to-white">
             <div className="flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2">
-                  <ShoppingBag size="18" className="text-gray-600" />
-                  <h2 className="text-base font-semibold text-gray-800">Produk Terbaru</h2>
+                  <ShoppingBag size="18" className="text-content-soft" />
+                  <h2 className="text-base font-semibold text-content">Produk Terbaru</h2>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">5 produk yang baru ditambahkan</p>
+                <p className="text-xs text-content-muted mt-1">5 produk yang baru ditambahkan</p>
               </div>
               <Link to="/admin/products" className="text-xs text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition">
                 Lihat semua
@@ -391,34 +391,34 @@ export default function Dashboard() {
             {recentProducts.length === 0 ? (
               <div className="py-12 text-center">
                 <Package size="40" className="mx-auto text-gray-200 mb-3" />
-                <p className="text-sm text-gray-400">Belum ada produk</p>
+                <p className="text-sm text-content-muted">Belum ada produk</p>
               </div>
             ) : recentProducts.map((p, idx) => (
               <div 
                 key={p.id} 
-                className="px-6 py-4 hover:bg-gray-50/80 transition-all duration-300 cursor-pointer group"
+                className="px-6 py-4 hover:bg-surface-muted/80 transition-all duration-300 cursor-pointer group"
                 style={{ animationDelay: `${idx * 50}ms` }}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     {p.thumbnail ? (
-                      <img src={p.thumbnail} alt="" className="w-10 h-10 rounded-xl object-cover border border-gray-100 shadow-sm" />
+                      <img src={p.thumbnail} alt="" className="w-10 h-10 rounded-xl object-cover border border-border shadow-sm" />
                     ) : (
                       <div className="w-10 h-10 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center">
-                        <Laptop size="16" className="text-gray-400" />
+                        <Laptop size="16" className="text-content-muted" />
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-gray-800 truncate group-hover:text-blue-600 transition">
+                      <p className="text-sm font-semibold text-content truncate group-hover:text-blue-600 transition">
                         {p.name}
                       </p>
-                      <p className="text-[11px] text-gray-400 mt-0.5">
+                      <p className="text-[11px] text-content-muted mt-0.5">
                         {p.brands?.name} · {p.categories?.name}
                       </p>
                     </div>
                   </div>
                   <div className="text-right ml-3">
-                    <p className="text-sm font-bold text-gray-800">
+                    <p className="text-sm font-bold text-content">
                       Rp {p.price?.toLocaleString()}
                     </p>
                     <p className={`text-[11px] font-medium mt-0.5 ${
@@ -434,15 +434,15 @@ export default function Dashboard() {
         </div>
 
         {/* Low Stock Alert dengan desain premium */}
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden card-hover">
-          <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-amber-50 to-white">
+        <div className="bg-surface border border-border rounded-2xl shadow-sm overflow-hidden card-hover">
+          <div className="px-6 py-4 border-b border-border bg-gradient-to-r from-amber-50 to-white">
             <div className="flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2">
                   <AlertCircle size="18" className="text-amber-500" />
-                  <h2 className="text-base font-semibold text-gray-800">Peringatan Stok</h2>
+                  <h2 className="text-base font-semibold text-content">Peringatan Stok</h2>
                 </div>
-                <p className="text-xs text-gray-500 mt-1">Stok menipis, perlu restock!</p>
+                <p className="text-xs text-content-muted mt-1">Stok menipis, perlu restock!</p>
               </div>
               <Link to="/admin/products" className="text-xs text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition">
                 Kelola
@@ -454,14 +454,14 @@ export default function Dashboard() {
             {lowStockProducts.length === 0 ? (
               <div className="py-12 text-center">
                 <Award size="40" className="mx-auto text-emerald-200 mb-3" />
-                <p className="text-sm text-gray-400">Semua stok dalam kondisi aman</p>
+                <p className="text-sm text-content-muted">Semua stok dalam kondisi aman</p>
               </div>
             ) : lowStockProducts.map((p) => (
               <div key={p.id} className="px-6 py-4 hover:bg-amber-50/30 transition-all duration-300">
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <p className="text-sm font-semibold text-gray-800">{p.name}</p>
-                    <p className="text-[11px] text-gray-500 mt-0.5">{p.brands?.name}</p>
+                    <p className="text-sm font-semibold text-content">{p.name}</p>
+                    <p className="text-[11px] text-content-muted mt-0.5">{p.brands?.name}</p>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className={`px-2 py-1 rounded-lg text-[11px] font-bold ${
@@ -497,11 +497,11 @@ export default function Dashboard() {
       {/* Popular + Activities dengan desain modern */}
       <div className="grid lg:grid-cols-2 gap-5">
         {/* Top Priced Products */}
-        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm card-hover">
+        <div className="bg-surface border border-border rounded-2xl p-6 shadow-sm card-hover">
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-2">
               <Sparkles size="18" className="text-amber-500" />
-              <h2 className="text-base font-semibold text-gray-800">Produk Premium</h2>
+              <h2 className="text-base font-semibold text-content">Produk Premium</h2>
             </div>
             <div className="px-2 py-1 bg-amber-50 rounded-lg">
               <span className="text-[10px] font-semibold text-amber-600">Harga Tertinggi</span>
@@ -516,9 +516,9 @@ export default function Dashboard() {
                 <div className="relative">
                   <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold ${
                     i === 0 ? "bg-amber-100 text-amber-700" :
-                    i === 1 ? "bg-gray-200 text-gray-600" :
+                    i === 1 ? "bg-gray-200 text-content-soft" :
                     i === 2 ? "bg-orange-100 text-orange-700" :
-                    "bg-gray-100 text-gray-500"
+                    "bg-gray-100 text-content-muted"
                   }`}>
                     {i + 1}
                   </div>
@@ -530,25 +530,25 @@ export default function Dashboard() {
                   )}
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-gray-800 group-hover:text-blue-600 transition">
+                  <p className="text-sm font-semibold text-content group-hover:text-blue-600 transition">
                     {p.name}
                   </p>
-                  <p className="text-[11px] text-gray-500 mt-0.5">{p.brands?.name}</p>
+                  <p className="text-[11px] text-content-muted mt-0.5">{p.brands?.name}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-bold text-blue-600">
                     Rp {p.price?.toLocaleString()}
                   </p>
-                  <p className="text-[10px] text-gray-400 mt-0.5">Premium</p>
+                  <p className="text-[10px] text-content-muted mt-0.5">Premium</p>
                 </div>
               </div>
             ))}
           </div>
           {/* Total value */}
-          <div className="mt-4 pt-4 border-t border-gray-100">
+          <div className="mt-4 pt-4 border-t border-border">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] text-gray-500">Total nilai produk</span>
-              <span className="text-sm font-bold text-gray-800">
+              <span className="text-[11px] text-content-muted">Total nilai produk</span>
+              <span className="text-sm font-bold text-content">
                 Rp {popularProducts.reduce((sum, p) => sum + (p.price || 0), 0).toLocaleString()}
               </span>
             </div>
@@ -556,10 +556,10 @@ export default function Dashboard() {
         </div>
 
         {/* Recent Activities dengan timeline */}
-        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm card-hover">
+        <div className="bg-surface border border-border rounded-2xl p-6 shadow-sm card-hover">
           <div className="flex items-center gap-2 mb-5">
-            <Activity size="18" className="text-gray-600" />
-            <h2 className="text-base font-semibold text-gray-800">Aktivitas Terbaru</h2>
+            <Activity size="18" className="text-content-soft" />
+            <h2 className="text-base font-semibold text-content">Aktivitas Terbaru</h2>
           </div>
           <div className="relative">
             {/* Timeline line */}
@@ -578,17 +578,17 @@ export default function Dashboard() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between flex-wrap gap-2">
-                        <p className="text-sm text-gray-700">
+                        <p className="text-sm text-content-soft">
                           <span className="font-semibold">{a.action}</span>
-                          <span className="text-gray-500"> · {a.target}</span>
+                          <span className="text-content-muted"> · {a.target}</span>
                         </p>
-                        <span className="text-[10px] text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] text-content-muted bg-surface-muted px-2 py-0.5 rounded-full">
                           {a.time}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 mt-1">
-                        <UserCheck size="10" className="text-gray-400" />
-                        <p className="text-[10px] text-gray-400">{a.user}</p>
+                        <UserCheck size="10" className="text-content-muted" />
+                        <p className="text-[10px] text-content-muted">{a.user}</p>
                       </div>
                     </div>
                   </div>
@@ -597,7 +597,7 @@ export default function Dashboard() {
             </div>
           </div>
           {/* View all activities */}
-          <button className="mt-5 w-full py-2 text-center text-xs text-gray-500 hover:text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition">
+          <button className="mt-5 w-full py-2 text-center text-xs text-content-muted hover:text-content-soft font-medium rounded-xl hover:bg-surface-muted transition">
             Lihat semua aktivitas
           </button>
         </div>
@@ -605,7 +605,7 @@ export default function Dashboard() {
 
       {/* Footer note */}
       <div className="text-center pt-4">
-        <p className="text-[10px] text-gray-400">
+        <p className="text-[10px] text-content-muted">
           Dashboard diperbarui secara real-time • Data akurat per {new Date().toLocaleTimeString('id-ID')}
         </p>
       </div>

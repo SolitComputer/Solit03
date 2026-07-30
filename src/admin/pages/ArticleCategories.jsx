@@ -17,7 +17,7 @@ const iconOptions = [
   { value: "Teknologi", Icon: Cpu, bg: "from-indigo-100 to-indigo-200", text: "text-indigo-600" },
   { value: "Gaming", Icon: Gamepad2, bg: "from-purple-100 to-purple-200", text: "text-purple-600" },
   { value: "Review", Icon: Sparkles, bg: "from-pink-100 to-pink-200", text: "text-pink-600" },
-  { value: "Umum", Icon: TagIcon, bg: "from-gray-100 to-gray-200", text: "text-gray-600" },
+  { value: "Umum", Icon: TagIcon, bg: "from-gray-100 to-gray-200", text: "text-content-soft" },
 ];
 
 function slugify(name) {
@@ -68,19 +68,19 @@ function CategoryModal({ isOpen, onClose, onSubmit, title, initialData, isEditin
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden border border-gray-100 animate-in fade-in zoom-in duration-200" style={{ maxHeight: "90vh", overflowY: "auto" }}>
+      <div className="bg-surface rounded-2xl shadow-2xl w-full max-w-md overflow-hidden border border-border animate-in fade-in zoom-in duration-200" style={{ maxHeight: "90vh", overflowY: "auto" }}>
         
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-surface-muted/50">
           <div className="flex items-center gap-2.5">
             <div className="p-2 bg-blue-100 text-blue-600 rounded-xl">
               <Layers3 size={18} />
             </div>
-            <h2 className="text-base font-bold text-gray-800">{title}</h2>
+            <h2 className="text-base font-bold text-content">{title}</h2>
           </div>
           <button 
             onClick={onClose} 
-            className="p-1.5 rounded-full hover:bg-gray-200/60 text-gray-400 hover:text-gray-600 transition"
+            className="p-1.5 rounded-full hover:bg-gray-200/60 text-content-muted hover:text-content-soft transition"
           >
             <X size={18} />
           </button>
@@ -89,21 +89,21 @@ function CategoryModal({ isOpen, onClose, onSubmit, title, initialData, isEditin
         {/* Modal Form Body */}
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
           <div>
-            <label className="text-xs font-bold text-gray-700 uppercase tracking-wider">Nama Kategori *</label>
+            <label className="text-xs font-bold text-content-soft uppercase tracking-wider">Nama Kategori *</label>
             <input 
               autoFocus 
               type="text" 
               placeholder="Contoh: Tips & Trik, Promo, Review"
               value={form.name} 
               onChange={handleName}
-              className={`w-full mt-1.5 bg-gray-50 border-2 rounded-xl text-sm font-medium px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition ${error ? "border-red-400" : "border-gray-200"}`} 
+              className={`w-full mt-1.5 bg-surface-muted border-2 rounded-xl text-sm font-medium px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-surface transition ${error ? "border-red-400" : "border-border"}`} 
             />
             {error && <p className="text-xs text-red-500 mt-1 flex items-center gap-1"><AlertTriangle size={12} /> {error}</p>}
           </div>
 
           <div>
             <div className="flex justify-between items-center mb-1">
-              <label className="text-xs font-bold text-gray-700 uppercase tracking-wider">Slug (URL)</label>
+              <label className="text-xs font-bold text-content-soft uppercase tracking-wider">Slug (URL)</label>
               {slugManual && (
                 <button
                   type="button"
@@ -114,19 +114,19 @@ function CategoryModal({ isOpen, onClose, onSubmit, title, initialData, isEditin
                 </button>
               )}
             </div>
-            <div className="flex items-center bg-gray-50 border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:bg-white transition">
-              <span className="text-xs font-mono text-gray-400 bg-gray-100 px-3 py-2.5 border-r border-gray-200 select-none">/</span>
+            <div className="flex items-center bg-surface-muted border border-border rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:bg-surface transition">
+              <span className="text-xs font-mono text-content-muted bg-gray-100 px-3 py-2.5 border-r border-border select-none">/</span>
               <input 
                 type="text" 
                 value={form.slug} 
                 onChange={(e) => { setSlugManual(true); setForm((f) => ({ ...f, slug: e.target.value })); }}
-                className="w-full bg-transparent text-sm font-mono px-3 py-2.5 focus:outline-none text-gray-700" 
+                className="w-full bg-transparent text-sm font-mono px-3 py-2.5 focus:outline-none text-content-soft" 
               />
             </div>
           </div>
 
           <div>
-            <label className="text-xs font-bold text-gray-700 uppercase tracking-wider mb-2 block">Pilih Ikon Visual</label>
+            <label className="text-xs font-bold text-content-soft uppercase tracking-wider mb-2 block">Pilih Ikon Visual</label>
             <div className="grid grid-cols-4 gap-2">
               {iconOptions.map((opt) => (
                 <button 
@@ -136,21 +136,21 @@ function CategoryModal({ isOpen, onClose, onSubmit, title, initialData, isEditin
                   className={`flex flex-col items-center gap-1.5 p-2.5 rounded-xl transition ${
                     form.icon === opt.value 
                       ? `bg-gradient-to-br ${opt.bg} ring-2 ring-blue-500 scale-105 shadow-sm` 
-                      : "bg-gray-50 border border-gray-200 hover:bg-gray-100"
+                      : "bg-surface-muted border border-border hover:bg-gray-100"
                   }`}
                 >
                   <opt.Icon className={`w-5 h-5 ${opt.text}`} />
-                  <span className="text-[10px] font-bold text-gray-700">{opt.value}</span>
+                  <span className="text-[10px] font-bold text-content-soft">{opt.value}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="flex gap-3 pt-3 border-t border-gray-100">
+          <div className="flex gap-3 pt-3 border-t border-border">
             <button 
               type="button" 
               onClick={onClose} 
-              className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 transition"
+              className="flex-1 px-4 py-2.5 border border-border rounded-xl text-xs font-bold text-content-soft hover:bg-gray-100 transition"
             >
               Batal
             </button>
@@ -170,22 +170,22 @@ function CategoryModal({ isOpen, onClose, onSubmit, title, initialData, isEditin
 function DeleteModal({ isOpen, onClose, onConfirm, name, isDeleting }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden border border-gray-100">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-red-50/50">
+      <div className="bg-surface rounded-2xl shadow-2xl w-full max-w-md overflow-hidden border border-border">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-red-50/50">
           <div className="flex items-center gap-2.5">
             <div className="p-2 bg-red-100 rounded-xl text-red-600"><AlertTriangle size={18} /></div>
-            <h2 className="text-base font-bold text-gray-800">Hapus Kategori</h2>
+            <h2 className="text-base font-bold text-content">Hapus Kategori</h2>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-full hover:bg-gray-200 text-gray-400"><X size={16} /></button>
+          <button onClick={onClose} className="p-1.5 rounded-full hover:bg-gray-200 text-content-muted"><X size={16} /></button>
         </div>
         <div className="px-6 py-5">
-          <p className="text-sm text-gray-600">
-            Apakah Anda yakin ingin menghapus kategori <span className="font-bold text-gray-900">"{name}"</span>?
+          <p className="text-sm text-content-soft">
+            Apakah Anda yakin ingin menghapus kategori <span className="font-bold text-content">"{name}"</span>?
           </p>
-          <p className="text-xs text-gray-400 mt-1">Artikel yang menggunakan kategori ini tidak akan terhapus.</p>
+          <p className="text-xs text-content-muted mt-1">Artikel yang menggunakan kategori ini tidak akan terhapus.</p>
         </div>
         <div className="flex gap-3 px-6 pb-6">
-          <button onClick={onClose} className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-50 transition">Batal</button>
+          <button onClick={onClose} className="flex-1 px-4 py-2.5 border border-border rounded-xl text-xs font-bold text-content-soft hover:bg-surface-muted transition">Batal</button>
           <button 
             onClick={onConfirm} 
             disabled={isDeleting}
@@ -274,14 +274,14 @@ export default function ArticleCategories() {
       <DeleteModal isOpen={deleteOpen} onClose={() => { setDeleteOpen(false); setSelected(null); }} onConfirm={handleDelete} name={selected?.name} isDeleting={deletingId === selected?.id} />
 
       {/* Top Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-surface p-5 rounded-2xl border border-border shadow-sm">
         <div className="flex items-center gap-3">
           <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-2xl shadow-md shadow-blue-500/20">
             <Layers3 size={24} />
           </div>
           <div>
-            <h1 className="text-xl md:text-2xl font-bold text-gray-800">Kategori Artikel</h1>
-            <p className="text-xs text-gray-400 mt-0.5">Kelola topik & taksonomi artikel berita toko</p>
+            <h1 className="text-xl md:text-2xl font-bold text-content">Kategori Artikel</h1>
+            <p className="text-xs text-content-muted mt-0.5">Kelola topik & taksonomi artikel berita toko</p>
           </div>
         </div>
 
@@ -295,74 +295,74 @@ export default function ArticleCategories() {
 
       {/* Quick Overview Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-3.5">
+        <div className="bg-surface p-4 rounded-2xl border border-border shadow-sm flex items-center gap-3.5">
           <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
             <Layers3 size={20} />
           </div>
           <div>
-            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Total Kategori</p>
-            <p className="text-xl font-black text-gray-800">{categories.length}</p>
+            <p className="text-[11px] font-bold text-content-muted uppercase tracking-wider">Total Kategori</p>
+            <p className="text-xl font-black text-content">{categories.length}</p>
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-3.5">
+        <div className="bg-surface p-4 rounded-2xl border border-border shadow-sm flex items-center gap-3.5">
           <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
             <CheckCircle2 size={20} />
           </div>
           <div>
-            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Status Integrasi</p>
+            <p className="text-[11px] font-bold text-content-muted uppercase tracking-wider">Status Integrasi</p>
             <p className="text-xs font-bold text-emerald-600 mt-0.5">Terhubung ke Database</p>
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-3.5">
+        <div className="bg-surface p-4 rounded-2xl border border-border shadow-sm flex items-center gap-3.5">
           <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
             <Database size={20} />
           </div>
           <div>
-            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Database Table</p>
-            <p className="text-xs font-mono font-semibold text-gray-700 mt-0.5">article_categories</p>
+            <p className="text-[11px] font-bold text-content-muted uppercase tracking-wider">Database Table</p>
+            <p className="text-xs font-mono font-semibold text-content-soft mt-0.5">article_categories</p>
           </div>
         </div>
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex items-center gap-3">
+      <div className="bg-surface rounded-2xl shadow-sm border border-border p-4 flex items-center gap-3">
         <div className="relative flex-1">
-          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-content-muted" />
           <input 
             type="text" 
             placeholder="Cari nama kategori atau slug..." 
             value={search} 
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-gray-50/80 border border-gray-200 rounded-xl text-xs font-medium pl-10 pr-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition" 
+            className="w-full bg-surface-muted/80 border border-border rounded-xl text-xs font-medium pl-10 pr-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-surface transition" 
           />
           {search && (
             <button 
               onClick={() => setSearch("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-content-muted hover:text-content-soft text-xs"
             >
               Clear
             </button>
           )}
         </div>
-        <span className="text-xs font-semibold text-gray-400 px-2 hidden sm:inline">
+        <span className="text-xs font-semibold text-content-muted px-2 hidden sm:inline">
           {filtered.length} Kategori
         </span>
       </div>
 
       {/* Main Grid View of Categories */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-surface rounded-2xl shadow-sm border border-border overflow-hidden">
         {loading ? (
-          <div className="py-16 text-center text-xs font-semibold text-gray-400">
+          <div className="py-16 text-center text-xs font-semibold text-content-muted">
             <div className="w-8 h-8 border-3 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-3" />
             Memuat daftar kategori...
           </div>
         ) : filtered.length === 0 ? (
           <div className="py-16 text-center">
             <Layers3 size={36} className="mx-auto mb-3 text-gray-300" />
-            <p className="text-sm font-bold text-gray-700">Belum ada kategori artikel</p>
-            <p className="text-xs text-gray-400 mt-1">Klik tombol "+ Tambah Kategori Baru" untuk mulai membuat</p>
+            <p className="text-sm font-bold text-content-soft">Belum ada kategori artikel</p>
+            <p className="text-xs text-content-muted mt-1">Klik tombol "+ Tambah Kategori Baru" untuk mulai membuat</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-5">
@@ -372,22 +372,22 @@ export default function ArticleCategories() {
               return (
                 <div 
                   key={cat.id} 
-                  className="bg-gray-50/70 border border-gray-100 rounded-2xl p-4 flex items-center justify-between hover:bg-white hover:shadow-md hover:border-blue-100 transition duration-200 group"
+                  className="bg-surface-muted/70 border border-border rounded-2xl p-4 flex items-center justify-between hover:bg-surface hover:shadow-md hover:border-blue-100 transition duration-200 group"
                 >
                   <div className="flex items-center gap-3.5 min-w-0">
                     <div className={`w-11 h-11 rounded-2xl flex items-center justify-center bg-gradient-to-br ${style.bg} shadow-sm group-hover:scale-105 transition`}>
                       <Icon className={`w-5 h-5 ${style.text}`} />
                     </div>
                     <div className="min-w-0">
-                      <h3 className="text-sm font-bold text-gray-800 truncate">{cat.name}</h3>
-                      <p className="text-[11px] text-gray-400 font-mono truncate mt-0.5">/{cat.slug}</p>
+                      <h3 className="text-sm font-bold text-content truncate">{cat.name}</h3>
+                      <p className="text-[11px] text-content-muted font-mono truncate mt-0.5">/{cat.slug}</p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-1 pl-2">
                     <button 
                       onClick={() => { setSelected(cat); setEditOpen(true); }} 
-                      className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition"
+                      className="p-2 text-content-muted hover:text-blue-600 hover:bg-blue-50 rounded-xl transition"
                       title="Edit Kategori"
                     >
                       <Edit size={15} />
@@ -395,7 +395,7 @@ export default function ArticleCategories() {
                     <button 
                       onClick={() => { setSelected(cat); setDeleteOpen(true); }} 
                       disabled={deletingId === cat.id}
-                      className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition disabled:opacity-40"
+                      className="p-2 text-content-muted hover:text-red-600 hover:bg-red-50 rounded-xl transition disabled:opacity-40"
                       title="Hapus Kategori"
                     >
                       {deletingId === cat.id ? (

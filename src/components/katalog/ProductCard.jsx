@@ -17,7 +17,7 @@ function ProductCard({ product, viewMode, mode, stock }) {
     const showDiscountUI = mode === 'promo' && isOnSale;
     const showBestUI = mode === 'bestseller';
     const createdDate = product.created_at || product.date_created || product.date_created_gmt;
-    const showNewUI = createdDate ? isNewProduct(createdDate, 3) : mode === 'new';
+    const showNewUI = mode === 'new' || (createdDate ? isNewProduct(createdDate, 30) : false);
 
     const getSoldCount = () => {
         const seed = (product.id * 9301 + 49297) % 233280;
@@ -27,7 +27,7 @@ function ProductCard({ product, viewMode, mode, stock }) {
     const soldCount = showBestUI ? getSoldCount() : null;
 
     const getStockBadge = () => {
-        if (!stock) return <span className="text-[10px] text-slate-400">Tersedia</span>;
+        if (!stock) return <span className="text-[10px] text-content-muted">Tersedia</span>;
         if (stock.in_stock === false || stock.stock_status === 'outofstock') {
             return <span className="text-[10px] text-red-500">Habis</span>;
         }
@@ -40,7 +40,7 @@ function ProductCard({ product, viewMode, mode, stock }) {
             const low = qty <= 5;
             return <span className={`text-[10px] ${low ? 'text-amber-500' : 'text-green-600'}`}>Sisa {qty}</span>;
         }
-        return <span className="text-[10px] text-slate-400">Tersedia</span>;
+        return <span className="text-[10px] text-content-muted">Tersedia</span>;
     };
 
     const getCardClassName = () => {
@@ -104,7 +104,7 @@ function ProductCard({ product, viewMode, mode, stock }) {
             <article className={getCardClassName()}>
                 <div className="flex gap-2.5 p-2.5">
                     {/* Image */}
-                    <div className="relative w-16 h-16 flex-shrink-0 bg-slate-50 rounded-lg overflow-hidden">
+                    <div className="relative w-16 h-16 flex-shrink-0 bg-white rounded-lg overflow-hidden">
                         {!imageLoaded && <div className="absolute inset-0 bg-slate-100 animate-pulse"></div>}
                         <img
                             ref={imgRef}
@@ -119,16 +119,16 @@ function ProductCard({ product, viewMode, mode, stock }) {
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
-                        <h4 className="text-xs font-semibold text-slate-800 line-clamp-2 mb-0.5">
+                        <h4 className="text-xs font-semibold text-content line-clamp-2 mb-0.5">
                             {product.name}
                         </h4>
                         {showBestUI && soldCount && (
-                            <p className="text-[9px] text-slate-400 mb-0.5">Terjual {soldCount}</p>
+                            <p className="text-[9px] text-content-muted mb-0.5">Terjual {soldCount}</p>
                         )}
                         <div className="flex items-center gap-1.5 flex-wrap">
-                            <span className="text-xs font-bold text-slate-900">{fmtIDR(nowPrice, minor)}</span>
+                            <span className="text-xs font-bold text-content">{fmtIDR(nowPrice, minor)}</span>
                             {showDiscountUI && (
-                                <span className="text-[9px] line-through text-slate-400">{fmtIDR(regularPrice, minor)}</span>
+                                <span className="text-[9px] line-through text-content-muted">{fmtIDR(regularPrice, minor)}</span>
                             )}
                             {getStockBadge()}
                         </div>
@@ -143,7 +143,7 @@ function ProductCard({ product, viewMode, mode, stock }) {
     const gridCard = (
         <article className={getCardClassName()}>
             {/* Image Container */}
-            <div className="relative bg-slate-50 aspect-square overflow-hidden">
+            <div className="relative bg-white aspect-square overflow-hidden">
                 {!imageLoaded && <div className="absolute inset-0 bg-slate-100 animate-pulse"></div>}
                 <img
                     ref={imgRef}
@@ -158,19 +158,19 @@ function ProductCard({ product, viewMode, mode, stock }) {
 
             {/* Content - Compact */}
             <div className="p-2.5">
-                <h4 className="text-xs font-semibold text-slate-800 line-clamp-2 min-h-[2rem] mb-0.5">
+                <h4 className="text-xs font-semibold text-content line-clamp-2 min-h-[2rem] mb-0.5">
                     {product.name}
                 </h4>
 
                 {showBestUI && soldCount && (
-                    <p className="text-[9px] text-slate-400 mb-1">Terjual {soldCount}</p>
+                    <p className="text-[9px] text-content-muted mb-1">Terjual {soldCount}</p>
                 )}
 
                 <div className="flex items-center justify-between gap-1.5 mt-1.5">
                     <div>
-                        <span className="text-xs font-bold text-slate-900">{fmtIDR(nowPrice, minor)}</span>
+                        <span className="text-xs font-bold text-content">{fmtIDR(nowPrice, minor)}</span>
                         {showDiscountUI && (
-                            <span className="text-[9px] line-through text-slate-400 ml-1">{fmtIDR(regularPrice, minor)}</span>
+                            <span className="text-[9px] line-through text-content-muted ml-1">{fmtIDR(regularPrice, minor)}</span>
                         )}
                     </div>
                     {getStockBadge()}

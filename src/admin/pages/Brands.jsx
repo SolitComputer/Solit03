@@ -87,13 +87,13 @@ function BrandModal({ isOpen, onClose, onSubmit, title, initialData, isEditing }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md" style={{ maxHeight: "90vh", overflowY: "auto" }}>
+      <div className="bg-surface rounded-2xl shadow-2xl w-full max-w-md" style={{ maxHeight: "90vh", overflowY: "auto" }}>
         {/* Header with gradient accent */}
         <div className="relative overflow-hidden">
           <div className={`absolute top-0 left-0 right-0 h-1 ${c.bg}`} />
           <div className="flex items-center justify-between px-6 py-4">
-            <h2 className="text-base font-bold text-gray-800">{title}</h2>
-            <button onClick={onClose} className="p-1.5 rounded-full hover:bg-gray-100 transition-all duration-200 text-gray-400 hover:text-gray-600">
+            <h2 className="text-base font-bold text-content">{title}</h2>
+            <button onClick={onClose} className="p-1.5 rounded-full hover:bg-gray-100 transition-all duration-200 text-content-muted hover:text-content-soft">
               <X size={16} />
             </button>
           </div>
@@ -102,7 +102,7 @@ function BrandModal({ isOpen, onClose, onSubmit, title, initialData, isEditing }
         <form onSubmit={handleSubmit} className="px-6 pb-6 space-y-5">
           {/* Name */}
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-gray-700">
+            <label className="text-xs font-semibold text-content-soft">
               Nama Brand <span className="text-red-500">*</span>
             </label>
             <input
@@ -111,36 +111,36 @@ function BrandModal({ isOpen, onClose, onSubmit, title, initialData, isEditing }
               placeholder="Contoh: ASUS, Samsung, Nike"
               value={form.name}
               onChange={handleName}
-              className={`w-full bg-gray-50 border-2 rounded-xl text-sm px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200
-                ${errors.name ? "border-red-400 focus:ring-red-500" : "border-gray-200 hover:border-gray-300"}`}
+              className={`w-full bg-surface-muted border-2 rounded-xl text-sm px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-surface transition-all duration-200
+                ${errors.name ? "border-red-400 focus:ring-red-500" : "border-border hover:border-border"}`}
             />
             {errors.name && <p className="text-xs text-red-500 flex items-center gap-1"><AlertTriangle className="w-3.5 h-3.5" aria-hidden="true" /> {errors.name}</p>}
           </div>
 
           {/* Slug */}
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-gray-700">Slug (URL)</label>
+            <label className="text-xs font-semibold text-content-soft">Slug (URL)</label>
             <div className="relative">
               <input
                 type="text"
                 placeholder="slug-brand-otomatis"
                 value={form.slug}
                 onChange={e => { setSlugManual(true); setForm(f => ({ ...f, slug: e.target.value })); }}
-                className="w-full bg-gray-50 border-2 border-gray-200 rounded-xl text-sm font-mono px-4 py-2.5 pr-16 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200 text-gray-600"
+                className="w-full bg-surface-muted border-2 border-border rounded-xl text-sm font-mono px-4 py-2.5 pr-16 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-surface transition-all duration-200 text-content-soft"
               />
               {slugManual && (
                 <button type="button" onClick={() => { setSlugManual(false); setForm(f => ({ ...f, slug: slugify(f.name) })); }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-medium text-blue-600 hover:text-blue-700 bg-white px-2 py-1 rounded-lg shadow-sm">
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-medium text-blue-600 hover:text-blue-700 bg-surface px-2 py-1 rounded-lg shadow-sm">
                   Auto
                 </button>
               )}
             </div>
-            <p className="text-xs text-gray-400">Digunakan untuk URL brand</p>
+            <p className="text-xs text-content-muted">Digunakan untuk URL brand</p>
           </div>
 
           {/* Color */}
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-gray-700">Warna Brand</label>
+            <label className="text-xs font-semibold text-content-soft">Warna Brand</label>
             <div className="flex gap-3 flex-wrap">
               {brandColors.map(col => (
                 <button key={col.value} type="button" onClick={() => setForm(f => ({ ...f, color: col.value }))}
@@ -154,14 +154,14 @@ function BrandModal({ isOpen, onClose, onSubmit, title, initialData, isEditing }
 
           {/* Preview Card */}
           <div className={`border-2 rounded-xl p-4 ${c.lightBg} ${c.border}`}>
-            <p className="text-xs font-semibold text-gray-500 mb-2">Preview</p>
+            <p className="text-xs font-semibold text-content-muted mb-2">Preview</p>
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm ${c.bg}`}>
                 <Tags size={16} className="text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-gray-800 truncate">{form.name || "Nama Brand"}</p>
-                <p className="text-xs text-gray-500 font-mono truncate">{form.slug || "slug-brand"}</p>
+                <p className="text-sm font-bold text-content truncate">{form.name || "Nama Brand"}</p>
+                <p className="text-xs text-content-muted font-mono truncate">{form.slug || "slug-brand"}</p>
               </div>
               <div className={`px-2 py-1 rounded-lg text-xs font-medium ${c.lightBg} ${c.text}`}>
                 {form.color}
@@ -172,7 +172,7 @@ function BrandModal({ isOpen, onClose, onSubmit, title, initialData, isEditing }
           {/* Actions */}
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose}
-              className="flex-1 px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200">
+              className="flex-1 px-4 py-2.5 border-2 border-border rounded-xl text-sm font-semibold text-content-soft hover:bg-surface-muted hover:border-border transition-all duration-200">
               Batal
             </button>
             <button type="submit"
@@ -190,7 +190,7 @@ function BrandModal({ isOpen, onClose, onSubmit, title, initialData, isEditing }
 function DeleteModal({ isOpen, onClose, onConfirm, name, isDeleting }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+      <div className="bg-surface rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
         <div className="relative">
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 to-red-600" />
           <div className="flex items-center justify-between px-6 py-4">
@@ -198,21 +198,21 @@ function DeleteModal({ isOpen, onClose, onConfirm, name, isDeleting }) {
               <div className="p-1.5 bg-red-100 rounded-full">
                 <AlertTriangle size={18} className="text-red-600" />
               </div>
-              <h2 className="text-base font-bold text-gray-800">Hapus Brand</h2>
+              <h2 className="text-base font-bold text-content">Hapus Brand</h2>
             </div>
-            <button onClick={onClose} className="p-1.5 rounded-full hover:bg-gray-100 transition-all duration-200 text-gray-400">
+            <button onClick={onClose} className="p-1.5 rounded-full hover:bg-gray-100 transition-all duration-200 text-content-muted">
               <X size={16} />
             </button>
           </div>
         </div>
         <div className="px-6 py-4">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-content-soft">
             Apakah Anda yakin ingin menghapus brand <span className="font-bold text-red-600">“{name}”</span>?
           </p>
-          <p className="text-xs text-gray-400 mt-2">Tindakan ini tidak dapat dibatalkan dan akan menghapus semua data terkait.</p>
+          <p className="text-xs text-content-muted mt-2">Tindakan ini tidak dapat dibatalkan dan akan menghapus semua data terkait.</p>
         </div>
         <div className="flex gap-3 px-6 pb-6">
-          <button onClick={onClose} className="flex-1 px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-all duration-200">
+          <button onClick={onClose} className="flex-1 px-4 py-2.5 border-2 border-border rounded-xl text-sm font-semibold text-content-soft hover:bg-surface-muted transition-all duration-200">
             Batal
           </button>
           <button onClick={onConfirm} disabled={isDeleting}
@@ -298,9 +298,9 @@ export default function Brands() {
         <div className="w-48 h-4 bg-gray-200 rounded-lg" />
       </div>
       <div className="grid grid-cols-3 gap-4">
-        {[1,2,3].map(i => <div key={i} className="bg-white rounded-xl p-4 shadow-sm animate-pulse"><div className="w-16 h-3 bg-gray-200 rounded mb-2"/><div className="w-12 h-7 bg-gray-200 rounded"/></div>)}
+        {[1,2,3].map(i => <div key={i} className="bg-surface rounded-xl p-4 shadow-sm animate-pulse"><div className="w-16 h-3 bg-gray-200 rounded mb-2"/><div className="w-12 h-7 bg-gray-200 rounded"/></div>)}
       </div>
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden animate-pulse">
+      <div className="bg-surface rounded-xl shadow-sm overflow-hidden animate-pulse">
         {[1,2,3,4,5].map(i => <div key={i} className="flex items-center gap-4 px-5 py-3"><div className="w-10 h-10 bg-gray-200 rounded-xl"/><div className="flex-1"><div className="w-28 h-3 bg-gray-200 rounded mb-1.5"/><div className="w-20 h-2 bg-gray-200 rounded"/></div></div>)}
       </div>
     </div>
@@ -318,7 +318,7 @@ export default function Brands() {
           <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
             Manajemen Brand
           </h1>
-          <p className="text-sm text-gray-500 mt-1">Kelola semua brand produk Anda</p>
+          <p className="text-sm text-content-muted mt-1">Kelola semua brand produk Anda</p>
         </div>
         <button onClick={() => setCreateOpen(true)}
           className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105">
@@ -333,32 +333,32 @@ export default function Brands() {
           { label: "Ditampilkan", value: paginated.length, icon: Eye, gradient: "from-gray-500 to-gray-600" },
           { label: "Filter Aktif", value: search ? "Ya" : "Tidak", icon: Search, gradient: "from-purple-500 to-purple-600" },
         ].map(({ label, value, icon: Icon, gradient }) => (
-          <div key={label} className="bg-white rounded-xl shadow-md p-5 hover:shadow-lg transition-shadow duration-200 border border-gray-100">
+          <div key={label} className="bg-surface rounded-xl shadow-md p-5 hover:shadow-lg transition-shadow duration-200 border border-border">
             <div className="flex items-center justify-between mb-2">
-              <Icon className="w-6 h-6 text-gray-600" aria-hidden="true" />
+              <Icon className="w-6 h-6 text-content-soft" aria-hidden="true" />
               <span className={`text-xs font-semibold px-2 py-1 rounded-full bg-gradient-to-r ${gradient} text-white`}>
                 {typeof value === 'number' ? `${value} item` : value}
               </span>
             </div>
-            <p className="text-sm font-semibold text-gray-700">{label}</p>
-            <p className="text-2xl font-bold text-gray-800 mt-1">{value}</p>
+            <p className="text-sm font-semibold text-content-soft">{label}</p>
+            <p className="text-2xl font-bold text-content mt-1">{value}</p>
           </div>
         ))}
       </div>
 
       {/* Toolbar */}
-      <div className="bg-white rounded-xl shadow-md border border-gray-100 p-4">
+      <div className="bg-surface rounded-xl shadow-md border border-border p-4">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-content-muted" />
             <input 
               type="text" 
               placeholder="Cari brand berdasarkan nama atau slug..." 
               value={search} 
               onChange={e => setSearch(e.target.value)}
-              className="w-full bg-gray-50 border-2 border-gray-200 rounded-xl text-sm pl-10 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200" 
+              className="w-full bg-surface-muted border-2 border-border rounded-xl text-sm pl-10 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-surface transition-all duration-200" 
             />
-            {search && <button onClick={() => setSearch("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"><X size={14} /></button>}
+            {search && <button onClick={() => setSearch("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-content-muted hover:text-content-soft transition-colors"><X size={14} /></button>}
           </div>
           <div className="flex gap-2">
             {[
@@ -367,15 +367,15 @@ export default function Brands() {
             ].map((s, i) => (
               <div key={i} className="relative">
                 <select value={s.val} onChange={e => s.set(e.target.value)}
-                  className="bg-gray-50 border-2 border-gray-200 rounded-xl text-sm pl-3 pr-8 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-gray-700 font-medium hover:border-gray-300 transition-all duration-200">
+                  className="bg-surface-muted border-2 border-border rounded-xl text-sm pl-3 pr-8 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-content-soft font-medium hover:border-border transition-all duration-200">
                   {s.opts.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
                 </select>
-                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-content-muted pointer-events-none" />
               </div>
             ))}
             {(search || sortBy !== "newest") && (
               <button onClick={() => { setSearch(""); setSortBy("newest"); setPage(1); }}
-                className="px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 flex items-center gap-2">
+                className="px-4 py-2.5 border-2 border-border rounded-xl text-sm font-semibold text-content-soft hover:bg-surface-muted hover:border-border transition-all duration-200 flex items-center gap-2">
                 <RefreshCw size={14} /> Reset Filter
               </button>
             )}
@@ -384,10 +384,10 @@ export default function Brands() {
       </div>
 
       {/* Main List */}
-      <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
-        <div className="px-5 py-4 border-b-2 border-gray-100 flex items-center justify-between bg-gradient-to-r from-gray-50 to-white">
-          <p className="text-sm font-bold text-gray-700">Daftar Brand</p>
-          <p className="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">{filtered.length} ditemukan</p>
+      <div className="bg-surface rounded-xl shadow-md border border-border overflow-hidden">
+        <div className="px-5 py-4 border-b-2 border-border flex items-center justify-between bg-gradient-to-r from-gray-50 to-white">
+          <p className="text-sm font-bold text-content-soft">Daftar Brand</p>
+          <p className="text-xs font-semibold text-content-muted bg-gray-100 px-2 py-1 rounded-lg">{filtered.length} ditemukan</p>
         </div>
 
         {loading ? (
@@ -405,8 +405,8 @@ export default function Brands() {
             <div className="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
               <Tags size={32} className="text-gray-300" />
             </div>
-            <p className="text-base font-semibold text-gray-500">{search ? "Brand tidak ditemukan" : "Belum ada brand"}</p>
-            <p className="text-sm text-gray-400 mt-1">{search ? "Coba dengan kata kunci lain" : "Klik tombol Tambah Brand untuk memulai"}</p>
+            <p className="text-base font-semibold text-content-muted">{search ? "Brand tidak ditemukan" : "Belum ada brand"}</p>
+            <p className="text-sm text-content-muted mt-1">{search ? "Coba dengan kata kunci lain" : "Klik tombol Tambah Brand untuk memulai"}</p>
           </div>
         ) : (
           <div className="divide-y divide-gray-100">
@@ -419,23 +419,23 @@ export default function Brands() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <p className="text-sm font-bold text-gray-800">{brand.name}</p>
+                      <p className="text-sm font-bold text-content">{brand.name}</p>
                       <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${c.lightBg} ${c.text}`}>{brand.color}</span>
                     </div>
-                    <p className="text-xs text-gray-500 font-mono">/{brand.slug}</p>
+                    <p className="text-xs text-content-muted font-mono">/{brand.slug}</p>
                   </div>
                   {brand.created_at && (
-                    <p className="text-xs text-gray-400 hidden md:block flex-shrink-0">
+                    <p className="text-xs text-content-muted hidden md:block flex-shrink-0">
                       <CalendarDays className="w-3.5 h-3.5 inline" aria-hidden="true" /> {new Date(brand.created_at).toLocaleDateString("id-ID", { day: 'numeric', month: 'short', year: 'numeric' })}
                     </p>
                   )}
                   <div className="flex gap-1 flex-shrink-0">
                     <button onClick={() => { setSelected(brand); setEditOpen(true); }}
-                      className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">
+                      className="p-2 text-content-muted hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">
                       <Edit size={14} />
                     </button>
                     <button onClick={() => { setSelected(brand); setDeleteOpen(true); }} disabled={deletingId === brand.id}
-                      className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 disabled:opacity-40">
+                      className="p-2 text-content-muted hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 disabled:opacity-40">
                       {deletingId === brand.id
                         ? <div className="w-4 h-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
                         : <Trash2 size={14} />}
@@ -449,13 +449,13 @@ export default function Brands() {
 
         {/* Pagination */}
         {filtered.length > perPage && (
-          <div className="px-5 py-4 border-t-2 border-gray-100 bg-gray-50 flex items-center justify-between">
-            <p className="text-xs font-medium text-gray-600">
+          <div className="px-5 py-4 border-t-2 border-border bg-surface-muted flex items-center justify-between">
+            <p className="text-xs font-medium text-content-soft">
               Menampilkan {(page-1)*perPage+1}–{Math.min(page*perPage, filtered.length)} dari {filtered.length} brand
             </p>
             <div className="flex items-center gap-2">
               <button onClick={() => setPage(p => Math.max(p-1,1))} disabled={page===1}
-                className="p-2 rounded-lg border-2 border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed hover:border-gray-300">
+                className="p-2 rounded-lg border-2 border-border bg-surface text-content-soft hover:bg-surface-muted transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed hover:border-border">
                 <ChevronLeft size={14} />
               </button>
               <div className="flex gap-1">
@@ -466,14 +466,14 @@ export default function Brands() {
                       className={`min-w-[32px] h-8 rounded-lg text-sm font-semibold transition-all duration-200 
                         ${page===n 
                           ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md" 
-                          : "text-gray-600 hover:bg-gray-100 border-2 border-transparent hover:border-gray-200"}`}>
+                          : "text-content-soft hover:bg-gray-100 border-2 border-transparent hover:border-border"}`}>
                       {n}
                     </button>
                   );
                 })}
               </div>
               <button onClick={() => setPage(p => Math.min(p+1,totalPages))} disabled={page===totalPages}
-                className="p-2 rounded-lg border-2 border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed hover:border-gray-300">
+                className="p-2 rounded-lg border-2 border-border bg-surface text-content-soft hover:bg-surface-muted transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed hover:border-border">
                 <ChevronRight size={14} />
               </button>
             </div>

@@ -4,6 +4,7 @@
 
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ThemeProvider } from "./context/ThemeContext";
 import MainLayout from "./components/layout/MainLayout";
 import ProtectedRoute from "./admin/components/ProtectedRoute";
 
@@ -45,15 +46,16 @@ const ArticleTags = lazy(() => import("./admin/pages/ArticleTags"));
 function PageLoader() {
   return (
     <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="w-8 h-8 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin" />
+      <div className="w-8 h-8 border-4 border-border border-t-blue-600 rounded-full animate-spin" />
     </div>
   );
 }
 
 function App() {
   return (
-    <BrowserRouter basename="/">
-      <Suspense fallback={<PageLoader />}>
+    <ThemeProvider>
+      <BrowserRouter basename="/">
+        <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
@@ -99,7 +101,8 @@ function App() {
           </Route>
         </Routes>
       </Suspense>
-    </BrowserRouter>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

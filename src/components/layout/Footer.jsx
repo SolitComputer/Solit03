@@ -48,7 +48,7 @@ export default function Footer() {
             <h2 className="text-lg font-semibold text-white tracking-tight mb-3">
               Solit<span className="text-blue-400">03</span>
             </h2>
-            <p className="text-sm text-slate-400 leading-relaxed max-w-xs">
+            <p className="text-sm text-content-muted leading-relaxed max-w-xs">
               Toko laptop second berkualitas rasa baru. Pilihan laptop terbaik
               dengan harga terjangkau dan kualitas terjamin.
             </p>
@@ -60,7 +60,7 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm">
               {menu.map((m) => (
                 <li key={m.href}>
-                  <a href={m.href} className="text-slate-400 hover:text-white transition-colors">
+                  <a href={m.href} className="text-content-muted hover:text-white transition-colors">
                     {m.label}
                   </a>
                 </li>
@@ -71,7 +71,7 @@ export default function Footer() {
           {/* Kontak */}
           <div>
             <h3 className="text-xs font-semibold text-white uppercase tracking-wider mb-4">Kontak</h3>
-            <ul className="space-y-3 text-sm text-slate-400">
+            <ul className="space-y-3 text-sm text-content-muted">
               <li className="flex items-center gap-2.5">
                 <MessageCircle size={15} className="text-blue-400 shrink-0" />
                 <span className="break-words">{contact.phone_display}</span>
@@ -97,7 +97,7 @@ export default function Footer() {
                     href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-slate-400 hover:text-white transition-colors"
+                    className="text-content-muted hover:text-white transition-colors"
                   >
                     {s.label}
                   </a>
@@ -108,12 +108,12 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="border-t border-white/10 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-center gap-2 text-center text-xs text-slate-500">
+        <div className="border-t border-white/10 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-center gap-2 text-center text-xs text-content-muted">
           <span>© {currentYear} Solit 03. All rights reserved.</span>
           <span className="hidden sm:inline">·</span>
           <button
             onClick={() => window.dispatchEvent(new Event("open-cookie-settings"))}
-            className="text-slate-400 hover:text-white underline underline-offset-2 transition-colors"
+            className="text-content-muted hover:text-white underline underline-offset-2 transition-colors"
           >
             Pengaturan Cookie
           </button>

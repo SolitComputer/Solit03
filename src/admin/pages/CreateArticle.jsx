@@ -47,7 +47,7 @@ export default function CreateArticle() {
   return (
     <section className="space-y-6">
       {/* Header with Back Button */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface p-5 rounded-2xl border border-border shadow-sm">
         <div>
           <Link 
             to="/admin/articles" 
@@ -60,8 +60,8 @@ export default function CreateArticle() {
               <PenTool size={20} />
             </div>
             <div>
-              <h1 className="text-xl md:text-2xl font-bold text-gray-800">Tulis Artikel Baru</h1>
-              <p className="text-xs text-gray-400">Buat berita, promo, atau tips baru untuk pengunjung toko</p>
+              <h1 className="text-xl md:text-2xl font-bold text-content">Tulis Artikel Baru</h1>
+              <p className="text-xs text-content-muted">Buat berita, promo, atau tips baru untuk pengunjung toko</p>
             </div>
           </div>
         </div>

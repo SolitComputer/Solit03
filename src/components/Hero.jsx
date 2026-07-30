@@ -65,7 +65,7 @@ export default function Hero() {
     // ========== LOADING SCREEN — minimalis ==========
     if (isLoading) {
         return (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-white overflow-hidden">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface overflow-hidden">
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                     <div className="absolute top-0 -left-32 w-80 h-80 bg-blue-100/60 rounded-full blur-3xl" />
                     <div className="absolute bottom-0 -right-32 w-80 h-80 bg-blue-50 rounded-full blur-3xl" />
@@ -79,10 +79,10 @@ export default function Hero() {
                         </div>
                     </div>
 
-                    <h2 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight mb-1">
+                    <h2 className="text-2xl md:text-3xl font-bold text-content tracking-tight mb-1">
                         Solit<span className="text-blue-600">03</span>
                     </h2>
-                    <p className="text-slate-400 text-sm font-light tracking-wide mb-6">
+                    <p className="text-content-muted text-sm font-light tracking-wide mb-6">
                         Solusi Laptop Second Berkualitas
                     </p>
 
@@ -116,7 +116,7 @@ export default function Hero() {
 
                     {/* Badge */}
                     <div className="flex justify-center">
-                        <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-1.5 border border-white/15 text-xs sm:text-sm text-white/90 font-medium">
+                        <span className="inline-flex items-center gap-2 bg-surface/10 backdrop-blur-md rounded-full px-4 py-1.5 border border-white/15 text-xs sm:text-sm text-white/90 font-medium">
                             <Sparkles className="w-3.5 h-3.5 text-blue-300" />
                             {hero.badge}
                         </span>
@@ -154,7 +154,7 @@ export default function Hero() {
                             whileHover={{ scale: 1.04, y: -2 }}
                             whileTap={{ scale: 0.97 }}
                             transition={{ type: "spring", stiffness: 400, damping: 22 }}
-                            className="btn px-8 py-3.5 text-sm sm:text-base text-white bg-white/10 backdrop-blur-md border border-white/25 hover:bg-white hover:text-slate-900 group"
+                            className="btn px-8 py-3.5 text-sm sm:text-base text-white bg-surface/10 backdrop-blur-md border border-white/25 hover:bg-surface hover:text-content group"
                         >
                             {hero.cta_secondary_label}
                             <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
@@ -168,7 +168,7 @@ export default function Hero() {
                             return (
                                 <div
                                     key={idx}
-                                    className="flex items-center justify-center gap-2 bg-white/[0.07] backdrop-blur-md rounded-xl px-3 py-3 border border-white/10 hover:bg-white/[0.12] hover:-translate-y-0.5 transition-all duration-300"
+                                    className="flex items-center justify-center gap-2 bg-surface/[0.07] backdrop-blur-md rounded-xl px-3 py-3 border border-white/10 hover:bg-surface/[0.12] hover:-translate-y-0.5 transition-all duration-300"
                                 >
                                     <Icon className="w-4.5 h-4.5 text-blue-300 shrink-0" />
                                     <span className="text-xs text-white/90 font-medium">{item.label}</span>

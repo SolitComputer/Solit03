@@ -37,7 +37,7 @@ function Topbar({ onBack, path, currentPanel, filters }) {
   };
 
   return (
-    <div className="topbar sticky top-0 z-[2000] flex items-center gap-2 mb-2 p-2.5 rounded-2xl backdrop-blur-[20px] backdrop-saturate-[1.8] bg-white/90 border border-slate-200 shadow-soft">
+    <div className="topbar sticky top-0 z-[2000] flex items-center gap-2 mb-2 p-2.5 rounded-2xl backdrop-blur-[20px] backdrop-saturate-[1.8] bg-surface/90 border border-border shadow-soft">
       <div className="topbar-actions flex justify-between w-full gap-2">
         <button
           onClick={onBack}

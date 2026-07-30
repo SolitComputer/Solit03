@@ -71,11 +71,11 @@ export default function WhatsAppButton() {
           isHovered && isVisible ? "translate-x-0 opacity-100" : "translate-x-96 opacity-0"
         }`}
       >
-        <div className="bg-white rounded-2xl shadow-soft-lg w-80 overflow-hidden border border-slate-200">
+        <div className="bg-surface rounded-2xl shadow-soft-lg w-80 overflow-hidden border border-border">
           {/* Header */}
           <div className="bg-green-500 px-4 py-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-surface rounded-full flex items-center justify-center">
                 <MessageCircle className="w-5 h-5 text-green-600" />
               </div>
               <div>
@@ -87,8 +87,8 @@ export default function WhatsAppButton() {
 
           {/* Body */}
           <div className="p-4">
-            <div className="bg-slate-50 rounded-lg p-3 mb-3">
-              <p className="text-xs text-slate-600">
+            <div className="bg-surface-muted rounded-lg p-3 mb-3">
+              <p className="text-xs text-content-soft">
                 Halo! Ada yang bisa kami bantu? Silakan klik tombol di bawah untuk memulai chat via WhatsApp.
               </p>
             </div>

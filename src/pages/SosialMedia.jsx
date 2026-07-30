@@ -85,7 +85,7 @@ export default function SosialMedia() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 relative overflow-hidden">
+        <div className="min-h-screen bg-surface-muted relative overflow-hidden">
             <Helmet>
                 <title>Sosial Media & Marketplace Solit 03 | Shopee, Tokopedia, TikTok</title>
                 <meta
@@ -110,11 +110,11 @@ export default function SosialMedia() {
                         Connect With Us
                     </span>
 
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 mt-5">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-content mt-5">
                         Temukan Kami di <span className="text-blue-600">Sosial Media</span>
                     </h1>
 
-                    <p className="text-sm md:text-base text-slate-500 mt-4 max-w-2xl mx-auto">
+                    <p className="text-sm md:text-base text-content-muted mt-4 max-w-2xl mx-auto">
                         Follow dan hubungi{" "}
                         <span className="font-semibold text-blue-600">Solit 03</span>
                     </p>
@@ -152,12 +152,12 @@ export default function SosialMedia() {
                                 </div>
 
                                 {/* Name */}
-                                <h3 className="text-sm md:text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
+                                <h3 className="text-sm md:text-base font-bold text-content group-hover:text-blue-600 transition-colors duration-300">
                                     {item.name}
                                 </h3>
 
                                 {/* Action Text */}
-                                <p className="text-[10px] text-slate-400 mt-1 group-hover:text-blue-500 transition-colors inline-flex items-center justify-center gap-1">
+                                <p className="text-[10px] text-content-muted mt-1 group-hover:text-blue-500 transition-colors inline-flex items-center justify-center gap-1">
                                     Kunjungi <ArrowRight className="w-3 h-3" aria-hidden="true" />
                                 </p>
                             </a>
@@ -180,7 +180,7 @@ export default function SosialMedia() {
                             </svg>
                             Visit Us
                         </span>
-                        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-slate-900 mt-5">
+                        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-content mt-5">
                             Lokasi <span className="text-blue-600">Kami</span>
                         </h2>
                         <div className="w-12 h-0.5 bg-blue-500 mx-auto mt-4 rounded-full" />
@@ -197,8 +197,8 @@ export default function SosialMedia() {
                                 title="Lokasi Solit 03"
                             ></iframe>
                         </div>
-                        <div className="bg-slate-50 px-4 py-3 border-t border-slate-200">
-                            <div className="flex items-center justify-center gap-2 text-xs text-slate-600">
+                        <div className="bg-surface-muted px-4 py-3 border-t border-border">
+                            <div className="flex items-center justify-center gap-2 text-xs text-content-soft">
                                 <svg className="w-3.5 h-3.5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
                                 </svg>
@@ -240,7 +240,7 @@ export default function SosialMedia() {
                     {/* Contact Info */}
                     <div className="flex items-center justify-center gap-2 mt-4">
                         <div className="h-3 w-px bg-slate-300"></div>
-                        <p className="text-[11px] text-slate-400">Atau hubungi langsung:</p>
+                        <p className="text-[11px] text-content-muted">Atau hubungi langsung:</p>
                         <a
                             href={WHATSAPP_URL}
                             target="_blank"

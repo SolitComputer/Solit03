@@ -44,7 +44,7 @@ function PanelBrands() {
         <ProgressBar currentStep={2} totalSteps={3} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="loader w-full h-[200px] rounded-2xl bg-gradient-to-r from-slate-100 via-slate-50 to-slate-100 bg-[length:400%_100%] animate-[loaderShine_1.2s_infinite_ease-in-out] border border-slate-200" />
+            <div key={i} className="loader w-full h-[200px] rounded-2xl bg-gradient-to-r from-slate-100 via-slate-50 to-slate-100 bg-[length:400%_100%] animate-[loaderShine_1.2s_infinite_ease-in-out] border border-border" />
           ))}
         </div>
       </div>
@@ -83,8 +83,8 @@ function PanelBrands() {
                   {(brand.name || '??').slice(0, 2).toUpperCase()}
                 </div>
               )}
-              <div className="brand-name font-semibold text-base text-slate-900">{brand.name}</div>
-              <div className="brand-count text-sm text-slate-500">
+              <div className="brand-name font-semibold text-base text-content">{brand.name}</div>
+              <div className="brand-count text-sm text-content-muted">
                 {brand.count !== null ? `${brand.count} produk` : 'Tersedia'}
               </div>
             </article>
@@ -92,7 +92,7 @@ function PanelBrands() {
         })}
       </div>
       {brands.length === 0 && (
-        <p className="text-slate-500 text-center mt-4">
+        <p className="text-content-muted text-center mt-4">
           Daftar merk kosong. Tambahkan di Products → Brands dan assign ke produk.
         </p>
       )}

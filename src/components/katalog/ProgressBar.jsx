@@ -34,8 +34,8 @@ function ProgressBar({ currentStep, totalSteps = 3 }) {
                 {[1, 2, 3].map(step => {
                     const status = getStepStatus(step);
                     return (
-                        <div key={step} className={`progress-step flex flex-col items-center gap-1.5 text-xs ${status === 'active' ? 'text-blue-600 font-bold' : 'text-slate-500'}`}>
-                            <div className={`step-circle w-[30px] h-[30px] rounded-full bg-slate-100 border-2 border-slate-200 flex items-center justify-center text-sm font-bold ${status === 'active' ? 'bg-blue-600 text-white border-transparent' : status === 'completed' ? 'bg-blue-600 text-white border-transparent' : ''}`}>
+                        <div key={step} className={`progress-step flex flex-col items-center gap-1.5 text-xs ${status === 'active' ? 'text-blue-600 font-bold' : 'text-content-muted'}`}>
+                            <div className={`step-circle w-[30px] h-[30px] rounded-full bg-slate-100 border-2 border-border flex items-center justify-center text-sm font-bold ${status === 'active' ? 'bg-blue-600 text-white border-transparent' : status === 'completed' ? 'bg-blue-600 text-white border-transparent' : ''}`}>
                                 {getStepIcon(step, status)}
                             </div>
                             <span>{getStepLabel(step)}</span>

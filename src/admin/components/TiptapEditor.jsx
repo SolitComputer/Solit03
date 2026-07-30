@@ -19,7 +19,7 @@ function ToolbarButton({ onClick, active, disabled, title, children }) {
       disabled={disabled}
       title={title}
       className={`p-1.5 rounded-lg transition ${
-        active ? "bg-blue-100 text-blue-600" : "text-gray-500 hover:bg-gray-100"
+        active ? "bg-blue-100 text-blue-600" : "text-content-muted hover:bg-gray-100"
       } disabled:opacity-30 disabled:cursor-not-allowed`}
     >
       {children}
@@ -89,8 +89,8 @@ export default function TiptapEditor({ value, onChange, placeholder = "Tulis isi
   }
 
   return (
-    <div className="border-2 border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition">
-      <div className="flex flex-wrap items-center gap-0.5 p-2 border-b border-gray-200 bg-gray-50">
+    <div className="border-2 border-border rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition">
+      <div className="flex flex-wrap items-center gap-0.5 p-2 border-b border-border bg-surface-muted">
         <ToolbarButton title="Bold" active={editor.isActive("bold")} onClick={() => editor.chain().focus().toggleBold().run()}>
           <Bold size={16} />
         </ToolbarButton>
@@ -119,12 +119,12 @@ export default function TiptapEditor({ value, onChange, placeholder = "Tulis isi
           <LinkIcon size={16} />
         </ToolbarButton>
 
-        <label className={`p-1.5 rounded-lg transition cursor-pointer text-gray-500 hover:bg-gray-100 ${uploading ? "opacity-50 pointer-events-none" : ""}`} title="Sisipkan Gambar (bisa berkali-kali)">
+        <label className={`p-1.5 rounded-lg transition cursor-pointer text-content-muted hover:bg-gray-100 ${uploading ? "opacity-50 pointer-events-none" : ""}`} title="Sisipkan Gambar (bisa berkali-kali)">
           <ImageIcon size={16} />
           <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
         </label>
 
-        <label className={`p-1.5 rounded-lg transition cursor-pointer text-gray-500 hover:bg-gray-100 ${uploadingVideo ? "opacity-50 pointer-events-none" : ""}`} title="Sisipkan Video (maks 15MB, bisa berkali-kali)">
+        <label className={`p-1.5 rounded-lg transition cursor-pointer text-content-muted hover:bg-gray-100 ${uploadingVideo ? "opacity-50 pointer-events-none" : ""}`} title="Sisipkan Video (maks 15MB, bisa berkali-kali)">
           <VideoIcon size={16} />
           <input type="file" accept="video/*" className="hidden" onChange={handleVideoUpload} />
         </label>
@@ -141,7 +141,7 @@ export default function TiptapEditor({ value, onChange, placeholder = "Tulis isi
 
       <EditorContent
         editor={editor}
-        className="prose prose-sm max-w-none px-4 py-3 min-h-[300px] max-h-[600px] overflow-y-auto focus:outline-none [&_.ProseMirror]:outline-none [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-gray-400 [&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none [&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0"
+        className="prose prose-sm max-w-none px-4 py-3 min-h-[300px] max-h-[600px] overflow-y-auto focus:outline-none [&_.ProseMirror]:outline-none [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-content-muted [&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none [&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0"
       />
       {uploading && <p className="px-4 pb-2 text-xs text-blue-500">Mengupload gambar...</p>}
       {uploadingVideo && <p className="px-4 pb-2 text-xs text-blue-500">Mengupload video...</p>}

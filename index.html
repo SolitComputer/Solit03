@@ -40,7 +40,7 @@
     <meta name="robots" content="index, follow" />
 
     <!-- Theme Color -->
-    <meta name="theme-color" content="#0F172A" />
+    <meta name="theme-color" id="theme-color-meta" content="#0f172a" />
 
     <!-- Open Graph (WA, Facebook, Discord Preview) -->
     <meta
@@ -121,6 +121,21 @@
           "https://tiktok.com/@solit03"
         ]
       }
+    </script>
+
+    <!-- FOUC Prevention Script -->
+    <script>
+      (function() {
+        try {
+          var savedTheme = localStorage.getItem('solit03-theme');
+          var isDark = savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
     </script>
   </head>
 

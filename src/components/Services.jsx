@@ -44,7 +44,7 @@ export default function Services() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-white">
+    <section ref={sectionRef} className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-surface">
 
       {/* Title */}
       <div className="text-center mb-12 md:mb-16">
@@ -52,10 +52,10 @@ export default function Services() {
           <Sparkles className="w-3.5 h-3.5" />
           LAYANAN
         </span>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mt-5">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-content mt-5">
           Layanan <span className="text-blue-600">Setiap Hari</span>
         </h2>
-        <p className="text-sm md:text-base text-slate-500 mt-4 max-w-2xl mx-auto">
+        <p className="text-sm md:text-base text-content-muted mt-4 max-w-2xl mx-auto">
           Dukungan menyeluruh untuk pengalaman belanja laptop yang aman dan nyaman.
         </p>
       </div>
@@ -71,17 +71,17 @@ export default function Services() {
               style={{ transitionDelay: `${index * 100}ms` }}
             >
               {/* Icon */}
-              <div className="w-14 h-14 mx-auto bg-slate-50 rounded-xl flex items-center justify-center mb-3 group-hover:bg-blue-50 transition-colors duration-300">
-                <Icon className="w-6 h-6 text-slate-600 group-hover:text-blue-600 transition-colors" />
+              <div className="w-14 h-14 mx-auto bg-surface-muted rounded-xl flex items-center justify-center mb-3 group-hover:bg-blue-50 transition-colors duration-300">
+                <Icon className="w-6 h-6 text-content-soft group-hover:text-blue-600 transition-colors" />
               </div>
 
               {/* Title */}
-              <h3 className="text-sm sm:text-base font-semibold text-slate-900 mb-1">
+              <h3 className="text-sm sm:text-base font-semibold text-content mb-1">
                 {service.title}
               </h3>
 
               {/* Description */}
-              <p className="text-xs sm:text-sm text-slate-500">
+              <p className="text-xs sm:text-sm text-content-muted">
                 {service.description}
               </p>
             </div>

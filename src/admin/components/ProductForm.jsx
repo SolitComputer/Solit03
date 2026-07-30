@@ -32,12 +32,12 @@ const SECTIONS = [
 function Field({ label, required, hint, children }) {
     return (
         <div className="space-y-1.5">
-            <label className="flex items-center gap-1 text-[11px] font-medium text-gray-500 uppercase tracking-wider">
+            <label className="flex items-center gap-1 text-[11px] font-medium text-content-muted uppercase tracking-wider">
                 {label}
                 {required && <span className="text-red-400">*</span>}
             </label>
             {children}
-            {hint && <p className="text-[11px] text-gray-400">{hint}</p>}
+            {hint && <p className="text-[11px] text-content-muted">{hint}</p>}
         </div>
     );
 }
@@ -45,11 +45,11 @@ function Field({ label, required, hint, children }) {
 function Input({ icon: Icon, ...props }) {
     return (
         <div className="relative">
-            {Icon && <Icon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />}
+            {Icon && <Icon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-content-muted pointer-events-none" />}
             <input
                 {...props}
-                className={`w-full bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800 placeholder-gray-400
-          focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition
+                className={`w-full bg-surface-muted border border-border rounded-lg text-sm text-content placeholder-gray-400
+          focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-surface transition
           py-2.5 pr-3 ${Icon ? "pl-9" : "pl-3"} ${props.className || ""}`}
             />
         </div>
@@ -61,13 +61,13 @@ function Select({ children, ...props }) {
         <div className="relative">
             <select
                 {...props}
-                className="w-full bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800
-          focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-white
+                className="w-full bg-surface-muted border border-border rounded-lg text-sm text-content
+          focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-surface
           transition py-2.5 pl-3 pr-8 appearance-none cursor-pointer"
             >
                 {children}
             </select>
-            <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+            <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-content-muted pointer-events-none" />
         </div>
     );
 }
@@ -170,8 +170,8 @@ export default function ProductForm({ form, setForm, onSubmit, buttonText }) {
             )}
 
             {/* Section Tabs */}
-            <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
-                <div className="flex border-b border-gray-100">
+            <div className="bg-surface border border-border rounded-xl shadow-sm overflow-hidden">
+                <div className="flex border-b border-border">
                     {SECTIONS.map(({ id, label, icon: Icon }) => (
                         <button
                             key={id}
@@ -180,7 +180,7 @@ export default function ProductForm({ form, setForm, onSubmit, buttonText }) {
                             className={`flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-medium transition-all
                 ${activeSection === id
                                     ? "bg-blue-50 text-blue-600 border-b-2 border-blue-500"
-                                    : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
+                                    : "text-content-muted hover:text-content-soft hover:bg-surface-muted"
                                 }`}
                         >
                             <Icon size={13} />
@@ -205,7 +205,7 @@ export default function ProductForm({ form, setForm, onSubmit, buttonText }) {
                                 </Field>
                                 <Field label="Slug">
                                     <div className="relative">
-                                        <Link2 size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                                        <Link2 size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-content-muted pointer-events-none" />
                                         <input
                                             type="text"
                                             value={form.slug || ""}
@@ -214,8 +214,8 @@ export default function ProductForm({ form, setForm, onSubmit, buttonText }) {
                                                 setForm({ ...form, slug: e.target.value });
                                             }}
                                             placeholder="auto-generated"
-                                            className="w-full bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-600 placeholder-gray-300
-                        focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-white
+                                            className="w-full bg-surface-muted border border-border rounded-lg text-sm text-content-soft placeholder-gray-300
+                        focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-surface
                         transition py-2.5 pl-9 pr-3 font-mono text-xs"
                                         />
                                         {slugManual && (
@@ -231,23 +231,23 @@ export default function ProductForm({ form, setForm, onSubmit, buttonText }) {
                                             </button>
                                         )}
                                     </div>
-                                    <p className="text-[11px] text-gray-400">
+                                    <p className="text-[11px] text-content-muted">
                                         {slugManual ? "Manual · klik 'auto' untuk reset" : "Otomatis dari nama produk"}
                                     </p>
                                 </Field>
                             </div>
 
                             {/* Harga */}
-                            <div className="border border-gray-100 rounded-lg p-4 space-y-3">
+                            <div className="border border-border rounded-lg p-4 space-y-3">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">Harga</span>
+                                    <span className="text-[11px] font-medium text-content-muted uppercase tracking-wider">Harga</span>
                                     <label className="flex items-center gap-2 cursor-pointer">
                                         <div className="relative">
                                             <input type="checkbox" className="sr-only" checked={isDiscounted} onChange={handleDiscountToggle} />
                                             <div className={`w-8 h-4 rounded-full transition-colors ${isDiscounted ? "bg-blue-500" : "bg-gray-200"}`} />
-                                            <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full shadow transition-all ${isDiscounted ? "left-4.5 translate-x-1" : "left-0.5"}`} />
+                                            <div className={`absolute top-0.5 w-3 h-3 bg-surface rounded-full shadow transition-all ${isDiscounted ? "left-4.5 translate-x-1" : "left-0.5"}`} />
                                         </div>
-                                        <span className="text-xs text-gray-500 flex items-center gap-1">
+                                        <span className="text-xs text-content-muted flex items-center gap-1">
                                             <Sparkles size={11} className="text-yellow-400" /> Diskon
                                         </span>
                                     </label>
@@ -319,8 +319,8 @@ export default function ProductForm({ form, setForm, onSubmit, buttonText }) {
                                     placeholder="Deskripsi singkat produk..."
                                     value={form.short_description || ""}
                                     onChange={(e) => setForm({ ...form, short_description: e.target.value })}
-                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800 placeholder-gray-400
-                    focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-white
+                                    className="w-full bg-surface-muted border border-border rounded-lg text-sm text-content placeholder-gray-400
+                    focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-surface
                     transition py-2.5 px-3 resize-none"
                                 />
                             </Field>
@@ -331,8 +331,8 @@ export default function ProductForm({ form, setForm, onSubmit, buttonText }) {
                                     placeholder="Deskripsi lengkap produk..."
                                     value={form.description || ""}
                                     onChange={(e) => setForm({ ...form, description: e.target.value })}
-                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800 placeholder-gray-400
-                    focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-white
+                                    className="w-full bg-surface-muted border border-border rounded-lg text-sm text-content placeholder-gray-400
+                    focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-surface
                     transition py-2.5 px-3 resize-none"
                                 />
                             </Field>
@@ -345,7 +345,7 @@ export default function ProductForm({ form, setForm, onSubmit, buttonText }) {
                             <Field label="Thumbnail">
                                 {form.thumbnail ? (
                                     <div className="flex items-center gap-3">
-                                        <img src={form.thumbnail} alt="" className="w-20 h-20 rounded-lg object-cover border border-gray-200" />
+                                        <img src={form.thumbnail} alt="" className="w-20 h-20 rounded-lg object-cover border border-border" />
                                         <div>
                                             <p className="text-xs text-green-600 font-medium mb-1.5 flex items-center gap-1"><Check className="w-3.5 h-3.5" aria-hidden="true" /> Terupload</p>
                                             <button
@@ -358,9 +358,9 @@ export default function ProductForm({ form, setForm, onSubmit, buttonText }) {
                                         </div>
                                     </div>
                                 ) : (
-                                    <label htmlFor="thumb-upload" className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-lg py-8 cursor-pointer hover:border-blue-400 hover:bg-blue-50/50 transition">
+                                    <label htmlFor="thumb-upload" className="flex flex-col items-center justify-center border-2 border-dashed border-border rounded-lg py-8 cursor-pointer hover:border-blue-400 hover:bg-blue-50/50 transition">
                                         <Upload size={22} className="text-gray-300 mb-2" />
-                                        <span className="text-xs text-gray-400">Klik untuk upload thumbnail</span>
+                                        <span className="text-xs text-content-muted">Klik untuk upload thumbnail</span>
                                         <span className="text-[10px] text-gray-300 mt-1">PNG, JPG, WEBP · max 5MB</span>
                                         <input id="thumb-upload" type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
                                     </label>
@@ -368,16 +368,16 @@ export default function ProductForm({ form, setForm, onSubmit, buttonText }) {
                             </Field>
 
                             <Field label="Galeri">
-                                <label htmlFor="gallery-upload" className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-lg py-6 cursor-pointer hover:border-blue-400 hover:bg-blue-50/50 transition">
+                                <label htmlFor="gallery-upload" className="flex flex-col items-center justify-center border-2 border-dashed border-border rounded-lg py-6 cursor-pointer hover:border-blue-400 hover:bg-blue-50/50 transition">
                                     <Upload size={18} className="text-gray-300 mb-1.5" />
-                                    <span className="text-xs text-gray-400">Upload beberapa foto sekaligus</span>
+                                    <span className="text-xs text-content-muted">Upload beberapa foto sekaligus</span>
                                     <input id="gallery-upload" type="file" multiple accept="image/*" onChange={handleGalleryUpload} className="hidden" />
                                 </label>
                                 {form.gallery?.length > 0 && (
                                     <div className="grid grid-cols-4 gap-2 mt-3">
                                         {form.gallery.map((img, i) => (
                                             <div key={i} className="relative group">
-                                                <img src={img} alt="" className="w-full h-20 rounded-lg object-cover border border-gray-100" />
+                                                <img src={img} alt="" className="w-full h-20 rounded-lg object-cover border border-border" />
                                                 <button
                                                     type="button"
                                                     onClick={() => setForm({ ...form, gallery: form.gallery.filter((_, idx) => idx !== i) })}
@@ -460,7 +460,7 @@ export default function ProductForm({ form, setForm, onSubmit, buttonText }) {
                                                 className={`px-2.5 py-1 rounded-md text-xs font-medium transition
                           ${active
                                                         ? "bg-blue-500 text-white"
-                                                        : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                                                        : "bg-gray-100 text-content-muted hover:bg-gray-200"
                                                     }`}
                                             >
                                                 {tag.name}

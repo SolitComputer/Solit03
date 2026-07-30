@@ -13,7 +13,7 @@ export default function AdCard({ ad }) {
       href={ad.cta_url || "#"}
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
-      className="group relative block w-full bg-slate-100 rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-blue-300 transition-all duration-300"
+      className="group relative block w-full bg-slate-100 rounded-2xl overflow-hidden border border-border/80 shadow-sm hover:shadow-xl hover:border-blue-300 transition-all duration-300"
       style={{ aspectRatio: `${width} / ${height}` }}
     >
       <img

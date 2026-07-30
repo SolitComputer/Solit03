@@ -99,7 +99,7 @@ export default function EditProducts() {
           Edit Produk
         </h1>
 
-        <p className="text-gray-500 mt-2">
+        <p className="text-content-muted mt-2">
           Edit data produk
         </p>
 

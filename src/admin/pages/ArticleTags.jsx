@@ -5,7 +5,7 @@ import {
 } from "../services/AdminArticleTags";
 import { useToast } from "../context/ToastContext";
 
-const inputCls = "bg-gray-50 border-2 border-gray-200 rounded-xl text-sm px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all";
+const inputCls = "bg-surface-muted border-2 border-border rounded-xl text-sm px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-surface transition-all";
 
 export default function ArticleTags() {
   const [tags, setTags] = useState([]);
@@ -76,12 +76,12 @@ export default function ArticleTags() {
         <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
           Tag Artikel
         </h1>
-        <p className="text-sm text-gray-500 mt-1">Kelola tag supaya bisa dipilih langsung saat menulis artikel, tanpa ketik ulang</p>
+        <p className="text-sm text-content-muted mt-1">Kelola tag supaya bisa dipilih langsung saat menulis artikel, tanpa ketik ulang</p>
       </div>
 
       {/* Add new */}
-      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5">
-        <p className="text-xs font-semibold text-gray-700 mb-3">Tambah Tag Baru</p>
+      <div className="bg-surface border border-border rounded-2xl shadow-sm p-5">
+        <p className="text-xs font-semibold text-content-soft mb-3">Tambah Tag Baru</p>
         <div className="flex items-center gap-2">
           <input
             placeholder="Nama tag, mis. Promo, Tips, Gaming"
@@ -102,9 +102,9 @@ export default function ArticleTags() {
       </div>
 
       {/* Search */}
-      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-4">
+      <div className="bg-surface border border-border rounded-2xl shadow-sm p-4">
         <div className="relative">
-          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-content-muted" />
           <input
             placeholder="Cari tag..."
             value={search}
@@ -112,7 +112,7 @@ export default function ArticleTags() {
             className={`${inputCls} w-full pl-10 pr-9`}
           />
           {search && (
-            <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+            <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-content-muted hover:text-content-soft">
               <X size={14} />
             </button>
           )}
@@ -120,10 +120,10 @@ export default function ArticleTags() {
       </div>
 
       {/* List */}
-      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-        <div className="px-5 py-4 border-b-2 border-gray-100 flex items-center justify-between bg-gradient-to-r from-gray-50 to-white">
-          <p className="text-sm font-bold text-gray-700">Daftar Tag</p>
-          <p className="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">{filtered.length} tag</p>
+      <div className="bg-surface border border-border rounded-2xl shadow-sm overflow-hidden">
+        <div className="px-5 py-4 border-b-2 border-border flex items-center justify-between bg-gradient-to-r from-gray-50 to-white">
+          <p className="text-sm font-bold text-content-soft">Daftar Tag</p>
+          <p className="text-xs font-semibold text-content-muted bg-gray-100 px-2 py-1 rounded-lg">{filtered.length} tag</p>
         </div>
 
         {loading ? (
@@ -131,7 +131,7 @@ export default function ArticleTags() {
         ) : filtered.length === 0 ? (
           <div className="py-16 text-center">
             <TagIcon size={36} className="mx-auto text-gray-200 mb-3" />
-            <p className="text-sm text-gray-400">{search ? "Tag tidak ditemukan" : "Belum ada tag"}</p>
+            <p className="text-sm text-content-muted">{search ? "Tag tidak ditemukan" : "Belum ada tag"}</p>
           </div>
         ) : (
           <div className="divide-y divide-gray-100">
@@ -151,8 +151,8 @@ export default function ArticleTags() {
                   />
                 ) : (
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-800 truncate">{tag.name}</p>
-                    <p className="text-[11px] text-gray-400 font-mono">/{tag.slug}</p>
+                    <p className="text-sm font-semibold text-content truncate">{tag.name}</p>
+                    <p className="text-[11px] text-content-muted font-mono">/{tag.slug}</p>
                   </div>
                 )}
 
@@ -162,11 +162,11 @@ export default function ArticleTags() {
                       {savingId === tag.id ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
                     </button>
                   ) : (
-                    <button onClick={() => startEdit(tag)} className="px-2.5 py-1.5 text-xs font-semibold text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition">
+                    <button onClick={() => startEdit(tag)} className="px-2.5 py-1.5 text-xs font-semibold text-content-muted hover:text-blue-600 hover:bg-blue-50 rounded-lg transition">
                       Edit
                     </button>
                   )}
-                  <button onClick={() => handleDelete(tag.id, tag.name)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition">
+                  <button onClick={() => handleDelete(tag.id, tag.name)} className="p-2 text-content-muted hover:text-red-600 hover:bg-red-50 rounded-lg transition">
                     <Trash2 size={15} />
                   </button>
                 </div>

@@ -80,14 +80,14 @@ export default function PromoImagesAdmin() {
           <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
             Showcase Laptop
           </h1>
-          <p className="text-sm text-gray-500 mt-1">Kelola galeri poster laptop di homepage</p>
+          <p className="text-sm text-content-muted mt-1">Kelola galeri poster laptop di homepage</p>
         </div>
         <div className="flex items-center gap-2">
           {!loading && items.length === 0 && DEFAULT_SHOWCASE_IMAGES.length > 0 && (
             <button
               onClick={handleImportDefaults}
               disabled={importing}
-              className="flex items-center gap-2 px-4 py-2.5 bg-white border-2 border-blue-200 text-blue-600 text-sm font-semibold rounded-xl hover:bg-blue-50 transition disabled:opacity-60"
+              className="flex items-center gap-2 px-4 py-2.5 bg-surface border-2 border-blue-200 text-blue-600 text-sm font-semibold rounded-xl hover:bg-blue-50 transition disabled:opacity-60"
             >
               {importing ? <Loader2 size={16} className="animate-spin" /> : <Import size={16} />}
               Impor dari Galeri Lama
@@ -104,11 +104,11 @@ export default function PromoImagesAdmin() {
       {loading ? (
         <div className="flex items-center justify-center py-24"><Loader2 size={24} className="animate-spin text-blue-500" /></div>
       ) : items.length === 0 ? (
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm py-20 text-center">
+        <div className="bg-surface border border-border rounded-2xl shadow-sm py-20 text-center">
           <ImageIcon size={36} className="mx-auto text-gray-200 mb-3" />
-          <p className="text-sm text-gray-400">Belum ada gambar showcase di database</p>
+          <p className="text-sm text-content-muted">Belum ada gambar showcase di database</p>
           {DEFAULT_SHOWCASE_IMAGES.length > 0 && (
-            <p className="text-xs text-gray-400 mt-1.5 max-w-sm mx-auto">
+            <p className="text-xs text-content-muted mt-1.5 max-w-sm mx-auto">
               Homepage saat ini masih menampilkan {DEFAULT_SHOWCASE_IMAGES.length} gambar bawaan lama.
               Klik "Impor dari Galeri Lama" di atas supaya bisa dikelola dari sini.
             </p>
@@ -117,20 +117,20 @@ export default function PromoImagesAdmin() {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {items.map((item) => (
-            <div key={item.id} className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden group">
-              <div className="aspect-square bg-gray-50 relative">
+            <div key={item.id} className="bg-surface border border-border rounded-xl shadow-sm overflow-hidden group">
+              <div className="aspect-square bg-surface-muted relative">
                 <img src={item.image_url} alt="" className={`w-full h-full object-cover ${!item.is_active ? "opacity-40" : ""}`} />
                 <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">
-                  <button onClick={() => toggleActive(item)} className="p-1.5 bg-white/90 rounded-lg text-gray-600 hover:text-blue-600 shadow-sm">
+                  <button onClick={() => toggleActive(item)} className="p-1.5 bg-surface/90 rounded-lg text-content-soft hover:text-blue-600 shadow-sm">
                     {item.is_active ? <Eye size={13} /> : <EyeOff size={13} />}
                   </button>
-                  <button onClick={() => handleDelete(item.id)} className="p-1.5 bg-white/90 rounded-lg text-gray-600 hover:text-red-600 shadow-sm">
+                  <button onClick={() => handleDelete(item.id)} className="p-1.5 bg-surface/90 rounded-lg text-content-soft hover:text-red-600 shadow-sm">
                     <Trash2 size={13} />
                   </button>
                 </div>
               </div>
               {!item.is_active && (
-                <p className="text-[10px] text-center text-gray-400 py-1 bg-gray-50">Tersembunyi</p>
+                <p className="text-[10px] text-center text-content-muted py-1 bg-surface-muted">Tersembunyi</p>
               )}
             </div>
           ))}

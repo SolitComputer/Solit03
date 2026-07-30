@@ -17,13 +17,13 @@ const TABS = [
 function Field({ label, children }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-xs font-semibold text-gray-700">{label}</label>
+      <label className="text-xs font-semibold text-content-soft">{label}</label>
       {children}
     </div>
   );
 }
 
-const inputCls = "w-full bg-gray-50 border-2 border-gray-200 rounded-xl text-sm px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all";
+const inputCls = "w-full bg-surface-muted border-2 border-border rounded-xl text-sm px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-surface transition-all";
 
 export default function SiteContent() {
   const [tab, setTab] = useState("hero");
@@ -104,7 +104,7 @@ export default function SiteContent() {
           <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
             Konten Homepage
           </h1>
-          <p className="text-sm text-gray-500 mt-1">Edit teks & informasi yang tampil di halaman utama</p>
+          <p className="text-sm text-content-muted mt-1">Edit teks & informasi yang tampil di halaman utama</p>
         </div>
         <button
           onClick={handleSave}
@@ -117,13 +117,13 @@ export default function SiteContent() {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 bg-white border border-gray-100 rounded-xl p-1.5 shadow-sm w-fit">
+      <div className="flex items-center gap-2 bg-surface border border-border rounded-xl p-1.5 shadow-sm w-fit">
         {TABS.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
             onClick={() => setTab(key)}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition ${
-              tab === key ? "bg-blue-600 text-white shadow-sm" : "text-gray-500 hover:bg-gray-50"
+              tab === key ? "bg-blue-600 text-white shadow-sm" : "text-content-muted hover:bg-surface-muted"
             }`}
           >
             <Icon size={15} /> {label}
@@ -133,7 +133,7 @@ export default function SiteContent() {
 
       {/* ===== HERO TAB ===== */}
       {tab === "hero" && (
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 space-y-5">
+        <div className="bg-surface border border-border rounded-2xl shadow-sm p-6 space-y-5">
           <Field label="Badge (teks kecil di atas judul)">
             <input className={inputCls} value={hero.badge || ""} onChange={(e) => setHero({ ...hero, badge: e.target.value })} />
           </Field>
@@ -162,7 +162,7 @@ export default function SiteContent() {
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-semibold text-gray-700">Badge Kepercayaan (trust indicators)</label>
+              <label className="text-xs font-semibold text-content-soft">Badge Kepercayaan (trust indicators)</label>
               <button onClick={addTrust} type="button" className="flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700">
                 <Plus size={14} /> Tambah
               </button>
@@ -173,7 +173,7 @@ export default function SiteContent() {
                   <select
                     value={t.icon}
                     onChange={(e) => updateTrust(i, "icon", e.target.value)}
-                    className="bg-gray-50 border-2 border-gray-200 rounded-xl text-sm px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="bg-surface-muted border-2 border-border rounded-xl text-sm px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     {ICON_OPTIONS.map((ic) => <option key={ic} value={ic}>{ic}</option>)}
                   </select>
@@ -183,7 +183,7 @@ export default function SiteContent() {
                     value={t.label}
                     onChange={(e) => updateTrust(i, "label", e.target.value)}
                   />
-                  <button onClick={() => removeTrust(i)} type="button" className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition">
+                  <button onClick={() => removeTrust(i)} type="button" className="p-2 text-content-muted hover:text-red-600 hover:bg-red-50 rounded-lg transition">
                     <Trash2 size={14} />
                   </button>
                 </div>
@@ -195,7 +195,7 @@ export default function SiteContent() {
 
       {/* ===== ABOUT TAB ===== */}
       {tab === "about" && (
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 space-y-5">
+        <div className="bg-surface border border-border rounded-2xl shadow-sm p-6 space-y-5">
           <Field label="Eyebrow (label kecil)">
             <input className={inputCls} value={about.eyebrow || ""} onChange={(e) => setAbout({ ...about, eyebrow: e.target.value })} />
           </Field>
@@ -228,7 +228,7 @@ export default function SiteContent() {
             <div className="flex items-center gap-4">
               {about.founder_image_url ? (
                 <div className="relative">
-                  <img src={about.founder_image_url} alt="" className="w-20 h-20 rounded-xl object-cover border border-gray-200" />
+                  <img src={about.founder_image_url} alt="" className="w-20 h-20 rounded-xl object-cover border border-border" />
                   <button
                     onClick={() => setAbout({ ...about, founder_image_url: null })}
                     className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center"
@@ -237,9 +237,9 @@ export default function SiteContent() {
                   </button>
                 </div>
               ) : (
-                <div className="w-20 h-20 rounded-xl bg-gray-100 flex items-center justify-center text-gray-400 text-[10px] text-center px-1">Default asset</div>
+                <div className="w-20 h-20 rounded-xl bg-gray-100 flex items-center justify-center text-content-muted text-[10px] text-center px-1">Default asset</div>
               )}
-              <label className="flex items-center gap-2 px-4 py-2.5 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-600 cursor-pointer hover:border-blue-400 hover:text-blue-600 transition">
+              <label className="flex items-center gap-2 px-4 py-2.5 border-2 border-dashed border-border rounded-xl text-sm text-content-soft cursor-pointer hover:border-blue-400 hover:text-blue-600 transition">
                 {uploadingFounder ? <Loader2 size={15} className="animate-spin" /> : <ImagePlus size={15} />}
                 Ganti Foto
                 <input type="file" accept="image/*" className="hidden" onChange={handleFounderUpload} />
@@ -251,7 +251,7 @@ export default function SiteContent() {
 
       {/* ===== CONTACT TAB ===== */}
       {tab === "contact" && (
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 space-y-5">
+        <div className="bg-surface border border-border rounded-2xl shadow-sm p-6 space-y-5">
           <div className="grid grid-cols-2 gap-4">
             <Field label="Nomor WhatsApp (format 62xxx)">
               <input className={inputCls} value={contact.whatsapp_number || ""} onChange={(e) => setContact({ ...contact, whatsapp_number: e.target.value })} />

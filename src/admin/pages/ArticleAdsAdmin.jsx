@@ -6,7 +6,7 @@ import {
 import { useToast } from "../context/ToastContext";
 import { AD_BANNER_SIZES, AD_PLACEMENT_LABELS, formatMaxSize, detectBannerSize } from "../../utils/adBannerSizes";
 
-const inputCls = "bg-gray-50 border-2 border-gray-200 rounded-xl text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all";
+const inputCls = "bg-surface-muted border-2 border-border rounded-xl text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-surface transition-all";
 
 function isAllowedImage(file) {
   return !!file && file.type.startsWith("image/");
@@ -172,32 +172,32 @@ export default function ArticleAdsAdmin() {
         <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
           Iklan Artikel
         </h1>
-        <p className="text-sm text-gray-500 mt-1">Kelola banner iklan laptop yang diselipkan di antara berita</p>
+        <p className="text-sm text-content-muted mt-1">Kelola banner iklan laptop yang diselipkan di antara berita</p>
       </div>
 
       {/* Add new */}
-      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5 space-y-4">
-        <p className="text-xs font-semibold text-gray-700">Tambah Iklan Baru</p>
+      <div className="bg-surface border border-border rounded-2xl shadow-sm p-5 space-y-4">
+        <p className="text-xs font-semibold text-content-soft">Tambah Iklan Baru</p>
 
         <div>
-          <label className="text-xs font-semibold text-gray-700">Gambar Banner</label>
+          <label className="text-xs font-semibold text-content-soft">Gambar Banner</label>
           <input
             type="file"
             accept="image/*"
             onChange={handleFileChange}
             className={`${inputCls} w-full mt-1.5`}
           />
-          <p className="text-[11px] text-gray-400 mt-1">Format yang didukung: {ALLOWED_IMAGE_LABEL}</p>
+          <p className="text-[11px] text-content-muted mt-1">Format yang didukung: {ALLOWED_IMAGE_LABEL}</p>
           {newFile && detectedDims && (
-            <p className="text-[11px] text-gray-400 mt-1">
+            <p className="text-[11px] text-content-muted mt-1">
               {newFile.name} — {(newFile.size / 1024).toFixed(0)} KB, terdeteksi {detectedDims.width}×{detectedDims.height}px
             </p>
           )}
         </div>
 
         <div>
-          <label className="text-xs font-semibold text-gray-700">
-            Ukuran Banner {newFile && <span className="text-gray-400 font-normal">(auto-terdeteksi, bisa diubah manual)</span>}
+          <label className="text-xs font-semibold text-content-soft">
+            Ukuran Banner {newFile && <span className="text-content-muted font-normal">(auto-terdeteksi, bisa diubah manual)</span>}
           </label>
           <select
             value={newAd.banner_size}
@@ -281,9 +281,9 @@ export default function ArticleAdsAdmin() {
       {loading ? (
         <div className="flex items-center justify-center py-24"><Loader2 size={24} className="animate-spin text-blue-500" /></div>
       ) : items.length === 0 ? (
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm py-20 text-center">
+        <div className="bg-surface border border-border rounded-2xl shadow-sm py-20 text-center">
           <Megaphone size={36} className="mx-auto text-gray-200 mb-3" />
-          <p className="text-sm text-gray-400">Belum ada iklan</p>
+          <p className="text-sm text-content-muted">Belum ada iklan</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -292,7 +292,7 @@ export default function ArticleAdsAdmin() {
             const dispWidth = spec.customSize ? item.custom_width || spec.width : spec.width;
             const dispHeight = spec.customSize ? item.custom_height || spec.height : spec.height;
             return (
-              <div key={item.id} className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
+              <div key={item.id} className="bg-surface border border-border rounded-xl shadow-sm overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
                 <div className="relative bg-slate-950 h-48 flex items-center justify-center p-3 overflow-hidden">
                   <img
                     src={item.image_url}
@@ -333,7 +333,7 @@ export default function ArticleAdsAdmin() {
                   <div className="flex items-center justify-between pt-1">
                     <button
                       onClick={() => updateLocal(item.id, "is_active", !item.is_active)}
-                      className={`flex items-center gap-1 text-[11px] font-semibold ${item.is_active ? "text-emerald-600" : "text-gray-400"}`}
+                      className={`flex items-center gap-1 text-[11px] font-semibold ${item.is_active ? "text-emerald-600" : "text-content-muted"}`}
                     >
                       {item.is_active ? <Eye size={13} /> : <EyeOff size={13} />}
                       {item.is_active ? "Aktif" : "Tersembunyi"}

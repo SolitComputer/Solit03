@@ -158,11 +158,11 @@ export default function TeamSlider() {
                     className="w-full h-72 object-cover rounded-xl"
                   />
 
-                  <h3 className="mt-4 font-bold text-lg text-slate-900">
+                  <h3 className="mt-4 font-bold text-lg text-content">
                     {member.name}
                   </h3>
 
-                  <p className="text-slate-500 text-sm">
+                  <p className="text-content-muted text-sm">
                     {member.role}
                   </p>
                 </div>
@@ -204,10 +204,10 @@ export default function TeamSlider() {
                     decoding="async"
                     className="w-full h-72 object-cover rounded-xl"
                   />
-                  <h3 className="mt-4 font-bold text-lg text-slate-900">
+                  <h3 className="mt-4 font-bold text-lg text-content">
                     {member.name}
                   </h3>
-                  <p className="text-slate-500 text-sm">
+                  <p className="text-content-muted text-sm">
                     {member.role}
                   </p>
                 </div>
@@ -233,7 +233,7 @@ export default function TeamSlider() {
         </div>
 
         {/* Swipe hint — shows briefly */}
-        <p className="text-[10px] text-slate-400 mt-3 animate-pulse">
+        <p className="text-[10px] text-content-muted mt-3 animate-pulse">
           ← Geser untuk lihat tim →
         </p>
       </div>

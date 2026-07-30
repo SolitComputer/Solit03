@@ -61,8 +61,8 @@ function PanelPrice() {
               <div className="icon w-[60px] h-[60px] rounded-xl grid place-items-center bg-blue-50 text-blue-600 border border-blue-100">
                 <Wallet className="w-7 h-7" aria-hidden="true" />
               </div>
-              <div className="title font-bold text-lg text-slate-900">{range.label}</div>
-              <div className="desc text-sm text-slate-500">Kisaran harga {range.label}</div>
+              <div className="title font-bold text-lg text-content">{range.label}</div>
+              <div className="desc text-sm text-content-muted">Kisaran harga {range.label}</div>
             </article>
           );
         })}

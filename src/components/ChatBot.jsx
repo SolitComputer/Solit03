@@ -451,14 +451,14 @@ export default function ChatBot() {
             className="fixed bottom-6 right-6 z-[60] w-[calc(100vw-3rem)] sm:w-[400px]"
           >
             <div
-              className={`flex flex-col bg-white rounded-2xl shadow-soft-lg overflow-hidden border border-slate-200 ${
+              className={`flex flex-col bg-surface rounded-2xl shadow-soft-lg overflow-hidden border border-border ${
                 isMinimized ? "" : "h-[min(600px,calc(100dvh-6rem))]"
               }`}
             >
               {/* Header */}
               <div className="shrink-0 bg-blue-600 px-4 py-3 flex items-center justify-between">
                 <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center shrink-0">
+                  <div className="w-8 h-8 bg-surface/20 rounded-full flex items-center justify-center shrink-0">
                     <Bot size={16} className="text-white" />
                   </div>
                   <div className="min-w-0">
@@ -472,14 +472,14 @@ export default function ChatBot() {
                 <div className="flex items-center gap-1 shrink-0">
                   <button
                     onClick={() => setIsMinimized(!isMinimized)}
-                    className="p-1.5 hover:bg-white/10 rounded-lg transition text-white"
+                    className="p-1.5 hover:bg-surface/10 rounded-lg transition text-white"
                     aria-label={isMinimized ? "Perbesar chat" : "Perkecil chat"}
                   >
                     {isMinimized ? <Plus size={16} /> : <Minus size={16} />}
                   </button>
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="p-1.5 hover:bg-white/10 rounded-lg transition text-white"
+                    className="p-1.5 hover:bg-surface/10 rounded-lg transition text-white"
                     aria-label="Tutup chat"
                   >
                     <X size={16} />
@@ -491,7 +491,7 @@ export default function ChatBot() {
                 <>
                   {/* Area pesan — scroll internal */}
                   <div
-                    className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-4 bg-slate-50"
+                    className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-4 bg-surface-muted"
                   >
                     {messages.map((message) => (
                       <motion.div
@@ -514,7 +514,7 @@ export default function ChatBot() {
                               <div className={`px-3 py-2 rounded-2xl ${
                                 message.type === "user"
                                   ? "bg-blue-600 text-white rounded-tr-none"
-                                  : "bg-white border border-slate-200 text-slate-700 rounded-tl-none shadow-soft-sm"
+                                  : "bg-surface border border-border text-content-soft rounded-tl-none shadow-soft-sm"
                               }`}>
                                 <p className="text-xs whitespace-pre-line break-words">{message.text}</p>
                               </div>
@@ -540,7 +540,7 @@ export default function ChatBot() {
                               </button>
                             )}
 
-                            <p className="text-[9px] text-slate-400 mt-1">
+                            <p className="text-[9px] text-content-muted mt-1">
                               {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                             </p>
                           </div>
@@ -554,7 +554,7 @@ export default function ChatBot() {
                           <div className="w-7 h-7 bg-blue-600 rounded-full flex items-center justify-center">
                             <Bot size={14} className="text-white" />
                           </div>
-                          <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-none px-3 py-2 shadow-soft-sm">
+                          <div className="bg-surface border border-border rounded-2xl rounded-tl-none px-3 py-2 shadow-soft-sm">
                             <div className="flex gap-1">
                               <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce-custom" style={{ animationDelay: "0s" }} />
                               <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce-custom" style={{ animationDelay: "0.15s" }} />
@@ -570,8 +570,8 @@ export default function ChatBot() {
 
                   {/* Quick Replies */}
                   {showQuickReplies && (
-                    <div className="shrink-0 px-4 py-2 border-t border-slate-100 bg-slate-50">
-                      <p className="text-[10px] text-slate-500 mb-2 flex items-center gap-1">
+                    <div className="shrink-0 px-4 py-2 border-t border-border bg-surface-muted">
+                      <p className="text-[10px] text-content-muted mb-2 flex items-center gap-1">
                         <Sparkles size={10} className="text-blue-500" />
                         Pilih topik yang ingin ditanyakan:
                       </p>
@@ -580,7 +580,7 @@ export default function ChatBot() {
                           <button
                             key={index}
                             onClick={() => handleQuickReply(reply.action)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-full text-xs text-slate-700 hover:border-blue-500 hover:text-blue-600 transition-all hover:scale-105"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface border border-border rounded-full text-xs text-content-soft hover:border-blue-500 hover:text-blue-600 transition-all hover:scale-105"
                           >
                             {reply.icon}
                             {reply.text}
@@ -591,7 +591,7 @@ export default function ChatBot() {
                   )}
 
                   {/* Input */}
-                  <div className="shrink-0 p-3 border-t border-slate-100 bg-white">
+                  <div className="shrink-0 p-3 border-t border-border bg-surface">
                     <div className="flex gap-2 items-end">
                       <textarea
                         ref={inputRef}
@@ -600,7 +600,7 @@ export default function ChatBot() {
                         onKeyPress={handleKeyPress}
                         placeholder="Tanya apa saja tentang laptop..."
                         rows="1"
-                        className="flex-1 px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                        className="flex-1 px-3 py-2 text-xs border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                         style={{ maxHeight: "80px" }}
                       />
                       <button
@@ -612,7 +612,7 @@ export default function ChatBot() {
                         <Send size={16} />
                       </button>
                     </div>
-                    <p className="text-[9px] text-slate-400 text-center mt-2">
+                    <p className="text-[9px] text-content-muted text-center mt-2">
                       Tips: Coba tanyakan "cari laptop Lenovo" atau "harga termurah"
                     </p>
                   </div>

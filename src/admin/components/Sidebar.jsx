@@ -121,7 +121,7 @@ export default function Sidebar() {
       <aside
         className={`
           fixed lg:relative z-30
-          bg-white border-r border-gray-100
+          bg-surface border-r border-border
           transition-all duration-300 ease-in-out
           flex flex-col
           ${collapsed ? "w-16" : "w-56"}
@@ -132,7 +132,7 @@ export default function Sidebar() {
         {/* Logo Section - Lebih kecil */}
         <div className={`
           flex items-center justify-between
-          h-12 px-3 border-b border-gray-100
+          h-12 px-3 border-b border-border
           ${collapsed ? "px-2 justify-center" : ""}
         `}>
           {!collapsed ? (<>
@@ -160,9 +160,9 @@ export default function Sidebar() {
             className="hidden lg:flex items-center justify-center w-6 h-6 rounded-md hover:bg-gray-100 transition"
           >
             {collapsed ? (
-              <ChevronRight size={14} className="text-gray-400" />
+              <ChevronRight size={14} className="text-content-muted" />
             ) : (
-              <ChevronLeft size={14} className="text-gray-400" />
+              <ChevronLeft size={14} className="text-content-muted" />
             )}
           </button>
         </div>
@@ -185,7 +185,7 @@ export default function Sidebar() {
                   group relative
                   ${active
                     ? "bg-blue-50 text-blue-700"
-                    : "text-gray-500 hover:bg-gray-50 hover:text-blue-600"
+                    : "text-content-muted hover:bg-surface-muted hover:text-blue-600"
                   }
                   ${collapsed ? "justify-center px-2" : ""}
                 `}
@@ -218,7 +218,7 @@ export default function Sidebar() {
 
         {/* Footer - Lebih kecil */}
         <div className={`
-          p-2 border-t border-gray-100
+          p-2 border-t border-border
           ${collapsed ? "px-2" : ""}
         `}>
           <button

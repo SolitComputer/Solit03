@@ -40,7 +40,7 @@ export default function CookieConsent() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold">Kami menggunakan cookie</p>
-              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+              <p className="text-xs text-content-muted mt-1 leading-relaxed">
                 Solit 03 memakai cookie untuk menjaga situs tetap berfungsi, menganalisis
                 trafik, dan meningkatkan pengalaman kamu. Kamu bisa terima semua, tolak yang
                 tidak esensial, atau atur sendiri preferensinya.
@@ -80,7 +80,7 @@ export default function CookieConsent() {
             </button>
             <button
               onClick={() => handle("reject_all", { analytics: false, marketing: false })}
-              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-semibold transition"
+              className="px-4 py-2 rounded-xl bg-surface/10 hover:bg-surface/15 text-white text-xs font-semibold transition"
             >
               Tolak Non-Esensial
             </button>
@@ -106,7 +106,7 @@ export default function CookieConsent() {
         <button
           onClick={() => setVisible(false)}
           aria-label="Tutup"
-          className="absolute top-3 right-3 text-slate-500 hover:text-white transition"
+          className="absolute top-3 right-3 text-content-muted hover:text-white transition"
         >
           <X size={16} />
         </button>
@@ -120,7 +120,7 @@ function PrefRow({ label, desc, checked, disabled, onChange }) {
     <label className={`flex items-center justify-between gap-3 py-1.5 ${disabled ? "opacity-60" : "cursor-pointer"}`}>
       <div>
         <p className="text-xs font-semibold text-white">{label}</p>
-        <p className="text-[11px] text-slate-400">{desc}</p>
+        <p className="text-[11px] text-content-muted">{desc}</p>
       </div>
       <input
         type="checkbox"

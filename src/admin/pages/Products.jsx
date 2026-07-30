@@ -114,7 +114,7 @@ export default function Products() {
             <div className="w-12 h-12 border-4 border-blue-200 rounded-full"></div>
             <div className="absolute top-0 left-0 w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
           </div>
-          <p className="text-sm text-gray-400">Memuat data produk...</p>
+          <p className="text-sm text-content-muted">Memuat data produk...</p>
         </div>
       </div>
     );
@@ -159,8 +159,8 @@ export default function Products() {
 
       {/* Header dengan gradient */}
       <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 text-white shadow-lg">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mr-32 -mt-32"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-5 rounded-full -ml-24 -mb-24"></div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-surface opacity-5 rounded-full -mr-32 -mt-32"></div>
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-surface opacity-5 rounded-full -ml-24 -mb-24"></div>
         
         <div className="relative flex items-center justify-between flex-wrap gap-4">
           <div>
@@ -174,7 +174,7 @@ export default function Products() {
           </div>
           <Link
             to="/admin/products/create"
-            className="flex items-center gap-2 px-4 py-2 bg-white text-blue-600 hover:bg-blue-50 text-sm font-semibold rounded-xl shadow-lg transition-all hover:scale-105 active:scale-95"
+            className="flex items-center gap-2 px-4 py-2 bg-surface text-blue-600 hover:bg-blue-50 text-sm font-semibold rounded-xl shadow-lg transition-all hover:scale-105 active:scale-95"
           >
             <Plus size="16" /> Tambah Produk Baru
           </Link>
@@ -196,7 +196,7 @@ export default function Products() {
             indigo: "bg-indigo-50 text-indigo-600"
           };
           return (
-            <div key={idx} className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm card-hover">
+            <div key={idx} className="bg-surface border border-border rounded-xl p-4 shadow-sm card-hover">
               <div className="flex items-center justify-between mb-2">
                 <div className={`w-10 h-10 rounded-xl ${colorClasses[color]} flex items-center justify-center`}>
                   <Icon size="18" />
@@ -206,29 +206,29 @@ export default function Products() {
                   {trend}
                 </div>
               </div>
-              <p className="text-[11px] text-gray-400 font-medium uppercase tracking-wider">{label}</p>
-              <p className="text-2xl font-bold text-gray-800 mt-1">{value.toLocaleString()}</p>
+              <p className="text-[11px] text-content-muted font-medium uppercase tracking-wider">{label}</p>
+              <p className="text-2xl font-bold text-content mt-1">{value.toLocaleString()}</p>
             </div>
           );
         })}
       </div>
 
       {/* Toolbar Premium */}
-      <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-gray-50">
+      <div className="bg-surface border border-border rounded-xl shadow-sm overflow-hidden">
+        <div className="p-4 border-b border-border">
           <div className="flex flex-col lg:flex-row gap-3">
             {/* Search Bar */}
             <div className="relative flex-1">
-              <Search size="14" className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search size="14" className="absolute left-3 top-1/2 -translate-y-1/2 text-content-muted" />
               <input
                 type="text"
                 placeholder="Cari produk berdasarkan nama, brand, atau kategori..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-9 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                className="w-full bg-surface-muted border border-border rounded-lg pl-9 pr-9 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               />
               {searchTerm && (
-                <button onClick={() => setSearchTerm("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                <button onClick={() => setSearchTerm("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-content-muted hover:text-content-soft">
                   <X size="14" />
                 </button>
               )}
@@ -240,32 +240,32 @@ export default function Products() {
                 <select
                   value={filterBrand}
                   onChange={(e) => setFilterBrand(e.target.value)}
-                  className="bg-gray-50 border border-gray-200 rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-gray-600"
+                  className="bg-surface-muted border border-border rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-content-soft"
                 >
                   <option value="all">Semua Brand</option>
                   {brands.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
                 </select>
-                <ChevronDown size="12" className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                <ChevronDown size="12" className="absolute right-2 top-1/2 -translate-y-1/2 text-content-muted pointer-events-none" />
               </div>
 
               <div className="relative">
                 <select
                   value={filterStock}
                   onChange={(e) => setFilterStock(e.target.value)}
-                  className="bg-gray-50 border border-gray-200 rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-gray-600"
+                  className="bg-surface-muted border border-border rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-content-soft"
                 >
                   <option value="all">Semua Stok</option>
                   <option value="available">Tersedia</option>
                   <option value="outofstock">Habis</option>
                 </select>
-                <ChevronDown size="12" className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                <ChevronDown size="12" className="absolute right-2 top-1/2 -translate-y-1/2 text-content-muted pointer-events-none" />
               </div>
 
               <div className="relative">
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-gray-50 border border-gray-200 rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-gray-600"
+                  className="bg-surface-muted border border-border rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-content-soft"
                 >
                   <option value="newest">Terbaru</option>
                   <option value="oldest">Terlama</option>
@@ -273,27 +273,27 @@ export default function Products() {
                   <option value="price_low">Harga Terendah</option>
                   <option value="name_asc">A-Z</option>
                 </select>
-                <ChevronDown size="12" className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                <ChevronDown size="12" className="absolute right-2 top-1/2 -translate-y-1/2 text-content-muted pointer-events-none" />
               </div>
 
               <div className="relative">
                 <select
                   value={itemsPerPage}
                   onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}
-                  className="bg-gray-50 border border-gray-200 rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-gray-600"
+                  className="bg-surface-muted border border-border rounded-lg text-sm pl-3 pr-7 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-content-soft"
                 >
                   <option value={10}>10 per halaman</option>
                   <option value={25}>25 per halaman</option>
                   <option value={50}>50 per halaman</option>
                   <option value={100}>100 per halaman</option>
                 </select>
-                <ChevronDown size="12" className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                <ChevronDown size="12" className="absolute right-2 top-1/2 -translate-y-1/2 text-content-muted pointer-events-none" />
               </div>
 
               {hasFilters && (
                 <button
                   onClick={resetFilters}
-                  className="px-3 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm text-gray-600 transition flex items-center gap-1.5"
+                  className="px-3 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm text-content-soft transition flex items-center gap-1.5"
                 >
                   <RefreshCw size="14" /> Reset Filter
                 </button>
@@ -304,13 +304,13 @@ export default function Products() {
             <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
               <button
                 onClick={() => setViewMode("table")}
-                className={`p-1.5 rounded-md transition ${viewMode === "table" ? "bg-white shadow-sm text-blue-600" : "text-gray-500"}`}
+                className={`p-1.5 rounded-md transition ${viewMode === "table" ? "bg-surface shadow-sm text-blue-600" : "text-content-muted"}`}
               >
                 <List size="16" />
               </button>
               <button
                 onClick={() => setViewMode("grid")}
-                className={`p-1.5 rounded-md transition ${viewMode === "grid" ? "bg-white shadow-sm text-blue-600" : "text-gray-500"}`}
+                className={`p-1.5 rounded-md transition ${viewMode === "grid" ? "bg-surface shadow-sm text-blue-600" : "text-content-muted"}`}
               >
                 <Grid3X3 size="16" />
               </button>
@@ -319,13 +319,13 @@ export default function Products() {
 
           {/* Bulk Actions */}
           {selectedProducts.length > 0 && (
-            <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between animate-slide-in">
+            <div className="mt-3 pt-3 border-t border-border flex items-center justify-between animate-slide-in">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
                   <CheckCircle size="14" />
                 </div>
-                <span className="text-sm text-gray-600">
-                  <span className="font-semibold text-gray-800">{selectedProducts.length}</span> produk dipilih
+                <span className="text-sm text-content-soft">
+                  <span className="font-semibold text-content">{selectedProducts.length}</span> produk dipilih
                 </span>
               </div>
               <button
@@ -342,22 +342,22 @@ export default function Products() {
         {viewMode === "table" && (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-100">
+              <thead className="bg-gradient-to-r from-gray-50 to-white border-b border-border">
                 <tr>
                   <th className="w-10 px-4 py-3">
                     <input
                       type="checkbox"
-                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="w-4 h-4 rounded border-border text-blue-600 focus:ring-blue-500"
                       checked={selectedProducts.length === products.length && products.length > 0}
                       onChange={() => setSelectedProducts(selectedProducts.length === products.length ? [] : products.map(p => p.id))}
                     />
                   </th>
-                  <th className="text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Produk</th>
-                  <th className="text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Harga</th>
-                  <th className="text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Stok</th>
-                  <th className="text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Brand</th>
-                  <th className="text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Kategori</th>
-                  <th className="text-center px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Aksi</th>
+                  <th className="text-left px-4 py-3 text-[11px] font-semibold text-content-muted uppercase tracking-wider">Produk</th>
+                  <th className="text-left px-4 py-3 text-[11px] font-semibold text-content-muted uppercase tracking-wider">Harga</th>
+                  <th className="text-left px-4 py-3 text-[11px] font-semibold text-content-muted uppercase tracking-wider">Stok</th>
+                  <th className="text-left px-4 py-3 text-[11px] font-semibold text-content-muted uppercase tracking-wider">Brand</th>
+                  <th className="text-left px-4 py-3 text-[11px] font-semibold text-content-muted uppercase tracking-wider">Kategori</th>
+                  <th className="text-center px-4 py-3 text-[11px] font-semibold text-content-muted uppercase tracking-wider">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
@@ -366,7 +366,7 @@ export default function Products() {
                     <td colSpan={7} className="py-20 text-center">
                       <div className="flex flex-col items-center gap-3">
                         <div className="w-10 h-10 border-3 border-blue-200 rounded-full animate-spin border-t-blue-600"></div>
-                        <p className="text-sm text-gray-400">Memuat produk...</p>
+                        <p className="text-sm text-content-muted">Memuat produk...</p>
                       </div>
                     </td>
                   </tr>
@@ -374,7 +374,7 @@ export default function Products() {
                   <tr>
                     <td colSpan={7} className="py-20 text-center">
                       <Package size="48" className="mx-auto mb-3 text-gray-200" />
-                      <p className="text-sm text-gray-400">Tidak ada produk ditemukan</p>
+                      <p className="text-sm text-content-muted">Tidak ada produk ditemukan</p>
                       {hasFilters && (
                         <button onClick={resetFilters} className="mt-3 text-blue-600 text-sm hover:underline">
                           Reset filter
@@ -391,7 +391,7 @@ export default function Products() {
                         <td className="px-4 py-3">
                           <input
                             type="checkbox"
-                            className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            className="w-4 h-4 rounded border-border text-blue-600 focus:ring-blue-500"
                             checked={selectedProducts.includes(p.id)}
                             onChange={() => setSelectedProducts(prev =>
                               prev.includes(p.id) ? prev.filter(id => id !== p.id) : [...prev, p.id]
@@ -401,17 +401,17 @@ export default function Products() {
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-3">
                             {p.thumbnail ? (
-                              <img src={p.thumbnail} alt={p.name} className="w-10 h-10 rounded-lg object-cover border border-gray-100 shadow-sm" />
+                              <img src={p.thumbnail} alt={p.name} className="w-10 h-10 rounded-lg object-cover border border-border shadow-sm" />
                             ) : (
                               <div className="w-10 h-10 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
-                                <Laptop size="16" className="text-gray-400" />
+                                <Laptop size="16" className="text-content-muted" />
                               </div>
                             )}
                             <div>
-                              <p className="text-sm font-semibold text-gray-800 group-hover:text-blue-600 transition">
+                              <p className="text-sm font-semibold text-content group-hover:text-blue-600 transition">
                                 {p.name}
                               </p>
-                              <p className="text-[10px] text-gray-400 font-mono">{p.slug}</p>
+                              <p className="text-[10px] text-content-muted font-mono">{p.slug}</p>
                             </div>
                           </div>
                         </td>
@@ -426,12 +426,12 @@ export default function Products() {
                                   -{p.discount_percent}%
                                 </span>
                               </div>
-                              <p className="text-[10px] text-gray-400 line-through mt-0.5">
+                              <p className="text-[10px] text-content-muted line-through mt-0.5">
                                 Rp {p.normal_price?.toLocaleString("id-ID")}
                               </p>
                             </div>
                           ) : (
-                            <span className="text-sm font-semibold text-gray-800">
+                            <span className="text-sm font-semibold text-content">
                               Rp {p.price?.toLocaleString("id-ID")}
                             </span>
                           )}
@@ -443,13 +443,13 @@ export default function Products() {
                           </div>
                         </td>
                         <td className="px-4 py-3">
-                          <span className="inline-flex items-center gap-1.5 text-sm text-gray-600">
+                          <span className="inline-flex items-center gap-1.5 text-sm text-content-soft">
                             <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                             {p.brands?.name || "—"}
                           </span>
                         </td>
                         <td className="px-4 py-3">
-                          <span className="inline-flex items-center gap-1.5 text-sm text-gray-600">
+                          <span className="inline-flex items-center gap-1.5 text-sm text-content-soft">
                             <span className="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
                             {p.categories?.name || "—"}
                           </span>
@@ -458,7 +458,7 @@ export default function Products() {
                           <div className="flex items-center justify-center gap-1">
                             <Link
                               to={`/admin/products/edit/${p.id}`}
-                              className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                              className="p-2 text-content-muted hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
                               title="Edit produk"
                             >
                               <Edit size="14" />
@@ -466,7 +466,7 @@ export default function Products() {
                             <button
                               onClick={() => handleDelete(p.id)}
                               disabled={deletingId === p.id}
-                              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-40"
+                              className="p-2 text-content-muted hover:text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-40"
                               title="Hapus produk"
                             >
                               {deletingId === p.id ? (
@@ -494,7 +494,7 @@ export default function Products() {
                 const stockBadge = getStockBadge(p.stock);
                 const StockIcon = stockBadge.icon;
                 return (
-                  <div key={p.id} className="bg-white border border-gray-100 rounded-xl overflow-hidden card-hover">
+                  <div key={p.id} className="bg-surface border border-border rounded-xl overflow-hidden card-hover">
                     <div className="relative aspect-video bg-gradient-to-br from-gray-50 to-gray-100">
                       {p.thumbnail ? (
                         <img src={p.thumbnail} alt={p.name} className="w-full h-full object-contain p-2" />
@@ -510,17 +510,17 @@ export default function Products() {
                       )}
                     </div>
                     <div className="p-3">
-                      <p className="text-[11px] text-gray-500 font-medium">{p.brands?.name || "Umum"}</p>
-                      <p className="text-sm font-semibold text-gray-800 mt-0.5 line-clamp-2">{p.name}</p>
+                      <p className="text-[11px] text-content-muted font-medium">{p.brands?.name || "Umum"}</p>
+                      <p className="text-sm font-semibold text-content mt-0.5 line-clamp-2">{p.name}</p>
                       <div className="mt-2 flex items-center justify-between">
                         <div>
                           {p.normal_price && p.price < p.normal_price ? (
                             <>
                               <p className="text-sm font-bold text-red-600">Rp {p.price?.toLocaleString()}</p>
-                              <p className="text-[9px] text-gray-400 line-through">Rp {p.normal_price?.toLocaleString()}</p>
+                              <p className="text-[9px] text-content-muted line-through">Rp {p.normal_price?.toLocaleString()}</p>
                             </>
                           ) : (
-                            <p className="text-sm font-bold text-gray-800">Rp {p.price?.toLocaleString()}</p>
+                            <p className="text-sm font-bold text-content">Rp {p.price?.toLocaleString()}</p>
                           )}
                         </div>
                         <div className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-semibold ${stockColorMap[stockBadge.color]}`}>
@@ -553,17 +553,17 @@ export default function Products() {
 
         {/* Pagination Premium */}
         {totalCount > 0 && (
-          <div className="px-4 py-3 border-t border-gray-100 bg-gray-50/30 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-xs text-gray-500">
-              Menampilkan <span className="font-semibold text-gray-700">{(currentPage - 1) * itemsPerPage + 1}</span> -{' '}
-              <span className="font-semibold text-gray-700">{Math.min(currentPage * itemsPerPage, totalCount)}</span> dari{' '}
-              <span className="font-semibold text-gray-700">{totalCount.toLocaleString()}</span> produk
+          <div className="px-4 py-3 border-t border-border bg-surface-muted/30 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-xs text-content-muted">
+              Menampilkan <span className="font-semibold text-content-soft">{(currentPage - 1) * itemsPerPage + 1}</span> -{' '}
+              <span className="font-semibold text-content-soft">{Math.min(currentPage * itemsPerPage, totalCount)}</span> dari{' '}
+              <span className="font-semibold text-content-soft">{totalCount.toLocaleString()}</span> produk
             </p>
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
                 disabled={currentPage === 1}
-                className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:text-gray-700 hover:bg-white transition disabled:opacity-30 disabled:cursor-not-allowed"
+                className="p-2 rounded-lg border border-border text-content-muted hover:text-content-soft hover:bg-surface transition disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <ChevronLeft size="14" />
               </button>
@@ -581,7 +581,7 @@ export default function Products() {
                     className={`min-w-[34px] h-8 rounded-lg text-sm font-medium transition-all ${
                       currentPage === n
                         ? "bg-blue-600 text-white shadow-sm"
-                        : "text-gray-600 hover:bg-gray-200"
+                        : "text-content-soft hover:bg-gray-200"
                     }`}
                   >
                     {n}
@@ -592,7 +592,7 @@ export default function Products() {
               <button
                 onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:text-gray-700 hover:bg-white transition disabled:opacity-30 disabled:cursor-not-allowed"
+                className="p-2 rounded-lg border border-border text-content-muted hover:text-content-soft hover:bg-surface transition disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <ChevronRight size="14" />
               </button>

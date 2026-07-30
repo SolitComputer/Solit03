@@ -51,7 +51,7 @@ function Hero({ onStart }) {
                     </ul>
 
                     {/* Penawaran Khusus */}
-                    <div className="bg-white/10 backdrop-blur-md border border-blue-300/40 rounded-2xl p-5 text-center shadow-soft mt-6 max-w-[500px] mx-auto">
+                    <div className="bg-surface/10 backdrop-blur-md border border-blue-300/40 rounded-2xl p-5 text-center shadow-soft mt-6 max-w-[500px] mx-auto">
                         <h3 className="text-blue-200 text-[clamp(20px,3vw,28px)] font-extrabold mb-2.5 drop-shadow-md inline-flex items-center justify-center gap-2">
                             <Flame className="w-6 h-6" aria-hidden="true" /> Promo Spesial Day 10.10
                         </h3>

@@ -7,7 +7,7 @@ export default function ProductTable({
 }) {
 
   return (
-    <div className="bg-white rounded-3xl overflow-hidden shadow-sm">
+    <div className="bg-surface rounded-3xl overflow-hidden shadow-sm">
 
       <table className="w-full">
 
@@ -68,7 +68,7 @@ export default function ProductTable({
                       {product.name}
                     </h3>
 
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-content-muted">
                       {product.slug}
                     </p>
 

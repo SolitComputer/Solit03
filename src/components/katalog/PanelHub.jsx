@@ -111,8 +111,8 @@ function PanelHub() {
                         <div className="icon w-[60px] h-[60px] rounded-xl grid place-items-center bg-blue-50 text-blue-600 border border-blue-100">
                             <option.icon className="w-7 h-7" aria-hidden="true" />
                         </div>
-                        <div className="title font-bold text-lg text-slate-900">{option.title}</div>
-                        <div className="desc text-sm text-slate-500">{option.desc}</div>
+                        <div className="title font-bold text-lg text-content">{option.title}</div>
+                        <div className="desc text-sm text-content-muted">{option.desc}</div>
                     </article>
                 ))}
             </div>

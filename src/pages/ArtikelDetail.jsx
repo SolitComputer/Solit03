@@ -73,7 +73,7 @@ export default function ArtikelDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-surface-muted">
         <Loader2 size={28} className="animate-spin text-blue-500" />
       </div>
     );
@@ -81,9 +81,9 @@ export default function ArtikelDetail() {
 
   if (notFound || !article) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 px-4 text-center">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-surface-muted px-4 text-center">
         <Newspaper size={40} className="text-slate-300 mb-3" />
-        <h1 className="text-xl font-bold text-slate-800">Artikel tidak ditemukan</h1>
+        <h1 className="text-xl font-bold text-content">Artikel tidak ditemukan</h1>
         <button onClick={() => navigate("/berita")} className="mt-4 text-blue-600 text-sm font-semibold hover:underline">
           Kembali ke Berita
         </button>
@@ -102,7 +102,7 @@ export default function ArtikelDetail() {
   const flankRightAd = flankAds[1] || null;
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-surface-muted">
       <Helmet>
         <title>{article.title} — Solit 03</title>
         <meta name="description" content={article.excerpt || article.title} />
@@ -175,9 +175,9 @@ export default function ArtikelDetail() {
         <div className="flex flex-wrap items-center gap-2.5 mb-6 text-xs">
           <Link
             to="/berita"
-            className="group inline-flex items-center gap-1.5 font-semibold text-slate-500 hover:text-blue-600 transition-colors"
+            className="group inline-flex items-center gap-1.5 font-semibold text-content-muted hover:text-blue-600 transition-colors"
           >
-            <ChevronLeft size={15} className="text-slate-400 group-hover:text-blue-600 transition-transform group-hover:-translate-x-0.5" />
+            <ChevronLeft size={15} className="text-content-muted group-hover:text-blue-600 transition-transform group-hover:-translate-x-0.5" />
             Kembali ke Berita
           </Link>
 
@@ -195,17 +195,17 @@ export default function ArtikelDetail() {
           )}
         </div>
 
-        <h1 className="font-display text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-[1.1] mt-4">
+        <h1 className="font-display text-3xl md:text-5xl font-black text-content tracking-tight leading-[1.1] mt-4">
           {article.title}
         </h1>
 
         {article.excerpt && (
-          <p className="font-serif text-lg md:text-xl text-slate-600 leading-relaxed mt-5 max-w-2xl">
+          <p className="font-serif text-lg md:text-xl text-content-soft leading-relaxed mt-5 max-w-2xl">
             {article.excerpt}
           </p>
         )}
 
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-3 mt-6 pb-6 border-b border-slate-200">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-3 mt-6 pb-6 border-b border-border">
           {article.author && (
             <span className="flex items-center gap-2 text-sm">
               <span className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-[11px] font-black text-white">
@@ -214,16 +214,16 @@ export default function ArtikelDetail() {
               <span className="font-semibold text-blue-600">{article.author}</span>
             </span>
           )}
-          <span className="flex items-center gap-1.5 text-sm text-slate-500">
+          <span className="flex items-center gap-1.5 text-sm text-content-muted">
             <CalendarDays size={14} /> {formatDate(article.published_at || article.created_at)}
           </span>
-          <span className="flex items-center gap-1.5 text-sm text-slate-500">
+          <span className="flex items-center gap-1.5 text-sm text-content-muted">
             <Eye size={14} /> {(article.views || 0).toLocaleString()} views
           </span>
 
           <button
             onClick={handleShare}
-            className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-semibold text-slate-600 hover:border-blue-300 hover:text-blue-600 transition"
+            className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-border text-xs font-semibold text-content-soft hover:border-blue-300 hover:text-blue-600 transition"
           >
             {copied ? <><Check size={13} /> Tersalin</> : <><Share2 size={13} /> Bagikan</>}
           </button>
@@ -239,7 +239,7 @@ export default function ArtikelDetail() {
             className="w-full aspect-video object-cover rounded-2xl shadow-md"
           />
           {article.author && (
-            <p className="text-xs text-slate-400 mt-2 text-center">Foto: {article.author} / Solit 03</p>
+            <p className="text-xs text-content-muted mt-2 text-center">Foto: {article.author} / Solit 03</p>
           )}
         </div>
       )}
@@ -247,7 +247,7 @@ export default function ArtikelDetail() {
       {/* ============ IKLAN SPONSOR ATAS (BILLBOARD / LEADERBOARD) ============ */}
       {topAd && (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 my-8">
-          <div className="flex items-center justify-center gap-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">
+          <div className="flex items-center justify-center gap-1 text-[10px] font-bold text-content-muted uppercase tracking-widest mb-1.5">
             <Megaphone size={11} className="text-blue-500" /> SPONSORED PROMO
           </div>
           <AdCard ad={topAd} />
@@ -259,23 +259,23 @@ export default function ArtikelDetail() {
         {/* Kolom kiri — artikel */}
         <div>
           <article
-            className="article-prose font-serif prose prose-slate max-w-none
+            className="article-prose font-serif prose prose-slate dark:prose-invert max-w-none
               prose-p:text-[19px] prose-p:leading-[1.8]
-              prose-headings:font-sans prose-headings:font-bold prose-headings:text-slate-900
+              prose-headings:font-sans prose-headings:font-bold prose-headings:text-content
               prose-a:text-blue-600 prose-img:rounded-xl prose-img:shadow-sm
               [&_video]:rounded-xl [&_video]:shadow-sm [&_video]:w-full [&_video]:my-6
               prose-blockquote:not-italic prose-blockquote:border-l-4 prose-blockquote:border-blue-600
               prose-blockquote:pl-6 prose-blockquote:py-1 prose-blockquote:font-sans
               prose-blockquote:font-bold prose-blockquote:text-2xl md:prose-blockquote:text-3xl
-              prose-blockquote:leading-snug prose-blockquote:text-slate-900 prose-blockquote:my-10
+              prose-blockquote:leading-snug prose-blockquote:text-content prose-blockquote:my-10
               prose-li:text-[19px]"
             dangerouslySetInnerHTML={{ __html: article.content }}
           />
 
           {/* Iklan Tengah / Bawah Artikel */}
           {contentAd && (
-            <div className="my-10 pt-6 border-t border-slate-200">
-              <div className="flex items-center justify-center gap-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
+            <div className="my-10 pt-6 border-t border-border">
+              <div className="flex items-center justify-center gap-1 text-[10px] font-bold text-content-muted uppercase tracking-widest mb-2">
                 <Megaphone size={11} className="text-blue-500" /> PROMO SPESIAL LAPTOP SOLIT 03
               </div>
               <AdCard ad={contentAd} />
@@ -287,8 +287,8 @@ export default function ArtikelDetail() {
         <aside className="lg:sticky lg:top-24 self-start space-y-6">
           {/* Iklan Sidebar */}
           {sidebarAd && (
-            <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
-              <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
+            <div className="bg-surface border border-border rounded-2xl p-4 shadow-sm">
+              <div className="flex items-center gap-1 text-[10px] font-bold text-content-muted uppercase tracking-widest mb-2">
                 <Megaphone size={11} className="text-blue-500" /> IKLAN SPONSOR
               </div>
               <AdCard ad={sidebarAd} />
@@ -296,7 +296,7 @@ export default function ArtikelDetail() {
           )}
 
           {popular.length > 0 && (
-            <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+            <div className="bg-surface border border-border rounded-2xl p-5 shadow-sm">
               <div className="flex items-center gap-2 mb-4">
                 <Flame size={15} className="text-blue-600" />
                 <h2 className="text-xs font-black uppercase tracking-widest text-blue-600">Most Popular</h2>
@@ -309,10 +309,10 @@ export default function ArtikelDetail() {
                         {i + 1}
                       </span>
                       <div className="min-w-0">
-                        <h3 className="text-sm font-semibold text-slate-800 leading-snug line-clamp-3 group-hover:text-blue-600 transition-colors">
+                        <h3 className="text-sm font-semibold text-content leading-snug line-clamp-3 group-hover:text-blue-600 transition-colors">
                           {a.title}
                         </h3>
-                        <span className="flex items-center gap-1 text-[11px] text-slate-400 mt-1.5">
+                        <span className="flex items-center gap-1 text-[11px] text-content-muted mt-1.5">
                           <Clock size={10} /> {(a.views || 0).toLocaleString()} views
                         </span>
                       </div>
@@ -324,16 +324,16 @@ export default function ArtikelDetail() {
           )}
 
           {article.tags?.length > 0 && (
-            <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+            <div className="bg-surface border border-border rounded-2xl p-5 shadow-sm">
               <div className="flex items-center gap-2 mb-3">
                 <TagIcon size={14} className="text-blue-600" />
-                <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">Tags</h2>
+                <h2 className="text-xs font-black uppercase tracking-widest text-content-muted">Tags</h2>
               </div>
               <div className="flex flex-wrap gap-2">
                 {article.tags.map((t) => (
                   <span
                     key={t.id}
-                    className="px-3 py-1.5 bg-slate-50 border border-slate-200 text-slate-600 text-xs font-semibold rounded-full hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-colors cursor-default"
+                    className="px-3 py-1.5 bg-surface-muted border border-border text-content-soft text-xs font-semibold rounded-full hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-colors cursor-default"
                   >
                     #{t.name}
                   </span>
@@ -346,12 +346,12 @@ export default function ArtikelDetail() {
 
       {/* ============ RELATED ============ */}
       {related.length > 0 && (
-        <div className="mt-16 bg-slate-100/80 border-t border-slate-200/80 py-12">
+        <div className="mt-16 bg-slate-100/80 border-t border-border/80 py-12">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="flex items-center gap-2 text-blue-600 text-xs font-bold uppercase tracking-widest mb-2">
               <Newspaper size={14} /> Baca Juga
             </div>
-            <h2 className="font-display text-2xl md:text-3xl font-black text-slate-900 tracking-tight mb-8">
+            <h2 className="font-display text-2xl md:text-3xl font-black text-content tracking-tight mb-8">
               Artikel Terkait Lainnya
             </h2>
 
@@ -360,7 +360,7 @@ export default function ArtikelDetail() {
                 <Link
                   key={a.id}
                   to={`/berita/${a.slug}`}
-                  className="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-md transition-all duration-200"
+                  className="group bg-surface rounded-2xl overflow-hidden border border-border hover:border-blue-300 shadow-sm hover:shadow-md transition-all duration-200"
                 >
                   <div className="aspect-[16/10] bg-slate-100 overflow-hidden">
                     {a.cover_image ? (
@@ -381,7 +381,7 @@ export default function ArtikelDetail() {
                         {a.article_categories.name}
                       </span>
                     )}
-                    <h3 className="font-semibold text-slate-900 text-sm leading-snug mt-1.5 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                    <h3 className="font-semibold text-content text-sm leading-snug mt-1.5 line-clamp-2 group-hover:text-blue-600 transition-colors">
                       {a.title}
                     </h3>
                   </div>
