@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { supabase } from "../services/supabase";
+import { isNewProduct } from "../utils/dateUtils";
 import {
   Laptop, ChevronRight, Filter, X, Star, ShoppingBag,
   ChevronLeft, Cpu, MemoryStick, HardDrive,
@@ -96,13 +97,24 @@ function SearchLoadingIndicator() {
   );
 }
 
-function ProductTagBadge({ productTags, allTags }) {
+const NEW_TAG_NAMES = ['new', 'baru', 'stok terbaru', 'stok baru', 'new stock', 'new-stock'];
+
+function ProductTagBadge({ productTags, allTags, createdAt }) {
   if (!productTags || productTags.length === 0) return null;
 
   const tagsToShow = productTags.slice(0, 2).map(pt => {
     const tagInfo = allTags.find(t => t.id === pt.tag_id);
+    if (!tagInfo) return null;
+
+    const isNewTag = NEW_TAG_NAMES.includes(tagInfo.name?.toLowerCase()?.trim());
+    if (isNewTag) {
+      const tagDate = pt.created_at || createdAt;
+      if (tagDate && !isNewProduct(tagDate, 3)) {
+        return null;
+      }
+    }
     return tagInfo;
-  }).filter(t => t);
+  }).filter(Boolean);
 
   if (tagsToShow.length === 0) return null;
 
@@ -153,7 +165,7 @@ function AnimatedProductCard({ product, onClick, index, allTags }) {
         )}
 
         {/* Product Tag Badge */}
-        <ProductTagBadge productTags={product.product_tags} allTags={allTags} />
+        <ProductTagBadge productTags={product.product_tags} allTags={allTags} createdAt={product.created_at} />
 
         {/* Out of Stock Badge */}
         {outOfStock && (

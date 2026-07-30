@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { ShoppingBag, Laptop, Clock, TrendingUp, Sparkles, ArrowRight, Zap, ShieldCheck, Flame } from "lucide-react";
 import { supabase } from "../services/supabase";
+import { isNewProduct } from "../utils/dateUtils";
 
 // Enhanced Skeleton Component with Shimmer Effect
 function ProductSkeleton() {
@@ -83,6 +84,7 @@ export default function LatestProducts() {
           processor: specs.processor || "-",
           ram: specs.ram || "-",
           storage: specs.storage || "-",
+          created_at: product.created_at,
         };
       });
 
@@ -217,11 +219,13 @@ export default function LatestProducts() {
                   </div>
                 )}
 
-                {/* New Badge */}
-                <div className="absolute top-4 left-4 z-10 bg-blue-600 text-white text-[12px] font-bold px-2.5 py-1 rounded-full shadow-soft-sm flex items-center gap-1.5">
-                  <Sparkles size={10} />
-                  <span>BARU</span>
-                </div>
+                {/* New Badge (otomatis hilang setelah 3 hari) */}
+                {isNewProduct(item.created_at, 3) && (
+                  <div className="absolute top-4 left-4 z-10 bg-blue-600 text-white text-[12px] font-bold px-2.5 py-1 rounded-full shadow-soft-sm flex items-center gap-1.5">
+                    <Sparkles size={10} />
+                    <span>BARU</span>
+                  </div>
+                )}
 
                 {/* Product Image */}
                 <div className="relative flex justify-center items-center py-4">

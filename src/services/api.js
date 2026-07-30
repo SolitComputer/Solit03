@@ -31,6 +31,17 @@ export const fmtIDR = (minorVal, minor = MINOR) => {
   });
 };
 
+export const isNewProduct = (dateInput, daysThreshold = 3) => {
+  if (!dateInput) return false;
+  const createdDate = new Date(dateInput).getTime();
+  if (isNaN(createdDate)) return false;
+  const now = Date.now();
+  const diffInMs = now - createdDate;
+  const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+  return diffInDays >= 0 && diffInDays <= daysThreshold;
+};
+
+
 export const fetchProducts = async (params, signal) => {
   const qp = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {

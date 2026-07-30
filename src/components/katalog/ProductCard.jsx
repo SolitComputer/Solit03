@@ -1,7 +1,7 @@
-// components/katalog/ProductCard.jsx
 import React, { useRef, useEffect, useState } from 'react';
 import { fmtIDR } from '../../services/api';
 import { Crown, Flame, Sparkles } from 'lucide-react';
+import { isNewProduct } from '../../utils/dateUtils';
 
 function ProductCard({ product, viewMode, mode, stock }) {
     const imgRef = useRef(null);
@@ -16,7 +16,8 @@ function ProductCard({ product, viewMode, mode, stock }) {
 
     const showDiscountUI = mode === 'promo' && isOnSale;
     const showBestUI = mode === 'bestseller';
-    const showNewUI = mode === 'new';
+    const createdDate = product.created_at || product.date_created || product.date_created_gmt;
+    const showNewUI = createdDate ? isNewProduct(createdDate, 3) : mode === 'new';
 
     const getSoldCount = () => {
         const seed = (product.id * 9301 + 49297) % 233280;

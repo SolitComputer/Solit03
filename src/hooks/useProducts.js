@@ -2,6 +2,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { useFunnelContext } from '../context/FunnelContext';
 import { fetchProducts, activeProductParams, resolveTagIdsBySlugs } from '../services/api';
+import { isNewProduct } from '../utils/dateUtils';
 
 const BEST_TAG = 'best-seller';
 const TAG_CANDIDATES = {

@@ -40,7 +40,8 @@ export async function fetchProducts(filters = {}) {
   }
 
   if (filters.newStock) {
-    query = query.eq("is_new_stock", true);
+    const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString();
+    query = query.or(`is_new_stock.eq.true,created_at.gte.${threeDaysAgo}`);
   }
 
   const { data, error } = await query;
