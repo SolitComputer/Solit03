@@ -190,14 +190,14 @@ export default function Sidebar() {
                   transition-all duration-150
                   group relative text-xs
                   ${active
-                    ? "bg-blue-50/80 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400 font-semibold border border-blue-100 dark:border-blue-900/30"
+                    ? "bg-blue-600 text-white shadow-md shadow-blue-600/20 font-bold"
                     : "text-content-soft hover:bg-surface-muted hover:text-blue-600 dark:hover:text-blue-400"
                   }
                   ${collapsed ? "justify-center px-2" : ""}
                 `}
                 title={collapsed ? menu.name : ""}
               >
-                <Icon size={17} className={`flex-shrink-0 ${active ? "text-blue-600 dark:text-blue-400" : "text-content-muted group-hover:text-blue-600"}`} />
+                <Icon size={17} className={`flex-shrink-0 ${active ? "text-white" : "text-content-muted group-hover:text-blue-600"}`} />
 
                 {!collapsed && (
                   <span className="truncate">

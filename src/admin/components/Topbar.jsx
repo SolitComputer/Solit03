@@ -150,39 +150,7 @@ export default function Topbar() {
           )}
         </div>
 
-        {/* Profile Dropdown */}
-        <div className="relative" ref={menuRef}>
-          <button
-            onClick={() => setMenuOpen((o) => !o)}
-            className="flex items-center gap-2.5 p-1.5 rounded-xl hover:bg-surface-muted border border-transparent hover:border-border transition-colors"
-          >
-            <img src={logo} alt="Solit 03" className="w-8 h-8 rounded-full shadow-xs object-cover border border-border" />
-            <div className="hidden sm:block text-left">
-              <p className="font-bold text-xs text-content leading-tight">Solit Admin</p>
-              <p className="text-[10px] text-content-muted leading-tight font-medium">Administrator</p>
-            </div>
-            <ChevronDown size={14} className={`hidden sm:block text-content-muted transition-transform duration-200 ${menuOpen ? "rotate-180" : ""}`} />
-          </button>
 
-          {menuOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-surface border border-border rounded-xl shadow-xl py-1.5 z-50">
-              <a
-                href="/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="sm:hidden flex items-center gap-2 px-3.5 py-2 text-xs text-content-soft hover:bg-surface-muted transition"
-              >
-                <ExternalLink size={14} /> Lihat Website
-              </a>
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition"
-              >
-                <LogOut size={14} /> Logout
-              </button>
-            </div>
-          )}
-        </div>
       </div>
     </header>
   );

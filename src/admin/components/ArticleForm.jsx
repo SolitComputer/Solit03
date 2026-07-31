@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { 
   ImagePlus, X, Loader2, Star, FileText, Sparkles, 
-  Tag, User, Globe, Check, Layers 
+  Tag, User, Globe, Check, Layers, Rocket, FileEdit
 } from "lucide-react";
 import TiptapEditor from "./TiptapEditor";
 import { uploadArticleImage } from "../../services/storage";
@@ -337,7 +337,7 @@ export default function ArticleForm({ form, setForm, categories, onSubmit, butto
                   className="w-4 h-4 rounded border-border text-amber-500 focus:ring-amber-400"
                 />
                 <div className="flex items-center gap-1.5">
-                  <Star size={15} className="text-amber-500 fill-amber-500" />
+                  <Star size={16} strokeWidth={2.5} className="text-amber-500" />
                   <span className="text-xs font-bold text-content">Artikel Unggulan (Featured)</span>
                 </div>
               </label>
@@ -356,7 +356,9 @@ export default function ArticleForm({ form, setForm, categories, onSubmit, butto
                       : "bg-surface-muted text-content-soft border-border hover:bg-gray-100"
                   }`}
                 >
-                  📝 Draft
+                  <span className="flex items-center gap-1.5 justify-center">
+                    <FileEdit size={14} /> Draft
+                  </span>
                 </button>
                 <button
                   type="button"
@@ -367,7 +369,9 @@ export default function ArticleForm({ form, setForm, categories, onSubmit, butto
                       : "bg-surface-muted text-content-soft border-border hover:bg-gray-100"
                   }`}
                 >
-                  🚀 Publish
+                  <span className="flex items-center gap-1.5 justify-center">
+                    <Rocket size={14} /> Publish
+                  </span>
                 </button>
               </div>
             </div>
