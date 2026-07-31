@@ -7,19 +7,28 @@ export default function AdCard({ ad }) {
   const width = spec.customSize ? ad.custom_width || spec.width : spec.width;
   const height = spec.customSize ? ad.custom_height || spec.height : spec.height;
   const isExternal = /^https?:\/\//i.test(ad.cta_url || "");
+  const isVertical = height > width || ad.banner_size === "sidebar_flank";
 
   return (
     <a
       href={ad.cta_url || "#"}
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
-      className="group relative block w-full bg-slate-100 rounded-2xl overflow-hidden border border-border/80 shadow-sm hover:shadow-xl hover:border-blue-300 transition-all duration-300"
-      style={{ aspectRatio: `${width} / ${height}` }}
+      className={`group relative block bg-slate-100 rounded-2xl overflow-hidden border border-border/80 shadow-sm hover:shadow-xl hover:border-blue-300 transition-all duration-300 ${
+        isVertical
+          ? "max-w-xs sm:max-w-sm mx-auto max-h-[400px]"
+          : "w-full max-h-[220px] md:max-h-[260px]"
+      }`}
+      style={{
+        aspectRatio: isVertical ? undefined : `${width} / ${height}`,
+      }}
     >
       <img
         src={ad.image_url}
         alt={ad.cta_label || "Iklan Solit 03"}
-        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        className={`w-full h-full ${
+          isVertical ? "object-contain max-h-[400px]" : "object-cover max-h-[260px]"
+        } group-hover:scale-105 transition-transform duration-500`}
       />
       {/* Badge Iklan */}
       <span className="absolute top-2.5 left-2.5 flex items-center gap-1 px-2.5 py-1 bg-slate-900/80 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-wider rounded-lg shadow-sm">
@@ -34,4 +43,5 @@ export default function AdCard({ ad }) {
     </a>
   );
 }
+
 

@@ -1122,43 +1122,45 @@ function ProductScreen({
 
       <div className="w-full px-2 sm:px-3 pt-4 sm:pt-6">
         <div className="bg-surface rounded-xl border border-border shadow-soft-sm px-2 sm:px-3 py-2">
-          <div className="flex items-center justify-between gap-2">
-            <button
-              onClick={onBack}
-              className="flex items-center gap-1 text-content-muted hover:text-content transition-colors text-[11px] sm:text-xs flex-shrink-0"
-            >
-              <ChevronLeft size={14} />
-              <span className="hidden sm:inline">Kembali</span>
-            </button>
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-2">
+            <div className="flex items-center justify-between gap-2 w-full sm:w-auto sm:contents">
+              <button
+                onClick={onBack}
+                className="flex items-center gap-1 text-content-muted hover:text-content transition-colors text-[11px] sm:text-xs flex-shrink-0 sm:order-1"
+              >
+                <ChevronLeft size={14} />
+                <span className="hidden sm:inline">Kembali</span>
+              </button>
 
-            <div className="flex-1 max-w-[180px] sm:max-w-xs">
+              <div className="flex items-center gap-1 sm:gap-1.5 sm:order-3">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="px-1.5 sm:px-2 py-1.5 text-[10px] sm:text-xs bg-surface-muted text-content border-0 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer transition-all hover:bg-slate-200/50"
+                >
+                  <option value="newest">Terbaru</option>
+                  <option value="price_high">Harga Tertinggi</option>
+                  <option value="price_low">Harga Terendah</option>
+                  <option value="name_asc">Nama A-Z</option>
+                </select>
+
+                <button
+                  onClick={() => setShowMobileFilters(!showMobileFilters)}
+                  className="lg:hidden flex items-center gap-1 px-1.5 sm:px-2 py-1.5 text-[10px] sm:text-xs bg-surface-muted text-content rounded-lg transition-all hover:bg-slate-200/50 flex-shrink-0"
+                >
+                  <Filter size={12} />
+                  <span className="hidden xs:inline">Filter</span>
+                  {hasFilter && <span className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse" />}
+                </button>
+              </div>
+            </div>
+
+            <div className="w-full sm:flex-1 sm:max-w-xs sm:order-2">
               <AnimatedSearchBar
                 value={searchInput}
                 onChange={setSearchInput}
                 isLoading={isSearching}
               />
-            </div>
-
-            <div className="flex items-center gap-1 sm:gap-1.5">
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="px-1.5 sm:px-2 py-1.5 text-[10px] sm:text-xs bg-surface-muted text-content border-0 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer transition-all hover:bg-slate-200/50"
-              >
-                <option value="newest">Terbaru</option>
-                <option value="price_high">Harga Tertinggi</option>
-                <option value="price_low">Harga Terendah</option>
-                <option value="name_asc">Nama A-Z</option>
-              </select>
-
-              <button
-                onClick={() => setShowMobileFilters(!showMobileFilters)}
-                className="lg:hidden flex items-center gap-1 px-1.5 sm:px-2 py-1.5 text-[10px] sm:text-xs bg-surface-muted text-content rounded-lg transition-all hover:bg-slate-200/50 flex-shrink-0"
-              >
-                <Filter size={12} />
-                <span className="hidden xs:inline">Filter</span>
-                {hasFilter && <span className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse" />}
-              </button>
             </div>
           </div>
         </div>

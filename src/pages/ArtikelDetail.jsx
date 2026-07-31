@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
   ChevronLeft, Loader2, Newspaper, Eye, CalendarDays,
-  Share2, Check, Flame, Clock, Tag as TagIcon, Megaphone,
+  Share2, Check, Flame, Clock, Tag as TagIcon, Megaphone, Type,
 } from "lucide-react";
 import { getArticleBySlug, getRelatedArticles, getPopularArticles } from "../services/articles";
 import { getArticleAds } from "../services/siteContent";
@@ -13,6 +13,12 @@ import logo from "../assets/solit03.jpeg";
 function formatDate(dateStr) {
   return new Date(dateStr).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
 }
+
+const FONT_SIZE_OPTIONS = [
+  { value: "sm", label: "Kecil", className: "article-prose--sm" },
+  { value: "md", label: "Sedang", className: "" },
+  { value: "lg", label: "Besar", className: "article-prose--lg" },
+];
 
 export default function ArtikelDetail() {
   const { slug } = useParams();
@@ -25,6 +31,23 @@ export default function ArtikelDetail() {
   const [notFound, setNotFound] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showStickyHeader, setShowStickyHeader] = useState(false);
+  const [isUltraWide, setIsUltraWide] = useState(false);
+  const [fontSize, setFontSize] = useState(() => localStorage.getItem("solit03-article-font-size") || "md");
+  const [stickySizeMenuOpen, setStickySizeMenuOpen] = useState(false);
+  const [headerSizeMenuOpen, setHeaderSizeMenuOpen] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("solit03-article-font-size", fontSize);
+  }, [fontSize]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsUltraWide(window.innerWidth >= 1380);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,6 +56,8 @@ export default function ArtikelDetail() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -94,15 +119,17 @@ export default function ArtikelDetail() {
   const category = article.article_categories;
 
   // Select ads for different editorial placements
-  const topAd = allAds.find((a) => a.banner_size === "billboard" || a.banner_size === "leaderboard") || allAds[0];
-  const sidebarAd = allAds.find((a) => a.banner_size === "medium_rectangle") || (allAds.length > 1 ? allAds[1] : (allAds[0] !== topAd ? allAds[0] : null));
-  const contentAd = allAds.length > 2 ? allAds[2] : (allAds.find((a) => a !== topAd && a !== sidebarAd) || null);
+  const horizontalAds = allAds.filter((a) => a.banner_size !== "sidebar_flank");
+  const topAd = horizontalAds.find((a) => a.banner_size === "billboard" || a.banner_size === "leaderboard") || horizontalAds[0] || null;
+  const sidebarAd = allAds.find((a) => a.banner_size === "medium_rectangle") || (allAds.length > 1 ? allAds[1] : null);
+  const contentAd = horizontalAds.length > 1 ? horizontalAds[1] : (horizontalAds.find((a) => a !== topAd) || null);
   const flankAds = allAds.filter((a) => a.banner_size === "sidebar_flank");
   const flankLeftAd = flankAds[0] || null;
   const flankRightAd = flankAds[1] || null;
+  const fontSizeClass = FONT_SIZE_OPTIONS.find((o) => o.value === fontSize)?.className || "";
 
   return (
-    <div className="min-h-screen bg-surface-muted">
+    <div className="min-h-screen bg-surface-muted max-w-full">
       <Helmet>
         <title>{article.title} — Solit 03</title>
         <meta name="description" content={article.excerpt || article.title} />
@@ -114,7 +141,7 @@ export default function ArtikelDetail() {
 
       {/* ============ STICKY READING HEADER (THE VERGE STYLE) ============ */}
       <div
-        className={`fixed top-0 left-0 w-full z-50 bg-[#0f172a]/95 backdrop-blur-md border-b border-slate-800 shadow-xl transition-all duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 right-0 w-full max-w-full overflow-hidden z-50 bg-[#0f172a]/95 backdrop-blur-md border-b border-slate-800 shadow-xl transition-all duration-300 ease-in-out ${
           showStickyHeader ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
         }`}
       >
@@ -134,40 +161,45 @@ export default function ArtikelDetail() {
             </h2>
           </div>
 
-          {/* Tombol Share di Kanan */}
-          <button
-            onClick={handleShare}
-            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-semibold text-slate-200 hover:text-white hover:border-blue-500 transition shrink-0"
-          >
-            {copied ? <Check size={13} className="text-emerald-400" /> : <Share2 size={13} />}
-            <span className="hidden sm:inline">{copied ? "Tersalin" : "Bagikan"}</span>
-          </button>
+          {/* Tombol Ukuran Font & Share di Kanan */}
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="relative">
+              <button
+                onClick={() => setStickySizeMenuOpen((v) => !v)}
+                aria-label="Ukuran teks"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-semibold text-slate-200 hover:text-white hover:border-blue-500 transition"
+              >
+                <Type size={13} />
+              </button>
+
+              {stickySizeMenuOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setStickySizeMenuOpen(false)}></div>
+                  <div className="absolute right-0 mt-2 w-32 bg-surface border border-border rounded-lg shadow-xl py-1 z-50">
+                    {FONT_SIZE_OPTIONS.map((opt) => (
+                      <button
+                        key={opt.value}
+                        onClick={() => { setFontSize(opt.value); setStickySizeMenuOpen(false); }}
+                        className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left ${fontSize === opt.value ? "text-blue-500 font-bold bg-surface-muted" : "text-content hover:bg-surface-muted"}`}
+                      >
+                        <Type size={14} /> {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
+            <button
+              onClick={handleShare}
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-semibold text-slate-200 hover:text-white hover:border-blue-500 transition"
+            >
+              {copied ? <Check size={13} className="text-emerald-400" /> : <Share2 size={13} />}
+              <span className="hidden sm:inline">{copied ? "Tersalin" : "Bagikan"}</span>
+            </button>
+          </div>
         </div>
       </div>
-
-      {/* ============ IKLAN KANAN-KIRI — desktop layar lebar (>= 1720px) ============ */}
-      {flankLeftAd && (
-        <div
-          className="hidden min-[1720px]:block fixed top-28 z-20"
-          style={{
-            right: "calc(50vw + 592px)",
-            width: Math.min(flankLeftAd.custom_width || 260, 300),
-          }}
-        >
-          <AdCard ad={flankLeftAd} />
-        </div>
-      )}
-      {flankRightAd && (
-        <div
-          className="hidden min-[1720px]:block fixed top-28 z-20"
-          style={{
-            left: "calc(50vw + 592px)",
-            width: Math.min(flankRightAd.custom_width || 260, 300),
-          }}
-        >
-          <AdCard ad={flankRightAd} />
-        </div>
-      )}
 
       {/* ============ HEADER ============ */}
       <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-8">
@@ -182,7 +214,7 @@ export default function ArtikelDetail() {
           </Link>
 
           {category?.name && (
-            <span className="text-slate-300 font-light">•</span>
+            <span className="text-slate-400 dark:text-slate-600 font-light">•</span>
           )}
 
           {category?.name && (
@@ -221,127 +253,183 @@ export default function ArtikelDetail() {
             <Eye size={14} /> {(article.views || 0).toLocaleString()} views
           </span>
 
+          <div className="ml-auto relative">
+            <button
+              onClick={() => setHeaderSizeMenuOpen((v) => !v)}
+              aria-label="Ukuran teks"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-border text-xs font-semibold text-content-soft hover:border-blue-300 hover:text-blue-600 transition"
+            >
+              <Type size={13} />
+            </button>
+
+            {headerSizeMenuOpen && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setHeaderSizeMenuOpen(false)}></div>
+                <div className="absolute right-0 mt-2 w-32 bg-surface border border-border rounded-lg shadow-xl py-1 z-50">
+                  {FONT_SIZE_OPTIONS.map((opt) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => { setFontSize(opt.value); setHeaderSizeMenuOpen(false); }}
+                      className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left ${fontSize === opt.value ? "text-blue-500 font-bold bg-surface-muted" : "text-content hover:bg-surface-muted"}`}
+                    >
+                      <Type size={14} /> {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
           <button
             onClick={handleShare}
-            className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-border text-xs font-semibold text-content-soft hover:border-blue-300 hover:text-blue-600 transition"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-border text-xs font-semibold text-content-soft hover:border-blue-300 hover:text-blue-600 transition"
           >
             {copied ? <><Check size={13} /> Tersalin</> : <><Share2 size={13} /> Bagikan</>}
           </button>
         </div>
       </div>
 
-      {/* ============ HERO IMAGE ============ */}
-      {article.cover_image && (
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-8">
-          <img
-            src={article.cover_image}
-            alt={article.title}
-            className="w-full aspect-video object-cover rounded-2xl shadow-md"
-          />
-          {article.author && (
-            <p className="text-xs text-content-muted mt-2 text-center">Foto: {article.author} / Solit 03</p>
-          )}
-        </div>
-      )}
-
-      {/* ============ IKLAN SPONSOR ATAS (BILLBOARD / LEADERBOARD) ============ */}
-      {topAd && (
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 my-8">
-          <div className="flex items-center justify-center gap-1 text-[10px] font-bold text-content-muted uppercase tracking-widest mb-1.5">
-            <Megaphone size={11} className="text-blue-500" /> SPONSORED PROMO
+      {/* ============ MAIN CONTENT + FLANK ADS ============ */}
+      <div className="w-full max-w-[1920px] mx-auto flex justify-center mt-8">
+        {/* IKLAN FLANK KIRI (Murni CSS In-Flow) */}
+        {isUltraWide && flankLeftAd && (
+          <div className="hidden xl:block flex-1 max-w-[300px] pr-6">
+            <div className="sticky top-24 flex justify-end">
+              <div style={{ width: Math.min(flankLeftAd.custom_width || 260, 300) }}>
+                <AdCard ad={flankLeftAd} />
+              </div>
+            </div>
           </div>
-          <AdCard ad={topAd} />
-        </div>
-      )}
+        )}
 
-      {/* ============ BODY: 2 KOLOM ASIMETRIS ============ */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 mt-8 grid lg:grid-cols-[1fr_320px] gap-12">
-        {/* Kolom kiri — artikel */}
-        <div>
-          <article
-            className="article-prose font-serif prose prose-slate dark:prose-invert max-w-none
-              prose-p:text-[19px] prose-p:leading-[1.8]
-              prose-headings:font-sans prose-headings:font-bold prose-headings:text-content
-              prose-a:text-blue-600 prose-img:rounded-xl prose-img:shadow-sm
-              [&_video]:rounded-xl [&_video]:shadow-sm [&_video]:w-full [&_video]:my-6
-              prose-blockquote:not-italic prose-blockquote:border-l-4 prose-blockquote:border-blue-600
-              prose-blockquote:pl-6 prose-blockquote:py-1 prose-blockquote:font-sans
-              prose-blockquote:font-bold prose-blockquote:text-2xl md:prose-blockquote:text-3xl
-              prose-blockquote:leading-snug prose-blockquote:text-content prose-blockquote:my-10
-              prose-li:text-[19px]"
-            dangerouslySetInnerHTML={{ __html: article.content }}
-          />
-
-          {/* Iklan Tengah / Bawah Artikel */}
-          {contentAd && (
-            <div className="my-10 pt-6 border-t border-border">
-              <div className="flex items-center justify-center gap-1 text-[10px] font-bold text-content-muted uppercase tracking-widest mb-2">
-                <Megaphone size={11} className="text-blue-500" /> PROMO SPESIAL LAPTOP SOLIT 03
-              </div>
-              <AdCard ad={contentAd} />
-            </div>
-          )}
-        </div>
-
-        {/* Kolom kanan — sticky sidebar */}
-        <aside className="lg:sticky lg:top-24 self-start space-y-6">
-          {/* Iklan Sidebar */}
-          {sidebarAd && (
-            <div className="bg-surface border border-border rounded-2xl p-4 shadow-sm">
-              <div className="flex items-center gap-1 text-[10px] font-bold text-content-muted uppercase tracking-widest mb-2">
-                <Megaphone size={11} className="text-blue-500" /> IKLAN SPONSOR
-              </div>
-              <AdCard ad={sidebarAd} />
+        {/* TENGAH: HERO + BILLBOARD + ARTIKEL */}
+        <div className="w-full max-w-6xl px-4 sm:px-6 min-w-0">
+          
+          {/* ============ HERO IMAGE ============ */}
+          {article.cover_image && (
+            <div className="max-w-5xl mx-auto mb-8">
+              <img
+                src={article.cover_image}
+                alt={article.title}
+                className="w-full aspect-video object-cover rounded-2xl shadow-md"
+              />
+              {article.author && (
+                <p className="text-xs text-content-muted mt-2 text-center">Foto: {article.author} / Solit 03</p>
+              )}
             </div>
           )}
 
-          {popular.length > 0 && (
-            <div className="bg-surface border border-border rounded-2xl p-5 shadow-sm">
-              <div className="flex items-center gap-2 mb-4">
-                <Flame size={15} className="text-blue-600" />
-                <h2 className="text-xs font-black uppercase tracking-widest text-blue-600">Most Popular</h2>
+          {/* ============ IKLAN SPONSOR ATAS (BILLBOARD / LEADERBOARD) ============ */}
+          {topAd && (
+            <div className="max-w-4xl mx-auto my-8">
+              <div className="flex items-center justify-center gap-1 text-[10px] font-bold text-content-muted uppercase tracking-widest mb-1.5">
+                <Megaphone size={11} className="text-blue-500" /> SPONSORED PROMO
               </div>
-              <ol className="space-y-4">
-                {popular.map((a, i) => (
-                  <li key={a.id}>
-                    <Link to={`/berita/${a.slug}`} className="group flex items-start gap-3">
-                      <span className="font-display text-2xl font-black leading-none text-blue-600 flex-shrink-0 w-6">
-                        {i + 1}
+              <AdCard ad={topAd} />
+            </div>
+          )}
+
+          {/* ============ BODY: 2 KOLOM ASIMETRIS ============ */}
+          <div className="grid lg:grid-cols-[1fr_320px] gap-12">
+            {/* Kolom kiri — artikel */}
+            <div>
+              <article
+                className={`article-prose ${fontSizeClass} font-serif prose prose-slate dark:prose-invert max-w-none
+                  prose-p:leading-[1.8] prose-p:text-slate-800 dark:prose-p:text-slate-200
+                  prose-headings:font-sans prose-headings:font-bold prose-headings:text-slate-900 dark:prose-headings:text-slate-100
+                  prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-img:rounded-xl prose-img:shadow-sm
+                  [&_video]:rounded-xl [&_video]:shadow-sm [&_video]:w-full [&_video]:my-6
+                  prose-blockquote:not-italic prose-blockquote:border-l-4 prose-blockquote:border-blue-600
+                  prose-blockquote:pl-6 prose-blockquote:py-1 prose-blockquote:font-sans
+                  prose-blockquote:font-bold prose-blockquote:text-2xl md:prose-blockquote:text-3xl
+                  prose-blockquote:leading-snug prose-blockquote:text-slate-900 dark:prose-blockquote:text-slate-100 prose-blockquote:my-10
+                  prose-li:text-slate-800 dark:prose-li:text-slate-200`}
+                dangerouslySetInnerHTML={{ __html: article.content }}
+              />
+
+              {/* Iklan Tengah / Bawah Artikel */}
+              {contentAd && (
+                <div className="my-10 pt-6 border-t border-border">
+                  <div className="flex items-center justify-center gap-1 text-[10px] font-bold text-content-muted uppercase tracking-widest mb-2">
+                    <Megaphone size={11} className="text-blue-500" /> PROMO SPESIAL LAPTOP SOLIT 03
+                  </div>
+                  <AdCard ad={contentAd} />
+                </div>
+              )}
+            </div>
+
+            {/* Kolom kanan — sticky sidebar */}
+            <aside className="lg:sticky lg:top-24 self-start space-y-6">
+              {/* Iklan Sidebar */}
+              {sidebarAd && (
+                <div className="bg-surface border border-border rounded-2xl p-4 shadow-sm">
+                  <div className="flex items-center gap-1 text-[10px] font-bold text-content-muted uppercase tracking-widest mb-2">
+                    <Megaphone size={11} className="text-blue-500" /> IKLAN SPONSOR
+                  </div>
+                  <AdCard ad={sidebarAd} />
+                </div>
+              )}
+
+              {popular.length > 0 && (
+                <div className="bg-surface border border-border rounded-2xl p-5 shadow-sm">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Flame size={15} className="text-blue-600" />
+                    <h2 className="text-xs font-black uppercase tracking-widest text-blue-600">Most Popular</h2>
+                  </div>
+                  <ol className="space-y-4">
+                    {popular.map((a, i) => (
+                      <li key={a.id}>
+                        <Link to={`/berita/${a.slug}`} className="group flex items-start gap-3">
+                          <span className="font-display text-2xl font-black leading-none text-blue-600 flex-shrink-0 w-6">
+                            {i + 1}
+                          </span>
+                          <div className="min-w-0">
+                            <h3 className="text-sm font-semibold text-content leading-snug line-clamp-3 group-hover:text-blue-600 transition-colors">
+                              {a.title}
+                            </h3>
+                            <span className="flex items-center gap-1 text-[11px] text-content-muted mt-1.5">
+                              <Clock size={10} /> {(a.views || 0).toLocaleString()} views
+                            </span>
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+
+              {article.tags?.length > 0 && (
+                <div className="bg-surface border border-border rounded-2xl p-5 shadow-sm">
+                  <div className="flex items-center gap-2 mb-3">
+                    <TagIcon size={14} className="text-blue-600" />
+                    <h2 className="text-xs font-black uppercase tracking-widest text-content-muted">Tags</h2>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {article.tags.map((t) => (
+                      <span
+                        key={t.id}
+                        className="px-3 py-1.5 bg-surface-muted border border-border text-content-soft text-xs font-semibold rounded-full hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-colors cursor-default"
+                      >
+                        #{t.name}
                       </span>
-                      <div className="min-w-0">
-                        <h3 className="text-sm font-semibold text-content leading-snug line-clamp-3 group-hover:text-blue-600 transition-colors">
-                          {a.title}
-                        </h3>
-                        <span className="flex items-center gap-1 text-[11px] text-content-muted mt-1.5">
-                          <Clock size={10} /> {(a.views || 0).toLocaleString()} views
-                        </span>
-                      </div>
-                    </Link>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          )}
+                    ))}
+                  </div>
+                </div>
+              )}
+            </aside>
+          </div>
+        </div>
 
-          {article.tags?.length > 0 && (
-            <div className="bg-surface border border-border rounded-2xl p-5 shadow-sm">
-              <div className="flex items-center gap-2 mb-3">
-                <TagIcon size={14} className="text-blue-600" />
-                <h2 className="text-xs font-black uppercase tracking-widest text-content-muted">Tags</h2>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {article.tags.map((t) => (
-                  <span
-                    key={t.id}
-                    className="px-3 py-1.5 bg-surface-muted border border-border text-content-soft text-xs font-semibold rounded-full hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-colors cursor-default"
-                  >
-                    #{t.name}
-                  </span>
-                ))}
+        {/* IKLAN FLANK KANAN (Murni CSS In-Flow) */}
+        {isUltraWide && flankRightAd && (
+          <div className="hidden xl:block flex-1 max-w-[300px] pl-6">
+            <div className="sticky top-24 flex justify-start">
+              <div style={{ width: Math.min(flankRightAd.custom_width || 260, 300) }}>
+                <AdCard ad={flankRightAd} />
               </div>
             </div>
-          )}
-        </aside>
+          </div>
+        )}
       </div>
 
       {/* ============ RELATED ============ */}

@@ -19,7 +19,15 @@ export default function Berita() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [allAds, setAllAds] = useState([]);
+  const [isUltraWide, setIsUltraWide] = useState(false);
   const limit = 9;
+
+  useEffect(() => {
+    const checkWidth = () => setIsUltraWide(window.innerWidth >= 1380);
+    checkWidth();
+    window.addEventListener("resize", checkWidth);
+    return () => window.removeEventListener("resize", checkWidth);
+  }, []);
 
   useEffect(() => {
     getArticleAds().then(setAllAds).catch(() => setAllAds([]));
@@ -62,6 +70,10 @@ export default function Berita() {
   }
 
   const listArticles = featured ? articles.filter((a) => a.id !== featured.id) : articles;
+  const flankAds = allAds.filter((a) => a.banner_size === "sidebar_flank");
+  const flankLeftAd = flankAds[0] || null;
+  const flankRightAd = flankAds[1] || null;
+  const feedAds = allAds.filter((a) => a.banner_size !== "sidebar_flank" && a.placement !== "sidebar_flank");
 
   return (
     <div className="min-h-screen bg-surface-muted">
@@ -131,73 +143,100 @@ export default function Berita() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-        {/* Featured hero */}
-        {featured && (
-          <div className="mb-10">
-            <ArticleCard article={featured} size="large" />
+      {/* Main Container dengan Iklan Flank Kanan-Kiri */}
+      <div className="w-full max-w-[1920px] mx-auto flex justify-center py-8">
+        
+        {/* IKLAN FLANK KIRI BERITA (Murni CSS In-Flow) */}
+        {isUltraWide && flankLeftAd && (
+          <div className="hidden xl:block flex-1 max-w-[300px] pr-6">
+            <div className="sticky top-24 flex justify-end">
+              <div style={{ width: Math.min(flankLeftAd.custom_width || 240, 260) }}>
+                <AdCard ad={flankLeftAd} />
+              </div>
+            </div>
           </div>
         )}
 
-        {loading ? (
-          <div className="flex items-center justify-center py-24">
-            <Loader2 size={28} className="animate-spin text-blue-500" />
-          </div>
-        ) : listArticles.length === 0 ? (
-          <div className="text-center py-24">
-            <Newspaper size={40} className="mx-auto mb-3 text-slate-300" />
-            <p className="text-content-muted text-sm">Belum ada artikel ditemukan</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {(() => {
-              const nodes = [];
-              listArticles.forEach((a, i) => {
-                nodes.push(<ArticleCard key={a.id} article={a} />);
+        {/* TENGAH: GRID ARTIKEL */}
+        <div className="w-full max-w-6xl px-4 sm:px-6 min-w-0">
+          {/* Featured hero */}
+          {featured && (
+            <div className="mb-10">
+              <ArticleCard article={featured} size="large" />
+            </div>
+          )}
 
-                // Insert full-width ad banner between rows every 3 articles
-                if ((i + 1) % 3 === 0 && allAds.length > 0) {
-                  const adIndex = Math.floor(i / 3) % allAds.length;
-                  const ad = allAds[adIndex];
-                  if (ad) {
-                    nodes.push(
-                      <div key={`ad-${i}`} className="col-span-full py-4 my-2">
-                        <div className="flex items-center justify-center gap-1.5 text-[10px] font-bold text-content-muted uppercase tracking-widest mb-2">
-                          <Megaphone size={11} className="text-blue-500" /> SPONSORED PROMO
+          {loading ? (
+            <div className="flex items-center justify-center py-24">
+              <Loader2 size={28} className="animate-spin text-blue-500" />
+            </div>
+          ) : listArticles.length === 0 ? (
+            <div className="text-center py-24">
+              <Newspaper size={40} className="mx-auto mb-3 text-slate-300" />
+              <p className="text-content-muted text-sm">Belum ada artikel ditemukan</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {(() => {
+                const nodes = [];
+                listArticles.forEach((a, i) => {
+                  nodes.push(<ArticleCard key={a.id} article={a} />);
+
+                  if ((i + 1) % 3 === 0 && feedAds.length > 0) {
+                    const adIndex = Math.floor(i / 3) % feedAds.length;
+                    const ad = feedAds[adIndex];
+                    if (ad) {
+                      nodes.push(
+                        <div key={`ad-${i}`} className="col-span-full py-4 my-2">
+                          <div className="flex items-center justify-center gap-1.5 text-[10px] font-bold text-content-muted uppercase tracking-widest mb-2">
+                            <Megaphone size={11} className="text-blue-500" /> SPONSORED PROMO
+                          </div>
+                          <div className="max-w-4xl mx-auto">
+                            <AdCard ad={ad} />
+                          </div>
                         </div>
-                        <div className="max-w-4xl mx-auto">
-                          <AdCard ad={ad} />
-                        </div>
-                      </div>
-                    );
+                      );
+                    }
                   }
-                }
-              });
+                });
 
-              return nodes;
-            })()}
+                return nodes;
+              })()}
+            </div>
+          )}
+
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-10">
+              <button
+                onClick={() => setPage(Math.max(page - 1, 1))}
+                disabled={page === 1}
+                className="p-2 rounded-lg border border-border text-content-muted hover:bg-surface transition disabled:opacity-30"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <span className="text-sm text-content-muted px-3">Halaman {page} dari {totalPages}</span>
+              <button
+                onClick={() => setPage(Math.min(page + 1, totalPages))}
+                disabled={page === totalPages}
+                className="p-2 rounded-lg border border-border text-content-muted hover:bg-surface transition disabled:opacity-30"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* IKLAN FLANK KANAN BERITA (Murni CSS In-Flow) */}
+        {isUltraWide && flankRightAd && (
+          <div className="hidden xl:block flex-1 max-w-[300px] pl-6">
+            <div className="sticky top-24 flex justify-start">
+              <div style={{ width: Math.min(flankRightAd.custom_width || 240, 260) }}>
+                <AdCard ad={flankRightAd} />
+              </div>
+            </div>
           </div>
         )}
 
-        {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-10">
-            <button
-              onClick={() => setPage(Math.max(page - 1, 1))}
-              disabled={page === 1}
-              className="p-2 rounded-lg border border-border text-content-muted hover:bg-surface transition disabled:opacity-30"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <span className="text-sm text-content-muted px-3">Halaman {page} dari {totalPages}</span>
-            <button
-              onClick={() => setPage(Math.min(page + 1, totalPages))}
-              disabled={page === totalPages}
-              className="p-2 rounded-lg border border-border text-content-muted hover:bg-surface transition disabled:opacity-30"
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );

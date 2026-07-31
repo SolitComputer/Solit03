@@ -47,7 +47,7 @@ export default function Navbar() {
     return (
         <nav
             className={`
-                relative w-full z-50
+                sticky top-0 w-full z-50
                 transition-all duration-200 ease-in-out
                 bg-surface text-content border-b border-border
                 ${scrolled ? "shadow-md bg-surface" : ""}
@@ -93,7 +93,7 @@ export default function Navbar() {
                         <div className="relative">
                             <button
                                 onClick={() => setThemeMenuOpen(!themeMenuOpen)}
-                                className="p-1.5 rounded-md text-content-muted hover:text-content hover:bg-surface-muted transition"
+                                className="p-2 -m-0.5 rounded-md text-content-muted hover:text-content hover:bg-surface-muted transition"
                                 aria-label="Toggle theme"
                             >
                                 {theme === "dark" ? <Moon size={18} /> : theme === "light" ? <Sun size={18} /> : <Monitor size={18} />}
@@ -119,7 +119,7 @@ export default function Navbar() {
 
                         <button
                             onClick={() => setMenuOpen(!menuOpen)}
-                            className="md:hidden p-1.5 rounded-md text-content-muted hover:text-content hover:bg-surface-muted"
+                            className="md:hidden p-2 -m-0.5 rounded-md text-content-muted hover:text-content hover:bg-surface-muted"
                             aria-label="Toggle menu"
                         >
                             {menuOpen ? <X size={22} /> : <Menu size={22} />}

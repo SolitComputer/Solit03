@@ -67,39 +67,39 @@ export default function Topbar() {
   }
 
   return (
-    <header className="h-16 bg-surface border-b border-border px-4 md:px-6 flex items-center justify-between gap-4 shadow-sm sticky top-0 z-40">
+    <header className="h-16 bg-surface border-b border-border px-4 md:px-6 flex items-center justify-between gap-4 sticky top-0 z-40">
       {/* Left — Back button & Breadcrumb */}
       <div className="flex items-center gap-2 flex-1 min-w-0">
         {canGoBack && (
           <button
             onClick={() => navigate(-1)}
-            className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0"
+            className="p-2 rounded-xl text-content-muted hover:text-content hover:bg-surface-muted transition-colors flex-shrink-0"
             title="Kembali"
           >
-            <ArrowLeft size={18} className="text-content-soft" />
+            <ArrowLeft size={18} />
           </button>
         )}
 
         <div className="flex items-center gap-1.5 text-xs sm:text-sm overflow-x-auto whitespace-nowrap [scrollbar-width:none]">
           <button
             onClick={() => navigate("/admin")}
-            className="flex items-center gap-1 text-content-muted hover:text-blue-700 transition"
+            className="flex items-center gap-1.5 text-content-muted hover:text-blue-600 font-medium transition"
           >
-            <Home size={14} />
+            <Home size={15} />
             <span className="hidden sm:inline">Dashboard</span>
           </button>
 
           {breadcrumbs.slice(1).map((crumb, idx) => (
             <div key={idx} className="flex items-center gap-1.5">
-              <span className="text-gray-300 text-xs">/</span>
+              <span className="text-content-muted/40 text-xs font-light">/</span>
               {crumb.isLast ? (
-                <span className="text-blue-700 font-semibold truncate text-xs sm:text-sm">
+                <span className="text-blue-600 dark:text-blue-400 font-bold truncate text-xs sm:text-sm">
                   {crumb.label}
                 </span>
               ) : (
                 <button
                   onClick={() => navigate(crumb.path)}
-                  className="text-content-muted hover:text-blue-700 transition truncate text-xs sm:text-sm"
+                  className="text-content-muted hover:text-blue-600 font-medium transition truncate text-xs sm:text-sm"
                 >
                   {crumb.label}
                 </button>
@@ -110,15 +110,15 @@ export default function Topbar() {
       </div>
 
       {/* Right — Preview site, Theme & user menu */}
-      <div className="flex items-center gap-2 flex-shrink-0">
+      <div className="flex items-center gap-3 flex-shrink-0">
         <a
           href="/"
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-surface-muted hover:bg-gray-100 text-content-soft hover:text-blue-700 rounded-lg transition-all duration-200 text-sm font-medium"
+          className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 bg-surface-muted hover:bg-gray-100 dark:hover:bg-slate-800 border border-border text-content-soft hover:text-blue-600 rounded-xl transition-all text-xs font-semibold"
           title="Lihat website"
         >
-          <ExternalLink size={15} />
+          <ExternalLink size={14} />
           <span className="hidden lg:inline">Lihat Website</span>
         </a>
 
@@ -126,7 +126,7 @@ export default function Topbar() {
         <div className="relative">
           <button
             onClick={() => setThemeMenuOpen(!themeMenuOpen)}
-            className="p-1.5 rounded-lg text-content-muted hover:text-content hover:bg-surface-muted transition-colors"
+            className="p-2 rounded-xl text-content-muted hover:text-content hover:bg-surface-muted transition-colors border border-transparent hover:border-border"
             aria-label="Toggle theme"
           >
             {theme === "dark" ? <Moon size={18} /> : theme === "light" ? <Sun size={18} /> : <Monitor size={18} />}
@@ -135,14 +135,14 @@ export default function Topbar() {
           {themeMenuOpen && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setThemeMenuOpen(false)}></div>
-              <div className="absolute right-0 mt-2 w-36 bg-surface border border-border rounded-lg shadow-xl py-1 z-50">
-                <button onClick={() => { setTheme("light"); setThemeMenuOpen(false); }} className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left ${theme === "light" ? "text-blue-500 font-bold bg-surface-muted" : "text-content hover:bg-surface-muted"}`}>
+              <div className="absolute right-0 mt-2 w-36 bg-surface border border-border rounded-xl shadow-xl py-1.5 z-50">
+                <button onClick={() => { setTheme("light"); setThemeMenuOpen(false); }} className={`w-full flex items-center gap-2 px-3.5 py-2 text-xs text-left font-medium ${theme === "light" ? "text-blue-600 font-bold bg-blue-50/60 dark:bg-blue-950/40" : "text-content-soft hover:bg-surface-muted"}`}>
                   <Sun size={14} /> Light
                 </button>
-                <button onClick={() => { setTheme("dark"); setThemeMenuOpen(false); }} className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left ${theme === "dark" ? "text-blue-500 font-bold bg-surface-muted" : "text-content hover:bg-surface-muted"}`}>
+                <button onClick={() => { setTheme("dark"); setThemeMenuOpen(false); }} className={`w-full flex items-center gap-2 px-3.5 py-2 text-xs text-left font-medium ${theme === "dark" ? "text-blue-600 font-bold bg-blue-50/60 dark:bg-blue-950/40" : "text-content-soft hover:bg-surface-muted"}`}>
                   <Moon size={14} /> Dark
                 </button>
-                <button onClick={() => { setTheme("system"); setThemeMenuOpen(false); }} className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left ${theme === "system" ? "text-blue-500 font-bold bg-surface-muted" : "text-content hover:bg-surface-muted"}`}>
+                <button onClick={() => { setTheme("system"); setThemeMenuOpen(false); }} className={`w-full flex items-center gap-2 px-3.5 py-2 text-xs text-left font-medium ${theme === "system" ? "text-blue-600 font-bold bg-blue-50/60 dark:bg-blue-950/40" : "text-content-soft hover:bg-surface-muted"}`}>
                   <Monitor size={14} /> System
                 </button>
               </div>
@@ -150,34 +150,35 @@ export default function Topbar() {
           )}
         </div>
 
+        {/* Profile Dropdown */}
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setMenuOpen((o) => !o)}
-            className="flex items-center gap-2 pl-1 pr-2 py-1 rounded-full hover:bg-surface-muted transition-colors"
+            className="flex items-center gap-2.5 p-1.5 rounded-xl hover:bg-surface-muted border border-transparent hover:border-border transition-colors"
           >
-            <img src={logo} alt="Solit 03" className="w-7 h-7 rounded-full shadow-sm object-cover" />
+            <img src={logo} alt="Solit 03" className="w-8 h-8 rounded-full shadow-xs object-cover border border-border" />
             <div className="hidden sm:block text-left">
-              <p className="font-semibold text-xs text-content leading-tight">Solit Admin</p>
-              <p className="text-[10px] text-content-muted leading-tight">Administrator</p>
+              <p className="font-bold text-xs text-content leading-tight">Solit Admin</p>
+              <p className="text-[10px] text-content-muted leading-tight font-medium">Administrator</p>
             </div>
-            <ChevronDown size={14} className={`hidden sm:block text-content-muted transition-transform ${menuOpen ? "rotate-180" : ""}`} />
+            <ChevronDown size={14} className={`hidden sm:block text-content-muted transition-transform duration-200 ${menuOpen ? "rotate-180" : ""}`} />
           </button>
 
           {menuOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-surface border border-border rounded-xl shadow-lg py-1.5 z-50">
+            <div className="absolute right-0 mt-2 w-48 bg-surface border border-border rounded-xl shadow-xl py-1.5 z-50">
               <a
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="sm:hidden flex items-center gap-2 px-3.5 py-2 text-sm text-content-muted hover:bg-surface-muted transition"
+                className="sm:hidden flex items-center gap-2 px-3.5 py-2 text-xs text-content-soft hover:bg-surface-muted transition"
               >
-                <ExternalLink size={15} /> Lihat Website
+                <ExternalLink size={14} /> Lihat Website
               </a>
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-2 px-3.5 py-2 text-sm text-red-600 hover:bg-red-50 transition"
+                className="w-full flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition"
               >
-                <LogOut size={15} /> Logout
+                <LogOut size={14} /> Logout
               </button>
             </div>
           )}

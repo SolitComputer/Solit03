@@ -2,9 +2,10 @@
 @plugin "@tailwindcss/typography";
 @source ".";
 
-html {
+html, body {
   scroll-behavior: smooth;
   background-color: var(--ds-bg);
+  max-width: 100vw;
 }
 
 /* ============================================================
@@ -40,11 +41,11 @@ html {
   /* Semantic tokens - LIGHT MODE */
   --ds-bg: #ffffff;
   --ds-bg-muted: #f8fafc;      /* slate-50  */
-  --ds-border: #e2e8f0;        /* slate-200 */
-  --ds-border-soft: #eef2f7;
-  --ds-text: #0f172a;          /* slate-900 */
-  --ds-text-soft: #475569;     /* slate-600 */
-  --ds-text-muted: #94a3b8;    /* slate-400 */
+  --ds-border: #cbd5e1;        /* slate-300 - clear borders */
+  --ds-border-soft: #e2e8f0;
+  --ds-text: #0f172a;          /* slate-900 - bold dark text */
+  --ds-text-soft: #334155;     /* slate-700 - sharp, clear secondary text */
+  --ds-text-muted: #475569;    /* slate-600 - high-contrast readable muted text */
   --ds-accent: #2563eb;        /* blue-600  */
   --ds-accent-hover: #1d4ed8;  /* blue-700  */
 
@@ -58,7 +59,7 @@ html {
 }
 
 :root.dark {
-  /* Semantic tokens - DARK MODE */
+  /* Semantic tokens - DARK MODE (Unchanged) */
   --ds-bg: #0f172a;            /* slate-900 */
   --ds-bg-muted: #1e293b;      /* slate-800 */
   --ds-border: #334155;        /* slate-700 */
@@ -76,6 +77,116 @@ html {
   --ds-shadow-brand: 0 6px 16px rgba(59, 130, 246, 0.3);
   
   color-scheme: dark;
+}
+
+/* ============================================================
+   ARTICLE PROSE TYPOGRAPHY CONTRAST OVERRIDES
+   ============================================================ */
+.article-prose {
+  color: #1e293b;
+  font-size: 19px;
+}
+.article-prose--sm {
+  font-size: 16px;
+}
+.article-prose--lg {
+  font-size: 22px;
+}
+.article-prose p,
+.article-prose li {
+  font-size: 1em;
+}
+.article-prose p {
+  color: #1e293b;
+}
+.article-prose span,
+.article-prose li,
+.article-prose div,
+.article-prose em {
+  color: inherit;
+}
+.article-prose h1,
+.article-prose h2,
+.article-prose h3,
+.article-prose h4,
+.article-prose h5,
+.article-prose h6 {
+  color: #0f172a;
+}
+.article-prose strong {
+  color: #0f172a;
+}
+.article-prose a {
+  color: #2563eb;
+}
+
+/* Force override faint light inline color styles in Light Mode */
+:root:not(.dark) .article-prose [style*="color"] {
+  color: #1e293b !important;
+}
+:root:not(.dark) .article-prose a[style*="color"] {
+  color: #2563eb !important;
+}
+
+/* Dark mode article prose styling (preserves crisp dark mode readability) */
+:root.dark .article-prose {
+  color: #cbd5e1;
+}
+:root.dark .article-prose p {
+  color: #cbd5e1;
+}
+:root.dark .article-prose h1,
+:root.dark .article-prose h2,
+:root.dark .article-prose h3,
+:root.dark .article-prose h4,
+:root.dark .article-prose h5,
+:root.dark .article-prose h6 {
+  color: #f8fafc;
+}
+:root.dark .article-prose strong {
+  color: #f8fafc;
+}
+:root.dark .article-prose a {
+  color: #60a5fa;
+}
+:root.dark .article-prose [style*="color"] {
+  color: #cbd5e1 !important;
+}
+:root.dark .article-prose a[style*="color"] {
+  color: #60a5fa !important;
+}
+
+/* Responsive layout safety for HTML content inside articles on mobile */
+.article-prose {
+  max-width: 100% !important;
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+.article-prose img,
+.article-prose video,
+.article-prose iframe,
+.article-prose object,
+.article-prose embed,
+.article-prose figure {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+.article-prose table {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+.article-prose pre,
+.article-prose code {
+  white-space: pre-wrap !important;
+  word-break: break-all !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
 }
 
 /* Force light mode when printing */
