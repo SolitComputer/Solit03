@@ -1,11 +1,27 @@
+import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import TeamSlider from "../components/tentang/TeamSlider";
 import TimeTravelStory from "../components/tentang/TimeTravelStory";
-import teamBg from "../assets/team-bg.webp";
 import teknisi from "../assets/teknisi.webp";
 import { Helmet } from "react-helmet-async";
 
 export default function Tentang() {
+  const videoRef = useRef(null);
+  const [isMuted, setIsMuted] = useState(false);
+
+  const toggleMute = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsMuted((prev) => !prev);
+  };
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = isMuted;
+      if (!isMuted) {
+        videoRef.current.play().catch(() => {});
+      }
+    }
+  }, [isMuted]);
 
   // Variants untuk animasi
   const fadeInUp = {
@@ -53,50 +69,99 @@ export default function Tentang() {
         <link rel="canonical" href="https://solit03.com/tentang" />
       </Helmet>
 
-      <main className="pt-8 bg-surface overflow-hidden">
+      <main className="pt-2 bg-surface overflow-hidden">
         {/* HERO - dengan animasi zoom dan fade */}
         <motion.section
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
-          className="relative py-8 md:py-12"
+          className="relative pt-4 pb-8 md:pt-6 md:pb-12"
         >
           <div className="max-w-6xl mx-auto px-4">
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
-              className="relative h-[280px] md:h-[360px] rounded-2xl overflow-hidden group cursor-pointer shadow-soft"
+              className="relative h-[320px] md:h-[440px] lg:h-[500px] rounded-3xl overflow-hidden group shadow-soft-lg ring-1 ring-black/5 bg-black"
             >
-              <motion.img
-                src={teamBg}
-                className="w-full h-full object-cover"
-                alt="Hero Tentang Solit 03"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.5 }}
+              {/* Video background - object-contain agar rasio video tidak terpotong */}
+              <motion.video
+                ref={videoRef}
+                src="/videos/SOLIT.mp4"
+                className="w-full h-full object-contain"
+                autoPlay
+                loop
+                muted={isMuted}
+                playsInline
+                whileHover={{ scale: 1.03 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
               />
+
+              {/* Overlay gelap tipis hanya di atas untuk kontras badge, tidak menutupi isi video */}
+              <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-slate-950/40 to-transparent pointer-events-none" />
+
+              {/* Badge live/video */}
               <motion.div
-                initial={{ opacity: 0 }}
-                whileHover={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-                className="absolute inset-0 bg-gradient-to-b from-slate-900/70 to-slate-900/40 flex flex-col items-center justify-center text-white text-center px-4"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+                className="absolute top-4 left-4 md:top-6 md:left-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-3 py-1.5 shadow-soft-sm"
               >
-                <motion.h1
-                  initial={{ y: 20 }}
-                  whileHover={{ y: 0 }}
-                  className="text-3xl md:text-4xl font-bold tracking-tight"
-                >
-                  Tentang Solit 03
-                </motion.h1>
-                <motion.p
-                  initial={{ y: 20, opacity: 0 }}
-                  whileHover={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.1 }}
-                  className="mt-3 text-sm md:text-base text-slate-100 max-w-md"
-                >
-                  Laptop Second Berkualitas Tinggi, Rasa Seperti Baru
-                </motion.p>
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+                </span>
+                <span className="text-[11px] font-semibold text-white tracking-wider uppercase">
+                  Video Profil
+                </span>
               </motion.div>
+
+              {/* Tombol mute/unmute */}
+              <motion.button
+                type="button"
+                onClick={toggleMute}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.95 }}
+                className="absolute top-4 right-4 md:top-6 md:right-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-3 py-1.5 shadow-soft-sm text-white hover:bg-white/20 transition-colors"
+                aria-label={isMuted ? "Aktifkan suara" : "Matikan suara"}
+              >
+                {isMuted ? (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M17 9l4 6m0-6l-4 6" />
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M15.536 8.464a5 5 0 010 7.072M17.657 6.343a8 8 0 010 11.314" />
+                  </svg>
+                )}
+                <span className="text-[11px] font-semibold tracking-wider uppercase">
+                  {isMuted ? "Suara Mati" : "Suara Aktif"}
+                </span>
+              </motion.button>
+
+              {/* Border glow saat hover */}
+              <div className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/10 group-hover:ring-blue-400/30 transition-all duration-500 pointer-events-none" />
+            </motion.div>
+
+            {/* Judul & subjudul ditaruh di luar video agar tidak menutupi konten video */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+              className="text-center mt-6 md:mt-8"
+            >
+              <div className="w-10 h-0.5 bg-blue-500 rounded-full mx-auto mb-4" />
+              <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-content">
+                Tentang Solit 03
+              </h1>
+              <p className="mt-3 text-sm md:text-lg text-content-muted max-w-md md:max-w-lg mx-auto">
+                Laptop Second Berkualitas Tinggi, Rasa Seperti Baru
+              </p>
             </motion.div>
           </div>
         </motion.section>
@@ -507,46 +572,7 @@ export default function Tentang() {
           </div>
         </section>
 
-        {/* TEAM */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="bg-surface-muted py-12 md:py-16"
-        >
-          <div className="max-w-6xl mx-auto px-4">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              variants={staggerContainer}
-              className="text-center mb-10"
-            >
-              <motion.h2
-                variants={fadeInUp}
-                className="text-2xl md:text-3xl font-bold text-content mb-3"
-              >
-                Tim Kami
-              </motion.h2>
-              <motion.div
-                initial={{ width: 0 }}
-                whileInView={{ width: 64 }}
-                transition={{ duration: 0.6 }}
-                className="h-0.5 bg-blue-500/60 mx-auto rounded-full mb-4"
-              />
-              <motion.p
-                variants={fadeInUp}
-                className="text-content-muted text-sm md:text-base max-w-2xl mx-auto"
-              >
-                Profesional yang berdedikasi memberikan pelayanan terbaik untuk
-                setiap pelanggan.
-              </motion.p>
-            </motion.div>
 
-            <TeamSlider />
-          </div>
-        </motion.div>
       </main>
     </>
   );
