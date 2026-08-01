@@ -67,39 +67,39 @@ export default function Dashboard() {
   const colorMap = {
     blue: { 
       dot: "bg-blue-500", 
-      bg: "bg-blue-50", 
-      text: "text-blue-600", 
+      bg: "bg-blue-50 dark:bg-blue-500/10", 
+      text: "text-blue-600 dark:text-blue-400", 
       bar: "from-blue-500 to-blue-400",
       gradient: "from-blue-600 to-blue-500",
-      light: "bg-blue-100",
-      dark: "bg-blue-700"
+      light: "bg-blue-100 dark:bg-blue-900/40",
+      dark: "bg-blue-700 dark:bg-blue-300"
     },
     violet: { 
       dot: "bg-violet-500", 
-      bg: "bg-violet-50", 
-      text: "text-violet-600", 
+      bg: "bg-violet-50 dark:bg-violet-500/10", 
+      text: "text-violet-600 dark:text-violet-400", 
       bar: "from-violet-500 to-violet-400",
       gradient: "from-violet-600 to-violet-500",
-      light: "bg-violet-100",
-      dark: "bg-violet-700"
+      light: "bg-violet-100 dark:bg-violet-900/40",
+      dark: "bg-violet-700 dark:bg-violet-300"
     },
     emerald: { 
       dot: "bg-emerald-500", 
-      bg: "bg-emerald-50", 
-      text: "text-emerald-600", 
+      bg: "bg-emerald-50 dark:bg-emerald-500/10", 
+      text: "text-emerald-600 dark:text-emerald-400", 
       bar: "from-emerald-500 to-emerald-400",
       gradient: "from-emerald-600 to-emerald-500",
-      light: "bg-emerald-100",
-      dark: "bg-emerald-700"
+      light: "bg-emerald-100 dark:bg-emerald-900/40",
+      dark: "bg-emerald-700 dark:bg-emerald-300"
     },
     amber: { 
       dot: "bg-amber-500", 
-      bg: "bg-amber-50", 
-      text: "text-amber-600", 
+      bg: "bg-amber-50 dark:bg-amber-500/10", 
+      text: "text-amber-600 dark:text-amber-400", 
       bar: "from-amber-500 to-amber-400",
       gradient: "from-amber-600 to-amber-500",
-      light: "bg-amber-100",
-      dark: "bg-amber-700"
+      light: "bg-amber-100 dark:bg-amber-900/40",
+      dark: "bg-amber-700 dark:bg-amber-300"
     },
   };
 

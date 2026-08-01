@@ -76,7 +76,7 @@ export default function JualBeli() {
           href="https://solit03.com/jual-beli"
         />
       </Helmet>
-      <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-blue-50/40">
+      <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-blue-50/40 dark:from-slate-900 dark:via-slate-800 dark:to-blue-900/20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 md:py-14">
           <style>{`
           @keyframes fadeSlideUp {
