@@ -1,49 +1,69 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import reinaldy from "../../assets/reinaldy.webp";
-import bangimron from "../../assets/bangimron.webp";
-import nuralim from "../../assets/bangalim.webp";
-import novita from "../../assets/owiiii.webp";
-import rayhan from "../../assets/Raihan.webp";
-import romadhon from "../../assets/bangsalam.webp";
-import rafisalim from "../../assets/rafi.webp";
-import yoga from "../../assets/masyoga.webp";
-import yuna from "../../assets/kayuna.webp";
-import ikmal from "../../assets/ikmall.webp";
-import fauzan from "../../assets/fauzan.webp";
-import fatur from "../../assets/tengkuu.webp";
-import fikri from "../../assets/fikri.webp";
-import dirga from "../../assets/dirga.webp";
-import raesty from "../../assets/raesty.webp";
-import jaelani from "../../assets/pamud.webp";
-import mbafitri from "../../assets/mbafitri.webp";
-import dicky from "../../assets/bangdiki.webp";
-import revin from "../../assets/bangrevin.webp";
+import fotoReinaldy from "../../assets/foto/reinaldy-olyvierd-sendouw.webp";
+import fotoYoga from "../../assets/foto/yoga-adi-prakoso.webp";
+import fotoRayhan from "../../assets/foto/rayhan-saputra.webp";
+import fotoYulfa from "../../assets/foto/yulfa.webp";
+import fotoIkmal from "../../assets/foto/ikmal-fairuz-arabi.webp";
+import fotoFauzan from "../../assets/foto/fauzan-abdul-g.webp";
+import fotoMoreno from "../../assets/foto/moreno-akbari-p.webp";
+import fotoDimas from "../../assets/foto/dimas-dwi-ap.webp";
+import fotoNurAlim from "../../assets/foto/nur-alim.webp";
+import fotoYuna from "../../assets/foto/yuna-lw.webp";
+import fotoDivaK from "../../assets/foto/diva-k.webp";
+import fotoRaesty from "../../assets/foto/raesty-yuliana.webp";
+import fotoDirga from "../../assets/foto/dirga-riadmas.webp";
+import fotoRafiDwi from "../../assets/foto/rafi-dwi-saputra.webp";
+import fotoRafiSalim from "../../assets/foto/rafi-salim.webp";
+import fotoLionel from "../../assets/foto/lionel-jaa.webp";
+import fotoHaifano from "../../assets/foto/m-haifano-ap.webp";
+import fotoFikri from "../../assets/foto/fikri-aryansyah.webp";
+import fotoRomadon from "../../assets/foto/romadon-abdusallam.webp";
+import fotoDicky from "../../assets/foto/dicky-pratama-s.webp";
+import fotoFadriansyah from "../../assets/foto/fadriansyah.webp";
+import fotoDavid from "../../assets/foto/david-j-sendouw.webp";
+import fotoAmaliyah from "../../assets/foto/amaliyah.webp";
+import fotoFauziahNurul from "../../assets/foto/fauziah-nurul-rahma.webp";
+import fotoBungaChalista from "../../assets/foto/bunga-chalista-augustav.webp";
+import fotoFitriHidayat from "../../assets/foto/fitri-hidayat.webp";
+import fotoNovaRovatul from "../../assets/foto/nova-rovatul-walidah.webp";
+import fotoHerry from "../../assets/foto/r-herry-sudiarman.webp";
+import fotoAchmadJaelani from "../../assets/foto/achmad-jaelani.webp";
 
 
 export default function TeamSlider() {
   const [index, setIndex] = useState(0);
 
   const members = [
-    { name: "Reinaldy Olyvierd Sendouw", role: "CEO", img: reinaldy },
-    { name: "Imron Muafi", role: "HRD", img: bangimron },
-    { name: "Nur Alim", role: "Marketing", img: nuralim },
-    { name: "Novita Glory Sendouw", role: "Content Creator", img: novita },
-    { name: "Rayhan Saputra", role: "Accounting", img: rayhan },
-    { name: "Ramadon Abdusalam", role: "Head of Sales", img: romadhon },
-    { name: "Rafi Salim", role: "Pengelola Barang", img: rafisalim },
-    { name: "Yoga Adi Prakoso", role: "Finance", img: yoga },
-    { name: "Yuna Luscyana Wati", role: "One Point", img: yuna },
-    { name: "Ikmal Fairuz Arabi", role: "Web Developer", img: ikmal },
-    { name: "Fauzan Abdul Ghaffar", role: "Web Developer", img: fauzan },
-    { name: "Tengku Muhammad Faturahman", role: "Kurir", img: fatur },
-    { name: "Fikri Arryansyah", role: "Penyedia Barang", img: fikri },
-    { name: "Dirga Riadmas", role: "Teknisi", img: dirga },
-    { name: "Raesty Yuliana", role: "Sales Offline", img: raesty },
-    { name: "Achmad Jaelani", role: "Chef", img: jaelani },
-    { name: "Ramdhani Suci", role: "Management Sales", img: mbafitri },
-    { name: "Rizki Revinza Saputra", role: "Sales", img: revin },
-    { name: "Dicky Pratama Setiawan", role: "Sotech", img: dicky },
+    { name: "Reinaldy Olyvierd Sendouw", role: "CEO", img: fotoReinaldy },
+    { name: "Yoga Adi Prakoso", role: "HRD", img: fotoYoga },
+    { name: "Rayhan Saputra", role: "Accounting", img: fotoRayhan },
+    { name: "Yulfa", role: "Purchasing", img: fotoYulfa },
+    { name: "Ikmal Fairuz Arabi", role: "Programmer", img: fotoIkmal },
+    { name: "Fauzan Abdul G", role: "Programmer", img: fotoFauzan },
+    { name: "Moreno Akbari P", role: "Programmer", img: fotoMoreno },
+    { name: "Dimas Dwi A.P", role: "Programmer", img: fotoDimas },
+    { name: "Nur Alim", role: "Marketing", img: fotoNurAlim },
+    { name: "Yuna Lucyanawati W", role: "Content Creator", img: fotoYuna },
+    { name: "Diva Karamaya", role: "Content Creator", img: fotoDivaK },
+    { name: "Raesty Yuliana", role: "Customer Service", img: fotoRaesty },
+    { name: "Dirga Riadmas", role: "Teknisi", img: fotoDirga },
+    { name: "Rafii Dwi Saputra", role: "Teknisi", img: fotoRafiDwi },
+    { name: "Rafi Salim", role: "Pengelola Barang", img: fotoRafiSalim },
+    { name: "Lionel J.A.A", role: "Pengelola Barang", img: fotoLionel },
+    { name: "M. Haifano A.P", role: "Pengelola Barang", img: fotoHaifano },
+    { name: "Fikri Aryansyah", role: "Penyedia Barang", img: fotoFikri },
+    { name: "Romadon Abdusallam", role: "Kepala Sales", img: fotoRomadon },
+    { name: "Dicky Pratama S.", role: "Kepala Sotech", img: fotoDicky },
+    { name: "Fadriansyah", role: "Kepala Onpoint", img: fotoFadriansyah },
+    { name: "David J. Sendouw", role: "Kepala Zenith", img: fotoDavid },
+    { name: "Amaliyah", role: "Sales", img: fotoAmaliyah },
+    { name: "Fauziah Nurul Rahma", role: "Sales", img: fotoFauziahNurul },
+    { name: "Bunga Chalista Augustav", role: "Sales", img: fotoBungaChalista },
+    { name: "Fitri Hidayat", role: "Sales", img: fotoFitriHidayat },
+    { name: "Nova Rovatul Walidah", role: "Sales", img: fotoNovaRovatul },
+    { name: "R Herry Sudiarman", role: "Pengantaran", img: fotoHerry },
+     { name: "Achmad Jaelani", role: "Chef", img: fotoAchmadJaelani },
   ];
 
   const prev = useCallback(() => {
@@ -96,15 +116,28 @@ export default function TeamSlider() {
 
   return (
     <section
-      className="text-center overflow-hidden"
+      className="relative text-center overflow-hidden py-6"
       onMouseEnter={() => (paused.current = true)}
       onMouseLeave={() => (paused.current = false)}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      <h2 className="text-2xl md:text-3xl font-bold mb-16">
-        Team Solit
-      </h2>
+      {/* Dekorasi background — satu radial glow biru lembut di tengah, tidak menangkap event apapun */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 md:w-[560px] md:h-[560px] rounded-full bg-blue-400/10 blur-3xl"
+      />
+
+      {/* Heading */}
+      <div className="relative mb-12 md:mb-16">
+        <h2 className="text-2xl md:text-4xl font-bold text-content tracking-tight">
+          Tim{" "}
+          <span className="bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+            Solit
+          </span>
+        </h2>
+        <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-gradient-to-r from-blue-600 to-blue-400" />
+      </div>
 
       {/* ===== DESKTOP: 3D Carousel (md+) ===== */}
       <div
@@ -141,35 +174,73 @@ export default function TeamSlider() {
                     scale(${1 - Math.abs(offset) * 0.15})
                   `,
                   zIndex: 50 - Math.abs(offset),
-                  filter: `blur(${Math.abs(offset) * 1}px)`,
+                  filter: `blur(${Math.abs(offset) * 1}px) grayscale(${isCenter ? 0 : 45}%)`,
                   opacity: isCenter ? 1 : 0.6,
                   willChange: "transform",
                 }}
               >
                 <div
-                  className={`card-3d p-4 w-64 md:w-72 ${!isCenter ? "cursor-pointer" : ""
-                    }`}
+                  className={`card-3d group relative p-4 w-64 md:w-72 rounded-3xl border bg-white/70 backdrop-blur-sm transition-all duration-500 ${
+                    isCenter
+                      ? "border-blue-200 shadow-[0_25px_60px_-20px_rgba(37,99,235,0.45),0_10px_25px_-10px_rgba(15,23,42,0.15)]"
+                      : "border-transparent shadow-soft"
+                  } ${!isCenter ? "cursor-pointer" : ""}`}
                 >
-                  <img
-                    src={member.img}
-                    alt={member.name}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-72 object-cover rounded-xl"
-                  />
+                  <div
+                    className={`relative overflow-hidden rounded-2xl transition-all duration-500 ${
+                      isCenter ? "ring-4 ring-white" : ""
+                    }`}
+                  >
+                    <img
+                      src={member.img}
+                      alt={member.name}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-black/35 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
 
-                  <h3 className="mt-4 font-bold text-lg text-content">
+                  <h3
+                    className={`mt-4 font-bold text-content tracking-tight transition-all duration-500 ${
+                      isCenter ? "text-xl" : "text-base"
+                    }`}
+                  >
                     {member.name}
                   </h3>
 
-                  <p className="text-content-muted text-sm">
+                  <span
+                    className={`mt-2 inline-block rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-wide transition-colors duration-500 ${
+                      isCenter
+                        ? "border-blue-600 bg-blue-600 text-white"
+                        : "border-blue-100 bg-blue-50 text-blue-700"
+                    }`}
+                  >
                     {member.role}
-                  </p>
+                  </span>
                 </div>
               </div>
             );
-          })}
+         })}
         </div>
+
+        {/* Tombol panah — desktop */}
+        <button
+          type="button"
+          onClick={prev}
+          aria-label="Sebelumnya"
+          className="absolute left-2 lg:left-8 top-1/2 -translate-y-1/2 z-40 flex items-center justify-center w-12 h-12 rounded-full bg-white/80 backdrop-blur-md border border-blue-100 shadow-soft hover:shadow-soft-lg hover:bg-blue-600 hover:border-blue-600 hover:text-white active:scale-95 text-blue-600 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2"
+        >
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+        <button
+          type="button"
+          onClick={next}
+          aria-label="Selanjutnya"
+          className="absolute right-2 lg:right-8 top-1/2 -translate-y-1/2 z-40 flex items-center justify-center w-12 h-12 rounded-full bg-white/80 backdrop-blur-md border border-blue-100 shadow-soft hover:shadow-soft-lg hover:bg-blue-600 hover:border-blue-600 hover:text-white active:scale-95 text-blue-600 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
       </div>
 
       {/* ===== MOBILE: Swipeable single card (< md) ===== */}
@@ -196,45 +267,52 @@ export default function TeamSlider() {
                   pointerEvents: isCenter ? "auto" : "none",
                 }}
               >
-                <div className="card-3d p-4">
-                  <img
-                    src={member.img}
-                    alt={member.name}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-72 object-cover rounded-xl"
-                  />
-                  <h3 className="mt-4 font-bold text-lg text-content">
+                <div className="card-3d p-4 border border-blue-100/70 rounded-3xl bg-white/80 backdrop-blur-sm shadow-soft">
+                  <div className="relative overflow-hidden rounded-2xl ring-4 ring-white">
+                    <img
+                      src={member.img}
+                      alt={member.name}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-72 object-cover"
+                    />
+                  </div>
+                  <h3 className="mt-4 font-bold text-lg text-content tracking-tight">
                     {member.name}
                   </h3>
-                  <p className="text-content-muted text-sm">
+                  <span className="mt-2 inline-block rounded-full border border-blue-600 bg-blue-600 px-3 py-1 text-xs font-medium uppercase tracking-wide text-white">
                     {member.role}
-                  </p>
+                  </span>
                 </div>
               </div>
             );
           })}
         </div>
 
-        {/* Dot indicators — mobile only */}
-        <div className="flex justify-center gap-1.5 mt-4">
-          {members.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setIndex(i)}
-              aria-label={`Go to member ${i + 1}`}
-              className={`rounded-full transition-all duration-300 ${
-                i === index
-                  ? "w-6 h-2 bg-blue-500"
-                  : "w-2 h-2 bg-slate-300 hover:bg-slate-400"
-              }`}
-            />
-          ))}
+        {/* Tombol panah — mobile */}
+        <div className="flex items-center justify-center gap-6 mt-6">
+          <button
+            type="button"
+            onClick={prev}
+            aria-label="Sebelumnya"
+            className="flex items-center justify-center w-9 h-9 rounded-full bg-white/80 backdrop-blur-sm border border-blue-100 shadow-soft text-blue-600 active:scale-95 hover:bg-blue-600 hover:text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
+          <button
+            type="button"
+            onClick={next}
+            aria-label="Selanjutnya"
+            className="flex items-center justify-center w-9 h-9 rounded-full bg-white/80 backdrop-blur-sm border border-blue-100 shadow-soft text-blue-600 active:scale-95 hover:bg-blue-600 hover:text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
 
         {/* Swipe hint — shows briefly */}
-        <p className="text-[10px] text-content-muted mt-3 animate-pulse">
-          ← Geser untuk lihat tim →
+        <p className="text-[11px] text-blue-600/70 mt-4 flex items-center justify-center gap-1.5 animate-pulse">
+          
         </p>
       </div>
     </section>

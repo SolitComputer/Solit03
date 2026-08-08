@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import TimeTravelStory from "../components/tentang/TimeTravelStory";
 import teknisi from "../assets/teknisi.webp";
 import { Helmet } from "react-helmet-async";
+import TeamSlider from "../components/tentang/TeamSlider";
 
 export default function Tentang() {
   const videoRef = useRef(null);
@@ -277,11 +278,8 @@ export default function Tentang() {
               </motion.div>
 
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">
-                <span className="text-content">
-                  Visi &
-                </span>
                 <span className="text-blue-600 ml-2">
-                  Misi Kami
+                  Visi & Misi Kami
                 </span>
               </h2>
 
@@ -572,6 +570,8 @@ export default function Tentang() {
           </div>
         </section>
 
+        {/* TIM KAMI - 3D carousel */}
+        <TeamSlider />
 
       </main>
     </>

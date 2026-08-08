@@ -4,7 +4,7 @@ import { getSiteSettings } from "../../services/siteContent";
 
 const DEFAULT_CONTACT = {
   phone_display: "+62 852-1064-7047",
-  email: "solit03@gmail.com",
+  email: "solitcomputer.03@gmail.com",
   address: "Depok, Indonesia",
   instagram_url: "https://instagram.com/solit.comp",
   tiktok_url: "https://tiktok.com/@solit03",
