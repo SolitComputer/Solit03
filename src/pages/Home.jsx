@@ -3,6 +3,7 @@ import BestSeller from "../components/LatestProduct";
 import About from "../components/About";
 import StatsStrip from "../components/StatsStrip";
 import Services from "../components/Services";
+import JasaWebPromo from "../components/JasaWebPromo";
 import Promo from "../components/Promo";
 import SocialMedia from "../components/SocialMedia";
 import Testimoni from "../components/Testimoni";
@@ -37,6 +38,7 @@ export default function Home() {
         <About />
         <StatsStrip />
         <Services />
+        <JasaWebPromo />
         <Promo />
         <LatestArticles />
         <SocialMedia />

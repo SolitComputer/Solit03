@@ -342,9 +342,9 @@ export default function Dashboard() {
             ].map(({ to, label, desc, icon: Icon, color }) => {
               const c = colorMap[color];
               return (
-                <Link 
-                  key={to} 
-                  to={to} 
+                <Link
+                  key={to}
+                  to={to}
                   className={`flex items-center gap-4 p-3 rounded-xl ${c.bg} transition-all duration-300 group hover:shadow-md`}
                 >
                   <div className={`w-10 h-10 bg-surface rounded-xl flex items-center justify-center ${c.text} shadow-sm group-hover:scale-110 transition`}>

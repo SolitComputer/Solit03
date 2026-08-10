@@ -19,6 +19,7 @@ import CekAntrian from "./pages/CekAntrian_realtime";
 import KatalogLaptop from "./pages/KatalogLaptop";
 import Berita from "./pages/Berita";
 import ArtikelDetail from "./pages/ArtikelDetail";
+import JasaWebsite from "./pages/JasaWebsite";
 
 // --- Admin pages (dipisah, tidak ikut ke-load di sisi publik) ---
 const Login = lazy(() => import("./admin/pages/Login"));
@@ -68,6 +69,7 @@ function App() {
             <Route path="/katalog-laptop" element={<KatalogLaptop />} />
             <Route path="/berita" element={<Berita />} />
             <Route path="/berita/:slug" element={<ArtikelDetail />} />
+            <Route path="/jasa-pembuatan-website" element={<JasaWebsite />} />
           </Route>
 
           <Route path="/admin/login" element={<Login />} />

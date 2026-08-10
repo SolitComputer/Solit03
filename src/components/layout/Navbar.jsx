@@ -38,6 +38,7 @@ export default function Navbar() {
         { name: "Katalog",      href: "/katalog" },
         { name: "Berita",       href: "/berita" },
         { name: "Jual-Beli",   href: "/jual-beli" },
+        { name: "Jasa Web",    href: "/jasa-pembuatan-website" },
         { name: "Tentang",     href: "/tentang" },
         { name: "Sosial",      href: "/sosial-media" },
         { name: "Garansi",     href: "/cek-garansi" },
