@@ -22,14 +22,16 @@ import fotoRomadon from "../../assets/foto/romadon-abdusallam.webp";
 import fotoDicky from "../../assets/foto/dicky-pratama-s.webp";
 import fotoFadriansyah from "../../assets/foto/fadriansyah.webp";
 import fotoDavid from "../../assets/foto/david-j-sendouw.webp";
+import fotoAndhika from "../../assets/foto/andhika.webp";
 import fotoAmaliyah from "../../assets/foto/amaliyah.webp";
+import fotoAndiniSazkia from "../../assets/foto/andini-sazkia-putri.webp";
 import fotoFauziahNurul from "../../assets/foto/fauziah-nurul-rahma.webp";
 import fotoBungaChalista from "../../assets/foto/bunga-chalista-augustav.webp";
 import fotoFitriHidayat from "../../assets/foto/fitri-hidayat.webp";
 import fotoNovaRovatul from "../../assets/foto/nova-rovatul-walidah.webp";
+import fotoNovitaGlory from "../../assets/foto/novita-glory-sendouw.webp";
 import fotoHerry from "../../assets/foto/r-herry-sudiarman.webp";
 import fotoAchmadJaelani from "../../assets/foto/achmad-jaelani.webp";
-
 
 export default function TeamSlider() {
   const [index, setIndex] = useState(0);
@@ -57,14 +59,38 @@ export default function TeamSlider() {
     { name: "Dicky Pratama S.", role: "Kepala Sotech", img: fotoDicky },
     { name: "Fadriansyah", role: "Kepala Onpoint", img: fotoFadriansyah },
     { name: "David J. Sendouw", role: "Kepala Zenith", img: fotoDavid },
+    { name: "Andhika", role: "Sales", img: fotoAndhika },
     { name: "Amaliyah", role: "Sales", img: fotoAmaliyah },
+    { name: "Andini Sazkia Putri", role: "Sales", img: fotoAndiniSazkia },
     { name: "Fauziah Nurul Rahma", role: "Sales", img: fotoFauziahNurul },
     { name: "Bunga Chalista Augustav", role: "Sales", img: fotoBungaChalista },
     { name: "Fitri Hidayat", role: "Sales", img: fotoFitriHidayat },
     { name: "Nova Rovatul Walidah", role: "Sales", img: fotoNovaRovatul },
+    { name: "Novita Glory Sendouw", role: "Sales", img: fotoNovitaGlory },
     { name: "R Herry Sudiarman", role: "Pengantaran", img: fotoHerry },
-     { name: "Achmad Jaelani", role: "Chef", img: fotoAchmadJaelani },
-  ];
+    { name: "Achmad Jaelani", role: "Chef", img: fotoAchmadJaelani },
+ ];
+
+  // Preload semua foto di waktu browser idle, supaya pas carousel digeser
+  // foto udah ke-cache dan langsung muncul tanpa nunggu network lagi
+  useEffect(() => {
+    const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 200));
+    const cancelIdle = window.cancelIdleCallback || clearTimeout;
+
+    const handle = idle(() => {
+      members.forEach((member) => {
+        const link = document.createElement("link");
+        link.rel = "preload";
+        link.as = "image";
+        link.href = member.img;
+        link.fetchPriority = "low";
+        document.head.appendChild(link);
+      });
+    });
+
+    return () => cancelIdle(handle);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const prev = useCallback(() => {
     setIndex((prev) => (prev - 1 + members.length) % members.length);
@@ -180,48 +206,47 @@ export default function TeamSlider() {
                 }}
               >
                 <div
-                  className={`card-3d group relative p-4 w-64 md:w-72 rounded-3xl border bg-white/70 backdrop-blur-sm transition-all duration-500 ${
-                    isCenter
+                  className={`card-3d group relative p-4 w-64 md:w-72 rounded-3xl border bg-white/70 backdrop-blur-sm transition-all duration-500 ${isCenter
                       ? "border-blue-200 shadow-[0_25px_60px_-20px_rgba(37,99,235,0.45),0_10px_25px_-10px_rgba(15,23,42,0.15)]"
                       : "border-transparent shadow-soft"
-                  } ${!isCenter ? "cursor-pointer" : ""}`}
+                    } ${!isCenter ? "cursor-pointer" : ""}`}
                 >
                   <div
-                    className={`relative overflow-hidden rounded-2xl transition-all duration-500 ${
-                      isCenter ? "ring-4 ring-white" : ""
-                    }`}
+                    className={`relative overflow-hidden rounded-2xl transition-all duration-500 ${isCenter ? "ring-4 ring-white" : ""
+                      }`}
                   >
-                    <img
+                   <img
                       src={member.img}
                       alt={member.name}
-                      loading="lazy"
+                      width={288}
+                      height={288}
+                      loading={Math.abs(offset) <= 1 ? "eager" : "lazy"}
                       decoding="async"
+                      fetchPriority={isCenter ? "high" : "auto"}
                       className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-black/35 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
 
                   <h3
-                    className={`mt-4 font-bold text-content tracking-tight transition-all duration-500 ${
-                      isCenter ? "text-xl" : "text-base"
-                    }`}
+                    className={`mt-4 font-bold text-content tracking-tight transition-all duration-500 ${isCenter ? "text-xl" : "text-base"
+                      }`}
                   >
                     {member.name}
                   </h3>
 
                   <span
-                    className={`mt-2 inline-block rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-wide transition-colors duration-500 ${
-                      isCenter
+                    className={`mt-2 inline-block rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-wide transition-colors duration-500 ${isCenter
                         ? "border-blue-600 bg-blue-600 text-white"
                         : "border-blue-100 bg-blue-50 text-blue-700"
-                    }`}
+                      }`}
                   >
                     {member.role}
                   </span>
                 </div>
               </div>
             );
-         })}
+          })}
         </div>
 
         {/* Tombol panah — desktop */}
@@ -272,8 +297,11 @@ export default function TeamSlider() {
                     <img
                       src={member.img}
                       alt={member.name}
-                      loading="lazy"
+                      width={280}
+                      height={288}
+                      loading={Math.abs(offset) <= 1 ? "eager" : "lazy"}
                       decoding="async"
+                      fetchPriority={isCenter ? "high" : "auto"}
                       className="w-full h-72 object-cover"
                     />
                   </div>
@@ -312,7 +340,7 @@ export default function TeamSlider() {
 
         {/* Swipe hint — shows briefly */}
         <p className="text-[11px] text-blue-600/70 mt-4 flex items-center justify-center gap-1.5 animate-pulse">
-          
+
         </p>
       </div>
     </section>
