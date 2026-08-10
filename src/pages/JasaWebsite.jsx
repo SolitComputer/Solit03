@@ -30,7 +30,7 @@ const staggerContainer = {
 const PRICING = [
   {
     name: "Landing Page",
-    price: "Rp 1.5jt",
+    price: "Rp 2.000.000",
     popular: false,
     features: [
       "Desain Responsif & Modern",
@@ -42,7 +42,7 @@ const PRICING = [
   },
   {
     name: "Company Profile",
-    price: "Rp 3.5jt",
+    price: "Rp 6.000.000",
     popular: true,
     features: [
       "Multi-page (Up to 5 Halaman)",
@@ -55,7 +55,7 @@ const PRICING = [
   },
   {
     name: "Web App / POS",
-    price: "Rp 15jt+",
+    price: "Rp 22.000.000+",
     popular: false,
     features: [
       "Full-Custom Architecture",
