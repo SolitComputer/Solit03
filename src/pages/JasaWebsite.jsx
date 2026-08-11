@@ -9,6 +9,13 @@ import {
   Check,
   ChevronDown,
   Sparkles,
+  Rocket,
+  Building2,
+  LayoutDashboard,
+  Compass,
+  PenTool,
+  Code2,
+  CheckCircle2,
 } from "lucide-react";
 import CursorSpotlight from "../components/ui/CursorSpotlight";
 
@@ -18,8 +25,12 @@ const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent
 )}`;
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: 28 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+  },
 };
 
 const staggerContainer = {
@@ -68,6 +79,9 @@ const PRICING = [
   },
 ];
 
+// Visual-only accent icons per pricing tier (does not touch PRICING data/logic)
+const PRICING_ICONS = [Rocket, Building2, LayoutDashboard];
+
 const METHODOLOGY = [
   {
     step: "01",
@@ -96,6 +110,9 @@ const METHODOLOGY = [
   },
 ];
 
+// Visual-only accent icons per methodology step (does not touch METHODOLOGY data/logic)
+const METHOD_ICONS = [Compass, PenTool, Code2, CheckCircle2, Rocket];
+
 const FAQS = [
   {
     q: "Berapa lama proses pembuatan website?",
@@ -122,22 +139,53 @@ const CASE_STUDIES = [
   },
 ];
 
+// Subtle dot-grid texture used behind a few sections for visual depth
+const dotGridStyle = {
+  backgroundImage:
+    "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.07) 1px, transparent 0)",
+  backgroundSize: "28px 28px",
+};
+
+function SectionDivider() {
+  return (
+    <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+  );
+}
+
 function FaqItem({ item, isOpen, onToggle }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden">
+    <div
+      className={`rounded-2xl border overflow-hidden transition-colors duration-300 ${
+        isOpen
+          ? "border-blue-500/40 bg-blue-500/[0.04]"
+          : "border-white/10 bg-white/[0.03] hover:border-white/20"
+      }`}
+    >
       <button
         type="button"
         onClick={onToggle}
         className="w-full flex items-center justify-between gap-4 px-5 py-4 md:px-6 md:py-5 text-left"
       >
-        <span className="text-sm md:text-base font-semibold text-white">
+        <span
+          className={`text-sm md:text-base font-semibold transition-colors duration-300 ${
+            isOpen ? "text-blue-300" : "text-white"
+          }`}
+        >
           {item.q}
         </span>
-        <ChevronDown
-          className={`w-5 h-5 shrink-0 text-slate-400 transition-transform duration-300 ${
-            isOpen ? "rotate-180 text-blue-400" : ""
+        <span
+          className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
+            isOpen
+              ? "border-blue-400/40 bg-blue-500/10 rotate-180"
+              : "border-white/10 bg-white/[0.03]"
           }`}
-        />
+        >
+          <ChevronDown
+            className={`w-4 h-4 transition-colors duration-300 ${
+              isOpen ? "text-blue-300" : "text-slate-400"
+            }`}
+          />
+        </span>
       </button>
       <div
         className={`grid transition-all duration-300 ease-out ${
@@ -174,16 +222,18 @@ export default function JasaWebsite() {
 
       <main className="bg-black overflow-hidden">
         {/* ================= HERO ================= */}
-        <section className="relative pt-16 pb-20 md:pt-24 md:pb-28 px-4">
+        <section className="relative pt-16 pb-20 md:pt-28 md:pb-32 px-4">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(37,99,235,0.28),transparent_55%)]" />
           <div className="absolute inset-0 ds-starfield opacity-50" />
+          <div className="pointer-events-none absolute top-1/3 left-[8%] w-72 h-72 bg-blue-600/10 blur-[110px] rounded-full" />
+          <div className="pointer-events-none absolute bottom-0 right-[10%] w-80 h-80 bg-sky-500/10 blur-[120px] rounded-full" />
 
           <div className="relative z-10 max-w-3xl mx-auto text-center">
             <motion.span
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-300"
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-300"
             >
               <span className="relative flex h-1.5 w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
@@ -196,7 +246,7 @@ export default function JasaWebsite() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.6 }}
-              className="mt-6 font-serif text-4xl md:text-6xl font-bold tracking-tight text-white leading-[1.1]"
+              className="mt-6 font-serif text-4xl md:text-6xl font-bold tracking-tight text-white leading-[1.1] text-balance"
             >
               Jasa Pembuatan Website &amp;{" "}
               <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-blue-500 bg-clip-text text-transparent">
@@ -208,7 +258,7 @@ export default function JasaWebsite() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="mt-5 text-sm md:text-lg text-slate-300/90 max-w-xl mx-auto leading-relaxed"
+              className="mt-5 text-sm md:text-lg text-slate-300/90 max-w-xl mx-auto leading-relaxed text-balance"
             >
               Spesialis Landing Page, Company Profile, hingga Sistem POS
               terintegrasi. Dibangun dengan standar industri global untuk
@@ -225,13 +275,14 @@ export default function JasaWebsite() {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-6 py-3 rounded-xl shadow-[0_10px_30px_rgba(37,99,235,0.35)] hover:-translate-y-0.5 transition-all duration-200"
+                className="group inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-6 py-3 rounded-xl shadow-[0_10px_30px_rgba(37,99,235,0.35)] hover:shadow-[0_15px_40px_rgba(37,99,235,0.5)] hover:-translate-y-0.5 transition-all duration-200"
               >
-                Konsultasi Gratis <ArrowRight className="w-4 h-4" />
+                Konsultasi Gratis{" "}
+                <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
               </a>
               <a
                 href="#studi-kasus"
-                className="inline-flex items-center gap-2 border border-white/15 text-white text-sm font-semibold px-6 py-3 rounded-xl hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200"
+                className="inline-flex items-center gap-2 border border-white/15 bg-white/[0.02] backdrop-blur-sm text-white text-sm font-semibold px-6 py-3 rounded-xl hover:bg-white/5 hover:border-white/25 hover:-translate-y-0.5 transition-all duration-200"
               >
                 Lihat Portofolio
               </a>
@@ -258,7 +309,7 @@ export default function JasaWebsite() {
             </motion.div>
           </div>
 
-          {/* Code editor mockup */}
+          {/* Code editor mockup — signature element */}
           <motion.div
             initial={{ opacity: 0, y: 40, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -266,63 +317,69 @@ export default function JasaWebsite() {
             className="relative z-10 max-w-3xl mx-auto mt-14 md:mt-16"
           >
             <div className="pointer-events-none absolute -inset-4 rounded-[2rem] bg-blue-600/20 blur-3xl" />
-            <div className="relative rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-md shadow-[0_30px_80px_rgba(2,6,23,0.6)] overflow-hidden">
-            <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/[0.02]">
-              <span className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
-              <span className="w-2.5 h-2.5 rounded-full bg-yellow-400/80" />
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
-              <span className="mx-auto inline-flex items-center gap-1.5 text-[11px] text-slate-400 font-mono">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                solit03.com
-              </span>
-            </div>
-            <div className="p-5 md:p-7 font-mono text-[12px] md:text-sm leading-relaxed">
-              <p>
-                <span className="text-purple-400">import</span>{" "}
-                <span className="text-slate-200">{"{ SolitCore }"}</span>{" "}
-                <span className="text-purple-400">from</span>{" "}
-                <span className="text-emerald-400">'@solit/core'</span>
-              </p>
-              <p className="mt-4">
-                <span className="text-purple-400">const</span>{" "}
-                <span className="text-blue-300">app</span>{" "}
-                <span className="text-slate-400">=</span>{" "}
-                <span className="text-purple-400">new</span>{" "}
-                <span className="text-yellow-300">SolitCore</span>
-                <span className="text-slate-400">{"({"}</span>
-              </p>
-              <p className="pl-6 text-slate-300">
-                performance:{" "}
-                <span className="text-emerald-400">'maximized'</span>,
-              </p>
-              <p className="pl-6 text-slate-300">
-                design: <span className="text-emerald-400">'pixel-perfect'</span>,
-              </p>
-              <p className="pl-6 text-slate-300">
-                security:{" "}
-                <span className="text-emerald-400">'enterprise-grade'</span>
-              </p>
-              <p className="text-slate-400">{"});"}</p>
-              <p className="mt-4">
-                <span className="text-blue-300">app</span>
-                <span className="text-slate-400">.launch().then(() =&gt; {"{"}</span>
-              </p>
-              <p className="pl-6">
-                <span className="text-slate-300">console.</span>
-                <span className="text-yellow-300">log</span>
-                <span className="text-slate-400">(</span>
-                <span className="text-emerald-400">'Ready to scale'</span>
-                <span className="text-slate-400">);</span>
-              </p>
-              <p className="text-slate-400">{"});"}</p>
-            </div>
+            <div className="relative rounded-2xl border border-white/10 ring-1 ring-white/[0.06] ring-inset bg-white/[0.03] backdrop-blur-md shadow-[0_30px_80px_rgba(2,6,23,0.6)] overflow-hidden">
+              <CursorSpotlight color="rgba(59,130,246,0.16)" size={420} />
+              <div className="relative flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/[0.02]">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
+                <span className="w-2.5 h-2.5 rounded-full bg-yellow-400/80" />
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
+                <span className="mx-auto inline-flex items-center gap-1.5 text-[11px] text-slate-400 font-mono">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  solit03.com
+                </span>
+              </div>
+              <div className="relative p-5 md:p-7 font-mono text-[12px] md:text-sm leading-relaxed">
+                <p>
+                  <span className="text-purple-400">import</span>{" "}
+                  <span className="text-slate-200">{"{ SolitCore }"}</span>{" "}
+                  <span className="text-purple-400">from</span>{" "}
+                  <span className="text-emerald-400">'@solit/core'</span>
+                </p>
+                <p className="mt-4">
+                  <span className="text-purple-400">const</span>{" "}
+                  <span className="text-blue-300">app</span>{" "}
+                  <span className="text-slate-400">=</span>{" "}
+                  <span className="text-purple-400">new</span>{" "}
+                  <span className="text-yellow-300">SolitCore</span>
+                  <span className="text-slate-400">{"({"}</span>
+                </p>
+                <p className="pl-6 text-slate-300">
+                  performance:{" "}
+                  <span className="text-emerald-400">'maximized'</span>,
+                </p>
+                <p className="pl-6 text-slate-300">
+                  design: <span className="text-emerald-400">'pixel-perfect'</span>,
+                </p>
+                <p className="pl-6 text-slate-300">
+                  security:{" "}
+                  <span className="text-emerald-400">'enterprise-grade'</span>
+                </p>
+                <p className="text-slate-400">{"});"}</p>
+                <p className="mt-4">
+                  <span className="text-blue-300">app</span>
+                  <span className="text-slate-400">.launch().then(() =&gt; {"{"}</span>
+                </p>
+                <p className="pl-6">
+                  <span className="text-slate-300">console.</span>
+                  <span className="text-yellow-300">log</span>
+                  <span className="text-slate-400">(</span>
+                  <span className="text-emerald-400">'Ready to scale'</span>
+                  <span className="text-slate-400">);</span>
+                </p>
+                <p className="text-slate-400">
+                  {"});"}
+                  <span className="inline-block w-[7px] h-[14px] bg-blue-400/80 ml-1 align-middle animate-pulse" />
+                </p>
+              </div>
             </div>
           </motion.div>
         </section>
 
         {/* ================= PRICING ================= */}
-        <section className="relative py-20 md:py-28 px-4 border-t border-white/5">
-          <div className="max-w-6xl mx-auto">
+        <section className="relative py-20 md:py-28 px-4">
+          <SectionDivider />
+          <div className="pointer-events-none absolute inset-0 opacity-[0.35] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" style={dotGridStyle} />
+          <div className="relative max-w-6xl mx-auto">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -358,61 +415,74 @@ export default function JasaWebsite() {
               variants={staggerContainer}
               className="grid md:grid-cols-3 gap-6"
             >
-              {PRICING.map((plan) => (
-                <motion.div
-                  key={plan.name}
-                  variants={fadeInUp}
-                  whileHover={{ y: -6 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                  className={`relative rounded-2xl border p-6 md:p-7 flex flex-col transition-colors duration-300 ${
-                    plan.popular
-                      ? "border-blue-500/60 bg-gradient-to-b from-blue-950/60 to-white/[0.02] shadow-[0_20px_60px_rgba(37,99,235,0.25)] md:-mt-4 md:mb-[-1rem]"
-                      : "border-white/10 bg-white/[0.02] hover:border-white/20"
-                  }`}
-                >
-                  {plan.popular && (
-                    <span className="absolute top-0 right-6 -translate-y-1/2 inline-flex items-center gap-1 bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-[0_6px_20px_rgba(37,99,235,0.5)]">
-                      <Sparkles className="w-3 h-3" />
-                      Populer
-                    </span>
-                  )}
-
-                  <h3 className="text-lg font-bold text-white">{plan.name}</h3>
-                  <p className="mt-1 text-xs text-slate-400">Mulai dari</p>
-                  <p
-                    className={`mt-2 text-3xl font-extrabold ${
-                      plan.popular ? "text-blue-400" : "text-white"
-                    }`}
-                  >
-                    {plan.price}
-                  </p>
-
-                  <ul className="mt-6 space-y-3 flex-1">
-                    {plan.features.map((f) => (
-                      <li
-                        key={f}
-                        className="flex items-start gap-2 text-sm text-slate-300"
-                      >
-                        <Check className="w-4 h-4 mt-0.5 text-blue-400 shrink-0" />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <a
-                    href={WHATSAPP_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`mt-7 inline-flex items-center justify-center w-full rounded-xl py-2.5 text-sm font-semibold transition-all duration-200 ${
+              {PRICING.map((plan, idx) => {
+                const PlanIcon = PRICING_ICONS[idx] ?? Layers;
+                return (
+                  <motion.div
+                    key={plan.name}
+                    variants={fadeInUp}
+                    whileHover={{ y: -6 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                    className={`relative rounded-2xl border p-6 md:p-7 flex flex-col transition-colors duration-300 ${
                       plan.popular
-                        ? "bg-blue-600 hover:bg-blue-500 text-white"
-                        : "border border-white/15 text-white hover:bg-white/5"
+                        ? "border-blue-500/60 bg-gradient-to-b from-blue-950/60 to-white/[0.02] shadow-[0_20px_60px_rgba(37,99,235,0.25)] md:-mt-4 md:mb-[-1rem]"
+                        : "border-white/10 bg-white/[0.02] hover:border-white/20"
                     }`}
                   >
-                    {plan.cta}
-                  </a>
-                </motion.div>
-              ))}
+                    {plan.popular && (
+                      <span className="absolute top-0 right-6 -translate-y-1/2 inline-flex items-center gap-1 bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-[0_6px_20px_rgba(37,99,235,0.5)]">
+                        <Sparkles className="w-3 h-3" />
+                        Populer
+                      </span>
+                    )}
+
+                    <span
+                      className={`inline-flex h-10 w-10 items-center justify-center rounded-xl border ${
+                        plan.popular
+                          ? "border-blue-400/40 bg-blue-500/10 text-blue-300"
+                          : "border-white/10 bg-white/[0.04] text-slate-300"
+                      }`}
+                    >
+                      <PlanIcon className="w-5 h-5" />
+                    </span>
+
+                    <h3 className="mt-4 text-lg font-bold text-white">{plan.name}</h3>
+                    <p className="mt-1 text-xs text-slate-400">Mulai dari</p>
+                    <p
+                      className={`mt-2 font-mono tabular-nums text-2xl md:text-3xl font-extrabold ${
+                        plan.popular ? "text-blue-400" : "text-white"
+                      }`}
+                    >
+                      {plan.price}
+                    </p>
+
+                    <ul className="mt-6 space-y-3 flex-1">
+                      {plan.features.map((f) => (
+                        <li
+                          key={f}
+                          className="flex items-start gap-2 text-sm text-slate-300"
+                        >
+                          <Check className="w-4 h-4 mt-0.5 text-blue-400 shrink-0" />
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <a
+                      href={WHATSAPP_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`mt-7 inline-flex items-center justify-center w-full rounded-xl py-2.5 text-sm font-semibold transition-all duration-200 ${
+                        plan.popular
+                          ? "bg-blue-600 hover:bg-blue-500 text-white shadow-[0_10px_24px_rgba(37,99,235,0.3)] hover:shadow-[0_14px_32px_rgba(37,99,235,0.45)]"
+                          : "border border-white/15 text-white hover:bg-white/5"
+                      }`}
+                    >
+                      {plan.cta}
+                    </a>
+                  </motion.div>
+                );
+              })}
             </motion.div>
           </div>
         </section>
@@ -420,9 +490,10 @@ export default function JasaWebsite() {
         {/* ================= STUDI KASUS ================= */}
         <section
           id="studi-kasus"
-          className="relative py-20 md:py-28 px-4 border-t border-white/5"
+          className="relative py-20 md:py-28 px-4"
         >
-          <div className="max-w-6xl mx-auto">
+          <SectionDivider />
+          <div className="relative max-w-6xl mx-auto">
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10 md:mb-14">
               <motion.div
                 initial="hidden"
@@ -467,10 +538,11 @@ export default function JasaWebsite() {
                 rel="noopener noreferrer"
                 variants={fadeInUp}
                 whileHover={{ y: -4 }}
-                className="group rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden"
+                className="group relative rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden hover:border-blue-400/30 transition-colors duration-300"
               >
-                <div className="p-4 bg-slate-900">
-                  <div className="rounded-lg overflow-hidden bg-white">
+                <div className="pointer-events-none absolute -inset-1 rounded-2xl bg-blue-500/0 group-hover:bg-blue-500/[0.05] blur-2xl transition-colors duration-500" />
+                <div className="relative p-4 bg-slate-900">
+                  <div className="rounded-lg overflow-hidden bg-white shadow-[0_20px_40px_rgba(0,0,0,0.35)] transition-transform duration-500 group-hover:scale-[1.02]">
                     <div className="flex items-center justify-between px-3 py-2 bg-blue-700 text-white text-[11px] font-semibold">
                       <span>solit03 Laptop &amp; Aksesoris</span>
                       <span className="rounded bg-white/20 px-2 py-0.5 text-[10px]">
@@ -488,10 +560,10 @@ export default function JasaWebsite() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center justify-between p-5">
+                <div className="relative flex items-center justify-between p-5">
                   <div>
                     <h3 className="font-bold text-white">{CASE_STUDIES[0].name}</h3>
-                    <p className="mt-1 text-xs text-slate-400">
+                    <p className="mt-1 text-xs text-slate-400 font-mono">
                       {CASE_STUDIES[0].tags}
                     </p>
                   </div>
@@ -506,10 +578,11 @@ export default function JasaWebsite() {
                 rel="noopener noreferrer"
                 variants={fadeInUp}
                 whileHover={{ y: -4 }}
-                className="group rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden"
+                className="group relative rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden hover:border-blue-400/30 transition-colors duration-300"
               >
-                <div className="p-4 bg-slate-900">
-                  <div className="rounded-lg overflow-hidden bg-white p-3">
+                <div className="pointer-events-none absolute -inset-1 rounded-2xl bg-blue-500/0 group-hover:bg-blue-500/[0.05] blur-2xl transition-colors duration-500" />
+                <div className="relative p-4 bg-slate-900">
+                  <div className="rounded-lg overflow-hidden bg-white p-3 shadow-[0_20px_40px_rgba(0,0,0,0.35)] transition-transform duration-500 group-hover:scale-[1.02]">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="w-6 h-6 rounded-full bg-blue-100" />
                       <div className="flex-1 space-y-1">
@@ -528,10 +601,10 @@ export default function JasaWebsite() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center justify-between p-5">
+                <div className="relative flex items-center justify-between p-5">
                   <div>
                     <h3 className="font-bold text-white">{CASE_STUDIES[1].name}</h3>
-                    <p className="mt-1 text-xs text-slate-400">
+                    <p className="mt-1 text-xs text-slate-400 font-mono">
                       {CASE_STUDIES[1].tags}
                     </p>
                   </div>
@@ -560,8 +633,9 @@ export default function JasaWebsite() {
         </section>
 
         {/* ================= METODOLOGI ================= */}
-        <section className="relative py-20 md:py-28 px-4 border-t border-white/5">
-          <div className="max-w-4xl mx-auto">
+        <section className="relative py-20 md:py-28 px-4">
+          <SectionDivider />
+          <div className="relative max-w-4xl mx-auto">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -588,37 +662,56 @@ export default function JasaWebsite() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.1 }}
               variants={staggerContainer}
-              className="divide-y divide-white/10 border-t border-white/10"
+              className="relative divide-y divide-white/10 border-t border-white/10"
             >
-              {METHODOLOGY.map((item) => (
-                <motion.div
-                  key={item.step}
-                  variants={fadeInUp}
-                  className="group grid md:grid-cols-[3.5rem_16rem_1fr] gap-2 md:gap-8 py-6 md:py-8 md:px-4 md:-mx-4 rounded-xl transition-colors duration-300 hover:bg-white/[0.02]"
-                >
-                  <span className="font-mono text-lg font-bold text-slate-700 transition-colors duration-300 group-hover:text-blue-400">
-                    {item.step}
-                  </span>
-                  <h3 className="text-base md:text-lg font-bold text-white">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">
-                    {item.text}
-                  </p>
-                </motion.div>
-              ))}
+              <div className="pointer-events-none absolute left-[1.7rem] top-0 bottom-0 w-px bg-gradient-to-b from-blue-500/0 via-white/10 to-blue-500/0 hidden md:block" />
+              {METHODOLOGY.map((item, idx) => {
+                const StepIcon = METHOD_ICONS[idx] ?? Sparkles;
+                return (
+                  <motion.div
+                    key={item.step}
+                    variants={fadeInUp}
+                    className="group grid md:grid-cols-[3.5rem_16rem_1fr] gap-2 md:gap-8 py-6 md:py-8 md:px-4 md:-mx-4 rounded-xl transition-colors duration-300 hover:bg-white/[0.02]"
+                  >
+                    <span className="relative flex items-center gap-2">
+                      <span className="hidden md:inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-black text-slate-500 transition-all duration-300 group-hover:border-blue-400/40 group-hover:text-blue-300 group-hover:bg-blue-500/10">
+                        <StepIcon className="w-4 h-4" />
+                      </span>
+                      <span className="font-mono text-lg font-bold text-slate-700 transition-colors duration-300 group-hover:text-blue-400">
+                        {item.step}
+                      </span>
+                    </span>
+                    <h3 className="text-base md:text-lg font-bold text-white">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-slate-400 leading-relaxed">
+                      {item.text}
+                    </p>
+                  </motion.div>
+                );
+              })}
             </motion.div>
           </div>
         </section>
 
         {/* ================= FAQ ================= */}
-        <section className="relative py-20 md:py-28 px-4 border-t border-white/5">
-          <div className="max-w-2xl mx-auto text-center">
+        <section className="relative py-20 md:py-28 px-4">
+          <SectionDivider />
+          <div className="relative max-w-2xl mx-auto text-center">
+            <motion.span
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-400"
+            >
+              FAQ
+            </motion.span>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="font-serif text-2xl md:text-4xl font-bold text-white"
+              transition={{ delay: 0.05 }}
+              className="mt-3 font-serif text-2xl md:text-4xl font-bold text-white"
             >
               Pertanyaan Umum
             </motion.h2>
@@ -638,7 +731,7 @@ export default function JasaWebsite() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
             variants={staggerContainer}
-            className="max-w-2xl mx-auto mt-10 space-y-3"
+            className="relative max-w-2xl mx-auto mt-10 space-y-3"
           >
             {FAQS.map((item, idx) => (
               <motion.div key={item.q} variants={fadeInUp}>
@@ -659,13 +752,14 @@ export default function JasaWebsite() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
-            className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800 px-6 py-14 md:py-16 text-center"
+            className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 px-6 py-14 md:py-16 text-center ring-1 ring-white/10"
           >
             <CursorSpotlight color="rgba(255,255,255,0.18)" size={480} />
             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:32px_32px]" />
+            <div className="pointer-events-none absolute -top-24 -right-24 w-72 h-72 bg-white/10 blur-3xl rounded-full" />
 
             <div className="relative z-10">
-              <h2 className="font-serif text-2xl md:text-4xl font-bold text-white">
+              <h2 className="font-serif text-2xl md:text-4xl font-bold text-white text-balance">
                 Siap Mendigitalkan Bisnis Anda?
               </h2>
               <p className="mt-4 text-sm md:text-base text-blue-100 max-w-xl mx-auto leading-relaxed">
@@ -677,9 +771,10 @@ export default function JasaWebsite() {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-7 inline-flex items-center gap-2 bg-white text-blue-700 text-sm font-bold px-6 py-3 rounded-xl hover:-translate-y-0.5 hover:shadow-xl transition-all duration-200"
+                className="group mt-7 inline-flex items-center gap-2 bg-white text-blue-700 text-sm font-bold px-6 py-3 rounded-xl hover:-translate-y-0.5 hover:shadow-xl transition-all duration-200"
               >
-                Hubungi via WhatsApp <ArrowRight className="w-4 h-4" />
+                Hubungi via WhatsApp{" "}
+                <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
               </a>
             </div>
           </motion.div>
