@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import fotoReinaldy from "../../assets/foto/reinaldy-olyvierd-sendouw.webp";
 import fotoYoga from "../../assets/foto/yoga-adi-prakoso.webp";
@@ -151,14 +151,41 @@ export default function TeamSlider() {
     return () => clearInterval(id);
   }, [members.length]);
 
+  // ========== CURSOR SPOTLIGHT (dekoratif) ==========
+  // Titik cahaya biru yang mengikuti kursor di desktop — murni visual,
+  // tidak menyentuh index/offset/logic carousel sama sekali.
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const spotlightX = useSpring(mouseX, { stiffness: 150, damping: 20, mass: 0.4 });
+  const spotlightY = useSpring(mouseY, { stiffness: 150, damping: 20, mass: 0.4 });
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    mouseX.set(e.clientX - rect.left);
+    mouseY.set(e.clientY - rect.top);
+  };
+
   return (
     <section
       className="relative text-center overflow-hidden py-6"
       onMouseEnter={() => (paused.current = true)}
       onMouseLeave={() => (paused.current = false)}
+      onMouseMove={handleMouseMove}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
+      {/* Spotlight yang mengikuti kursor — desktop only, dekoratif murni */}
+      <motion.div
+        aria-hidden="true"
+        className="hidden md:block pointer-events-none absolute w-[420px] h-[420px] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.16),transparent_70%)]"
+        style={{
+          left: spotlightX,
+          top: spotlightY,
+          marginLeft: -210,
+          marginTop: -210,
+        }}
+      />
+
       {/* Dekorasi background — dua radial glow biru yang mengambang pelan, tidak menangkap event apapun */}
       <motion.div
         aria-hidden="true"
@@ -198,8 +225,14 @@ export default function TeamSlider() {
         </motion.h2>
         <motion.div
           variants={fadeInUp}
-          className="mx-auto mt-4 h-1 w-16 rounded-full bg-gradient-to-r from-blue-600 to-blue-400"
-        />
+          className="mx-auto mt-4 h-1 w-16 rounded-full overflow-hidden bg-blue-100"
+        >
+          <motion.div
+            className="h-full w-full bg-gradient-to-r from-blue-600 via-sky-400 to-blue-600 bg-[length:200%_100%]"
+            animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+          />
+        </motion.div>
       </motion.div>
 
       {/* ===== DESKTOP: 3D Carousel (md+) ===== */}
@@ -253,17 +286,21 @@ export default function TeamSlider() {
                   willChange: "transform",
                 }}
               >
+                {/* initial/animate di sini murni mengurus fade+pop saat kartu ini
+                    pertama kali masuk ke rentang render (mount) — offset/posisi
+                    tetap sepenuhnya dikendalikan style di atas, tidak disentuh */}
                 <motion.div
-                  animate={
-                    isCenter
-                      ? { scale: [1, 1.015, 1] }
-                      : { scale: 1 }
-                  }
-                  transition={
-                    isCenter
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  animate={{
+                    opacity: 1,
+                    scale: isCenter ? [1, 1.015, 1] : 1,
+                  }}
+                  transition={{
+                    opacity: { duration: 0.4, ease: "easeOut" },
+                    scale: isCenter
                       ? { duration: 3, repeat: Infinity, ease: "easeInOut" }
-                      : { duration: 0.3 }
-                  }
+                      : { duration: 0.3 },
+                  }}
                   className={`card-3d group relative p-4 w-64 md:w-72 rounded-3xl border bg-white/70 backdrop-blur-sm transition-all duration-500 ${isCenter
                       ? "border-blue-200 shadow-[0_25px_60px_-20px_rgba(37,99,235,0.45),0_10px_25px_-10px_rgba(15,23,42,0.15)]"
                       : "border-transparent shadow-soft"
@@ -368,16 +405,17 @@ export default function TeamSlider() {
                 }}
               >
                 <motion.div
-                  animate={
-                    isCenter
-                      ? { scale: [1, 1.015, 1] }
-                      : { scale: 1 }
-                  }
-                  transition={
-                    isCenter
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{
+                    opacity: 1,
+                    scale: isCenter ? [1, 1.015, 1] : 1,
+                  }}
+                  transition={{
+                    opacity: { duration: 0.4, ease: "easeOut" },
+                    scale: isCenter
                       ? { duration: 3, repeat: Infinity, ease: "easeInOut" }
-                      : { duration: 0.3 }
-                  }
+                      : { duration: 0.3 },
+                  }}
                   className="card-3d p-4 border border-blue-100/70 rounded-3xl bg-white/80 backdrop-blur-sm shadow-soft"
                 >
                   <div className="relative overflow-hidden rounded-2xl ring-4 ring-white">
@@ -434,7 +472,7 @@ export default function TeamSlider() {
 
         {/* Swipe hint — nudge halus kiri-kanan supaya kelihatan hidup */}
         <motion.p
-          className="text-[11px] text-blue-600/70 mt-4 flex items-center justify-center gap-1.5"
+          className="inline-flex items-center justify-center gap-1.5 mt-4 mx-auto rounded-full bg-white/60 backdrop-blur-sm px-3 py-1 text-[11px] text-blue-600/80"
           animate={{ opacity: [0.5, 1, 0.5] }}
           transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
         >
