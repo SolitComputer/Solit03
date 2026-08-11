@@ -5,6 +5,10 @@ import { ArrowRight, ChevronRight, Sparkles } from "lucide-react";
 import bgHero from "../assets/background.webp";
 import solitLogo from "../assets/solit03.jpeg";
 import InteractiveBackground from "./ui/InteractiveBackground";
+import Aurora from "./ui/Aurora";
+import SplitText from "./ui/SplitText";
+import Magnet from "./ui/Magnet";
+import TextLoop from "./ui/TextLoop";
 import { getSiteSettings } from "../services/siteContent";
 import { getServiceIcon } from "../utils/serviceIcons";
 
@@ -106,6 +110,13 @@ export default function Hero() {
             />
             {/* Overlay gelap — jaga keterbacaan teks */}
             <div className="absolute inset-0 bg-gradient-to-b from-slate-900/85 via-slate-900/70 to-slate-900/95 pointer-events-none" />
+            {/* Pita aurora premium yang bergerak pelan di balik jaring partikel */}
+            <Aurora
+                className="pointer-events-none"
+                colors={["#2563eb", "#22d3ee", "#6366f1"]}
+                opacity={0.4}
+                blur={100}
+            />
             {/* Jaring partikel interaktif — menghindar dari kursor */}
             <InteractiveBackground className="pointer-events-none" />
             <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[520px] h-[520px] bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
@@ -125,12 +136,26 @@ export default function Hero() {
                     {/* Title */}
                     <div className="space-y-4">
                         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white">
-                            {hero.title_prefix}<span className="text-shimmer">{hero.title_suffix}</span>
+                            <SplitText as="span" text={hero.title_prefix} by="char" stagger={0.06} />
+                            <span className="text-blue-500 ml-1">{hero.title_suffix}</span>
                         </h1>
-                        <p className="text-lg sm:text-xl md:text-2xl text-slate-200 font-light">
-                            {hero.subtitle}
-                        </p>
+                        <SplitText
+                            as="p"
+                            text={hero.subtitle}
+                            by="word"
+                            delay={0.25}
+                            className="text-lg sm:text-xl md:text-2xl text-slate-200 font-light"
+                        />
                     </div>
+
+                    {/* Tagline berputar */}
+                    <p className="text-base sm:text-lg md:text-xl text-slate-200 font-light">
+                        Andal untuk{" "}
+                        <TextLoop
+                            items={["Kuliah", "Kerja", "Coding", "Desain", "Gaming"]}
+                            className="font-semibold text-blue-300"
+                        />
+                    </p>
 
                     {/* Description */}
                     <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
@@ -139,26 +164,30 @@ export default function Hero() {
 
                     {/* CTA */}
                     <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
-                        <motion.button
-                            onClick={handleViewCatalog}
-                            whileHover={{ scale: 1.04, y: -2 }}
-                            whileTap={{ scale: 0.97 }}
-                            transition={{ type: "spring", stiffness: 400, damping: 22 }}
-                            className="btn btn-primary px-8 py-3.5 text-sm sm:text-base group"
-                        >
-                            {hero.cta_primary_label}
-                            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                        </motion.button>
-                        <motion.button
-                            onClick={handleWhatsApp}
-                            whileHover={{ scale: 1.04, y: -2 }}
-                            whileTap={{ scale: 0.97 }}
-                            transition={{ type: "spring", stiffness: 400, damping: 22 }}
-                            className="btn px-8 py-3.5 text-sm sm:text-base text-white bg-surface/10 backdrop-blur-md border border-white/25 hover:bg-surface hover:text-content group"
-                        >
-                            {hero.cta_secondary_label}
-                            <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-                        </motion.button>
+                        <Magnet>
+                            <motion.button
+                                onClick={handleViewCatalog}
+                                whileHover={{ scale: 1.04, y: -2 }}
+                                whileTap={{ scale: 0.97 }}
+                                transition={{ type: "spring", stiffness: 400, damping: 22 }}
+                                className="btn btn-primary px-8 py-3.5 text-sm sm:text-base group"
+                            >
+                                {hero.cta_primary_label}
+                                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                            </motion.button>
+                        </Magnet>
+                        <Magnet>
+                            <motion.button
+                                onClick={handleWhatsApp}
+                                whileHover={{ scale: 1.04, y: -2 }}
+                                whileTap={{ scale: 0.97 }}
+                                transition={{ type: "spring", stiffness: 400, damping: 22 }}
+                                className="btn px-8 py-3.5 text-sm sm:text-base text-white bg-surface/10 backdrop-blur-md border border-white/25 hover:bg-surface hover:text-content group"
+                            >
+                                {hero.cta_secondary_label}
+                                <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                            </motion.button>
+                        </Magnet>
                     </div>
 
                     {/* Trust indicators */}

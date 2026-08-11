@@ -159,7 +159,7 @@ export default function LatestProducts() {
 
         {/* Main Title */}
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-content mt-5">
-          Produk <span className="text-shimmer">Terbaru</span>
+          Produk <span className="text-blue-600">Terbaru</span>
         </h2>
 
         {/* Subtitle with dynamic loading indicator */}

@@ -2,6 +2,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import { fmtIDR } from '../../services/api';
 import { Crown, Flame, Sparkles } from 'lucide-react';
 import { isNewProduct } from '../../utils/dateUtils';
+import TiltCard from '../ui/TiltCard';
+import CursorSpotlight from '../ui/CursorSpotlight';
 
 function ProductCard({ product, viewMode, mode, stock }) {
     const imgRef = useRef(null);
@@ -178,10 +180,12 @@ function ProductCard({ product, viewMode, mode, stock }) {
             </div>
 
             <a className="absolute inset-0 z-10" href={buildProductUrl()} aria-label={`Buka ${product.name}`} />
+            {/* Sorotan cahaya lembut mengikuti kursor — di atas gambar, tak menghalangi klik */}
+            <CursorSpotlight size={360} color="rgba(59,130,246,0.16)" className="z-20" />
         </article>
     );
 
-    return gridCard;
+    return <TiltCard max={6} scale={1.03} className="rounded-2xl h-full">{gridCard}</TiltCard>;
 }
 
 export default ProductCard;

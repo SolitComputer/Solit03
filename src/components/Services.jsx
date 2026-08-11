@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { Sparkles } from "lucide-react";
 import { getServices } from "../services/siteContent";
 import { getServiceIcon } from "../utils/serviceIcons";
+import TiltCard from "./ui/TiltCard";
+import CursorSpotlight from "./ui/CursorSpotlight";
+import SplitText from "./ui/SplitText";
 
 const DEFAULT_SERVICES = [
   { id: "d1", icon: "BadgeCheck", title: "Quality Control", description: "Teruji & Terpercaya" },
@@ -53,7 +56,8 @@ export default function Services() {
           LAYANAN
         </span>
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-content mt-5">
-          Layanan <span className="text-blue-600">Setiap Hari</span>
+          <SplitText as="span" text="Layanan " />
+          <span className="text-blue-600">Setiap Hari</span>
         </h2>
         <p className="text-sm md:text-base text-content-muted mt-4 max-w-2xl mx-auto">
           Dukungan menyeluruh untuk pengalaman belanja laptop yang aman dan nyaman.
@@ -65,26 +69,28 @@ export default function Services() {
         {services.map((service, index) => {
           const Icon = getServiceIcon(service.icon);
           return (
-            <div
-              key={service.id}
-              className="group card-3d p-5 text-center"
-              style={{ transitionDelay: `${index * 100}ms` }}
-            >
-              {/* Icon */}
-              <div className="w-14 h-14 mx-auto bg-surface-muted rounded-xl flex items-center justify-center mb-3 group-hover:bg-blue-50 transition-colors duration-300">
-                <Icon className="w-6 h-6 text-content-soft group-hover:text-blue-600 transition-colors" />
+            <TiltCard key={service.id} max={8} scale={1.04} className="rounded-2xl h-full">
+              <div
+                className="group card-3d relative overflow-hidden p-5 text-center h-full"
+                style={{ transitionDelay: `${index * 100}ms` }}
+              >
+                <CursorSpotlight size={280} color="rgba(59,130,246,0.16)" className="z-0" />
+                {/* Icon */}
+                <div className="relative z-10 w-14 h-14 mx-auto bg-surface-muted rounded-xl flex items-center justify-center mb-3 group-hover:bg-blue-50 transition-colors duration-300">
+                  <Icon className="w-6 h-6 text-content-soft group-hover:text-blue-600 transition-colors" />
+                </div>
+
+                {/* Title */}
+                <h3 className="relative z-10 text-sm sm:text-base font-semibold text-content mb-1">
+                  {service.title}
+                </h3>
+
+                {/* Description */}
+                <p className="relative z-10 text-xs sm:text-sm text-content-muted">
+                  {service.description}
+                </p>
               </div>
-
-              {/* Title */}
-              <h3 className="text-sm sm:text-base font-semibold text-content mb-1">
-                {service.title}
-              </h3>
-
-              {/* Description */}
-              <p className="text-xs sm:text-sm text-content-muted">
-                {service.description}
-              </p>
-            </div>
+            </TiltCard>
           );
         })}
       </div>
