@@ -1,3 +1,4 @@
+import { ArrowUpRight } from "lucide-react";
 import shopeeImg from "../assets/shopee_solit.webp";
 import tokopediaImg from "../assets/tokopedia_solit.webp";
 import Reveal from "./ui/Reveal";
@@ -7,8 +8,14 @@ export default function Marketplace() {
     <section className="py-16 md:py-24 bg-surface-muted">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
-        <Reveal as="h2" className="text-2xl sm:text-3xl md:text-4xl font-bold text-content text-center tracking-tight mb-10 md:mb-12">
-          Marketplace <span className="text-blue-600">Kami</span>
+        <Reveal className="text-center mb-10 md:mb-12">
+          <span className="eyebrow">Belanja Online</span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-content tracking-tight mt-5">
+            Marketplace <span className="text-blue-600">Kami</span>
+          </h2>
+          <p className="text-sm md:text-base text-content-muted mt-3 max-w-xl mx-auto">
+            Transaksi lebih aman &amp; nyaman lewat toko resmi kami.
+          </p>
         </Reveal>
 
         {/* Grid */}
@@ -22,11 +29,14 @@ export default function Marketplace() {
             rel="noopener noreferrer"
             className="group block flex-1"
           >
-            <div className="card-3d overflow-hidden">
-              <div className="p-3 pb-1.5 text-center">
+            <div className="card-3d overflow-hidden h-full">
+              <div className="flex items-center justify-between px-4 py-3">
                 <p className="text-base sm:text-lg font-semibold text-content">
                   Shopee
                 </p>
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                  <ArrowUpRight className="w-4 h-4" />
+                </span>
               </div>
               <div className="overflow-hidden">
                 <img
@@ -48,11 +58,14 @@ export default function Marketplace() {
             rel="noopener noreferrer"
             className="group block flex-1"
           >
-            <div className="card-3d overflow-hidden">
-              <div className="p-3 pb-1.5 text-center">
+            <div className="card-3d overflow-hidden h-full">
+              <div className="flex items-center justify-between px-4 py-3">
                 <p className="text-base sm:text-lg font-semibold text-content">
                   Tokopedia
                 </p>
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                  <ArrowUpRight className="w-4 h-4" />
+                </span>
               </div>
               <div className="overflow-hidden">
                 <img

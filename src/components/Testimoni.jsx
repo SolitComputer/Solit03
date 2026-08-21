@@ -24,10 +24,16 @@ export default function Testimoni() {
   return (
     <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-surface-muted text-center">
 
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-content mb-10 md:mb-12">
-        <SplitText as="span" text="Bukti " />
-        <span className="text-blue-600">Kepuasan Pelanggan</span>
-      </h2>
+      <div className="mb-10 md:mb-12">
+        <span className="eyebrow">Testimoni</span>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-content mt-5">
+          <SplitText as="span" text="Bukti " />
+          <span className="text-blue-600">Kepuasan Pelanggan</span>
+        </h2>
+        <p className="text-sm md:text-base text-content-muted mt-3 max-w-lg mx-auto">
+          Cerita nyata dari pelanggan yang sudah membuktikan kualitas Solit 03.
+        </p>
+      </div>
 
       {/* Video Grid */}
       <div className="flex flex-col sm:flex-row justify-center items-center gap-5 md:gap-6 max-w-5xl mx-auto">

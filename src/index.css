@@ -2,6 +2,11 @@
 @plugin "@tailwindcss/typography";
 @source ".";
 
+/* Dark mode digerakkan oleh class `.dark` (dari ThemeContext), BUKAN preferensi OS.
+   Tanpa ini, utility `dark:` di Tailwind v4 default mengikuti prefers-color-scheme,
+   sehingga bisa menyala walau situs sedang tampil light mode. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 html, body {
   scroll-behavior: smooth;
   background-color: var(--ds-bg);

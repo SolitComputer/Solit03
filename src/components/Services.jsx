@@ -76,8 +76,8 @@ export default function Services() {
               >
                 <CursorSpotlight size={280} color="rgba(59,130,246,0.16)" className="z-0" />
                 {/* Icon */}
-                <div className="relative z-10 w-14 h-14 mx-auto bg-surface-muted rounded-xl flex items-center justify-center mb-3 group-hover:bg-blue-50 transition-colors duration-300">
-                  <Icon className="w-6 h-6 text-content-soft group-hover:text-blue-600 transition-colors" />
+                <div className="relative z-10 w-14 h-14 mx-auto bg-surface-muted dark:bg-slate-800 rounded-2xl flex items-center justify-center mb-4 text-content-soft group-hover:bg-blue-600 group-hover:text-white group-hover:-translate-y-0.5 shadow-soft-sm transition-all duration-300">
+                  <Icon className="w-6 h-6" />
                 </div>
 
                 {/* Title */}

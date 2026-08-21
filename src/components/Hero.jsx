@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronRight, Sparkles } from "lucide-react";
+import { ArrowRight, ChevronRight, Sparkles, Star, ShieldCheck, BadgeCheck } from "lucide-react";
 import bgHero from "../assets/background.webp";
 import solitLogo from "../assets/solit03.jpeg";
+import heroShowcase from "../assets/laptop/1.webp";
 import InteractiveBackground from "./ui/InteractiveBackground";
 import Aurora from "./ui/Aurora";
 import SplitText from "./ui/SplitText";
@@ -121,91 +122,172 @@ export default function Hero() {
             <InteractiveBackground className="pointer-events-none" />
             <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[520px] h-[520px] bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
 
-            {/* Content */}
-            <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 z-10 text-center">
-                <div className={`space-y-7 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+            {/* Content — dua kolom: teks kiri, showcase kanan */}
+            <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 z-10">
+                <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] gap-12 lg:gap-8 items-center">
 
-                    {/* Badge */}
-                    <div className="flex justify-center">
-                        <span className="inline-flex items-center gap-2 bg-surface/10 backdrop-blur-md rounded-full px-4 py-1.5 border border-white/15 text-xs sm:text-sm text-white/90 font-medium">
-                            <Sparkles className="w-3.5 h-3.5 text-blue-300" />
-                            {hero.badge}
-                        </span>
-                    </div>
+                    {/* ---------- Kolom kiri: konten ---------- */}
+                    <div className={`text-center lg:text-left space-y-6 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
 
-                    {/* Title */}
-                    <div className="space-y-4">
-                        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white">
-                            <SplitText as="span" text={hero.title_prefix} by="char" stagger={0.06} />
-                            <span className="text-blue-500 ml-1">{hero.title_suffix}</span>
-                        </h1>
-                        <SplitText
-                            as="p"
-                            text={hero.subtitle}
-                            by="word"
-                            delay={0.25}
-                            className="text-lg sm:text-xl md:text-2xl text-slate-200 font-light"
-                        />
-                    </div>
+                        {/* Badge */}
+                        <div className="flex justify-center lg:justify-start">
+                            <span className="inline-flex items-center gap-2 bg-white/[0.08] backdrop-blur-md rounded-full pl-1.5 pr-4 py-1.5 border border-white/15 text-xs sm:text-sm text-white/90 font-medium">
+                                <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/90 px-2 py-0.5 text-[0.65rem] font-semibold text-white">
+                                    <Sparkles className="w-3 h-3" /> NEW
+                                </span>
+                                {hero.badge}
+                            </span>
+                        </div>
 
-                    {/* Tagline berputar */}
-                    <p className="text-base sm:text-lg md:text-xl text-slate-200 font-light">
-                        Andal untuk{" "}
-                        <TextLoop
-                            items={["Kuliah", "Kerja", "Coding", "Desain", "Gaming"]}
-                            className="font-semibold text-blue-300"
-                        />
-                    </p>
+                        {/* Title */}
+                        <div className="space-y-4">
+                            <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white leading-[1.05]">
+                                <SplitText as="span" text={hero.title_prefix} by="char" stagger={0.06} />
+                                <span className="text-blue-500 ml-1">{hero.title_suffix}</span>
+                            </h1>
+                            <SplitText
+                                as="p"
+                                text={hero.subtitle}
+                                by="word"
+                                delay={0.25}
+                                className="text-lg sm:text-xl md:text-2xl text-slate-200 font-light"
+                            />
+                        </div>
 
-                    {/* Description */}
-                    <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-                        {hero.description}
-                    </p>
+                        {/* Tagline berputar */}
+                        <p className="text-base sm:text-lg text-slate-200 font-light">
+                            Andal untuk{" "}
+                            <TextLoop
+                                items={["Kuliah", "Kerja", "Coding", "Desain", "Gaming"]}
+                                className="font-semibold text-blue-300"
+                            />
+                        </p>
 
-                    {/* CTA */}
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
-                        <Magnet>
-                            <motion.button
-                                onClick={handleViewCatalog}
-                                whileHover={{ scale: 1.04, y: -2 }}
-                                whileTap={{ scale: 0.97 }}
-                                transition={{ type: "spring", stiffness: 400, damping: 22 }}
-                                className="btn btn-primary px-8 py-3.5 text-sm sm:text-base group"
-                            >
-                                {hero.cta_primary_label}
-                                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                            </motion.button>
-                        </Magnet>
-                        <Magnet>
-                            <motion.button
-                                onClick={handleWhatsApp}
-                                whileHover={{ scale: 1.04, y: -2 }}
-                                whileTap={{ scale: 0.97 }}
-                                transition={{ type: "spring", stiffness: 400, damping: 22 }}
-                                className="btn px-8 py-3.5 text-sm sm:text-base text-white bg-surface/10 backdrop-blur-md border border-white/25 hover:bg-surface hover:text-content group"
-                            >
-                                {hero.cta_secondary_label}
-                                <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-                            </motion.button>
-                        </Magnet>
-                    </div>
+                        {/* Description */}
+                        <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                            {hero.description}
+                        </p>
 
-                    {/* Trust indicators */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-8">
-                        {trust.map((item, idx) => {
-                            const Icon = getServiceIcon(item.icon);
-                            return (
-                                <div
-                                    key={idx}
-                                    className="flex items-center justify-center gap-2 bg-surface/[0.07] backdrop-blur-md rounded-xl px-3 py-3 border border-white/10 hover:bg-surface/[0.12] hover:-translate-y-0.5 transition-all duration-300"
+                        {/* CTA */}
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
+                            <Magnet>
+                                <motion.button
+                                    onClick={handleViewCatalog}
+                                    whileHover={{ scale: 1.04, y: -2 }}
+                                    whileTap={{ scale: 0.97 }}
+                                    transition={{ type: "spring", stiffness: 400, damping: 22 }}
+                                    className="btn btn-primary px-8 py-3.5 text-sm sm:text-base group w-full sm:w-auto"
                                 >
-                                    <Icon className="w-4.5 h-4.5 text-blue-300 shrink-0" />
-                                    <span className="text-xs text-white/90 font-medium">{item.label}</span>
-                                </div>
-                            );
-                        })}
+                                    {hero.cta_primary_label}
+                                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                                </motion.button>
+                            </Magnet>
+                            <Magnet>
+                                <motion.button
+                                    onClick={handleWhatsApp}
+                                    whileHover={{ scale: 1.04, y: -2 }}
+                                    whileTap={{ scale: 0.97 }}
+                                    transition={{ type: "spring", stiffness: 400, damping: 22 }}
+                                    className="btn px-8 py-3.5 text-sm sm:text-base text-white bg-white/[0.08] backdrop-blur-md border border-white/25 hover:bg-surface hover:text-content group w-full sm:w-auto"
+                                >
+                                    {hero.cta_secondary_label}
+                                    <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                                </motion.button>
+                            </Magnet>
+                        </div>
+
+                        {/* Trust indicators — baris kompak */}
+                        <div className="grid grid-cols-2 gap-2.5 pt-6 max-w-md mx-auto lg:mx-0">
+                            {trust.map((item, idx) => {
+                                const Icon = getServiceIcon(item.icon);
+                                return (
+                                    <div
+                                        key={idx}
+                                        className="flex items-center gap-2 bg-white/[0.06] backdrop-blur-md rounded-xl px-3 py-2.5 border border-white/10 hover:bg-white/[0.12] hover:-translate-y-0.5 transition-all duration-300"
+                                    >
+                                        <Icon className="w-4 h-4 text-blue-300 shrink-0" />
+                                        <span className="text-xs text-white/90 font-medium text-left leading-tight">{item.label}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
+
+                    {/* ---------- Kolom kanan: showcase card ---------- */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30, rotate: -2 }}
+                        animate={isVisible ? { opacity: 1, y: 0, rotate: 0 } : {}}
+                        transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 0.61, 0.36, 1] }}
+                        className="relative mx-auto w-full max-w-sm lg:max-w-md"
+                    >
+                        {/* Glow di belakang kartu */}
+                        <div className="absolute -inset-6 bg-blue-500/20 rounded-[2rem] blur-3xl pointer-events-none" />
+
+                        {/* Frame utama */}
+                        <div className="relative rounded-[1.75rem] p-2.5 bg-white/[0.06] backdrop-blur-xl border border-white/15 shadow-2xl animate-float">
+                            <div className="relative rounded-[1.25rem] overflow-hidden ring-1 ring-white/10">
+                                <img
+                                    src={heroShowcase}
+                                    alt="Laptop second berkualitas Solit 03"
+                                    className="w-full h-auto object-cover"
+                                    loading="eager"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent pointer-events-none" />
+                            </div>
+                        </div>
+
+                        {/* Floating chip — rating (kiri atas) */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={isVisible ? { opacity: 1, scale: 1 } : {}}
+                            transition={{ delay: 0.7, type: "spring", stiffness: 300 }}
+                            className="absolute -top-4 -left-4 flex items-center gap-2.5 rounded-2xl bg-white/95 backdrop-blur-md px-3.5 py-2.5 shadow-xl"
+                        >
+                            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-100">
+                                <Star className="w-4.5 h-4.5 text-amber-500 fill-amber-500" />
+                            </span>
+                            <div className="text-left leading-tight">
+                                <p className="text-sm font-bold text-slate-900">4.9/5.0</p>
+                                <p className="text-[0.65rem] text-slate-500">500+ ulasan</p>
+                            </div>
+                        </motion.div>
+
+                        {/* Floating chip — garansi (kanan bawah) */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={isVisible ? { opacity: 1, scale: 1 } : {}}
+                            transition={{ delay: 0.85, type: "spring", stiffness: 300 }}
+                            className="absolute -bottom-4 -right-3 flex items-center gap-2.5 rounded-2xl bg-white/95 backdrop-blur-md px-3.5 py-2.5 shadow-xl"
+                        >
+                            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-100">
+                                <ShieldCheck className="w-4.5 h-4.5 text-blue-600" />
+                            </span>
+                            <div className="text-left leading-tight">
+                                <p className="text-sm font-bold text-slate-900">Bergaransi</p>
+                                <p className="text-[0.65rem] text-slate-500">Lolos QC ketat</p>
+                            </div>
+                        </motion.div>
+
+                        {/* Floating chip — harga (kanan atas) */}
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={isVisible ? { opacity: 1, y: 0 } : {}}
+                            transition={{ delay: 1, type: "spring", stiffness: 300 }}
+                            className="absolute top-8 -right-4 flex items-center gap-1.5 rounded-full bg-blue-600 px-3.5 py-2 shadow-xl shadow-blue-600/30"
+                        >
+                            <BadgeCheck className="w-4 h-4 text-white" />
+                            <span className="text-xs font-semibold text-white">Mulai 2 jt-an</span>
+                        </motion.div>
+                    </motion.div>
                 </div>
+            </div>
+
+            {/* Scroll indicator */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 hidden sm:flex flex-col items-center gap-2">
+                <span className="text-[0.65rem] uppercase tracking-[0.2em] text-white/50">Scroll</span>
+                <span className="flex h-9 w-5 items-start justify-center rounded-full border border-white/25 p-1">
+                    <span className="h-2 w-1 rounded-full bg-white/70 animate-bounce-custom" />
+                </span>
             </div>
         </section>
     );

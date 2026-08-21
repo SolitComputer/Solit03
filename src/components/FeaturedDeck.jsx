@@ -33,6 +33,23 @@ export default function FeaturedDeck() {
             Setiap unit melewati quality control menyeluruh dan bergaransi resmi.
             Tinggal pilih, kami pastikan performanya ngebut sejak hari pertama.
           </p>
+
+          {/* Feature list */}
+          <ul className="mt-6 space-y-2.5 max-w-md">
+            {[
+              "Lolos 15+ tahap uji performa & fisik",
+              "Garansi resmi & after-sales responsif",
+              "Harga transparan, tanpa biaya tersembunyi",
+            ].map((f) => (
+              <li key={f} className="flex items-start gap-2.5 text-sm text-content-soft">
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-500/15 text-blue-600 dark:text-blue-400">
+                  <ShieldCheck className="w-3 h-3" />
+                </span>
+                {f}
+              </li>
+            ))}
+          </ul>
+
           <Magnet>
             <motion.button
               onClick={goCatalog}

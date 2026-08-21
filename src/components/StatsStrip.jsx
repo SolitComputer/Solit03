@@ -21,14 +21,17 @@ const STATS = [
 export default function StatsStrip() {
   return (
     <section className="px-4 sm:px-6 lg:px-8 py-14 md:py-20 bg-surface">
-      <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-        {STATS.map((s, i) => (
-          <Reveal key={s.label} delay={i * 0.08} className="h-full">
-            {/* Border gradasi rata di seluruh tepi (trik padding + gradient) */}
-            <div className="group h-full rounded-2xl p-[1.5px] bg-gradient-to-br from-blue-300/60 to-cyan-300/60 hover:from-blue-500 hover:to-cyan-400 shadow-soft-sm hover:shadow-soft transition-all duration-300 hover:-translate-y-1">
-              <div className="h-full rounded-[15px] bg-surface-muted/70 px-4 py-6 md:py-8 text-center">
-                <div className="w-11 h-11 mx-auto mb-3 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center transition-colors group-hover:bg-blue-100">
-                  <s.icon className="w-5 h-5" aria-hidden="true" />
+      <Reveal>
+        {/* Satu strip menyatu, border gradasi tipis biru→cyan */}
+        <div className="max-w-5xl mx-auto rounded-[1.75rem] p-[1.5px] bg-gradient-to-br from-blue-300/50 to-cyan-300/50 shadow-soft">
+          <div className="overflow-hidden rounded-[1.65rem] grid grid-cols-2 md:grid-cols-4 gap-px bg-border/70">
+            {STATS.map((s) => (
+              <div
+                key={s.label}
+                className="group px-5 py-7 md:py-9 flex flex-col items-center text-center bg-surface-muted/70 dark:bg-slate-800/60 backdrop-blur-sm transition-colors hover:bg-blue-50/50 dark:hover:bg-blue-500/5"
+              >
+                <div className="w-12 h-12 mb-3.5 rounded-2xl bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:bg-blue-600 group-hover:text-white">
+                  <s.icon className="w-5.5 h-5.5" aria-hidden="true" />
                 </div>
                 <div className="text-3xl md:text-4xl font-extrabold tracking-tight text-content">
                   <RollingCounter to={s.to} suffix={s.suffix} />
@@ -37,10 +40,10 @@ export default function StatsStrip() {
                   {s.label}
                 </p>
               </div>
-            </div>
-          </Reveal>
-        ))}
-      </div>
+            ))}
+          </div>
+        </div>
+      </Reveal>
     </section>
   );
 }
