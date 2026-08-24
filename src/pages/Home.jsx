@@ -1,12 +1,16 @@
 import Hero from "../components/Hero";
 import BestSeller from "../components/LatestProduct";
 import About from "../components/About";
+import BrandMarquee from "../components/BrandMarquee";
 import StatsStrip from "../components/StatsStrip";
+import FeaturedDeck from "../components/FeaturedDeck";
 import Services from "../components/Services";
+import TextRibbon from "../components/TextRibbon";
 import JasaWebPromo from "../components/JasaWebPromo";
 import Promo from "../components/Promo";
 import SocialMedia from "../components/SocialMedia";
 import Testimoni from "../components/Testimoni";
+import ExploreMenu from "../components/ExploreMenu";
 import Location from "../components/Location";
 import Marketplace from "../components/Marketplace";
 import Footer from "../components/layout/Footer";
@@ -36,13 +40,17 @@ export default function Home() {
         <Hero />
         <BestSeller />
         <About />
+        <BrandMarquee />
         <StatsStrip />
+        <FeaturedDeck />
         <Services />
+        <TextRibbon />
         <JasaWebPromo />
         <Promo />
         <LatestArticles />
         <SocialMedia />
         <Testimoni />
+        <ExploreMenu />
         <Location />
         <Marketplace />
         <ChatBot />

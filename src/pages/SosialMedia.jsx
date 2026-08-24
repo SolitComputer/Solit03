@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 import { Helmet } from "react-helmet-async";
+import ChromaGrid from "../components/ui/ChromaGrid";
+import { DEFAULT_SHOWCASE_IMAGES } from "../utils/defaultShowcaseImages";
 import shopeeIcon from "../assets/shoppe.png";
 import tokopediaIcon from "../assets/tokopedia.webp";
 import tiktokIcon from "../assets/tiktok1.png";
@@ -10,6 +12,11 @@ import facebookIcon from "../assets/fb.png";
 
 const WHATSAPP_NUMBER = "6285210647047";
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
+
+const GALLERY = DEFAULT_SHOWCASE_IMAGES.slice(0, 6).map((it, i) => ({
+  image: it.image_url,
+  borderColor: ["#3b82f6", "#22d3ee", "#6366f1", "#0ea5e9", "#8b5cf6", "#06b6d4"][i % 6],
+}));
 
 export default function SosialMedia() {
     const [isVisible, setIsVisible] = useState({
@@ -164,6 +171,25 @@ export default function SosialMedia() {
                         ))}
                     </div>
                 </div>
+
+                {/* Galeri Foto — ChromaGrid (sorotan kursor mengungkap warna) */}
+                {GALLERY.length > 0 && (
+                    <div className="mt-12 md:mt-16">
+                        <div className="text-center mb-8">
+                            <span className="eyebrow">
+                                <span className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
+                                Galeri
+                            </span>
+                            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-content mt-5">
+                                Galeri <span className="text-blue-600">Solit 03</span>
+                            </h2>
+                            <p className="text-xs md:text-sm text-content-muted mt-3 max-w-xl mx-auto">
+                                Arahkan kursor untuk menyorot — koleksi unit yang pernah kami rapikan.
+                            </p>
+                        </div>
+                        <ChromaGrid items={GALLERY} />
+                    </div>
+                )}
 
                 {/* Location Section */}
                 <div
