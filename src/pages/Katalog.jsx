@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { supabase } from "../services/supabase";
 import { isNewProduct } from "../utils/dateUtils";
 import {
@@ -253,16 +253,16 @@ function AnimatedSearchBar({ value, onChange, isLoading, onFocus, onBlur }) {
           }`}
       />
 
-      <div className="relative">
-        <Search
-          size={isMobile ? 14 : 16}
-          className="absolute left-2.5 top-1/2 -translate-y-1/2 text-content-muted transition-all duration-300"
-          style={{
-            transform: isFocused
-              ? 'translateY(-50%) scale(1.1)'
-              : 'translateY(-50%)',
-          }}
-        />
+            <div className="relative">
+        <span className="absolute left-2.5 inset-y-0 flex items-center pointer-events-none">
+          <Search
+            size={isMobile ? 14 : 16}
+            className="text-content-muted transition-transform duration-300"
+            style={{
+              transform: isFocused ? 'scale(1.1)' : 'scale(1)',
+            }}
+          />
+        </span>
 
         <input
           type="text"
@@ -599,6 +599,63 @@ function PageBtn({ children, active, disabled, onClick }) {
   );
 }
 
+// Custom Sort Dropdown (ganti native <select> agar tampilan open-state bisa dikontrol penuh)
+function SortDropdown({ value, onChange, options }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const selectedLabel = options.find((opt) => opt.value === value)?.label || "";
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="flex items-center gap-1.5 pl-3 pr-2 sm:pl-4 py-1.5 text-[10px] sm:text-xs bg-surface-muted text-content rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer transition-all hover:bg-slate-200/50"
+      >
+        <span>{selectedLabel}</span>
+        <ChevronDown
+          size={12}
+          className={`text-content-muted transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {isOpen && (
+        <div className="absolute right-0 mt-1 w-36 bg-surface border border-border rounded-lg shadow-soft-lg overflow-hidden z-20 animate-slideDown">
+          {options.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => {
+                onChange(opt.value);
+                setIsOpen(false);
+              }}
+              className={`w-full text-left px-3 py-1.5 text-[11px] sm:text-xs transition-colors ${
+                opt.value === value
+                  ? "bg-blue-500/15 text-blue-400 font-semibold"
+                  : "text-content-soft hover:bg-white/5"
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Product Modal
 // Product Modal
 function ProductModal({ product, onClose, allTags }) {
   const [imgIdx, setImgIdx] = useState(0);
@@ -1133,16 +1190,16 @@ function ProductScreen({
               </button>
 
               <div className="flex items-center gap-1 sm:gap-1.5 sm:order-3">
-                <select
+                               <SortDropdown
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="px-1.5 sm:px-2 py-1.5 text-[10px] sm:text-xs bg-surface-muted text-content border-0 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer transition-all hover:bg-slate-200/50"
-                >
-                  <option value="newest">Terbaru</option>
-                  <option value="price_high">Harga Tertinggi</option>
-                  <option value="price_low">Harga Terendah</option>
-                  <option value="name_asc">Nama A-Z</option>
-                </select>
+                  onChange={setSortBy}
+                  options={[
+                    { value: "newest", label: "Terbaru" },
+                    { value: "price_high", label: "Harga Tertinggi" },
+                    { value: "price_low", label: "Harga Terendah" },
+                    { value: "name_asc", label: "Nama A-Z" },
+                  ]}
+                />
 
                 <button
                   onClick={() => setShowMobileFilters(!showMobileFilters)}
