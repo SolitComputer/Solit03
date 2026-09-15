@@ -224,11 +224,11 @@ export default function SosialMedia() {
                             ></iframe>
                         </div>
                         <div className="bg-surface-muted px-4 py-3 border-t border-border">
-                            <div className="flex items-center justify-center gap-2 text-xs text-content-soft">
-                                <svg className="w-3.5 h-3.5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                            <div className="flex items-center justify-center gap-2 text-xs text-content-soft text-center">
+                                <svg className="w-3.5 h-3.5 text-blue-600 shrink-0" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
                                 </svg>
-                                <span>Jl. Raya Sawangan No. 123, Depok, Jawa Barat</span>
+                                <span>JL. H Naiman GG MUSOLAH AINAL YAQIN, Kel. Rangkapan Jaya, Kec. Pancoran Mas, Kota Depok, Jawa Barat 16435</span>
                             </div>
                         </div>
                     </div>

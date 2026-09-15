@@ -4,14 +4,17 @@ import Reveal from "./ui/Reveal";
 import { getSiteSettings } from "../services/siteContent";
 
 const DEFAULT_MAP_QUERY = "Solit 03 Depok Sawangan";
+const DEFAULT_ADDRESS = "JL. H Naiman GG MUSOLAH AINAL YAQIN, Kel. Rangkapan Jaya, Kec. Pancoran Mas, Kota Depok, Jawa Barat 16435";
 
 export default function Location() {
   const [mapQuery, setMapQuery] = useState(DEFAULT_MAP_QUERY);
+  const [address, setAddress] = useState(DEFAULT_ADDRESS);
 
   useEffect(() => {
     getSiteSettings()
       .then((settings) => {
         if (settings.contact?.map_query) setMapQuery(settings.contact.map_query);
+        if (settings.contact?.address) setAddress(settings.contact.address);
       })
       .catch(() => {});
   }, []);
@@ -49,7 +52,7 @@ export default function Location() {
                 <ul className="mt-6 space-y-4 text-sm">
                   <li className="flex items-start gap-3">
                     <MapPin className="w-4.5 h-4.5 text-blue-300 mt-0.5 shrink-0" />
-                    <span className="text-slate-200">Sawangan, Depok — Jawa Barat</span>
+                    <span className="text-slate-200 leading-relaxed">{address}</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <Clock className="w-4.5 h-4.5 text-blue-300 mt-0.5 shrink-0" />

@@ -288,14 +288,14 @@ export default function ChatBot() {
           break;
           
         case "store":
-          response = `Alamat Toko Solit 03:\n\n`;
-          response += `Jl. Kavling Adhi Karya No. 77\n`;
-          response += `Rangkapan Jaya Lama, Pancoran Mas\n`;
-          response += `Kota Depok, Jawa Barat\n\n`;
+          response = `Alamat Kantor & Toko Solit 03 (PT Solit Teknologi Indonesia):\n\n`;
+          response += `JL. H Naiman GG MUSOLAH AINAL YAQIN\n`;
+          response += `Kel. Rangkapan Jaya, Kec. Pancoran Mas\n`;
+          response += `Kota Depok, Jawa Barat 16435\n\n`;
           response += `Jam Operasional:\n`;
           response += `Senin - Sabtu: 09.00 - 17.00\n`;
           response += `Minggu: Tutup\n\n`;
-          response += `Telepon: +62 852-1064-7047`;
+          response += `Telepon / WhatsApp: +62 852-1064-7047`;
           addBotMessage(response);
           setTimeout(() => {
             addBotMessageWithWhatsApp();

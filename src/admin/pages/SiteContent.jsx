@@ -253,6 +253,14 @@ export default function SiteContent() {
       {tab === "contact" && (
         <div className="bg-surface border border-border rounded-2xl shadow-sm p-6 space-y-5">
           <div className="grid grid-cols-2 gap-4">
+            <Field label="Nama Perusahaan / Legal">
+              <input className={inputCls} placeholder="PT SOLIT TEKNOLOGI INDONESIA" value={contact.company_name || ""} onChange={(e) => setContact({ ...contact, company_name: e.target.value })} />
+            </Field>
+            <Field label="Nomor Induk Berusaha (NIB)">
+              <input className={inputCls} placeholder="2212230062715" value={contact.nib || ""} onChange={(e) => setContact({ ...contact, nib: e.target.value })} />
+            </Field>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
             <Field label="Nomor WhatsApp (format 62xxx)">
               <input className={inputCls} value={contact.whatsapp_number || ""} onChange={(e) => setContact({ ...contact, whatsapp_number: e.target.value })} />
             </Field>
@@ -263,16 +271,16 @@ export default function SiteContent() {
           <Field label="Pesan Default WhatsApp">
             <textarea rows={2} className={inputCls} value={contact.whatsapp_message || ""} onChange={(e) => setContact({ ...contact, whatsapp_message: e.target.value })} />
           </Field>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field label="Email">
-              <input className={inputCls} value={contact.email || ""} onChange={(e) => setContact({ ...contact, email: e.target.value })} />
+              <input className={inputCls} placeholder="info@solit03.com" value={contact.email || ""} onChange={(e) => setContact({ ...contact, email: e.target.value })} />
             </Field>
-            <Field label="Alamat singkat (footer)">
-              <input className={inputCls} value={contact.address || ""} onChange={(e) => setContact({ ...contact, address: e.target.value })} />
+            <Field label="Query Google Maps (nama toko/alamat pencarian)">
+              <input className={inputCls} value={contact.map_query || ""} onChange={(e) => setContact({ ...contact, map_query: e.target.value })} />
             </Field>
           </div>
-          <Field label="Query Google Maps (nama toko/alamat pencarian)">
-            <input className={inputCls} value={contact.map_query || ""} onChange={(e) => setContact({ ...contact, map_query: e.target.value })} />
+          <Field label="Alamat Lengkap Kantor / Toko (Footer & Kontak)">
+            <textarea rows={2} className={inputCls} value={contact.address || ""} onChange={(e) => setContact({ ...contact, address: e.target.value })} />
           </Field>
           <div className="grid grid-cols-2 gap-4">
             <Field label="Instagram URL">
