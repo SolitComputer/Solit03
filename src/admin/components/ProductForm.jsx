@@ -313,24 +313,12 @@ export default function ProductForm({ form, setForm, onSubmit, buttonText }) {
                                 </Field>
                             </div>
 
-                            <Field label="Deskripsi Singkat">
+                            <Field label="Deskripsi Produk">
                                 <textarea
-                                    rows={2}
-                                    placeholder="Deskripsi singkat produk..."
+                                    rows={3}
+                                    placeholder="Deskripsi produk..."
                                     value={form.short_description || ""}
                                     onChange={(e) => setForm({ ...form, short_description: e.target.value })}
-                                    className="w-full bg-surface-muted border border-border rounded-lg text-sm text-content placeholder-gray-400
-                    focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-surface
-                    transition py-2.5 px-3 resize-none"
-                                />
-                            </Field>
-
-                            <Field label="Deskripsi Lengkap">
-                                <textarea
-                                    rows={4}
-                                    placeholder="Deskripsi lengkap produk..."
-                                    value={form.description || ""}
-                                    onChange={(e) => setForm({ ...form, description: e.target.value })}
                                     className="w-full bg-surface-muted border border-border rounded-lg text-sm text-content placeholder-gray-400
                     focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:bg-surface
                     transition py-2.5 px-3 resize-none"
