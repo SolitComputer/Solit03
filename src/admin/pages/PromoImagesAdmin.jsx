@@ -87,7 +87,7 @@ export default function PromoImagesAdmin() {
             <button
               onClick={handleImportDefaults}
               disabled={importing}
-              className="flex items-center gap-2 px-4 py-2.5 bg-surface border-2 border-blue-200 text-blue-600 text-sm font-semibold rounded-xl hover:bg-blue-50 transition disabled:opacity-60"
+               className="flex items-center gap-2 px-4 py-2.5 bg-surface border border-blue-300 dark:border-blue-500/40 text-blue-600 dark:text-blue-400 text-sm font-semibold rounded-xl hover:bg-blue-50 dark:hover:bg-blue-500/10 transition disabled:opacity-60"
             >
               {importing ? <Loader2 size={16} className="animate-spin" /> : <Import size={16} />}
               Impor dari Galeri Lama
@@ -105,7 +105,7 @@ export default function PromoImagesAdmin() {
         <div className="flex items-center justify-center py-24"><Loader2 size={24} className="animate-spin text-blue-500" /></div>
       ) : items.length === 0 ? (
         <div className="bg-surface border border-border rounded-2xl shadow-sm py-20 text-center">
-          <ImageIcon size={36} className="mx-auto text-gray-200 mb-3" />
+          <ImageIcon size={36} className="mx-auto text-content-muted/40 mb-3" />
           <p className="text-sm text-content-muted">Belum ada gambar showcase di database</p>
           {DEFAULT_SHOWCASE_IMAGES.length > 0 && (
             <p className="text-xs text-content-muted mt-1.5 max-w-sm mx-auto">
@@ -117,14 +117,16 @@ export default function PromoImagesAdmin() {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {items.map((item) => (
-            <div key={item.id} className="bg-surface border border-border rounded-xl shadow-sm overflow-hidden group">
-              <div className="aspect-square bg-surface-muted relative">
-                <img src={item.image_url} alt="" className={`w-full h-full object-cover ${!item.is_active ? "opacity-40" : ""}`} />
+            <div key={item.id} className="bg-surface border border-border rounded-xl shadow-sm overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+              <div className="aspect-square bg-surface-muted relative overflow-hidden">
+                <img src={item.image_url} alt="" className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${!item.is_active ? "opacity-40" : ""}`} />
+                {/* overlay gelap halus biar tombol kebaca */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                 <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">
-                  <button onClick={() => toggleActive(item)} className="p-1.5 bg-surface/90 rounded-lg text-content-soft hover:text-blue-600 shadow-sm">
+                  <button onClick={() => toggleActive(item)} className="p-1.5 bg-surface/90 backdrop-blur rounded-lg text-content-soft hover:text-blue-600 shadow-sm">
                     {item.is_active ? <Eye size={13} /> : <EyeOff size={13} />}
                   </button>
-                  <button onClick={() => handleDelete(item.id)} className="p-1.5 bg-surface/90 rounded-lg text-content-soft hover:text-red-600 shadow-sm">
+                  <button onClick={() => handleDelete(item.id)} className="p-1.5 bg-surface/90 backdrop-blur rounded-lg text-content-soft hover:text-red-600 shadow-sm">
                     <Trash2 size={13} />
                   </button>
                 </div>

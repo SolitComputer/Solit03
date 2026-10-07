@@ -28,12 +28,12 @@ export default function StatsStrip() {
             {STATS.map((s) => (
               <div
                 key={s.label}
-                className="group px-5 py-7 md:py-9 flex flex-col items-center text-center bg-surface-muted/70 dark:bg-slate-800/60 backdrop-blur-sm transition-colors hover:bg-blue-50/50 dark:hover:bg-blue-500/5"
+                className="group px-5 py-7 md:py-9 flex flex-col items-center text-center bg-surface-muted/70 dark:bg-slate-800/60 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:bg-blue-50/50 dark:hover:bg-blue-500/5"
               >
-                <div className="w-12 h-12 mb-3.5 rounded-2xl bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:bg-blue-600 group-hover:text-white">
-                  <s.icon className="w-5.5 h-5.5" aria-hidden="true" />
+                <div className="w-12 h-12 mb-3.5 rounded-2xl bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white group-hover:shadow-lg group-hover:shadow-blue-600/30">
+                  <s.icon className="w-5 h-5" aria-hidden="true" />
                 </div>
-                <div className="text-3xl md:text-4xl font-extrabold tracking-tight text-content">
+                <div className="text-3xl md:text-4xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
                   <RollingCounter to={s.to} suffix={s.suffix} />
                 </div>
                 <p className="mt-1.5 text-xs md:text-sm text-content-muted font-medium">

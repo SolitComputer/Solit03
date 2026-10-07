@@ -42,8 +42,9 @@ export default function About() {
 
   return (
     <section ref={sectionRef} className="relative px-4 sm:px-6 lg:px-8 py-16 md:py-24 overflow-hidden bg-surface-muted">
-      {/* Subtle decorative orb */}
+      {/* Decorative orbs */}
       <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-100/40 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-32 -left-32 w-72 h-72 bg-cyan-100/30 rounded-full blur-3xl pointer-events-none" />
 
       {/* Title */}
       <div className="text-center mb-12 md:mb-16 relative z-10">
@@ -70,34 +71,35 @@ export default function About() {
 
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto">
-        <div className="grid lg:grid-cols-2 items-center gap-10 lg:gap-14">
+        <div className="grid lg:grid-cols-2 items-center gap-10 lg:gap-16">
 
           {/* Image */}
           <div className={`relative w-full transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
             {/* aksen gradient di belakang */}
-            <div className="absolute -inset-3 bg-gradient-to-tr from-blue-500/15 to-cyan-400/10 rounded-[2rem] blur-2xl pointer-events-none" />
+            <div className="absolute -inset-4 bg-gradient-to-tr from-blue-500/20 to-cyan-400/10 rounded-[2.25rem] blur-2xl pointer-events-none" />
 
-            <div className="relative group rounded-[1.75rem] overflow-hidden shadow-soft-lg ring-1 ring-border/60">
+            <div className="relative group rounded-[1.75rem] overflow-hidden shadow-soft-lg ring-1 ring-border/50">
               <img
                 src={about.founder_image_url || founderImg}
                 alt={`${about.founder_name} - Founder Solit`}
-                className="w-full aspect-[4/3] object-cover group-hover:scale-[1.03] transition-transform duration-700"
+                className="w-full aspect-[4/5] md:aspect-[5/6] object-cover object-center group-hover:scale-[1.04] transition-transform duration-[900ms] ease-out"
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent" />
+              {/* overlay gelap bawah biar teks kebaca */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/10 to-transparent" />
 
               {/* label founder */}
-              <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3">
-                <div>
-                  <p className="text-white font-semibold text-sm sm:text-base leading-tight">{about.founder_name}</p>
-                  <p className="text-blue-200 text-xs">{about.founder_role}</p>
-                </div>
+              <div className="absolute bottom-5 left-5 right-5">
+                <p className="text-white font-semibold text-sm sm:text-base leading-tight drop-shadow">
+                  {about.founder_name}
+                </p>
+                <p className="text-blue-200 text-xs mt-0.5">{about.founder_role}</p>
               </div>
             </div>
 
             {/* Floating badge statistik */}
-            <div className="absolute -bottom-5 -right-4 sm:-right-5 bg-surface rounded-2xl shadow-soft-lg border border-border px-4 py-3 flex items-center gap-3">
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 text-white">
+            <div className="absolute -bottom-5 -right-4 sm:-right-5 bg-surface/95 backdrop-blur rounded-2xl shadow-soft-lg border border-border px-4 py-3 flex items-center gap-3">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-600/30">
                 <Shield className="w-5 h-5" />
               </span>
               <div className="leading-tight">
@@ -109,15 +111,15 @@ export default function About() {
 
           {/* Quote */}
           <div className={`w-full transition-all duration-700 delay-150 ease-out ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
-            <div className="relative bg-slate-900 rounded-[1.75rem] p-7 sm:p-9 shadow-soft-lg overflow-hidden">
-              <div className="absolute -top-10 -right-10 w-56 h-56 bg-blue-500/15 rounded-full blur-3xl" />
+            <div className="relative bg-slate-900 rounded-[1.75rem] p-7 sm:p-9 shadow-soft-lg overflow-hidden ring-1 ring-white/5">
+              <div className="absolute -top-10 -right-10 w-56 h-56 bg-blue-500/20 rounded-full blur-3xl" />
               <Quote className="absolute top-5 right-6 w-20 h-20 text-white/[0.06]" />
 
               <div className="relative z-10">
                 <div className="flex items-center gap-2 mb-5">
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-blue-400 text-blue-400" />
+                      <Star key={i} className="w-4 h-4 fill-blue-400 text-blue-400 drop-shadow-[0_0_6px_rgba(96,165,250,0.5)]" />
                     ))}
                   </div>
                   <span className="text-white/40 text-[0.7rem] uppercase tracking-widest">Visi Kami</span>

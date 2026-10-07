@@ -23,7 +23,7 @@ function Field({ label, children }) {
   );
 }
 
-const inputCls = "w-full bg-surface-muted border-2 border-border rounded-xl text-sm px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-surface transition-all";
+const inputCls = "w-full bg-surface-muted border border-border rounded-xl text-sm px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-blue-500 focus:bg-surface transition-all";
 
 export default function SiteContent() {
   const [tab, setTab] = useState("hero");
@@ -123,7 +123,7 @@ export default function SiteContent() {
             key={key}
             onClick={() => setTab(key)}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition ${
-              tab === key ? "bg-blue-600 text-white shadow-sm" : "text-content-muted hover:bg-surface-muted"
+              tab === key ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md shadow-blue-600/20" : "text-content-muted hover:bg-surface-muted"
             }`}
           >
             <Icon size={15} /> {label}
@@ -134,6 +134,10 @@ export default function SiteContent() {
       {/* ===== HERO TAB ===== */}
       {tab === "hero" && (
         <div className="bg-surface border border-border rounded-2xl shadow-sm p-6 space-y-5">
+          <div className="flex items-center gap-2 pb-4 border-b border-border/60">
+            <Home size={18} className="text-blue-600" />
+            <h2 className="text-base font-semibold text-content">Bagian Hero (banner utama)</h2>
+          </div>
           <Field label="Badge (teks kecil di atas judul)">
             <input className={inputCls} value={hero.badge || ""} onChange={(e) => setHero({ ...hero, badge: e.target.value })} />
           </Field>
@@ -173,7 +177,7 @@ export default function SiteContent() {
                   <select
                     value={t.icon}
                     onChange={(e) => updateTrust(i, "icon", e.target.value)}
-                    className="bg-surface-muted border-2 border-border rounded-xl text-sm px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="bg-surface-muted border border-border rounded-xl text-sm px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-blue-500 transition-all"
                   >
                     {ICON_OPTIONS.map((ic) => <option key={ic} value={ic}>{ic}</option>)}
                   </select>
@@ -237,7 +241,7 @@ export default function SiteContent() {
                   </button>
                 </div>
               ) : (
-                <div className="w-20 h-20 rounded-xl bg-gray-100 flex items-center justify-center text-content-muted text-[10px] text-center px-1">Default asset</div>
+                <div className="w-20 h-20 rounded-xl bg-surface-muted border border-dashed border-border flex items-center justify-center text-content-muted text-[10px] text-center px-1">Default asset</div>
               )}
               <label className="flex items-center gap-2 px-4 py-2.5 border-2 border-dashed border-border rounded-xl text-sm text-content-soft cursor-pointer hover:border-blue-400 hover:text-blue-600 transition">
                 {uploadingFounder ? <Loader2 size={15} className="animate-spin" /> : <ImagePlus size={15} />}

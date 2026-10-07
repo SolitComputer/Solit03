@@ -32,9 +32,16 @@ export default function BrandMarquee() {
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-content mt-4">
             Ratusan Unit dari <span className="text-blue-600">Brand Ternama</span>
           </h2>
+          <p className="text-sm text-content-muted mt-3 max-w-md mx-auto leading-relaxed">
+            Garansi resmi &amp; kondisi teruji untuk setiap brand yang kami jual.
+          </p>
         </Reveal>
 
-        <LogoLoop logos={LOGOS} logoHeight={32} gap={56} duration={34} />
+        <Reveal delay={0.1}>
+          <div className="relative rounded-[1.75rem] bg-surface ring-1 ring-border/60 shadow-soft-lg px-4 sm:px-8 py-7 md:py-9">
+            <LogoLoop logos={LOGOS} logoHeight={32} gap={56} duration={34} />
+          </div>
+        </Reveal>
       </div>
     </section>
   );

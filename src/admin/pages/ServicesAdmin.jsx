@@ -5,7 +5,7 @@ import { useToast } from "../context/ToastContext";
 import { SERVICE_ICON_OPTIONS, getServiceIcon } from "../../utils/serviceIcons";
 
 const ICON_OPTIONS = SERVICE_ICON_OPTIONS;
-const inputCls = "bg-surface-muted border-2 border-border rounded-xl text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-surface transition-all";
+const inputCls = "bg-surface-muted border border-border rounded-xl text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-blue-500 focus:bg-surface transition-all";
 
 export default function ServicesAdmin() {
   const [items, setItems] = useState([]);
@@ -91,14 +91,14 @@ export default function ServicesAdmin() {
         ) : items.length === 0 ? (
           <p className="text-center text-sm text-content-muted py-16">Belum ada layanan</p>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-border/60">
             {items.map((item) => {
               const Icon = getServiceIcon(item.icon);
               return (
               <div key={item.id} className="flex flex-wrap items-center gap-2 px-5 py-3.5">
-                <GripVertical size={14} className="text-gray-300 hidden sm:block" />
-                <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                  <Icon className="w-4.5 h-4.5 text-blue-600" />
+                <GripVertical size={14} className="text-content-muted/50 hidden sm:block" />
+                <div className="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center flex-shrink-0">
+                  <Icon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 </div>
                 <select value={item.icon} onChange={(e) => updateLocal(item.id, "icon", e.target.value)} className={inputCls}>
                   {ICON_OPTIONS.map((ic) => <option key={ic} value={ic}>{ic}</option>)}
@@ -115,7 +115,7 @@ export default function ServicesAdmin() {
                 <button
                   onClick={() => updateLocal(item.id, "is_active", !item.is_active)}
                   title={item.is_active ? "Aktif — klik untuk sembunyikan" : "Tersembunyi — klik untuk aktifkan"}
-                  className={`p-2 rounded-lg transition ${item.is_active ? "text-emerald-600 hover:bg-emerald-50" : "text-content-muted hover:bg-gray-100"}`}
+                  className={`p-2 rounded-lg transition ${item.is_active ? "text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10" : "text-content-muted hover:bg-surface-muted"}`}
                 >
                   {item.is_active ? <Eye size={16} /> : <EyeOff size={16} />}
                 </button>

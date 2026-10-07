@@ -1,8 +1,8 @@
 import {
   Laptop, Package, Tags, Layers3, Star, Clock,
   PlusCircle, MinusCircle, AlertCircle, ArrowUpRight,
-  ArrowDownRight, ShoppingBag, ChevronRight, 
-  TrendingUp, TrendingDown, Zap, Sparkles, 
+  ArrowDownRight, ShoppingBag, ChevronRight,
+  TrendingUp, TrendingDown, Zap, Sparkles,
   BarChart3, Activity, Award, Eye, ShoppingCart,
   UserCheck, CreditCard, Settings, HelpCircle,
   Bell, Search, Menu, Grid3X3, List, Filter,
@@ -65,37 +65,37 @@ export default function Dashboard() {
   }
 
   const colorMap = {
-    blue: { 
-      dot: "bg-blue-500", 
-      bg: "bg-blue-50 dark:bg-blue-500/10", 
-      text: "text-blue-600 dark:text-blue-400", 
+    blue: {
+      dot: "bg-blue-500",
+      bg: "bg-blue-50 dark:bg-blue-500/10",
+      text: "text-blue-600 dark:text-blue-400",
       bar: "from-blue-500 to-blue-400",
       gradient: "from-blue-600 to-blue-500",
       light: "bg-blue-100 dark:bg-blue-900/40",
       dark: "bg-blue-700 dark:bg-blue-300"
     },
-    violet: { 
-      dot: "bg-violet-500", 
-      bg: "bg-violet-50 dark:bg-violet-500/10", 
-      text: "text-violet-600 dark:text-violet-400", 
+    violet: {
+      dot: "bg-violet-500",
+      bg: "bg-violet-50 dark:bg-violet-500/10",
+      text: "text-violet-600 dark:text-violet-400",
       bar: "from-violet-500 to-violet-400",
       gradient: "from-violet-600 to-violet-500",
       light: "bg-violet-100 dark:bg-violet-900/40",
       dark: "bg-violet-700 dark:bg-violet-300"
     },
-    emerald: { 
-      dot: "bg-emerald-500", 
-      bg: "bg-emerald-50 dark:bg-emerald-500/10", 
-      text: "text-emerald-600 dark:text-emerald-400", 
+    emerald: {
+      dot: "bg-emerald-500",
+      bg: "bg-emerald-50 dark:bg-emerald-500/10",
+      text: "text-emerald-600 dark:text-emerald-400",
       bar: "from-emerald-500 to-emerald-400",
       gradient: "from-emerald-600 to-emerald-500",
       light: "bg-emerald-100 dark:bg-emerald-900/40",
       dark: "bg-emerald-700 dark:bg-emerald-300"
     },
-    amber: { 
-      dot: "bg-amber-500", 
-      bg: "bg-amber-50 dark:bg-amber-500/10", 
-      text: "text-amber-600 dark:text-amber-400", 
+    amber: {
+      dot: "bg-amber-500",
+      bg: "bg-amber-50 dark:bg-amber-500/10",
+      text: "text-amber-600 dark:text-amber-400",
       bar: "from-amber-500 to-amber-400",
       gradient: "from-amber-600 to-amber-500",
       light: "bg-amber-100 dark:bg-amber-900/40",
@@ -103,10 +103,10 @@ export default function Dashboard() {
     },
   };
 
-  const actColor = { 
-    create: "bg-emerald-100 text-emerald-600", 
-    update: "bg-blue-100 text-blue-600", 
-    delete: "bg-red-100 text-red-500" 
+  const actColor = {
+    create: "bg-emerald-100 text-emerald-600",
+    update: "bg-blue-100 text-blue-600",
+    delete: "bg-red-100 text-red-500"
   };
   const ActIcon = { create: PlusCircle, update: Package, delete: MinusCircle };
 
@@ -236,7 +236,7 @@ export default function Dashboard() {
           <div className="flex items-center gap-2 mb-1">
             <div className="w-1 h-7 bg-gradient-to-b from-blue-500 to-violet-500 rounded-full"></div>
             <h1 className="text-xl font-bold text-content">Dashboard Overview</h1>
-           
+
           </div>
           <p className="text-sm text-content-muted ml-3">
             Selamat datang Di Dashboard Admin
@@ -251,30 +251,29 @@ export default function Dashboard() {
         {stats.map(({ label, value, icon: Icon, trend, up, color }, idx) => {
           const c = colorMap[color];
           return (
-            <div 
-              key={label} 
-              className="stat-card bg-surface border border-border rounded-2xl p-5 shadow-sm card-hover cursor-pointer animate-slide-up"
+            <div
+              key={label}
+              className="stat-card group bg-surface border border-border rounded-2xl p-5 shadow-sm card-hover cursor-pointer animate-slide-up"
               style={{ animationDelay: `${idx * 100}ms` }}
             >
               <div className="flex items-center justify-between mb-4">
                 <div className={`w-11 h-11 rounded-xl ${c.bg} ${c.text} flex items-center justify-center transition-all duration-300 group-hover:scale-110`}>
                   <Icon size="20" strokeWidth={1.5} />
                 </div>
-                <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-semibold ${
-                  up ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-500"
-                }`}>
+                <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-semibold ${up ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-500"
+                  }`}>
                   {up ? <TrendingUp size="12" /> : <TrendingDown size="12" />}
                   {trend}
                 </div>
               </div>
               <div>
                 <p className="text-[11px] text-content-muted font-medium uppercase tracking-wider">{label}</p>
-                <p className="text-2xl font-bold text-content mt-1">{value.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-content mt-1 tabular-nums">{value.toLocaleString()}</p>
                 <p className="text-[10px] text-content-muted mt-1">{stats.find(s => s.label === label)?.subtitle}</p>
               </div>
               {/* Progress bar mini */}
-              <div className="mt-3 h-1 bg-gray-100 rounded-full overflow-hidden">
-                <div 
+              <div className="mt-3 h-1 bg-surface-muted rounded-full overflow-hidden">
+                <div
                   className={`h-full bg-gradient-to-r ${c.bar} rounded-full transition-all duration-1000`}
                   style={{ width: `${Math.min((value / 1000) * 100, 100)}%` }}
                 />
@@ -309,12 +308,12 @@ export default function Dashboard() {
                 <div key={i} className="group">
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-semibold text-content-muted w-6">{i+1}</span>
+                      <span className="text-[10px] font-semibold text-content-muted w-6">{i + 1}</span>
                       <span className="text-xs font-medium text-content-soft truncate max-w-[120px]">{p.name}</span>
                     </div>
                     <span className="text-xs font-semibold text-content-soft">{p.stock} unit</span>
                   </div>
-                  <div className="relative h-7 bg-gray-100 rounded-lg overflow-hidden">
+                  <div className="relative h-7 bg-surface-muted rounded-lg overflow-hidden">
                     <div
                       className={`absolute left-0 top-0 h-full bg-gradient-to-r ${c.bar} rounded-lg transition-all duration-1000 ease-out flex items-center justify-end px-3`}
                       style={{ width: `${Math.max(pct, 8)}%` }}
@@ -372,7 +371,7 @@ export default function Dashboard() {
       <div className="grid lg:grid-cols-2 gap-5">
         {/* Recent Products */}
         <div className="bg-surface border border-border rounded-2xl shadow-sm overflow-hidden card-hover">
-          <div className="px-6 py-4 border-b border-border bg-gradient-to-r from-gray-50 to-white">
+          <div className="px-6 py-4 border-b border-border bg-gradient-to-r from-surface-muted/60 to-surface">
             <div className="flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2">
@@ -387,15 +386,15 @@ export default function Dashboard() {
               </Link>
             </div>
           </div>
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-border/60">
             {recentProducts.length === 0 ? (
               <div className="py-12 text-center">
                 <Package size="40" className="mx-auto text-gray-200 mb-3" />
                 <p className="text-sm text-content-muted">Belum ada produk</p>
               </div>
             ) : recentProducts.map((p, idx) => (
-              <div 
-                key={p.id} 
+              <div
+                key={p.id}
                 className="px-6 py-4 hover:bg-surface-muted/80 transition-all duration-300 cursor-pointer group"
                 style={{ animationDelay: `${idx * 50}ms` }}
               >
@@ -421,9 +420,8 @@ export default function Dashboard() {
                     <p className="text-sm font-bold text-content">
                       Rp {p.price?.toLocaleString()}
                     </p>
-                    <p className={`text-[11px] font-medium mt-0.5 ${
-                      p.stock > 0 ? "text-emerald-600" : "text-red-500"
-                    }`}>
+                    <p className={`text-[11px] font-medium mt-0.5 ${p.stock > 0 ? "text-emerald-600" : "text-red-500"
+                      }`}>
                       {p.stock} unit
                     </p>
                   </div>
@@ -435,7 +433,7 @@ export default function Dashboard() {
 
         {/* Low Stock Alert dengan desain premium */}
         <div className="bg-surface border border-border rounded-2xl shadow-sm overflow-hidden card-hover">
-          <div className="px-6 py-4 border-b border-border bg-gradient-to-r from-amber-50 to-white">
+          <div className="px-6 py-4 border-b border-border bg-gradient-to-r from-amber-50 to-surface dark:from-amber-500/10">
             <div className="flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2">
@@ -450,7 +448,7 @@ export default function Dashboard() {
               </Link>
             </div>
           </div>
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-border/60">
             {lowStockProducts.length === 0 ? (
               <div className="py-12 text-center">
                 <Award size="40" className="mx-auto text-emerald-200 mb-3" />
@@ -464,14 +462,13 @@ export default function Dashboard() {
                     <p className="text-[11px] text-content-muted mt-0.5">{p.brands?.name}</p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className={`px-2 py-1 rounded-lg text-[11px] font-bold ${
-                      p.stock === 0 
-                        ? "bg-red-100 text-red-600" 
-                        : "bg-amber-100 text-amber-700"
-                    }`}>
+                    <div className={`px-2 py-1 rounded-lg text-[11px] font-bold ${p.stock === 0
+                      ? "bg-red-100 text-red-600"
+                      : "bg-amber-100 text-amber-700"
+                      }`}>
                       {p.stock === 0 ? "HABIS" : `${p.stock} unit`}
                     </div>
-                    <Link 
+                    <Link
                       to={`/admin/products/edit/${p.id}`}
                       className="text-xs text-blue-600 hover:text-blue-700 font-medium px-2 py-1 rounded hover:bg-blue-50 transition"
                     >
@@ -480,11 +477,10 @@ export default function Dashboard() {
                   </div>
                 </div>
                 {/* Progress bar untuk stok */}
-                <div className="mt-2 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                  <div 
-                    className={`h-full rounded-full transition-all duration-500 ${
-                      p.stock === 0 ? "bg-red-500" : "bg-amber-500"
-                    }`}
+                <div className="mt-2 h-1.5 bg-surface-muted rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-500 ${p.stock === 0 ? "bg-red-500" : "bg-amber-500"
+                      }`}
                     style={{ width: `${(p.stock / 20) * 100}%` }}
                   />
                 </div>
@@ -509,17 +505,16 @@ export default function Dashboard() {
           </div>
           <div className="space-y-3">
             {popularProducts.map((p, i) => (
-              <div 
-                key={i} 
+              <div
+                key={i}
                 className="flex items-center gap-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-gray-50 to-transparent transition-all duration-300 group"
               >
                 <div className="relative">
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold ${
-                    i === 0 ? "bg-amber-100 text-amber-700" :
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold ${i === 0 ? "bg-amber-100 text-amber-700" :
                     i === 1 ? "bg-gray-200 text-content-soft" :
-                    i === 2 ? "bg-orange-100 text-orange-700" :
-                    "bg-gray-100 text-content-muted"
-                  }`}>
+                      i === 2 ? "bg-orange-100 text-orange-700" :
+                        "bg-gray-100 text-content-muted"
+                    }`}>
                     {i + 1}
                   </div>
                   {i === 0 && (
@@ -563,7 +558,7 @@ export default function Dashboard() {
           </div>
           <div className="relative">
             {/* Timeline line */}
-            <div className="absolute left-3 top-0 bottom-0 w-px bg-gray-200"></div>
+            <div className="absolute left-3 top-0 bottom-0 w-px bg-border"></div>
             <div className="space-y-4">
               {recentActivities.map((a, idx) => {
                 const Icon = ActIcon[a.type];

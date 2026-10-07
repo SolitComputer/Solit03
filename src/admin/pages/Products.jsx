@@ -293,7 +293,7 @@ export default function Products() {
               {hasFilters && (
                 <button
                   onClick={resetFilters}
-                  className="px-3 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm text-content-soft transition flex items-center gap-1.5"
+                  className="px-3 py-2.5 bg-surface-muted hover:bg-border/60 rounded-lg text-sm text-content-soft transition flex items-center gap-1.5"
                 >
                   <RefreshCw size="14" /> Reset Filter
                 </button>
@@ -301,7 +301,7 @@ export default function Products() {
             </div>
 
             {/* View Toggle */}
-            <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
+            <div className="flex gap-1 bg-surface-muted rounded-lg p-1">
               <button
                 onClick={() => setViewMode("table")}
                 className={`p-1.5 rounded-md transition ${viewMode === "table" ? "bg-surface shadow-sm text-blue-600" : "text-content-muted"}`}
@@ -342,7 +342,7 @@ export default function Products() {
         {viewMode === "table" && (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gradient-to-r from-gray-50 to-white border-b border-border">
+               <thead className="bg-gradient-to-r from-surface-muted/60 to-surface border-b border-border">
                 <tr>
                   <th className="w-10 px-4 py-3">
                     <input
@@ -360,12 +360,12 @@ export default function Products() {
                   <th className="text-center px-4 py-3 text-[11px] font-semibold text-content-muted uppercase tracking-wider">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50">
+              <tbody className="divide-y divide-border/60">
                 {loading ? (
                   <tr>
                     <td colSpan={7} className="py-20 text-center">
                       <div className="flex flex-col items-center gap-3">
-                        <div className="w-10 h-10 border-3 border-blue-200 rounded-full animate-spin border-t-blue-600"></div>
+                        <div className="w-10 h-10 border-4 border-blue-200 rounded-full animate-spin border-t-blue-600"></div>
                         <p className="text-sm text-content-muted">Memuat produk...</p>
                       </div>
                     </td>
@@ -581,7 +581,7 @@ export default function Products() {
                     className={`min-w-[34px] h-8 rounded-lg text-sm font-medium transition-all ${
                       currentPage === n
                         ? "bg-blue-600 text-white shadow-sm"
-                        : "text-content-soft hover:bg-gray-200"
+                        : "text-content-soft hover:bg-surface-muted"
                     }`}
                   >
                     {n}
