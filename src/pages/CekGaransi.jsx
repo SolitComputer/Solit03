@@ -129,7 +129,6 @@ export default function CekGaransi() {
                 {
                     method: "GET",
                     mode: "cors",
-                    headers: { "Content-Type": "application/json" },
                 }
             );
             const data = await res.json();
