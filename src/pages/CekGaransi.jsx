@@ -6,7 +6,7 @@ import {
 import { Helmet } from "react-helmet-async";
 
 // ── Konfigurasi API ──────────────────────────────────────────────────────────
-const SOLIT_POS_API = import.meta.env.VITE_SOLIT_POS_URL || "https://solit-pos.vercel.app";
+const SOLIT_POS_API = import.meta.env.VITE_SOLIT_POS_URL || "https://pos.solit.id";
 
 const STATUS_CONFIG = {
     ACTIVE: {
@@ -214,7 +214,7 @@ export default function CekGaransi() {
                     name="description"
                     content="Cek status garansi laptop Solit 03 secara online. Masukkan serial number untuk melihat masa berlaku garansi laptop second bergaransi kamu."
                 />
-                <link rel="canonical" href="https://solit03.com/cek-garansi" />
+                <link rel="canonical" href="https://solit.id/cek-garansi" />
             </Helmet>
             <div className="fixed inset-0 -z-10 opacity-30">
                 <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:32px_32px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,black,transparent)]" />
