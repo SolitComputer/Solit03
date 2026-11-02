@@ -34,7 +34,7 @@ const SLIDES = [
   { key: "prep-selesai", source: "prep", title: "Penyiapan Selesai", sub: "Pesanan siap dikirim/diambil", statuses: ["SELESAI"] },
 ];
 
-const SLIDE_MS = 30_000;
+const SLIDE_MS = 10_000;
 
 function StatusBadge({ status }) {
   const cfg = STATUS_CONFIG[status];
