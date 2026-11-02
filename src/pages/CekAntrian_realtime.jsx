@@ -90,6 +90,96 @@ function formatDate(iso) {
   });
 }
 
+// ───────── Timeline servis (baru) ─────────
+// Jam singkat "14.05" untuk node timeline — null kalau belum ada datanya
+function formatJam(iso) {
+  if (!iso) return null;
+  return new Date(iso)
+    .toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: false })
+    .replace(":", ".");
+}
+
+// Status -> index node aktif (happy-path 3 tahap sesuai sketsa)
+const STAGE_INDEX = {
+  ANTRIAN: 0,
+  SEDANG_DIKERJAKAN: 1,
+  MENUNGGU_SPAREPART: 1, // sub-state "Dikerjakan"
+  DONE: 2,
+  GAGAL_DIPERBAIKI: 2,   // node akhir jadi merah
+};
+
+function TimelineDot({ variant, children }) {
+  const style = {
+    done: "bg-emerald-500 text-white",
+    active: "bg-blue-500 text-white ring-4 ring-blue-100",
+    sparepart: "bg-orange-500 text-white ring-4 ring-orange-100",
+    fail: "bg-rose-500 text-white ring-4 ring-rose-100",
+    pending: "bg-surface border-2 border-slate-300",
+  }[variant];
+  return (
+    <div className={`relative z-10 w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${style}`}>
+      {children}
+    </div>
+  );
+}
+
+function ServiceTimeline({ order }) {
+  const activeIdx = STAGE_INDEX[order.status] ?? 0;
+  const isGagal = order.status === "GAGAL_DIPERBAIKI";
+  const isSparepart = order.status === "MENUNGGU_SPAREPART";
+
+  const nodes = [
+    { label: "Menunggu dikerjakan", sub: null, time: formatJam(order.tanggal_masuk), prefix: "masuk" },
+    { label: "Dikerjakan", sub: order.teknisi ? `oleh ${order.teknisi}` : null, time: formatJam(order.tanggal_mulai), prefix: "mulai" },
+    { label: isGagal ? "Gagal diperbaiki" : "Selesai", sub: null, time: formatJam(order.tanggal_selesai), prefix: isGagal ? "" : "selesai" },
+  ];
+
+  const variantFor = (i) => {
+    if (i < activeIdx) return "done";
+    if (i === activeIdx) {
+      if (isGagal && i === 2) return "fail";
+      if (isSparepart && i === 1) return "sparepart";
+      return "active";
+    }
+    return "pending";
+  };
+
+  return (
+    <div className="flex items-start mt-3">
+      {nodes.map((node, i) => {
+        const v = variantFor(i);
+        const reached = i <= activeIdx;
+        return (
+          <div key={i} className="flex-1 relative flex flex-col items-center text-center px-1">
+            {i > 0 && (
+              <div className={`absolute top-3 -left-1/2 w-full h-0.5 ${i <= activeIdx ? "bg-blue-500" : "bg-slate-200"}`} />
+            )}
+            <TimelineDot variant={v}>
+              {v === "done" ? <Check size={14} />
+                : v === "fail" ? <AlertCircle size={13} />
+                : v === "sparepart" ? <Package size={12} />
+                : v === "active" ? <Wrench size={12} />
+                : null}
+            </TimelineDot>
+            <p className={`mt-2 text-[11px] font-semibold leading-tight ${reached ? "text-content" : "text-content-muted"}`}>
+              {node.label}
+            </p>
+            {node.sub && <p className="text-[11px] text-blue-600 leading-tight">{node.sub}</p>}
+            {i === 1 && isSparepart && (
+              <span className="mt-0.5 text-[10px] bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded-full font-semibold">
+                Tunggu sparepart
+              </span>
+            )}
+            <p className="mt-0.5 text-[10px] text-content-muted font-mono">
+              {node.time ? `${node.prefix} ${node.time}`.trim() : "—"}
+            </p>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 // ── SSE + fallback hook — TIDAK DIUBAH ──────────────────────────────────────
 function useServiceOrders() {
   const [orders, setOrders] = useState([]);
@@ -459,94 +549,45 @@ export default function CekAntrian() {
                       {/* Colored top bar */}
                       <div className={`h-1 bg-gradient-to-r ${cfg.gradient}`} />
 
-                      {items.length > 3 ? (
-                        // Table view untuk >3 item
-                        <div className="divide-y divide-slate-50/80">
-                          <div className="grid grid-cols-12 gap-2 px-5 py-2.5 bg-surface-muted/60">
-                            <span className="col-span-1 text-[10px] font-bold text-content-muted uppercase">No</span>
-                            <span className="col-span-4 text-[10px] font-bold text-content-muted uppercase">Nama</span>
-                            <span className="col-span-4 text-[10px] font-bold text-content-muted uppercase">Laptop</span>
-                            <span className="col-span-3 text-[10px] font-bold text-content-muted uppercase text-right">Masuk</span>
-                          </div>
-                          {items.map((order) => {
-                            const isNew = newIds.has(order.no_urut);
-                            return (
-                              <div
-                                key={order.no_urut}
-                                className={`grid grid-cols-12 gap-2 px-5 py-3 items-center transition-colors ${cfg.rowBg} ${isNew ? "bg-blue-50/60" : ""}`}
-                              >
-                                <div className="col-span-1">
-                                  <span className={`inline-flex w-7 h-7 rounded-lg items-center justify-center text-xs font-bold ${cfg.bg} ${cfg.text} border ${cfg.border}`}>
-                                    {order.no_urut}
-                                  </span>
-                                </div>
-                                <div className="col-span-4 min-w-0">
-                                  <p className="text-sm font-semibold text-content truncate">{order.nama}</p>
-                                  {isNew && (
-                                    <span className="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full font-semibold">Baru</span>
-                                  )}
-                                </div>
-                                <div className="col-span-4 min-w-0">
-                                  <p className="text-xs text-content-soft truncate">{order.type_laptop}</p>
-                                </div>
-                                <div className="col-span-3 text-right">
-                                  <p className="text-[11px] text-content-muted font-mono">
-                                    {new Date(order.tanggal_masuk).toLocaleString("id-ID", {
-                                      day: "2-digit", month: "short",
-                                      hour: "2-digit", minute: "2-digit", hour12: false,
-                                    })}
-                                  </p>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      ) : (
-                        // Card view untuk ≤3 item
-                        <div className="divide-y divide-slate-50/80">
-                          {items.map((order) => {
-                            const isNew = newIds.has(order.no_urut);
-                            return (
-                              <div
-                                key={order.no_urut}
-                                className={`px-5 py-4 flex items-center gap-4 transition-colors ${cfg.rowBg} ${isNew ? "bg-blue-50/60" : ""}`}
-                              >
-                                {/* Nomor urut */}
-                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 font-bold text-sm border shadow-soft-sm ${cfg.bg} ${cfg.text} ${cfg.border}`}>
+                      <div className="divide-y divide-slate-100">
+                        {items.map((order) => {
+                          const isNew = newIds.has(order.no_urut);
+                          return (
+                            <div
+                              key={order.no_urut}
+                              className={`px-5 py-4 transition-colors ${cfg.rowBg} ${isNew ? "bg-blue-50/60" : ""}`}
+                            >
+                              {/* Baris info order */}
+                              <div className="flex items-center gap-3">
+                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 font-bold text-sm border ${cfg.bg} ${cfg.text} ${cfg.border}`}>
                                   {order.no_urut}
                                 </div>
-
-                                {/* Info */}
                                 <div className="flex-1 min-w-0">
-                                  <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
+                                  <div className="flex items-center gap-1.5 flex-wrap">
                                     <p className="font-bold text-content text-sm">{order.nama}</p>
                                     {isNew && (
-                                      <span className="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full font-semibold animate-pulse">
-                                        Baru
-                                      </span>
+                                      <span className="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full font-semibold animate-pulse">Baru</span>
                                     )}
-                                    {status === "DONE" && (
+                                    {order.status === "DONE" && (
                                       <span className="inline-flex items-center gap-1 text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full font-medium">
                                         <Check className="w-3 h-3" aria-hidden="true" /> Silakan diambil
                                       </span>
                                     )}
                                   </div>
-                                  <p className="text-xs text-content-muted truncate">{order.type_laptop}</p>
-                                  <p className="text-[11px] text-content-muted mt-0.5 font-mono">
-                                    Masuk {formatDate(order.tanggal_masuk)}
-                                    {order.tanggal_selesai && (
-                                      <span className="ml-2 text-emerald-600">· Selesai {formatDate(order.tanggal_selesai)}</span>
-                                    )}
+                                  <p className="text-xs text-content-muted truncate">
+                                    {order.type_laptop}
+                                    {order.keluhan && <span className="text-content-soft"> · {order.keluhan}</span>}
                                   </p>
                                 </div>
-
-                                {/* Badge */}
-                                <StatusBadge status={status} />
+                                <StatusBadge status={order.status} />
                               </div>
-                            );
-                          })}
-                        </div>
-                      )}
+
+                              {/* Timeline tahapan */}
+                              <ServiceTimeline order={order} />
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 );
