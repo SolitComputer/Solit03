@@ -99,6 +99,26 @@ function formatJam(iso) {
     .replace(":", ".");
 }
 
+// Jam sekarang, update tiap detik → bikin durasi di timeline jalan live
+function useNow(tickMs = 1000) {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), tickMs);
+    return () => clearInterval(t);
+  }, [tickMs]);
+  return now;
+}
+
+// Durasi "1j 23m 45d" / "5m 12d" dari selisih milidetik; null kalau tak valid
+function formatDurasi(ms) {
+  if (ms == null || !Number.isFinite(ms) || ms < 0) return null;
+  const totalDetik = Math.floor(ms / 1000);
+  const jam = Math.floor(totalDetik / 3600);
+  const menit = Math.floor((totalDetik % 3600) / 60);
+  const detik = totalDetik % 60;
+  return jam > 0 ? `${jam}j ${menit}m ${detik}d` : `${menit}m ${detik}d`;
+}
+
 // Status -> index node aktif (happy-path 3 tahap sesuai sketsa)
 const STAGE_INDEX = {
   ANTRIAN: 0,
@@ -123,14 +143,22 @@ function TimelineDot({ variant, children }) {
   );
 }
 
-function ServiceTimeline({ order }) {
+function ServiceTimeline({ order, now }) {
   const activeIdx = STAGE_INDEX[order.status] ?? 0;
   const isGagal = order.status === "GAGAL_DIPERBAIKI";
   const isSparepart = order.status === "MENUNGGU_SPAREPART";
 
+  const tMasuk = order.tanggal_masuk ? new Date(order.tanggal_masuk).getTime() : null;
+  const tMulai = order.tanggal_mulai ? new Date(order.tanggal_mulai).getTime() : null;
+  const tSelesai = order.tanggal_selesai ? new Date(order.tanggal_selesai).getTime() : null;
+
+  // Durasi tiap tahap. Tahap yang masih berjalan dihitung sampai "now" → jalan live.
+  const durMenunggu = tMasuk != null ? (tMulai ?? now) - tMasuk : null;      // masuk → mulai
+  const durDikerjakan = tMulai != null ? (tSelesai ?? now) - tMulai : null;  // mulai → selesai
+
   const nodes = [
-    { label: "Menunggu dikerjakan", sub: null, time: formatJam(order.tanggal_masuk), prefix: "masuk" },
-    { label: "Dikerjakan", sub: order.teknisi ? `oleh ${order.teknisi}` : null, time: formatJam(order.tanggal_mulai), prefix: "mulai" },
+    { label: "Menunggu dikerjakan", sub: null, time: formatDurasi(durMenunggu), prefix: "nunggu" },
+    { label: "Dikerjakan", sub: order.teknisi ? `oleh ${order.teknisi}` : null, time: formatDurasi(durDikerjakan), prefix: "proses" },
     { label: isGagal ? "Gagal diperbaiki" : "Selesai", sub: null, time: formatJam(order.tanggal_selesai), prefix: isGagal ? "" : "selesai" },
   ];
 
@@ -277,6 +305,7 @@ export default function CekAntrian() {
   const [newIds, setNewIds] = useState(new Set());
   const [isVisible, setIsVisible] = useState({ hero: false, stats: false, content: false, cta: false });
   const prevOrdersRef = useRef([]);
+  const now = useNow(); // ticker 1 detik untuk durasi live di timeline
 
   // ── Intersection observer — sama persis dengan CekGaransi ─────────────────
   useEffect(() => {
@@ -583,7 +612,7 @@ export default function CekAntrian() {
                               </div>
 
                               {/* Timeline tahapan */}
-                              <ServiceTimeline order={order} />
+                              <ServiceTimeline order={order} now={now} />
                             </div>
                           );
                         })}
