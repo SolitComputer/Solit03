@@ -2,7 +2,7 @@
 import { Wrench, Clock, CheckCircle, Package, RefreshCw, Search, AlertCircle, Check, Hash, Radio } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 
-const POS_BASE = "https://solit-pos.vercel.app";
+const POS_BASE = "https://pos.solit.id";
 const STREAM_URL = `${POS_BASE}/api/service/stream`;
 const FALLBACK_URL = `${POS_BASE}/api/service/public`;
 
@@ -55,9 +55,21 @@ const STATUS_CONFIG = {
     gradient: "from-emerald-500 to-emerald-600",
     badgeBg: "bg-emerald-100",
   },
+  GAGAL_DIPERBAIKI: {
+    label: "Gagal Diperbaiki",
+    icon: <AlertCircle size={13} />,
+    bg: "bg-rose-50",
+    border: "border-rose-200",
+    text: "text-rose-700",
+    dot: "bg-rose-400",
+    rowBg: "hover:bg-rose-50/40",
+    desc: "Perbaikan tidak bisa dilanjutkan",
+    gradient: "from-rose-500 to-rose-600",
+    badgeBg: "bg-rose-100",
+  },
 };
 
-const STATUS_ORDER = ["ANTRIAN", "SEDANG_DIKERJAKAN", "MENUNGGU_SPAREPART", "DONE"];
+const STATUS_ORDER = ["ANTRIAN", "SEDANG_DIKERJAKAN", "MENUNGGU_SPAREPART", "GAGAL_DIPERBAIKI", "DONE"];
 
 function StatusBadge({ status }) {
   const cfg = STATUS_CONFIG[status];
