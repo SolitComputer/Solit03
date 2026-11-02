@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet-async";
 const POS_BASE = "https://pos.solit.id";
 const STREAM_URL = `${POS_BASE}/api/service/stream`;
 const FALLBACK_URL = `${POS_BASE}/api/service/public`;
-const PREP_URL = `${POS_BASE}/api/preparation/public`;
+const PREP_URL = `${POS_BASE}/api/preparation/public/`;
 
 const STATUS_CONFIG = {
   ANTRIAN: { label: "Antrian", icon: <Clock size={13} />, bg: "bg-amber-50", border: "border-amber-200", text: "text-amber-700", dot: "bg-amber-400", rowBg: "hover:bg-amber-50/40", desc: "Menunggu giliran dikerjakan", gradient: "from-amber-500 to-amber-600", badgeBg: "bg-amber-100" },
