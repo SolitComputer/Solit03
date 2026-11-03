@@ -295,6 +295,14 @@ export default function CekAntrian() {
       {magnify ? (
         <div className="fixed inset-0 z-[100] bg-surface flex flex-col">
           <style>{`@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}.pg-anim{animation:slideIn .45s cubic-bezier(.2,.9,.4,1.05)}`}</style>
+
+          {/* Maskot — cuma tampil di Mode Display, 1 saja, pojok kiri-bawah */}
+          <img
+            src="/solit-mascot.png"
+            alt=""
+            className="hidden xl:block absolute bottom-0 left-0 w-64 2xl:w-80 h-auto pointer-events-none select-none drop-shadow-xl z-0"
+            draggable={false}
+          />
           {cur ? (
             <>
               <div style={{ height: 6, background: cur.source === "prep" ? "#534AB7" : "#378ADD" }} />
@@ -362,31 +370,16 @@ export default function CekAntrian() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-14">
         <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.fadeUp{animation:fadeUp .5s ease forwards}`}</style>
 
-        <div className="mb-8">
-          <div className="flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-4 md:gap-8">
-            {/* KIRI: teks & aksi */}
-            <div className="text-center md:text-left">
-              <span className="eyebrow"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full" /> Official Solit 03</span>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-content mt-4">Antrian <span className="text-blue-600">Servis</span> & Penyiapan</h1>
-              <p className="text-sm text-content-muted mt-3">Pantau status laptop & pesanan kamu secara real-time.</p>
-              <button onClick={enter} className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 shadow-soft transition">
-                <Maximize2 size={16} /> Perbesar (Mode Display TV)
-              </button>
-              <div className="flex items-center justify-center md:justify-start gap-2 mt-3">
-                <div className={`w-2 h-2 rounded-full ${connected ? "bg-emerald-500 animate-pulse" : "bg-slate-300"}`} />
-                <span className="text-xs text-content-muted">{connected ? "Terhubung real-time" : "Mode polling"}</span>
-              </div>
-            </div>
-
-            {/* KANAN: maskot pengisi area kosong */}
-            <div className="shrink-0 flex justify-center md:justify-end">
-              <img
-                src="/solit-mascot.png"
-                alt="Maskot Solit 03"
-                className="w-48 sm:w-56 md:w-64 lg:w-72 h-auto select-none pointer-events-none drop-shadow-xl"
-                draggable={false}
-              />
-            </div>
+        <div className="text-center mb-8">
+          <span className="eyebrow"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full" /> Official Solit 03</span>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-content mt-4">Antrian <span className="text-blue-600">Servis</span> & Penyiapan</h1>
+          <p className="text-sm text-content-muted mt-3">Pantau status laptop & pesanan kamu secara real-time.</p>
+          <button onClick={enter} className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 shadow-soft transition">
+            <Maximize2 size={16} /> Perbesar (Mode Display TV)
+          </button>
+          <div className="flex items-center justify-center gap-2 mt-3">
+            <div className={`w-2 h-2 rounded-full ${connected ? "bg-emerald-500 animate-pulse" : "bg-slate-300"}`} />
+            <span className="text-xs text-content-muted">{connected ? "Terhubung real-time" : "Mode polling"}</span>
           </div>
         </div>
 
