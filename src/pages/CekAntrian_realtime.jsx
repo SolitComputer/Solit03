@@ -1,6 +1,7 @@
 ﻿import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { Wrench, Clock, Package, RefreshCw, AlertCircle, Check, Maximize2, X, Truck } from "lucide-react";
 import { Helmet } from "react-helmet-async";
+import mascotImg from "../assets/solit-mascot.png";
 
 const POS_BASE = "https://pos.solit.id";
 const STREAM_URL = `${POS_BASE}/api/service/stream`;
@@ -298,7 +299,7 @@ export default function CekAntrian() {
 
           {/* Maskot — 1 saja, muncul di Mode Display, pojok kiri-bawah */}
           <img
-            src="/solit-mascot.png"
+            src={mascotImg}
             alt="Maskot Solit 03"
             className="absolute bottom-0 left-0 w-40 sm:w-52 lg:w-64 xl:w-72 h-auto pointer-events-none select-none drop-shadow-xl z-0"
             draggable={false}
