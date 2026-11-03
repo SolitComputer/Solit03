@@ -128,8 +128,8 @@ function PhaseCard({ n, big = false }) {
         </div>
 
         <p className={`font-bold text-content leading-tight ${big ? "text-lg" : "text-base"}`}>{n.nama}</p>
-        <p className="text-xs text-content-secondary mt-0.5 truncate">
-          {n.device}{n.subtitle ? <span className="text-content-muted"> · {n.subtitle}</span> : null}
+        <p className="text-xs text-content-soft dark:text-slate-300 mt-0.5 truncate">
+          {n.device}{n.subtitle ? <span className="text-content-muted dark:text-slate-400"> · {n.subtitle}</span> : null}
         </p>
 
         {n.chips.length > 0 && (
@@ -251,26 +251,16 @@ export default function CekAntrian() {
   }, [magnify, pages.length]);
   useEffect(() => { if (pageIdx >= pages.length) setPageIdx(0); }, [pages.length, pageIdx]);
 
-  const wasDarkRef = useRef(false);
   const enter = useCallback(async () => {
-    // Paksa mode terang selama display TV, simpan kondisi dark sebelumnya
-    wasDarkRef.current = document.documentElement.classList.contains("dark");
-    document.documentElement.classList.remove("dark");
     setPageIdx(0); setMagnify(true);
     try { await rootRef.current?.requestFullscreen?.(); } catch {}
   }, []);
   const exit = useCallback(async () => {
     setMagnify(false);
-    if (wasDarkRef.current) document.documentElement.classList.add("dark"); // balikin tema semula
     try { if (document.fullscreenElement) await document.exitFullscreen(); } catch {}
   }, []);
   useEffect(() => {
-    const onFs = () => {
-      if (!document.fullscreenElement) {
-        setMagnify(false);
-        if (wasDarkRef.current) document.documentElement.classList.add("dark"); // balikin saat keluar via Esc
-      }
-    };
+    const onFs = () => { if (!document.fullscreenElement) setMagnify(false); };
     document.addEventListener("fullscreenchange", onFs);
     return () => document.removeEventListener("fullscreenchange", onFs);
   }, []);
@@ -291,20 +281,20 @@ export default function CekAntrian() {
 
       {/* ════ MODE PERBESAR ════ */}
       {magnify ? (
-        <div className="fixed inset-0 z-[100] bg-white text-slate-900 flex flex-col" style={{ colorScheme: "light" }}>
+        <div className="fixed inset-0 z-[100] bg-surface flex flex-col">
           <style>{`@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}.pg-anim{animation:slideIn .45s cubic-bezier(.2,.9,.4,1.05)}`}</style>
           {cur ? (
             <>
               <div style={{ height: 6, background: cur.source === "prep" ? "#534AB7" : "#378ADD" }} />
               <div className="px-10 pt-6 pb-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold ${cur.source === "prep" ? "bg-violet-50 text-violet-700" : "bg-blue-50 text-blue-700"}`}>
+                  <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold ${cur.source === "prep" ? "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300" : "bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300"}`}>
                     {cur.source === "prep" ? <Truck size={15} /> : <Wrench size={15} />}
                     {cur.title}
                   </span>
                   <span className="text-sm text-content-muted">Halaman {cur.no} / {cur.total}</span>
                 </div>
-                <button onClick={exit} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-content-soft text-sm font-semibold transition">
+                <button onClick={exit} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-content-soft text-sm font-semibold transition">
                   <X size={16} /> Keluar
                 </button>
               </div>
@@ -325,7 +315,7 @@ export default function CekAntrian() {
             <div className="flex-1 flex flex-col items-center justify-center text-center">
               <ClipboardList size={48} className="text-slate-300 mb-4" />
               <p className="text-xl font-bold text-content-soft">Belum ada data hari ini</p>
-              <button onClick={exit} className="mt-6 px-5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-content-soft font-semibold">Keluar</button>
+              <button onClick={exit} className="mt-6 px-5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-content-soft font-semibold">Keluar</button>
             </div>
           )}
         </div>
@@ -349,7 +339,7 @@ export default function CekAntrian() {
 
         {/* PENYIAPAN */}
         <div className="flex items-center gap-3 mb-4">
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold bg-violet-50 text-violet-700"><Truck size={15} /> PENYIAPAN BARANG</span>
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><Truck size={15} /> PENYIAPAN BARANG</span>
           <div className="flex-1 h-px bg-gradient-to-r from-violet-200 to-transparent" />
         </div>
         {prepCards.length === 0 ? (
@@ -362,7 +352,7 @@ export default function CekAntrian() {
 
         {/* SERVICE */}
         <div className="flex items-center gap-3 mb-4">
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold bg-blue-50 text-blue-700"><Wrench size={15} /> ANTRIAN SERVICE</span>
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300"><Wrench size={15} /> ANTRIAN SERVICE</span>
           <div className="flex-1 h-px bg-gradient-to-r from-blue-200 to-transparent" />
         </div>
         {svcCards.length === 0 ? (
