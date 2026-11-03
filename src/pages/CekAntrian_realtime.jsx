@@ -78,9 +78,9 @@ function normSvc(o, now) {
 
 // warna per fase aktif
 const STEP_STYLE = [
-  { bar: "#EF9F27", badgeBg: "bg-amber-50", badgeText: "text-amber-800", icon: Clock },     // menunggu
-  { bar: "#378ADD", badgeBg: "bg-blue-50", badgeText: "text-blue-800", icon: Package },      // diproses
-  { bar: "#1D9E75", badgeBg: "bg-emerald-50", badgeText: "text-emerald-800", icon: Check },  // selesai
+  { bar: "#EF9F27", badgeBg: "bg-amber-50 dark:bg-amber-500/15", badgeText: "text-amber-700 dark:text-amber-300", icon: Clock },     // menunggu
+  { bar: "#378ADD", badgeBg: "bg-blue-50 dark:bg-blue-500/15", badgeText: "text-blue-700 dark:text-blue-300", icon: Package },        // diproses
+  { bar: "#1D9E75", badgeBg: "bg-emerald-50 dark:bg-emerald-500/15", badgeText: "text-emerald-700 dark:text-emerald-300", icon: Check }, // selesai
 ];
 
 // ── Dot progress 3 titik ──
@@ -135,7 +135,7 @@ function PhaseCard({ n, big = false }) {
         {n.chips.length > 0 && (
           <div className="flex gap-1.5 flex-wrap mt-1.5">
             {n.chips.map((c, i) => (
-              <span key={i} className={`text-[10px] font-semibold px-2 py-0.5 rounded ${["bg-blue-50 text-blue-800", "bg-violet-50 text-violet-800", "bg-emerald-50 text-emerald-800"][i % 3]}`}>{c}</span>
+              <span key={i} className={`text-[10px] font-semibold px-2 py-0.5 rounded ${["bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300", "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300", "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"][i % 3]}`}>{c}</span>
             ))}
           </div>
         )}
@@ -150,10 +150,10 @@ function PhaseCard({ n, big = false }) {
         </div>
         <div className="flex justify-between mt-1">
           <span className={`text-[10px] ${n.step >= 0 ? "text-content font-medium" : "text-content-muted"}`}>{n.labels[0]}</span>
-          <span className={`text-[10px] ${n.step >= 1 ? "text-blue-600 font-medium" : "text-content-muted"} truncate px-1`}>
+          <span className={`text-[10px] ${n.step >= 1 ? "text-blue-600 dark:text-blue-400 font-medium" : "text-content-muted"} truncate px-1`}>
             {n.step2Name ? `oleh ${n.step2Name}` : n.labels[1]}
           </span>
-          <span className={`text-[10px] ${n.step >= 2 ? "text-emerald-600 font-medium" : "text-content-muted"}`}>{n.labels[2]}</span>
+          <span className={`text-[10px] ${n.step >= 2 ? "text-emerald-600 dark:text-emerald-400 font-medium" : "text-content-muted"}`}>{n.labels[2]}</span>
         </div>
       </div>
     </div>
@@ -275,7 +275,7 @@ export default function CekAntrian() {
 
       {/* ════ MODE PERBESAR ════ */}
       {magnify ? (
-        <div className="fixed inset-0 z-[100] bg-white flex flex-col">
+        <div className="fixed inset-0 z-[100] bg-white text-slate-900 flex flex-col" style={{ colorScheme: "light" }}>
           <style>{`@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}.pg-anim{animation:slideIn .45s cubic-bezier(.2,.9,.4,1.05)}`}</style>
           {cur ? (
             <>
