@@ -14,10 +14,10 @@ const PER_PAGE = 4;        // customer per layar
 // ── Teks berjalan di bawah Mode Display — EDIT isinya di sini ──
 const RUNNING_TEXT = [
   "SOLIT 03 — Jual Beli & Service Laptop Second Terpercaya di Depok",
-  "Buka Senin–Sabtu 09.00–20.00 WIB",
-  "Alamat: [ISI ALAMAT TOKO KAMU]",
-  "WhatsApp: [ISI NOMOR WA KAMU]",
-  "Garansi Resmi • Laptop Berkualitas • Harga Bersaing",
+  "Buka Setiap Hari 08.00–22.00 WIB (khusus Selasa mulai 10.00)",
+  "Alamat: Kav Adikarya No.77, Rangkapan Jaya, Pancoran Mas, Depok 16435",
+  "WhatsApp: 0852-1064-7047",
+  "Garansi Resmi • Laptop Second  • Harga Murah",
 ].join("   •   ");
 
 // ── util waktu ──
