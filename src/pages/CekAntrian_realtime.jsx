@@ -83,6 +83,13 @@ const STEP_STYLE = [
   { bar: "#1D9E75", badgeBg: "bg-emerald-50 dark:bg-emerald-500/15", badgeText: "text-emerald-700 dark:text-emerald-300", icon: Check }, // selesai
 ];
 
+// Warna kartu ringkasan per fase (full string — jangan dirangkai template literal)
+const SUMMARY_TONE = [
+  "bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/30 text-amber-700 dark:text-amber-300",
+  "bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/30 text-blue-700 dark:text-blue-300",
+  "bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300",
+];
+
 // ── Dot progress 3 titik ──
 function Dot({ state }) {
   const cls = {
@@ -266,6 +273,11 @@ export default function CekAntrian() {
   }, []);
 
   const cur = pages[pageIdx] ?? null;
+  const curCards = cur ? (cur.source === "prep" ? prepCards : svcCards) : [];
+  const summaryCounts = [0, 1, 2].map((s) => curCards.filter((c) => c.step === s).length);
+  const summaryLabels = cur?.source === "prep"
+    ? ["Menunggu disiapkan", "Disiapkan", "Selesai"]
+    : ["Menunggu dikerjakan", "Dikerjakan", "Selesai"];
 
   return (
     <div ref={rootRef} className="min-h-screen bg-surface-muted relative overflow-x-hidden">
@@ -297,6 +309,17 @@ export default function CekAntrian() {
                 <button onClick={exit} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-content-soft text-sm font-semibold transition">
                   <X size={16} /> Keluar
                 </button>
+              </div>
+
+              <div className="px-10 pb-3">
+                <div className="grid grid-cols-3 gap-3 max-w-6xl mx-auto">
+                  {summaryCounts.map((cnt, i) => (
+                    <div key={i} className={`rounded-xl border px-4 py-2.5 flex items-center justify-between ${SUMMARY_TONE[i]}`}>
+                      <span className="text-sm font-medium">{summaryLabels[i]}</span>
+                      <span className="text-2xl font-black leading-none">{cnt}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div key={cur.key} className="pg-anim flex-1 overflow-hidden px-10 pb-4">
