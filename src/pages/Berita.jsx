@@ -143,7 +143,7 @@ export default function Berita() {
         </div>
       </div>
 
-      {/* Main Container dengan Iklan Flank Kanan-Kiri */}
+      {/* Main Containerr dengan Iklan Flank Kanan-Kiri */}
       <div className="w-full max-w-[1920px] mx-auto flex justify-center py-8">
         
         {/* IKLAN FLANK KIRI BERITA (Murni CSS In-Flow) */}
