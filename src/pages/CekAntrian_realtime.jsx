@@ -11,6 +11,15 @@ const PREP_URL = `${POS_BASE}/api/preparation/public`;
 const SLIDE_MS = 10_000;   // durasi tiap halaman di mode Perbesar
 const PER_PAGE = 4;        // customer per layar
 
+// ── Teks berjalan di bawah Mode Display — EDIT isinya di sini ──
+const RUNNING_TEXT = [
+  "SOLIT 03 — Jual Beli & Service Laptop Second Terpercaya di Depok",
+  "Buka Senin–Sabtu 09.00–20.00 WIB",
+  "Alamat: [ISI ALAMAT TOKO KAMU]",
+  "WhatsApp: [ISI NOMOR WA KAMU]",
+  "Garansi Resmi • Laptop Berkualitas • Harga Bersaing",
+].join("   •   ");
+
 // ── util waktu ──
 function useNow(tickMs = 1000) {
   const [now, setNow] = useState(() => Date.now());
@@ -301,7 +310,7 @@ export default function CekAntrian() {
           <img
             src={mascotImg}
             alt="Maskot Solit 03"
-            className="absolute bottom-0 left-0 w-40 sm:w-52 lg:w-64 xl:w-72 h-auto pointer-events-none select-none drop-shadow-xl z-0"
+            className="absolute bottom-12 left-0 w-40 sm:w-52 lg:w-64 xl:w-72 h-auto pointer-events-none select-none drop-shadow-xl z-0"
             draggable={false}
           />
           {cur ? (
@@ -350,8 +359,17 @@ export default function CekAntrian() {
               <button onClick={exit} className="mt-6 px-5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-content-soft font-semibold">Keluar</button>
             </div>
           )}
+
+          {/* ── Running text info toko (paling bawah Mode Display) ── */}
+          <div className="relative z-10 shrink-0 overflow-hidden border-t border-border bg-blue-600">
+            <style>{`@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}.marquee-track{display:inline-flex;white-space:nowrap;animation:marquee 30s linear infinite}`}</style>
+            <div className="marquee-track py-2.5">
+              <span className="px-8 text-sm font-semibold text-white">{RUNNING_TEXT}</span>
+              <span className="px-8 text-sm font-semibold text-white">{RUNNING_TEXT}</span>
+            </div>
+          </div>
         </div>
-      ) : (
+      ) : ( 
       /* ════ MODE NORMAL ════ */
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-14">
         <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.fadeUp{animation:fadeUp .5s ease forwards}`}</style>
