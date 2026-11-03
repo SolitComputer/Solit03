@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { Wrench, Clock, Package, RefreshCw, AlertCircle, Check, Maximize2, X, Truck, ClipboardList } from "lucide-react";
+import { Wrench, Clock, Package, RefreshCw, AlertCircle, Check, Maximize2, X, Truck } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 
 const POS_BASE = "https://pos.solit.id";
@@ -298,7 +298,7 @@ export default function CekAntrian() {
           {cur ? (
             <>
               <div style={{ height: 6, background: cur.source === "prep" ? "#534AB7" : "#378ADD" }} />
-              <div className="px-10 pt-6 pb-4 flex items-center justify-between">
+              <div className="relative px-10 pt-6 pb-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold ${cur.source === "prep" ? "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300" : "bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300"}`}>
                     {cur.source === "prep" ? <Truck size={15} /> : <Wrench size={15} />}
@@ -306,6 +306,15 @@ export default function CekAntrian() {
                   </span>
                   <span className="text-sm text-content-muted">Halaman {cur.no} / {cur.total}</span>
                 </div>
+                {/* CENTER: brand lockup maskot (pengisi area kosong atas) */}
+                <div className="hidden lg:flex items-center gap-2.5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none">
+                  <img src="/solit-mascot.png" alt="" className="h-10 w-auto drop-shadow" draggable={false} />
+                  <div className="leading-tight text-left">
+                    <p className="text-sm font-black text-content">SOLIT 03</p>
+                    <p className="text-[10px] font-semibold text-content-muted -mt-0.5">Papan Antrian Realtime</p>
+                  </div>
+                </div>
+
                 <button onClick={exit} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-content-soft text-sm font-semibold transition">
                   <X size={16} /> Keluar
                 </button>
@@ -335,9 +344,15 @@ export default function CekAntrian() {
               </div>
             </>
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center text-center">
-              <ClipboardList size={48} className="text-slate-300 mb-4" />
-              <p className="text-xl font-bold text-content-soft">Belum ada data hari ini</p>
+            <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
+              <img
+                src="/solit-mascot.png"
+                alt="Maskot Solit 03"
+                className="w-56 sm:w-72 h-auto drop-shadow-xl mb-6 select-none pointer-events-none"
+                draggable={false}
+              />
+              <p className="text-2xl font-black text-content">Belum ada antrian hari ini</p>
+              <p className="text-sm text-content-muted mt-2">Papan akan update otomatis begitu ada servis atau penyiapan masuk.</p>
               <button onClick={exit} className="mt-6 px-5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-content-soft font-semibold">Keluar</button>
             </div>
           )}
@@ -347,16 +362,31 @@ export default function CekAntrian() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-14">
         <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.fadeUp{animation:fadeUp .5s ease forwards}`}</style>
 
-        <div className="text-center mb-8">
-          <span className="eyebrow"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full" /> Official Solit 03</span>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-content mt-4">Antrian <span className="text-blue-600">Servis</span> & Penyiapan</h1>
-          <p className="text-sm text-content-muted mt-3">Pantau status laptop & pesanan kamu secara real-time.</p>
-          <button onClick={enter} className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 shadow-soft transition">
-            <Maximize2 size={16} /> Perbesar (Mode Display TV)
-          </button>
-          <div className="flex items-center justify-center gap-2 mt-3">
-            <div className={`w-2 h-2 rounded-full ${connected ? "bg-emerald-500 animate-pulse" : "bg-slate-300"}`} />
-            <span className="text-xs text-content-muted">{connected ? "Terhubung real-time" : "Mode polling"}</span>
+        <div className="mb-8">
+          <div className="flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-4 md:gap-8">
+            {/* KIRI: teks & aksi */}
+            <div className="text-center md:text-left">
+              <span className="eyebrow"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full" /> Official Solit 03</span>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-content mt-4">Antrian <span className="text-blue-600">Servis</span> & Penyiapan</h1>
+              <p className="text-sm text-content-muted mt-3">Pantau status laptop & pesanan kamu secara real-time.</p>
+              <button onClick={enter} className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 shadow-soft transition">
+                <Maximize2 size={16} /> Perbesar (Mode Display TV)
+              </button>
+              <div className="flex items-center justify-center md:justify-start gap-2 mt-3">
+                <div className={`w-2 h-2 rounded-full ${connected ? "bg-emerald-500 animate-pulse" : "bg-slate-300"}`} />
+                <span className="text-xs text-content-muted">{connected ? "Terhubung real-time" : "Mode polling"}</span>
+              </div>
+            </div>
+
+            {/* KANAN: maskot pengisi area kosong */}
+            <div className="shrink-0 flex justify-center md:justify-end">
+              <img
+                src="/solit-mascot.png"
+                alt="Maskot Solit 03"
+                className="w-48 sm:w-56 md:w-64 lg:w-72 h-auto select-none pointer-events-none drop-shadow-xl"
+                draggable={false}
+              />
+            </div>
           </div>
         </div>
 
