@@ -251,10 +251,26 @@ export default function CekAntrian() {
   }, [magnify, pages.length]);
   useEffect(() => { if (pageIdx >= pages.length) setPageIdx(0); }, [pages.length, pageIdx]);
 
-  const enter = useCallback(async () => { setPageIdx(0); setMagnify(true); try { await rootRef.current?.requestFullscreen?.(); } catch {} }, []);
-  const exit = useCallback(async () => { setMagnify(false); try { if (document.fullscreenElement) await document.exitFullscreen(); } catch {} }, []);
+  const wasDarkRef = useRef(false);
+  const enter = useCallback(async () => {
+    // Paksa mode terang selama display TV, simpan kondisi dark sebelumnya
+    wasDarkRef.current = document.documentElement.classList.contains("dark");
+    document.documentElement.classList.remove("dark");
+    setPageIdx(0); setMagnify(true);
+    try { await rootRef.current?.requestFullscreen?.(); } catch {}
+  }, []);
+  const exit = useCallback(async () => {
+    setMagnify(false);
+    if (wasDarkRef.current) document.documentElement.classList.add("dark"); // balikin tema semula
+    try { if (document.fullscreenElement) await document.exitFullscreen(); } catch {}
+  }, []);
   useEffect(() => {
-    const onFs = () => { if (!document.fullscreenElement) setMagnify(false); };
+    const onFs = () => {
+      if (!document.fullscreenElement) {
+        setMagnify(false);
+        if (wasDarkRef.current) document.documentElement.classList.add("dark"); // balikin saat keluar via Esc
+      }
+    };
     document.addEventListener("fullscreenchange", onFs);
     return () => document.removeEventListener("fullscreenchange", onFs);
   }, []);
