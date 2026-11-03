@@ -296,11 +296,11 @@ export default function CekAntrian() {
         <div className="fixed inset-0 z-[100] bg-surface flex flex-col">
           <style>{`@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}.pg-anim{animation:slideIn .45s cubic-bezier(.2,.9,.4,1.05)}`}</style>
 
-          {/* Maskot — cuma tampil di Mode Display, 1 saja, pojok kiri-bawah */}
+          {/* Maskot — 1 saja, muncul di Mode Display, pojok kiri-bawah */}
           <img
             src="/solit-mascot.png"
-            alt=""
-            className="hidden xl:block absolute bottom-0 left-0 w-64 2xl:w-80 h-auto pointer-events-none select-none drop-shadow-xl z-0"
+            alt="Maskot Solit 03"
+            className="absolute bottom-0 left-0 w-40 sm:w-52 lg:w-64 xl:w-72 h-auto pointer-events-none select-none drop-shadow-xl z-0"
             draggable={false}
           />
           {cur ? (
@@ -314,15 +314,6 @@ export default function CekAntrian() {
                   </span>
                   <span className="text-sm text-content-muted">Halaman {cur.no} / {cur.total}</span>
                 </div>
-                {/* CENTER: brand lockup maskot (pengisi area kosong atas) */}
-                <div className="hidden lg:flex items-center gap-2.5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none">
-                  <img src="/solit-mascot.png" alt="" className="h-10 w-auto drop-shadow" draggable={false} />
-                  <div className="leading-tight text-left">
-                    <p className="text-sm font-black text-content">SOLIT 03</p>
-                    <p className="text-[10px] font-semibold text-content-muted -mt-0.5">Papan Antrian Realtime</p>
-                  </div>
-                </div>
-
                 <button onClick={exit} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-content-soft text-sm font-semibold transition">
                   <X size={16} /> Keluar
                 </button>
@@ -353,12 +344,6 @@ export default function CekAntrian() {
             </>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
-              <img
-                src="/solit-mascot.png"
-                alt="Maskot Solit 03"
-                className="w-56 sm:w-72 h-auto drop-shadow-xl mb-6 select-none pointer-events-none"
-                draggable={false}
-              />
               <p className="text-2xl font-black text-content">Belum ada antrian hari ini</p>
               <p className="text-sm text-content-muted mt-2">Papan akan update otomatis begitu ada servis atau penyiapan masuk.</p>
               <button onClick={exit} className="mt-6 px-5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-content-soft font-semibold">Keluar</button>
