@@ -104,8 +104,8 @@ const SUMMARY_TONE = [
 function Dot({ state }) {
   const cls = {
     done: "bg-emerald-500 text-white",
-    active1: "bg-amber-500 ring-4 ring-amber-100",
-    active2: "bg-blue-500 ring-4 ring-blue-100",
+    active1: "bg-amber-500 ring-4 ring-amber-100 animate-pulse",
+    active2: "bg-blue-500 ring-4 ring-blue-100 animate-pulse",
     active3: "bg-emerald-500 ring-4 ring-emerald-100 text-white",
     pending: "bg-surface border-2 border-slate-300",
   }[state];
@@ -134,17 +134,17 @@ function PhaseCard({ n, big = false }) {
   const line = (i) => (i < n.step ? (n.step === 2 ? "bg-emerald-500" : "bg-blue-500") : "bg-slate-200");
 
   return (
-    <div className="bg-surface border border-border rounded-xl overflow-hidden">
-      <div style={{ height: 5, background: st.bar }} />
-      <div className={big ? "p-4" : "p-3.5"}>
+    <div className="group bg-surface border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-200 dark:hover:border-blue-500/40 transition-all duration-300 ease-out">
+      <div style={{ height: 6, background: `linear-gradient(90deg, ${st.bar}, ${st.bar}cc)` }} />
+      <div className={big ? "p-3.5" : "p-3"}>
         <div className="flex items-center justify-between mb-1.5">
-          <span className="font-mono text-[11px] font-semibold text-content-muted">{n.orderNo}</span>
-          <span className={`inline-flex items-center gap-1 ${st.badgeBg} ${st.badgeText} text-[11px] font-semibold px-2 py-0.5 rounded-full`}>
+          <span className="font-mono text-[11px] font-bold text-content-soft bg-surface-muted dark:bg-slate-700/50 px-1.5 py-0.5 rounded-md">{n.orderNo}</span>
+          <span className={`inline-flex items-center gap-1 ${st.badgeBg} ${st.badgeText} text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm`}>
             <Icon size={12} /> {badgeLabel}{badgeDur ? ` · ${badgeDur}` : ""}
           </span>
         </div>
 
-        <p className={`font-bold text-content leading-tight ${big ? "text-lg" : "text-base"}`}>{n.nama}</p>
+        <p className={`font-bold text-content leading-tight ${big ? "text-base" : "text-sm"}`}>{n.nama}</p>
         <p className="text-xs text-content-soft dark:text-slate-300 mt-0.5 truncate">
           {n.device}{n.subtitle ? <span className="text-content-muted dark:text-slate-400"> · {n.subtitle}</span> : null}
         </p>
@@ -158,7 +158,7 @@ function PhaseCard({ n, big = false }) {
         )}
 
         {/* progress 3 titik */}
-        <div className="flex items-center gap-1 mt-3">
+        <div className="flex items-center gap-1 mt-2">
           <Dot state={dotState(0)} />
           <div className={`flex-1 h-0.5 rounded ${line(0)}`} />
           <Dot state={dotState(1)} />
@@ -325,12 +325,18 @@ export default function CekAntrian() {
 
               <div className="px-10 pb-3">
                 <div className="grid grid-cols-3 gap-3 max-w-6xl mx-auto">
-                  {summaryCounts.map((cnt, i) => (
-                    <div key={i} className={`rounded-xl border px-4 py-2.5 flex items-center justify-between ${SUMMARY_TONE[i]}`}>
-                      <span className="text-sm font-medium">{summaryLabels[i]}</span>
-                      <span className="text-2xl font-black leading-none">{cnt}</span>
-                    </div>
-                  ))}
+                  {summaryCounts.map((cnt, i) => {
+                    const Icon = STEP_STYLE[i].icon;
+                    return (
+                      <div key={i} className={`rounded-2xl border px-5 py-3.5 flex items-center justify-between shadow-sm ${SUMMARY_TONE[i]}`}>
+                        <span className="inline-flex items-center gap-2.5 text-base font-semibold">
+                          <Icon size={20} className="opacity-80" />
+                          {summaryLabels[i]}
+                        </span>
+                        <span className="text-4xl font-black leading-none tabular-nums">{cnt}</span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -360,9 +366,24 @@ export default function CekAntrian() {
             <img
               src={mascotImg}
               alt="Maskot Solit 03"
-            className="absolute top-0 left-4 -translate-y-[108%] w-52 sm:w-64 lg:w-80 xl:w-96 h-auto pointer-events-none select-none drop-shadow-xl z-0"
+            className="absolute top-0 left-4 -translate-y-[117%] w-32 sm:w-40 lg:w-52 xl:w-60 h-auto pointer-events-none select-none drop-shadow-xl z-0"
               draggable={false}
             />
+            <img
+              src={mascotImg}
+              alt="Maskot Solit 03"
+            className="absolute top-0 right-4 -translate-y-[117%] w-32 sm:w-40 lg:w-52 xl:w-60 h-auto pointer-events-none select-none drop-shadow-xl z-0 -scale-x-100"
+              draggable={false}
+            />
+            {/* ── Jam & tanggal realtime — di tengah, di antara dua maskot ── */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[170%] z-0 text-center pointer-events-none select-none">
+              <p className="text-5xl lg:text-6xl font-black text-blue-600 dark:text-blue-400 tabular-nums leading-none drop-shadow-sm">
+                {new Date(now).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: false }).replace(":", ".")}
+              </p>
+              <p className="mt-2 text-base lg:text-lg font-semibold text-content-soft capitalize">
+                {new Date(now).toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "short", year: "numeric" })}
+              </p>
+            </div>
             <style>{`@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}.marquee-track{display:inline-flex;white-space:nowrap;animation:marquee 30s linear infinite}`}</style>
             <div className="marquee-track py-2.5">
               <span className="px-8 text-sm font-semibold text-white">{RUNNING_TEXT}</span>
