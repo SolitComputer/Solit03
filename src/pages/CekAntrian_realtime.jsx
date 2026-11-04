@@ -311,14 +311,17 @@ export default function CekAntrian() {
             <>
               <div style={{ height: 6, background: cur.source === "prep" ? "#534AB7" : "#378ADD" }} />
               <div className="relative px-10 pt-6 pb-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold ${cur.source === "prep" ? "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300" : "bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300"}`}>
-                    {cur.source === "prep" ? <Truck size={15} /> : <Wrench size={15} />}
+                <div className="flex items-center gap-4">
+                  <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-base font-black tracking-tight shadow-sm ${cur.source === "prep" ? "bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-300" : "bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300"}`}>
+                    {cur.source === "prep" ? <Truck size={18} /> : <Wrench size={18} />}
                     {cur.title}
                   </span>
-                  <span className="text-sm text-content-muted">Halaman {cur.no} / {cur.total}</span>
+                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-content-muted">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                    Halaman {cur.no} / {cur.total}
+                  </span>
                 </div>
-                <button onClick={exit} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-content-soft text-sm font-semibold transition">
+                <button onClick={exit} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-red-50 hover:text-red-600 dark:bg-slate-700 dark:hover:bg-red-500/20 text-content-soft text-sm font-semibold transition-colors">
                   <X size={16} /> Keluar
                 </button>
               </div>
@@ -348,7 +351,7 @@ export default function CekAntrian() {
 
               <div className="px-10 py-4 border-t border-border flex items-center justify-center gap-2">
                 {pages.map((p, i) => (
-                  <div key={p.key} className={`h-1.5 rounded-full transition-all duration-300 ${i === pageIdx ? "w-10 bg-blue-500" : "w-4 bg-slate-300"}`} />
+                  <div key={p.key} className={`h-2 rounded-full transition-all duration-500 ${i === pageIdx ? "w-12 bg-gradient-to-r from-blue-500 to-violet-500" : "w-2.5 bg-slate-300 dark:bg-slate-600"}`} />
                 ))}
               </div>
             </>
@@ -361,26 +364,26 @@ export default function CekAntrian() {
           )}
 
           {/* ── Running text info toko (paling bawah Mode Display) ── */}
-          <div className="relative z-10 shrink-0 overflow-visible border-t border-border bg-blue-600">
+          <div className="relative z-10 shrink-0 overflow-visible bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 shadow-[0_-4px_20px_rgba(0,0,0,0.15)]">
             {/* Maskot — duduk tepat di atas garis running text, stay walau di-zoom */}
             <img
               src={mascotImg}
               alt="Maskot Solit 03"
-            className="absolute top-0 left-4 -translate-y-[117%] w-32 sm:w-40 lg:w-52 xl:w-60 h-auto pointer-events-none select-none drop-shadow-xl z-0"
+            className="absolute top-0 left-4 -translate-y-[118%] w-32 sm:w-40 lg:w-52 xl:w-60 h-auto pointer-events-none select-none drop-shadow-xl z-0"
               draggable={false}
             />
             <img
               src={mascotImg}
               alt="Maskot Solit 03"
-            className="absolute top-0 right-4 -translate-y-[117%] w-32 sm:w-40 lg:w-52 xl:w-60 h-auto pointer-events-none select-none drop-shadow-xl z-0 -scale-x-100"
+            className="absolute top-0 right-4 -translate-y-[118%] w-32 sm:w-40 lg:w-52 xl:w-60 h-auto pointer-events-none select-none drop-shadow-xl z-0"
               draggable={false}
             />
             {/* ── Jam & tanggal realtime — di tengah, di antara dua maskot ── */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[170%] z-0 text-center pointer-events-none select-none">
-              <p className="text-5xl lg:text-6xl font-black text-blue-600 dark:text-blue-400 tabular-nums leading-none drop-shadow-sm">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[150%] z-0 text-center pointer-events-none select-none">
+              <p className="text-6xl lg:text-7xl font-black text-blue-600 dark:text-blue-400 tabular-nums leading-none drop-shadow-sm">
                 {new Date(now).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: false }).replace(":", ".")}
               </p>
-              <p className="mt-2 text-base lg:text-lg font-semibold text-content-soft capitalize">
+              <p className="mt-2 text-lg lg:text-xl font-bold text-content-soft capitalize tracking-wide">
                 {new Date(now).toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "short", year: "numeric" })}
               </p>
             </div>
