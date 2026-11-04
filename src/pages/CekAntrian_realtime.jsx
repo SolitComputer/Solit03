@@ -306,13 +306,7 @@ export default function CekAntrian() {
         <div className="fixed inset-0 z-[100] bg-surface flex flex-col">
           <style>{`@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}.pg-anim{animation:slideIn .45s cubic-bezier(.2,.9,.4,1.05)}`}</style>
 
-          {/* Maskot — 1 saja, muncul di Mode Display, pojok kiri-bawah */}
-          <img
-            src={mascotImg}
-            alt="Maskot Solit 03"
-            className="absolute bottom-12 left-0 w-40 sm:w-52 lg:w-64 xl:w-72 h-auto pointer-events-none select-none drop-shadow-xl z-0"
-            draggable={false}
-          />
+
           {cur ? (
             <>
               <div style={{ height: 6, background: cur.source === "prep" ? "#534AB7" : "#378ADD" }} />
@@ -361,7 +355,14 @@ export default function CekAntrian() {
           )}
 
           {/* ── Running text info toko (paling bawah Mode Display) ── */}
-          <div className="relative z-10 shrink-0 overflow-hidden border-t border-border bg-blue-600">
+          <div className="relative z-10 shrink-0 overflow-visible border-t border-border bg-blue-600">
+            {/* Maskot — duduk tepat di atas garis running text, stay walau di-zoom */}
+            <img
+              src={mascotImg}
+              alt="Maskot Solit 03"
+            className="absolute top-0 left-4 -translate-y-[108%] w-52 sm:w-64 lg:w-80 xl:w-96 h-auto pointer-events-none select-none drop-shadow-xl z-0"
+              draggable={false}
+            />
             <style>{`@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}.marquee-track{display:inline-flex;white-space:nowrap;animation:marquee 30s linear infinite}`}</style>
             <div className="marquee-track py-2.5">
               <span className="px-8 text-sm font-semibold text-white">{RUNNING_TEXT}</span>
