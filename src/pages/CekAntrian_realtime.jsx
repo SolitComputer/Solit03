@@ -8,7 +8,7 @@ const SERVICE_URL = `${POS_BASE}/api/service/public`;
 const PREP_URL = `${POS_BASE}/api/preparation/public`;
 
 const SLIDE_MS = 15_000;   // durasi tiap slide di mode Display (15 detik)
-const PER_PAGE = 8;        // customer per panel per slide
+const PER_PAGE = 5;        // customer per panel per slide
 
 // ── Teks berjalan di bawah Mode Display ──
 const RUNNING_TEXT = [
@@ -88,6 +88,7 @@ function normPrep(o, now) {
     dur1: t1 != null ? (t2 ?? now) - t1 : null,
     dur2: t2 != null ? (t3 ?? now) - t2 : null,
     doneTime: o.tanggal_selesai,
+    catatan: o.catatan_progres || o.catatan || null,
   };
 }
 
@@ -109,6 +110,7 @@ function normSvc(o, now) {
     dur1: t1 != null ? (t2 ?? now) - t1 : null,
     dur2: t2 != null ? (t3 ?? now) - t2 : null,
     doneTime: o.tanggal_selesai,
+    catatan: o.catatan_progres || o.catatan || null,
   };
 }
 
@@ -217,97 +219,122 @@ function BigCard({ n }) {
     n.step === 1 ? formatDurasi(n.dur2) :
     formatJam(n.doneTime);
 
-  // Susun data menjadi entri timeline vertikal (tanpa nomor antrian)
+  // Warna status sesuai step
+  const statusColor =
+    n.step === 0 ? "text-amber-600 dark:text-amber-400"
+    : n.step === 1 ? "text-blue-600 dark:text-blue-400"
+    : "text-emerald-600 dark:text-emerald-400";
+
+  // Entri info bernomor di sisi kiri
   const entries = [
-    {
-      label: "Nama CS",
-      value: n.nama,
-      dot: "#3b82f6",
-      big: true, // teks paling besar
-    },
-    {
-      label: n.source === "prep" ? "Tipe Barang" : "Tipe Laptop",
-      value: n.device,
-      sub: n.subtitle || null,
-      dot: "#3b82f6",
-    },
+    { label: "Nama Customer", value: n.nama, big: true },
+    { label: n.source === "prep" ? "Tipe Barang" : "Tipe Laptop", value: n.device },
   ];
 
-  // Chips spek (hanya prep)
-  if (n.chips.length > 0) {
-    entries.push({
-      label: "Spesifikasi",
-      chips: n.chips,
-      dot: "#8b5cf6", // violet
-    });
+  // Keluhan / Spesifikasi
+  if (n.source === "service") {
+    entries.push({ label: "Keluhan", value: n.subtitle || "—" });
+  } else if (n.chips.length > 0) {
+    entries.push({ label: "Spesifikasi", chips: n.chips });
   }
 
-  // Status pengerjaan — warna dot sesuai step
-  entries.push({
-    label: "Status Pengerjaan",
-    value: n.labels[n.step] + (badgeDur ? ` · ${badgeDur}` : ""),
-    sub: n.step2Name ? `oleh ${n.step2Name}` : null,
-    dot: st.bar,
-    statusStep: n.step, // untuk warna teks
-  });
+  // Catatan Progres — dari API, kalau tidak ada tampilkan "-"
+  entries.push({ label: "Catatan Progres", value: n.catatan || "—" });
 
   return (
-    <div className="h-full flex flex-col justify-center px-2">
-      {entries.map((entry, i) => (
-        <div key={i} className="flex gap-4 xl:gap-5">
-            {/* ● Dot + garis vertikal */}
-            <div className="flex flex-col items-center shrink-0">
-              <div
-                className="w-4 h-4 xl:w-5 xl:h-5 rounded-full shrink-0 mt-1.5 shadow-sm"
-                style={{ background: entry.dot }}
-              />
-              {i < entries.length - 1 && (
-                <div className="w-0.5 flex-1 bg-slate-200 dark:bg-slate-600 my-1" />
-              )}
-            </div>
+    <div className="h-full flex items-center px-6 xl:px-10">
+      <div className="flex gap-6 xl:gap-10 w-full">
 
-            {/* Konten entri */}
-            <div className={i < entries.length - 1 ? "pb-5 xl:pb-6" : "pb-1"}>
-              <p className="text-sm xl:text-base text-content-muted font-medium leading-none">
-                {entry.label}
-              </p>
-
-              {/* Value utama */}
-              {entry.chips ? (
-                <div className="flex gap-2 flex-wrap mt-2">
-                  {entry.chips.map((c, ci) => (
-                    <span key={ci} className={`text-base xl:text-lg font-bold px-3 py-1 rounded-lg ${
-                      ["bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300",
-                       "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300",
-                       "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"][ci % 3]
-                    }`}>{c}</span>
-                  ))}
+        {/* ═══ KOLOM KIRI: info bernomor ═══ */}
+        <div className="flex-1 min-w-0">
+          {entries.map((entry, i) => {
+            const num = i + 1;
+            return (
+              <div key={i} className="flex gap-4 xl:gap-5">
+                {/* Nomor + garis vertikal */}
+                <div className="flex flex-col items-center shrink-0">
+                  <div className="w-8 h-8 xl:w-9 xl:h-9 2xl:w-10 2xl:h-10 rounded-full shrink-0 mt-1 bg-blue-600 dark:bg-blue-500 flex items-center justify-center shadow-md">
+                    <span className="text-white font-black text-sm xl:text-base 2xl:text-lg">{num}</span>
+                  </div>
+                  {i < entries.length - 1 && (
+                    <div className="w-0.5 flex-1 bg-slate-300 dark:bg-slate-600 my-1" />
+                  )}
                 </div>
-              ) : (
-                <p className={`font-black leading-tight mt-1 ${
-                  entry.big
-                    ? "text-3xl xl:text-4xl 2xl:text-5xl text-content"
-                    : entry.statusStep != null
-                      ? `text-2xl xl:text-3xl ${
-                          entry.statusStep === 0 ? "text-amber-600 dark:text-amber-400"
-                        : entry.statusStep === 1 ? "text-blue-600 dark:text-blue-400"
-                        : "text-emerald-600 dark:text-emerald-400"
-                        }`
-                      : "text-2xl xl:text-3xl text-content"
-                }`}>
-                  {entry.value}
-                </p>
-              )}
 
-              {/* Sub-text (keluhan, oleh teknisi) */}
-              {entry.sub && (
-                <p className="text-base xl:text-lg text-content-soft dark:text-slate-400 mt-0.5">
-                  {entry.sub}
-                </p>
-              )}
-            </div>
+                {/* Konten entri */}
+                <div className={i < entries.length - 1 ? "pb-5 xl:pb-7 2xl:pb-8" : "pb-1"}>
+                  <p className="text-sm xl:text-base 2xl:text-lg text-content-muted font-semibold tracking-wide leading-none">
+                    {entry.label}
+                  </p>
+
+                  {entry.big ? (
+                    <p className="text-4xl xl:text-5xl 2xl:text-6xl font-black text-content tracking-tight leading-tight mt-1">
+                      {entry.value}
+                    </p>
+                  ) : entry.chips ? (
+                    <div className="flex gap-2 flex-wrap mt-2">
+                      {entry.chips.map((c, ci) => (
+                        <span key={ci} className={`text-lg xl:text-xl font-bold px-3 py-1 rounded-lg ${
+                          ["bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300",
+                           "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300",
+                           "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"][ci % 3]
+                        }`}>{c}</span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className={`font-bold leading-tight mt-1 ${
+                      entry.big
+                        ? "text-4xl xl:text-5xl 2xl:text-6xl text-content tracking-tight"
+                        : "text-2xl xl:text-3xl 2xl:text-4xl text-content"
+                    }`}>
+                      {entry.value}
+                    </p>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* ═══ KOLOM KANAN: status progress timeline ═══ */}
+        <div className="shrink-0 flex flex-col justify-center pl-6 xl:pl-8 border-l border-slate-200 dark:border-slate-700">
+          <div className="space-y-1">
+            {n.labels.map((lbl, si) => {
+              const isDone = si < n.step;
+              const isCurrent = si === n.step;
+              const stepDur = si === 0 ? formatDurasi(n.dur1) : si === 1 ? formatDurasi(n.dur2) : formatJam(n.doneTime);
+              return (
+                <div key={si} className="flex items-start gap-3">
+                  {/* Dot + garis vertikal */}
+                  <div className="flex flex-col items-center shrink-0 pt-1.5">
+                    <div className={`w-3.5 h-3.5 xl:w-4 xl:h-4 rounded-full shrink-0 ${
+                      isDone ? "bg-emerald-500" : isCurrent ? "bg-blue-500 ring-4 ring-blue-500/20" : "bg-slate-300 dark:bg-slate-600"
+                    }`} />
+                    {si < n.labels.length - 1 && (
+                      <div className={`w-0.5 h-5 xl:h-6 ${isDone ? "bg-emerald-400" : "bg-slate-300 dark:bg-slate-600"}`} />
+                    )}
+                  </div>
+                  {/* Label + durasi */}
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-lg xl:text-xl 2xl:text-2xl font-bold leading-snug ${
+                      isCurrent ? statusColor : isDone ? "text-emerald-600 dark:text-emerald-400" : "text-content-muted"
+                    }`}>
+                      {lbl}
+                      {(isCurrent || isDone) && stepDur && (
+                        <span className={`font-semibold text-base xl:text-lg ${isDone ? "opacity-60" : "opacity-80"}`}> · {stepDur}</span>
+                      )}
+                    </p>
+                    {isCurrent && n.step2Name && (
+                      <p className="text-sm xl:text-base text-content-soft font-medium mt-0.5">oleh {n.step2Name}</p>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        ))}
+        </div>
+
+      </div>
     </div>
   );
 }
@@ -599,8 +626,8 @@ export default function CekAntrian() {
             </div>
           ) : (
             <div className="flex-1 flex overflow-hidden min-h-0">
-              {/* ═══ PANEL KIRI (65%) — 1 kartu besar full ═══ */}
-              <div className="w-[65%] flex flex-col p-5 overflow-hidden" key={`left-${leftCard?.key}`}>
+              {/* ═══ PANEL KIRI (72%) — 1 kartu besar full ═══ */}
+              <div className="w-[72%] flex flex-col p-5 overflow-hidden" key={`left-${leftCard?.key}`}>
                 {leftCard && (
                   <div className="anim-left flex flex-col gap-3 h-full">
                     {/* Header panel kiri */}
@@ -626,46 +653,52 @@ export default function CekAntrian() {
               {/* ═══ DIVIDER ═══ */}
               <div className="w-px bg-border shrink-0" />
 
-              {/* ═══ PANEL KANAN (35%) — flat rows + separator ═══ */}
-              <div className="w-[35%] flex flex-col py-1 px-3 overflow-y-auto" key={`right-${rightPage?.key}`}>
+              {/* ═══ PANEL KANAN (28%) — flat rows + separator ═══ */}
+              <div className="w-[28%] flex flex-col py-2 px-4 overflow-y-auto" key={`right-${rightPage?.key}`}>
                 {rightPage ? (
                   <div className="anim-right flex flex-col h-full justify-center">
                     {rightPage.items.map((n, idx) => {
                       const dur1Str = formatDurasi(n.dur1);
                       const dur2Str = formatDurasi(n.dur2);
                       const isActive = leftCard?.key === n.key;
+                      const statusColor =
+                        n.step === 0 ? "text-amber-600 dark:text-amber-400"
+                        : n.step === 1 ? "text-blue-600 dark:text-blue-400"
+                        : "text-emerald-600 dark:text-emerald-400";
 
                       return (
                         <div key={n.key}>
-                          {idx > 0 && <div className="border-t border-slate-600/30 dark:border-slate-600/40" />}
+                          {idx > 0 && <div className="border-t border-slate-300/50 dark:border-slate-600/40" />}
 
-                          <div className={`py-2 transition-opacity duration-500 ${isActive ? "" : "opacity-40"}`}>
-                            {/* Nama + Device — satu baris */}
-                            <p className={`font-bold text-sm leading-snug ${isActive ? "text-content" : "text-content-soft"}`}>
+                          <div className={`py-2.5 transition-opacity duration-500 ${isActive ? "" : "opacity-35"}`}>
+                            {/* Nama CS */}
+                            <p className={`font-extrabold text-base xl:text-lg leading-snug tracking-tight ${isActive ? "text-content" : "text-content-soft"}`}>
                               {n.nama}
-                              <span className="font-normal text-content-muted"> · {n.device}</span>
+                            </p>
+                            {/* Tipe Device — baris terpisah */}
+                            <p className="text-sm xl:text-base text-content-muted font-medium mt-0.5 truncate">
+                              {n.device}
                             </p>
 
-                            {/* Progress dots + durasi — compact */}
-                            <div className="flex items-center gap-1 mt-1.5">
+                            {/* Status label — warna sesuai step */}
+                            <p className={`text-xs xl:text-sm font-bold mt-1 ${statusColor}`}>
+                              {n.labels[n.step]}
+                              {n.step2Name && <span className="font-medium text-content-muted"> · {n.step2Name}</span>}
+                            </p>
+
+                            {/* Progress dots + durasi */}
+                            <div className="flex items-center gap-1.5 mt-2">
                               <Dot state={dotState(n.step, 0)} />
                               <div className="flex-1 relative">
                                 <div className={`h-0.5 rounded ${lineColor(n.step, 0)}`} />
-                                {dur1Str && <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] text-content-muted font-medium">{dur1Str}</span>}
+                                {dur1Str && <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 text-[10px] text-content-muted font-semibold tabular-nums">{dur1Str}</span>}
                               </div>
                               <Dot state={dotState(n.step, 1)} />
                               <div className="flex-1 relative">
                                 <div className={`h-0.5 rounded ${lineColor(n.step, 1)}`} />
-                                {dur2Str && <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] text-content-muted font-medium">{dur2Str}</span>}
+                                {dur2Str && <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 text-[10px] text-content-muted font-semibold tabular-nums">{dur2Str}</span>}
                               </div>
                               <Dot state={dotState(n.step, 2)} />
-                            </div>
-                            <div className="flex justify-between mt-0.5">
-                              <span className={`text-[9px] ${n.step >= 0 ? "text-content font-medium" : "text-content-muted"}`}>{n.labels[0]}</span>
-                              <span className={`text-[9px] ${n.step >= 1 ? "text-blue-500 dark:text-blue-400 font-medium" : "text-content-muted"} truncate px-1`}>
-                                {n.step2Name ? `oleh ${n.step2Name}` : n.labels[1]}
-                              </span>
-                              <span className={`text-[9px] ${n.step >= 2 ? "text-emerald-500 dark:text-emerald-400 font-medium" : "text-content-muted"}`}>{n.labels[2]}</span>
                             </div>
                           </div>
                         </div>
