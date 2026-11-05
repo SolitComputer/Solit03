@@ -225,7 +225,7 @@ function BigCard({ n }) {
     : n.step === 1 ? "text-blue-600 dark:text-blue-400"
     : "text-emerald-600 dark:text-emerald-400";
 
-  // Entri info bernomor di sisi kiri
+  // Entri info di sisi kiri (tanpa nomor)
   const entries = [
     { label: "Nama Customer", value: n.nama, big: true },
     { label: n.source === "prep" ? "Tipe Barang" : "Tipe Laptop", value: n.device },
@@ -238,62 +238,63 @@ function BigCard({ n }) {
     entries.push({ label: "Spesifikasi", chips: n.chips });
   }
 
-  // Catatan Progres — dari API, kalau tidak ada tampilkan "-"
-  entries.push({ label: "Catatan Progres", value: n.catatan || "—" });
+  // Catatan Progres — dari API, kalau ada tampilin bernomor, kalau kosong "—"
+  const catatanLines = n.catatan
+    ? n.catatan.split(/\n|;|,/).map(s => s.trim()).filter(Boolean)
+    : [];
+  entries.push({ label: "Catatan Progres", catatan: true, catatanLines });
 
   return (
     <div className="h-full flex items-center px-6 xl:px-10">
       <div className="flex gap-6 xl:gap-10 w-full">
 
-        {/* ═══ KOLOM KIRI: info bernomor ═══ */}
+        {/* ═══ KOLOM KIRI: info tanpa nomor ═══ */}
         <div className="flex-1 min-w-0">
-          {entries.map((entry, i) => {
-            const num = i + 1;
-            return (
-              <div key={i} className="flex gap-4 xl:gap-5">
-                {/* Nomor + garis vertikal */}
-                <div className="flex flex-col items-center shrink-0">
-                  <div className="w-8 h-8 xl:w-9 xl:h-9 2xl:w-10 2xl:h-10 rounded-full shrink-0 mt-1 bg-blue-600 dark:bg-blue-500 flex items-center justify-center shadow-md">
-                    <span className="text-white font-black text-sm xl:text-base 2xl:text-lg">{num}</span>
+          {entries.map((entry, i) => (
+            <div key={i} className={i < entries.length - 1 ? "pb-4 xl:pb-6 2xl:pb-7 mb-4 xl:mb-6 2xl:mb-7 border-b border-slate-200/60 dark:border-slate-700/40" : "pb-1"}>
+              <p className="text-sm xl:text-base 2xl:text-lg text-content-muted font-semibold tracking-wide leading-none uppercase">
+                {entry.label}
+              </p>
+
+              {entry.big ? (
+                <p className="text-4xl xl:text-5xl 2xl:text-6xl font-black text-content tracking-tight leading-tight mt-1">
+                  {entry.value}
+                </p>
+              ) : entry.chips ? (
+                <div className="flex gap-2 flex-wrap mt-2">
+                  {entry.chips.map((c, ci) => (
+                    <span key={ci} className={`text-lg xl:text-xl font-bold px-3 py-1 rounded-lg ${
+                      ["bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300",
+                       "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300",
+                       "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"][ci % 3]
+                    }`}>{c}</span>
+                  ))}
+                </div>
+              ) : entry.catatan ? (
+                /* Catatan Progres — bernomor kalau ada isi, strip kalau kosong */
+                entry.catatanLines.length > 0 ? (
+                  <div className="mt-2 space-y-1.5">
+                    {entry.catatanLines.map((line, li) => (
+                      <div key={li} className="flex gap-3 items-baseline">
+                        <span className="shrink-0 w-7 h-7 xl:w-8 xl:h-8 rounded-full bg-blue-600 dark:bg-blue-500 flex items-center justify-center shadow-sm">
+                          <span className="text-white font-black text-xs xl:text-sm">{li + 1}</span>
+                        </span>
+                        <p className="text-xl xl:text-2xl 2xl:text-3xl font-bold text-content leading-snug">
+                          {line}
+                        </p>
+                      </div>
+                    ))}
                   </div>
-                  {i < entries.length - 1 && (
-                    <div className="w-0.5 flex-1 bg-slate-300 dark:bg-slate-600 my-1" />
-                  )}
-                </div>
-
-                {/* Konten entri */}
-                <div className={i < entries.length - 1 ? "pb-5 xl:pb-7 2xl:pb-8" : "pb-1"}>
-                  <p className="text-sm xl:text-base 2xl:text-lg text-content-muted font-semibold tracking-wide leading-none">
-                    {entry.label}
-                  </p>
-
-                  {entry.big ? (
-                    <p className="text-4xl xl:text-5xl 2xl:text-6xl font-black text-content tracking-tight leading-tight mt-1">
-                      {entry.value}
-                    </p>
-                  ) : entry.chips ? (
-                    <div className="flex gap-2 flex-wrap mt-2">
-                      {entry.chips.map((c, ci) => (
-                        <span key={ci} className={`text-lg xl:text-xl font-bold px-3 py-1 rounded-lg ${
-                          ["bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300",
-                           "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300",
-                           "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"][ci % 3]
-                        }`}>{c}</span>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className={`font-bold leading-tight mt-1 ${
-                      entry.big
-                        ? "text-4xl xl:text-5xl 2xl:text-6xl text-content tracking-tight"
-                        : "text-2xl xl:text-3xl 2xl:text-4xl text-content"
-                    }`}>
-                      {entry.value}
-                    </p>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+                ) : (
+                  <p className="text-2xl xl:text-3xl 2xl:text-4xl font-bold text-content-muted leading-tight mt-1">—</p>
+                )
+              ) : (
+                <p className="text-2xl xl:text-3xl 2xl:text-4xl font-bold text-content leading-tight mt-1">
+                  {entry.value}
+                </p>
+              )}
+            </div>
+          ))}
         </div>
 
         {/* ═══ KOLOM KANAN: status progress timeline ═══ */}
@@ -653,63 +654,88 @@ export default function CekAntrian() {
               {/* ═══ DIVIDER ═══ */}
               <div className="w-px bg-border shrink-0" />
 
-              {/* ═══ PANEL KANAN (28%) — flat rows + separator ═══ */}
-              <div className="w-[28%] flex flex-col py-2 px-4 overflow-y-auto" key={`right-${rightPage?.key}`}>
+              {/* ═══ PANEL KANAN (28%) — daftar antrian ═══ */}
+              <div className="w-[28%] flex flex-col overflow-y-auto bg-gradient-to-b from-slate-50 via-slate-50/80 to-white dark:from-slate-800/60 dark:via-slate-800/40 dark:to-slate-900/30" key={`right-${rightPage?.key}`}>
                 {rightPage ? (
-                  <div className="anim-right flex flex-col h-full justify-center">
-                    {rightPage.items.map((n, idx) => {
-                      const dur1Str = formatDurasi(n.dur1);
-                      const dur2Str = formatDurasi(n.dur2);
-                      const isActive = leftCard?.key === n.key;
-                      const statusColor =
-                        n.step === 0 ? "text-amber-600 dark:text-amber-400"
-                        : n.step === 1 ? "text-blue-600 dark:text-blue-400"
-                        : "text-emerald-600 dark:text-emerald-400";
+                  <div className="anim-right flex flex-col h-full justify-center px-4 xl:px-5 py-4">
+                    {/* Header panel kanan */}
+                    <div className="flex items-center gap-2.5 mb-4 px-1">
+                      <div className={`w-2 h-2 rounded-full shrink-0 ${
+                        rightPage.source === "prep" ? "bg-violet-500" : "bg-blue-500"
+                      }`} />
+                      <span className="text-xs xl:text-sm font-extrabold text-content-soft uppercase tracking-[0.15em]">
+                        {rightPage.source === "prep" ? "Penyiapan" : "Service"}
+                      </span>
+                      <div className="flex-1 h-px bg-gradient-to-r from-slate-300 to-transparent dark:from-slate-600" />
+                      <span className="text-[11px] xl:text-xs font-bold text-white bg-slate-400 dark:bg-slate-600 px-2 py-0.5 rounded-full tabular-nums">
+                        {rightPage.no}/{rightPage.total}
+                      </span>
+                    </div>
 
-                      return (
-                        <div key={n.key}>
-                          {idx > 0 && <div className="border-t border-slate-300/50 dark:border-slate-600/40" />}
+                    <div className="space-y-1.5">
+                      {rightPage.items.map((n, idx) => {
+                        const dur1Str = formatDurasi(n.dur1);
+                        const dur2Str = formatDurasi(n.dur2);
+                        const isActive = leftCard?.key === n.key;
+                        const statusColor =
+                          n.step === 0 ? "text-amber-600 dark:text-amber-400"
+                          : n.step === 1 ? "text-blue-600 dark:text-blue-400"
+                          : "text-emerald-600 dark:text-emerald-400";
+                        const statusBg =
+                          n.step === 0 ? "bg-amber-50 dark:bg-amber-500/10"
+                          : n.step === 1 ? "bg-blue-50 dark:bg-blue-500/10"
+                          : "bg-emerald-50 dark:bg-emerald-500/10";
+                        const activeBorder =
+                          n.step === 0 ? "border-amber-400" : n.step === 1 ? "border-blue-500" : "border-emerald-500";
 
-                          <div className={`py-2.5 transition-opacity duration-500 ${isActive ? "" : "opacity-35"}`}>
-                            {/* Nama CS */}
-                            <p className={`font-extrabold text-base xl:text-lg leading-snug tracking-tight ${isActive ? "text-content" : "text-content-soft"}`}>
-                              {n.nama}
-                            </p>
-                            {/* Tipe Device — baris terpisah */}
-                            <p className="text-sm xl:text-base text-content-muted font-medium mt-0.5 truncate">
+                        return (
+                          <div key={n.key} className={`rounded-xl px-3.5 py-3 xl:py-3.5 transition-all duration-500 ${
+                            isActive
+                              ? `bg-white dark:bg-slate-800 shadow-md shadow-slate-200/60 dark:shadow-black/20 border border-slate-200/80 dark:border-slate-700 border-l-[3px] ${activeBorder}`
+                              : "opacity-35 hover:opacity-50 border border-transparent"
+                          }`}>
+                            {/* Baris 1: Nomor urut + Nama CS */}
+                            <div className="flex items-baseline gap-2">
+                              <span className={`text-[11px] xl:text-xs font-mono font-bold shrink-0 px-1.5 py-0.5 rounded ${
+                                isActive ? "bg-slate-100 dark:bg-slate-700 text-content-soft" : "text-content-muted"
+                              }`}>{n.orderNo}</span>
+                              <p className={`font-extrabold text-lg xl:text-xl 2xl:text-2xl leading-snug tracking-tight truncate ${
+                                isActive ? "text-content" : "text-content-soft"
+                              }`}>
+                                {n.nama}
+                              </p>
+                            </div>
+
+                            {/* Baris 2: Tipe Device */}
+                            <p className="text-sm xl:text-base 2xl:text-lg text-content-muted font-medium mt-0.5 truncate">
                               {n.device}
                             </p>
 
-                            {/* Status label — warna sesuai step */}
-                            <p className={`text-xs xl:text-sm font-bold mt-1 ${statusColor}`}>
-                              {n.labels[n.step]}
-                              {n.step2Name && <span className="font-medium text-content-muted"> · {n.step2Name}</span>}
-                            </p>
-
-                            {/* Progress dots + durasi */}
-                            <div className="flex items-center gap-1.5 mt-2">
-                              <Dot state={dotState(n.step, 0)} />
-                              <div className="flex-1 relative">
-                                <div className={`h-0.5 rounded ${lineColor(n.step, 0)}`} />
-                                {dur1Str && <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 text-[10px] text-content-muted font-semibold tabular-nums">{dur1Str}</span>}
-                              </div>
-                              <Dot state={dotState(n.step, 1)} />
-                              <div className="flex-1 relative">
-                                <div className={`h-0.5 rounded ${lineColor(n.step, 1)}`} />
-                                {dur2Str && <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 text-[10px] text-content-muted font-semibold tabular-nums">{dur2Str}</span>}
-                              </div>
-                              <Dot state={dotState(n.step, 2)} />
+                            {/* Baris 3: Status badge + teknisi + durasi */}
+                            <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
+                              <span className={`inline-flex items-center text-[11px] xl:text-xs font-bold px-2 py-0.5 rounded-md ${statusColor} ${statusBg}`}>
+                                {n.labels[n.step]}
+                              </span>
+                              {n.step2Name && (
+                                <span className="text-[11px] xl:text-xs font-medium text-content-muted truncate">· {n.step2Name}</span>
+                              )}
+                              {(dur1Str || dur2Str) && (
+                                <span className="text-[10px] xl:text-[11px] font-semibold text-content-muted tabular-nums ml-auto">
+                                  {n.step <= 1 && dur1Str}{n.step === 1 && dur2Str ? ` → ${dur2Str}` : ""}
+                                  {n.step === 2 && formatJam(n.doneTime) ? `selesai ${formatJam(n.doneTime)}` : ""}
+                                </span>
+                              )}
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
                 ) : leftCard ? (
                   /* Kalau cuma 1 data, panel kanan kosong dengan info */
-                  <div className="flex-1 flex flex-col items-center justify-center text-center px-4">
-                    <p className="text-lg font-bold text-content-muted">Tidak ada data lain</p>
-                    <p className="text-sm text-content-muted mt-1">Semua data ditampilkan di panel kiri.</p>
+                  <div className="flex-1 flex flex-col items-center justify-center text-center px-4 bg-gradient-to-b from-slate-50 to-white dark:from-slate-800/60 dark:to-slate-900/30">
+                    <p className="text-xl font-bold text-content-muted">Tidak ada data lain</p>
+                    <p className="text-base text-content-muted mt-2">Semua data ditampilkan di panel kiri.</p>
                   </div>
                 ) : null}
               </div>
