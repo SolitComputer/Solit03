@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { Wrench, Clock, Package, Check, Maximize2, X, Truck, Volume2, VolumeX } from "lucide-react";
+import { Wrench, Clock, Package, Check, Maximize2, Truck } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 
 const POS_BASE = "https://pos.solit.id";
@@ -120,12 +120,6 @@ const STEP_STYLE = [
   { bar: "#EF9F27", badgeBg: "bg-amber-50 dark:bg-amber-500/15", badgeText: "text-amber-700 dark:text-amber-300", icon: Clock },
   { bar: "#378ADD", badgeBg: "bg-blue-50 dark:bg-blue-500/15", badgeText: "text-blue-700 dark:text-blue-300", icon: Package },
   { bar: "#1D9E75", badgeBg: "bg-emerald-50 dark:bg-emerald-500/15", badgeText: "text-emerald-700 dark:text-emerald-300", icon: Check },
-];
-
-const SUMMARY_TONE = [
-  "bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/30 text-amber-700 dark:text-amber-300",
-  "bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/30 text-blue-700 dark:text-blue-300",
-  "bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300",
 ];
 
 // ═══════════════════════════════════════════
@@ -314,83 +308,6 @@ function BigCard({ n }) {
             </div>
           </div>
         ))}
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════
-// KARTU — MODE DISPLAY: PANEL KANAN (COMPACT)
-// ═══════════════════════════════════════════
-
-function CompactCard({ n }) {
-  const st = STEP_STYLE[n.step] ?? STEP_STYLE[0];
-  const Icon = st.icon;
-  const badgeDur =
-    n.step === 0 ? formatDurasi(n.dur1) :
-    n.step === 1 ? formatDurasi(n.dur2) :
-    formatJam(n.doneTime);
-  const badgeLabel = n.labels[n.step];
-
-  return (
-    <div className="bg-surface border border-border rounded-xl overflow-hidden shadow-sm">
-      <div style={{ height: 5, background: `linear-gradient(90deg, ${st.bar}, ${st.bar}cc)` }} />
-      <div className="p-3">
-        <div className="flex items-center justify-between mb-1">
-          <span className="font-mono text-xs font-bold text-content-soft bg-surface-muted dark:bg-slate-700/50 px-1.5 py-0.5 rounded-md">{n.orderNo}</span>
-          <span className={`inline-flex items-center gap-1 ${st.badgeBg} ${st.badgeText} text-xs font-bold px-2 py-0.5 rounded-full`}>
-            <Icon size={12} /> {badgeLabel}{badgeDur ? ` · ${badgeDur}` : ""}
-          </span>
-        </div>
-        <p className="font-bold text-content text-base leading-tight">{n.nama}</p>
-        <p className="text-sm text-content-soft dark:text-slate-300 mt-0.5 truncate">
-          {n.device}{n.subtitle ? <span className="text-content-muted dark:text-slate-400"> · {n.subtitle}</span> : null}
-        </p>
-        {n.chips.length > 0 && (
-          <div className="flex gap-1.5 flex-wrap mt-1.5">
-            {n.chips.map((c, i) => (
-              <span key={i} className={`text-[10px] font-semibold px-2 py-0.5 rounded ${["bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300", "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300", "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"][i % 3]}`}>{c}</span>
-            ))}
-          </div>
-        )}
-        <div className="flex items-center gap-1 mt-2">
-          <Dot state={dotState(n.step, 0)} />
-          <div className={`flex-1 h-0.5 rounded ${lineColor(n.step, 0)}`} />
-          <Dot state={dotState(n.step, 1)} />
-          <div className={`flex-1 h-0.5 rounded ${lineColor(n.step, 1)}`} />
-          <Dot state={dotState(n.step, 2)} />
-        </div>
-        <div className="flex justify-between mt-1">
-          <span className={`text-[10px] ${n.step >= 0 ? "text-content font-medium" : "text-content-muted"}`}>{n.labels[0]}</span>
-          <span className={`text-[10px] ${n.step >= 1 ? "text-blue-600 dark:text-blue-400 font-medium" : "text-content-muted"} truncate px-1`}>
-            {n.step2Name ? `oleh ${n.step2Name}` : n.labels[1]}
-          </span>
-          <span className={`text-[10px] ${n.step >= 2 ? "text-emerald-600 dark:text-emerald-400 font-medium" : "text-content-muted"}`}>{n.labels[2]}</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════
-// PANEL DISPLAY — Summary bar per source
-// ═══════════════════════════════════════════
-
-function SummaryBar({ allCards, labels, compact = false }) {
-  const counts = [0, 1, 2].map((s) => allCards.filter((c) => c.step === s).length);
-  return (
-    <div className={`grid grid-cols-3 ${compact ? "gap-2" : "gap-3"}`}>
-      {counts.map((cnt, i) => {
-        const Icon = STEP_STYLE[i].icon;
-        return (
-          <div key={i} className={`rounded-xl border flex items-center justify-between shadow-sm ${SUMMARY_TONE[i]} ${compact ? "px-3 py-2" : "px-4 py-3"}`}>
-            <span className={`inline-flex items-center gap-2 font-semibold ${compact ? "text-sm" : "text-base"}`}>
-              <Icon size={compact ? 16 : 20} className="opacity-80" />
-              {labels[i]}
-            </span>
-            <span className={`font-black leading-none tabular-nums ${compact ? "text-2xl" : "text-4xl"}`}>{cnt}</span>
-          </div>
-        );
-      })}
     </div>
   );
 }
@@ -618,8 +535,11 @@ export default function CekAntrian() {
   // Enter/exit fullscreen
   const enter = useCallback(async () => {
     setSlideIdx(0); setMagnify(true);
+    // Auto-unlock + aktifkan TTS (klik Perbesar = user gesture)
+    tts.unlock();
+    tts.setEnabled(true);
     try { await rootRef.current?.requestFullscreen?.(); } catch {}
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const exit = useCallback(async () => {
     setMagnify(false);
     if (typeof speechSynthesis !== "undefined") speechSynthesis.cancel();
@@ -670,71 +590,12 @@ export default function CekAntrian() {
             .anim-right{animation:panelSlide .5s cubic-bezier(.16,1,.3,1) .1s both}
           `}</style>
 
-          {/* ── Top bar: TTS controls + exit ── */}
-          <div className="shrink-0 px-6 py-3 border-b border-border flex items-center justify-between bg-surface">
-            {/* TTS Controls */}
-            <div className="flex items-center gap-3">
-              {!tts.unlocked ? (
-                <button
-                  onClick={tts.unlock}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white text-sm font-bold hover:bg-blue-700 transition-colors shadow-sm"
-                >
-                  <Volume2 size={16} /> Aktifkan Suara
-                </button>
-              ) : (
-                <>
-                  <button
-                    onClick={() => tts.setEnabled(!tts.enabled)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-colors shadow-sm ${
-                      tts.enabled
-                        ? "bg-blue-600 text-white hover:bg-blue-700"
-                        : "bg-slate-100 dark:bg-slate-700 text-content-soft hover:bg-slate-200 dark:hover:bg-slate-600"
-                    }`}
-                  >
-                    {tts.enabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
-                    {tts.enabled ? "Suara Aktif" : "Suara Mati"}
-                  </button>
-                  {tts.enabled && (
-                    <div className="flex items-center gap-2">
-                      <VolumeX size={14} className="text-content-muted" />
-                      <input
-                        type="range"
-                        min="0"
-                        max="1"
-                        step="0.1"
-                        value={tts.volume}
-                        onChange={(e) => tts.setVolume(parseFloat(e.target.value))}
-                        className="w-24 h-1.5 accent-blue-600"
-                      />
-                      <Volume2 size={14} className="text-content-muted" />
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-
-            {/* Page indicator + exit */}
-            <div className="flex items-center gap-4">
-              {slideMap.length > 0 && (
-                <span className="text-sm font-semibold text-content-muted tabular-nums">
-                  {slideIdx % slideMap.length + 1} / {slideMap.length}
-                </span>
-              )}
-              <button
-                onClick={exit}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-red-50 hover:text-red-600 dark:bg-slate-700 dark:hover:bg-red-500/20 text-content-soft text-sm font-semibold transition-colors"
-              >
-                <X size={16} /> Keluar
-              </button>
-            </div>
-          </div>
-
-          {/* ── Konten utama: 2 panel ── */}
+          {/* ── Konten utama: 2 panel (top bar dihapus, keluar via ESC) ── */}
           {slideMap.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
               <p className="text-2xl font-black text-content">Belum ada antrian hari ini</p>
               <p className="text-sm text-content-muted mt-2">Papan akan update otomatis begitu ada servis atau penyiapan masuk.</p>
-              <button onClick={exit} className="mt-6 px-5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-content-soft font-semibold">Keluar</button>
+              <p className="text-xs text-content-muted mt-4">Tekan ESC untuk keluar</p>
             </div>
           ) : (
             <div className="flex-1 flex overflow-hidden min-h-0">
