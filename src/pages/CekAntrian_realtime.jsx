@@ -136,16 +136,16 @@ function PhaseCard({ n, big = false }) {
   return (
     <div className="group bg-surface border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-200 dark:hover:border-blue-500/40 transition-all duration-300 ease-out">
       <div style={{ height: 6, background: `linear-gradient(90deg, ${st.bar}, ${st.bar}cc)` }} />
-      <div className={big ? "p-4" : "p-3"}>
+      <div className={big ? "p-3.5" : "p-3"}>
         <div className="flex items-center justify-between mb-1.5">
-          <span className={`font-mono font-bold text-content-soft bg-surface-muted dark:bg-slate-700/50 px-1.5 py-0.5 rounded-md ${big ? "text-xs" : "text-[11px]"}`}>{n.orderNo}</span>
-          <span className={`inline-flex items-center gap-1 ${st.badgeBg} ${st.badgeText} font-bold rounded-full shadow-sm ${big ? "text-xs px-3 py-1" : "text-[11px] px-2.5 py-1"}`}>
-            <Icon size={big ? 14 : 12} /> {badgeLabel}{badgeDur ? ` · ${badgeDur}` : ""}
+          <span className="font-mono text-[11px] font-bold text-content-soft bg-surface-muted dark:bg-slate-700/50 px-1.5 py-0.5 rounded-md">{n.orderNo}</span>
+          <span className={`inline-flex items-center gap-1 ${st.badgeBg} ${st.badgeText} text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm`}>
+            <Icon size={12} /> {badgeLabel}{badgeDur ? ` · ${badgeDur}` : ""}
           </span>
         </div>
 
-        <p className={`font-bold text-content leading-tight ${big ? "text-lg" : "text-sm"}`}>{n.nama}</p>
-        <p className={`text-content-soft dark:text-slate-300 mt-0.5 truncate ${big ? "text-sm" : "text-xs"}`}>
+        <p className={`font-bold text-content leading-tight ${big ? "text-base" : "text-sm"}`}>{n.nama}</p>
+        <p className="text-xs text-content-soft dark:text-slate-300 mt-0.5 truncate">
           {n.device}{n.subtitle ? <span className="text-content-muted dark:text-slate-400"> · {n.subtitle}</span> : null}
         </p>
 
@@ -363,9 +363,6 @@ export default function CekAntrian() {
             </div>
           )}
 
-          {/* Spacer: lahan khusus untuk jam & maskot mengambang, biar tak menimpa grid/dots */}
-          <div className="shrink-0 h-24" aria-hidden="true" />
-
           {/* ── Running text info toko (paling bawah Mode Display) ── */}
           <div className="relative z-10 shrink-0 overflow-visible bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 shadow-[0_-4px_20px_rgba(0,0,0,0.15)]">
             {/* Maskot — duduk tepat di atas garis running text, stay walau di-zoom */}
@@ -382,7 +379,7 @@ export default function CekAntrian() {
               draggable={false}
             />
             {/* ── Jam & tanggal realtime — di tengah, di antara dua maskot ── */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[120%] z-20 text-center pointer-events-none select-none">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[150%] z-0 text-center pointer-events-none select-none">
               <p className="text-6xl lg:text-7xl font-black text-blue-600 dark:text-blue-400 tabular-nums leading-none drop-shadow-sm">
                 {new Date(now).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: false }).replace(":", ".")}
               </p>

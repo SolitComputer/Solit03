@@ -5,19 +5,13 @@ import fotoReinaldy from "../../assets/foto/reinaldy-olyvierd-sendouw.webp";
 import fotoYoga from "../../assets/foto/yoga-adi-prakoso.webp";
 import fotoRayhan from "../../assets/foto/rayhan-saputra.webp";
 import fotoYulfa from "../../assets/foto/yulfa.webp";
-import fotoIkmal from "../../assets/foto/ikmal-fairuz-arabi.webp";
 import fotoFauzan from "../../assets/foto/fauzan-abdul-g.webp";
 import fotoMoreno from "../../assets/foto/moreno-akbari-p.webp";
-import fotoDimas from "../../assets/foto/dimas-dwi-ap.webp";
 import fotoNurAlim from "../../assets/foto/nur-alim.webp";
-import fotoYuna from "../../assets/foto/yuna-lw.webp";
 import fotoDivaK from "../../assets/foto/diva-k.webp";
 import fotoRaesty from "../../assets/foto/raesty-yuliana.webp";
 import fotoDirga from "../../assets/foto/dirga-riadmas.webp";
-import fotoRafiDwi from "../../assets/foto/rafi-dwi-saputra.webp";
 import fotoRafiSalim from "../../assets/foto/rafi-salim.webp";
-import fotoLionel from "../../assets/foto/lionel-jaa.webp";
-import fotoHaifano from "../../assets/foto/m-haifano-ap.webp";
 import fotoFikri from "../../assets/foto/fikri-aryansyah.webp";
 import fotoRomadon from "../../assets/foto/romadon-abdusallam.webp";
 import fotoDicky from "../../assets/foto/dicky-pratama-s.webp";
@@ -57,30 +51,24 @@ export default function TeamSlider() {
     { name: "Yoga Adi Prakoso", role: "HRD", img: fotoYoga },
     { name: "Rayhan Saputra", role: "Accounting", img: fotoRayhan },
     { name: "Yulfa", role: "Purchasing", img: fotoYulfa },
-    { name: "Ikmal Fairuz Arabi", role: "Programmer", img: fotoIkmal },
-    { name: "Fauzan Abdul Ghaffar", role: "Programmer", img: fotoFauzan },
     { name: "Moreno Akbari Pasha", role: "Programmer", img: fotoMoreno },
-    { name: "Dimas Dwi Ananda Putra", role: "Programmer", img: fotoDimas },
+    { name: "Fauzan Abdul Ghaffar", role: "Programmer", img: fotoFauzan },
     { name: "Nur Alim", role: "Kepala Marketing", img: fotoNurAlim },
-    { name: "Yuna Lucyanawati W", role: "Content Creator", img: fotoYuna },
+    { name: "Fikri Aryansyah", role: "Marketing", img: fotoFikri },
     { name: "Diva Karamaya", role: "Content Creator", img: fotoDivaK },
     { name: "Raesty Yuliana", role: "Customer Service", img: fotoRaesty },
-    { name: "Dirga Riadmas", role: "Teknisi", img: fotoDirga },
-    { name: "Rafii Dwi Saputra", role: "Teknisi", img: fotoRafiDwi },
     { name: "Rafi Salim", role: "Kepala Pengelola Barang", img: fotoRafiSalim },
-    { name: "Lionel Juan Adhitya Alvarro", role: "Pengelola Barang", img: fotoLionel },
-    { name: "Muhammad Haifano Addinnya Priadi", role: "Pengelola Barang", img: fotoHaifano },
-    { name: "Fikri Aryansyah", role: "Kepala Penyedia Barang", img: fotoFikri },
     { name: "Romadon Abdusallam", role: "Kepala Sales", img: fotoRomadon },
-    { name: "Dicky Pratama Setiawan", role: "Kepala Sotech", img: fotoDicky },
-    { name: "Fadriansyah", role: "Kepala Onpoint", img: fotoFadriansyah },
-    { name: "David J.Sendouw", role: "Kepala Zenith", img: fotoDavid },
-    { name: "Andhika", role: "Sales", img: fotoAndhika },
-    { name: "Amaliyah", role: "Sales", img: fotoAmaliyah },
+    { name: "Dirga Riadmas", role: "Wakil Kepala Sales", img: fotoDirga },
+    { name: "Dicky Pratama Setiawan", role: "Kepala Admin Barang", img: fotoDicky },
+    { name: "Bunga Chalista Augustav", role: "Admin Barang", img: fotoBungaChalista },
+    { name: "Fadriansyah", role: "Penyedia Barang", img: fotoFadriansyah },
+    { name: "Andhika", role: "Penyedia Barang", img: fotoAndhika },
+    { name: "Amaliyah", role: "Penyedia Barang", img: fotoAmaliyah },
+    { name: "Fitri Hidayat", role: "Penyedia Barang", img: fotoFitriHidayat },
+    { name: "David J.Sendouw", role: "Sales", img: fotoDavid },
     { name: "Andini Sazkia Putri", role: "Sales", img: fotoAndiniSazkia },
     { name: "Fauziah Nurul Rahma", role: "Sales", img: fotoFauziahNurul },
-    { name: "Bunga Chalista Augustav", role: "Sales", img: fotoBungaChalista },
-    { name: "Fitri Hidayat", role: "Sales", img: fotoFitriHidayat },
     { name: "Nova Rovatul Walidah", role: "Sales", img: fotoNovaRovatul },
     { name: "Novita Glory Sendouw", role: "Sales", img: fotoNovitaGlory },
     { name: "R Herry Sudiarman", role: "Pengantaran", img: fotoHerry },
