@@ -13,7 +13,7 @@ const PER_PAGE = 5;        // customer per panel per slide
 // ── Teks berjalan di bawah Mode Display ──
 const RUNNING_TEXT = [
   "SOLIT 03 — Jual Beli & Service Laptop Second Terpercaya di Depok",
-  "Buka Setiap Hari 08.00–22.00 WIB (khusus Selasa mulai 10.00)",
+  "Buka Setiap Hari 08.00–23.00 WIB (khusus Selasa mulai 10.00)",
   "Alamat: Kav Adikarya No.77, Rangkapan Jaya, Pancoran Mas, Depok 16435",
   "WhatsApp: 0852-1064-7047",
   "Garansi Resmi • Laptop Second  • Harga Murah",
@@ -548,6 +548,22 @@ export default function CekAntrian() {
     return map;
   }, [pages]);
   const totalSlides = slideMap.length || 1;
+  const prevKeysRef = useRef(null);
+
+  // Auto-jump ke data baru yang baru masuk
+  useEffect(() => {
+    if (!magnify || slideMap.length === 0) return;
+    const currentKeys = new Set(slideMap.map(s => s.card.key));
+
+    if (prevKeysRef.current !== null) {
+      // Cari slide pertama yang key-nya belum ada di prevKeys (= data baru)
+      const newIdx = slideMap.findIndex(s => !prevKeysRef.current.has(s.card.key));
+      if (newIdx !== -1) {
+        setSlideIdx(newIdx);
+      }
+    }
+    prevKeysRef.current = currentKeys;
+  }, [magnify, slideMap]);
 
   // Auto-slide setiap 15 detik
   useEffect(() => {
