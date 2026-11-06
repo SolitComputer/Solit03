@@ -630,22 +630,25 @@ export default function CekAntrian() {
                 <p className="text-xs text-content-muted mt-4">Tekan ESC untuk keluar</p>
               </div>
             ) : (
+              <>
+              {/* Header badge — full width di tengah atas */}
+              {leftCard && (
+                <div className="flex items-center justify-center py-3">
+                  <span className={`inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-bold tracking-wide shadow-sm ${leftCard.source === "prep"
+                      ? "bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-300"
+                      : "bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300"
+                    }`}>
+                    {leftCard.source === "prep" ? <Truck size={16} /> : <Wrench size={16} />}
+                    {leftCard.source === "prep" ? "Penyiapan Barang" : "Antrian Service"}
+                  </span>
+                </div>
+              )}
+
               <div className="flex-1 flex overflow-hidden min-h-0">
                 {/* ═══ PANEL KIRI (72%) — 1 kartu besar full ═══ */}
                 <div className="w-[72%] flex flex-col p-5 overflow-hidden" key={`left-${leftCard?.key}`}>
                   {leftCard && (
-                    <div className="anim-left flex flex-col gap-3 h-full">
-                      {/* Header panel kiri */}
-                      <div className="flex items-center justify-center">
-                        <span className={`inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-bold tracking-wide shadow-sm ${leftCard.source === "prep"
-                            ? "bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-300"
-                            : "bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300"
-                          }`}>
-                          {leftCard.source === "prep" ? <Truck size={16} /> : <Wrench size={16} />}
-                          {leftCard.source === "prep" ? "Penyiapan Barang" : "Antrian Service"}
-                        </span>
-                      </div>
-
+                    <div className="anim-left flex flex-col h-full">
                       {/* Satu kartu besar — full height */}
                       <div className="flex-1 min-h-0">
                         <BigCard n={leftCard} />
@@ -739,6 +742,7 @@ export default function CekAntrian() {
                   ) : null}
                 </div>
               </div>
+              </>
             )}
 
             {/* ── Footer: page dots + running text ── */}
