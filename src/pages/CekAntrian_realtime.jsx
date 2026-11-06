@@ -257,7 +257,7 @@ function BigCard({ n }) {
               </p>
 
               {entry.big ? (
-                <p className="text-5xl xl:text-6xl 2xl:text-7xl font-black text-content tracking-tighter leading-[1.1] mt-2">
+                <p className="text-3xl xl:text-4xl 2xl:text-5xl font-black text-content tracking-tight leading-snug mt-2">
                   {entry.value}
                 </p>
               ) : entry.chips ? (
