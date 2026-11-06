@@ -251,13 +251,13 @@ function BigCard({ n }) {
         {/* ═══ KOLOM KIRI: info tanpa nomor ═══ */}
         <div className="flex-1 min-w-0">
           {entries.map((entry, i) => (
-            <div key={i} className={i < entries.length - 1 ? "pb-4 xl:pb-6 2xl:pb-7 mb-4 xl:mb-6 2xl:mb-7 border-b border-slate-200/60 dark:border-slate-700/40" : "pb-1"}>
-              <p className="text-sm xl:text-base 2xl:text-lg text-content-muted font-semibold tracking-wide leading-none uppercase">
+            <div key={i} className={i < entries.length - 1 ? "pb-5 xl:pb-7 2xl:pb-8 mb-5 xl:mb-7 2xl:mb-8 border-b border-slate-200/50 dark:border-slate-700/30" : "pb-1"}>
+              <p className="text-xs xl:text-sm 2xl:text-base text-content-muted/70 font-bold tracking-[0.2em] leading-none uppercase">
                 {entry.label}
               </p>
 
               {entry.big ? (
-                <p className="text-4xl xl:text-5xl 2xl:text-6xl font-black text-content tracking-tight leading-tight mt-1">
+                <p className="text-5xl xl:text-6xl 2xl:text-7xl font-black text-content tracking-tighter leading-[1.1] mt-2">
                   {entry.value}
                 </p>
               ) : entry.chips ? (
@@ -279,17 +279,17 @@ function BigCard({ n }) {
                         <span className="shrink-0 w-7 h-7 xl:w-8 xl:h-8 rounded-full bg-blue-600 dark:bg-blue-500 flex items-center justify-center shadow-sm">
                           <span className="text-white font-black text-xs xl:text-sm">{li + 1}</span>
                         </span>
-                        <p className="text-xl xl:text-2xl 2xl:text-3xl font-bold text-content leading-snug">
+                        <p className="text-2xl xl:text-3xl 2xl:text-4xl font-bold text-content leading-snug">
                           {line}
                         </p>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-2xl xl:text-3xl 2xl:text-4xl font-bold text-content-muted leading-tight mt-1">—</p>
+                  <p className="text-3xl xl:text-4xl 2xl:text-5xl font-bold text-content-muted/50 leading-tight mt-2">—</p>
                 )
               ) : (
-                <p className="text-2xl xl:text-3xl 2xl:text-4xl font-bold text-content leading-tight mt-1">
+                <p className="text-3xl xl:text-4xl 2xl:text-5xl font-extrabold text-content leading-snug mt-2">
                   {entry.value}
                 </p>
               )}
@@ -298,7 +298,7 @@ function BigCard({ n }) {
         </div>
 
         {/* ═══ KOLOM KANAN: status progress timeline ═══ */}
-        <div className="shrink-0 flex flex-col justify-center pl-6 xl:pl-8 border-l border-slate-200 dark:border-slate-700">
+        <div className="shrink-0 flex flex-col justify-center pl-8 xl:pl-10 border-l-2 border-slate-200/80 dark:border-slate-700/60">
           <div className="space-y-1">
             {n.labels.map((lbl, si) => {
               const isDone = si < n.step;
@@ -308,16 +308,16 @@ function BigCard({ n }) {
                 <div key={si} className="flex items-start gap-3">
                   {/* Dot + garis vertikal */}
                   <div className="flex flex-col items-center shrink-0 pt-1.5">
-                    <div className={`w-3.5 h-3.5 xl:w-4 xl:h-4 rounded-full shrink-0 ${
-                      isDone ? "bg-emerald-500" : isCurrent ? "bg-blue-500 ring-4 ring-blue-500/20" : "bg-slate-300 dark:bg-slate-600"
+                    <div className={`w-4 h-4 xl:w-5 xl:h-5 rounded-full shrink-0 ${
+                      isDone ? "bg-emerald-500 shadow-sm shadow-emerald-500/30" : isCurrent ? "bg-blue-500 ring-[5px] ring-blue-500/15 shadow-sm shadow-blue-500/30" : "bg-slate-300 dark:bg-slate-600"
                     }`} />
                     {si < n.labels.length - 1 && (
-                      <div className={`w-0.5 h-5 xl:h-6 ${isDone ? "bg-emerald-400" : "bg-slate-300 dark:bg-slate-600"}`} />
+                      <div className={`w-0.5 h-6 xl:h-8 ${isDone ? "bg-emerald-400" : "bg-slate-200 dark:bg-slate-600"}`} />
                     )}
                   </div>
                   {/* Label + durasi */}
                   <div className="flex-1 min-w-0">
-                    <p className={`text-lg xl:text-xl 2xl:text-2xl font-bold leading-snug ${
+                    <p className={`text-xl xl:text-2xl 2xl:text-3xl font-extrabold leading-snug ${
                       isCurrent ? statusColor : isDone ? "text-emerald-600 dark:text-emerald-400" : "text-content-muted"
                     }`}>
                       {lbl}
