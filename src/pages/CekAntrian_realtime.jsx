@@ -67,7 +67,7 @@ function chunk(arr, size) {
 // ═══════════════════════════════════════════
 
 const PREP_STEP = { MENUNGGU: 0, DIPROSES: 1, SIAP_KIRIM: 2 };
-const SVC_STEP  = { ANTRIAN: 0, SEDANG_DIKERJAKAN: 1, MENUNGGU_SPAREPART: 1, DONE: 2 };
+const SVC_STEP = { ANTRIAN: 0, SEDANG_DIKERJAKAN: 1, MENUNGGU_SPAREPART: 1, DONE: 2 };
 
 function normPrep(o, now) {
   const step = PREP_STEP[o.status] ?? 0;
@@ -164,8 +164,8 @@ function PhaseCard({ n }) {
   const Icon = st.icon;
   const badgeDur =
     n.step === 0 ? formatDurasi(n.dur1) :
-    n.step === 1 ? formatDurasi(n.dur2) :
-    formatJam(n.doneTime);
+      n.step === 1 ? formatDurasi(n.dur2) :
+        formatJam(n.doneTime);
   const badgeLabel = n.labels[n.step];
 
   return (
@@ -216,14 +216,14 @@ function BigCard({ n }) {
   const st = STEP_STYLE[n.step] ?? STEP_STYLE[0];
   const badgeDur =
     n.step === 0 ? formatDurasi(n.dur1) :
-    n.step === 1 ? formatDurasi(n.dur2) :
-    formatJam(n.doneTime);
+      n.step === 1 ? formatDurasi(n.dur2) :
+        formatJam(n.doneTime);
 
   // Warna status sesuai step
   const statusColor =
     n.step === 0 ? "text-amber-600 dark:text-amber-400"
-    : n.step === 1 ? "text-blue-600 dark:text-blue-400"
-    : "text-emerald-600 dark:text-emerald-400";
+      : n.step === 1 ? "text-blue-600 dark:text-blue-400"
+        : "text-emerald-600 dark:text-emerald-400";
 
   // Entri info di sisi kiri (tanpa nomor)
   const entries = [
@@ -263,11 +263,10 @@ function BigCard({ n }) {
               ) : entry.chips ? (
                 <div className="flex gap-2 flex-wrap mt-2">
                   {entry.chips.map((c, ci) => (
-                    <span key={ci} className={`text-lg xl:text-xl font-bold px-3 py-1 rounded-lg ${
-                      ["bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300",
-                       "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300",
-                       "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"][ci % 3]
-                    }`}>{c}</span>
+                    <span key={ci} className={`text-lg xl:text-xl font-bold px-3 py-1 rounded-lg ${["bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300",
+                        "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300",
+                        "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"][ci % 3]
+                      }`}>{c}</span>
                   ))}
                 </div>
               ) : entry.catatan ? (
@@ -308,18 +307,16 @@ function BigCard({ n }) {
                 <div key={si} className="flex items-start gap-3">
                   {/* Dot + garis vertikal */}
                   <div className="flex flex-col items-center shrink-0 pt-1.5">
-                    <div className={`w-4 h-4 xl:w-5 xl:h-5 rounded-full shrink-0 ${
-                      isDone ? "bg-emerald-500 shadow-sm shadow-emerald-500/30" : isCurrent ? "bg-blue-500 ring-[5px] ring-blue-500/15 shadow-sm shadow-blue-500/30" : "bg-slate-300 dark:bg-slate-600"
-                    }`} />
+                    <div className={`w-4 h-4 xl:w-5 xl:h-5 rounded-full shrink-0 ${isDone ? "bg-emerald-500 shadow-sm shadow-emerald-500/30" : isCurrent ? "bg-blue-500 ring-[5px] ring-blue-500/15 shadow-sm shadow-blue-500/30" : "bg-slate-300 dark:bg-slate-600"
+                      }`} />
                     {si < n.labels.length - 1 && (
                       <div className={`w-0.5 h-6 xl:h-8 ${isDone ? "bg-emerald-400" : "bg-slate-200 dark:bg-slate-600"}`} />
                     )}
                   </div>
                   {/* Label + durasi */}
                   <div className="flex-1 min-w-0">
-                    <p className={`text-xl xl:text-2xl 2xl:text-3xl font-extrabold leading-snug ${
-                      isCurrent ? statusColor : isDone ? "text-emerald-600 dark:text-emerald-400" : "text-content-muted"
-                    }`}>
+                    <p className={`text-xl xl:text-2xl 2xl:text-3xl font-extrabold leading-snug ${isCurrent ? statusColor : isDone ? "text-emerald-600 dark:text-emerald-400" : "text-content-muted"
+                      }`}>
                       {lbl}
                       {(isCurrent || isDone) && stepDur && (
                         <span className={`font-semibold text-base xl:text-lg ${isDone ? "opacity-60" : "opacity-80"}`}> · {stepDur}</span>
@@ -461,7 +458,7 @@ function useServiceOrders() {
 
   const startPoll = useCallback(() => {
     const poll = async () => {
-      try { const r = await fetch(SERVICE_URL); const j = await r.json(); if (j.success) setOrders(j.data ?? []); } catch {}
+      try { const r = await fetch(SERVICE_URL); const j = await r.json(); if (j.success) setOrders(j.data ?? []); } catch { }
     };
     poll(); fbRef.current = setInterval(poll, 15_000);
   }, []);
@@ -472,7 +469,7 @@ function useServiceOrders() {
     clearTimeout(rcRef.current);
     if (typeof EventSource === "undefined") { startPoll(); return; }
     const es = new EventSource(STREAM_URL); esRef.current = es;
-    const onData = (e) => { try { const p = JSON.parse(e.data); setOrders(p.orders ?? []); setConnected(true); stopPoll(); } catch {} };
+    const onData = (e) => { try { const p = JSON.parse(e.data); setOrders(p.orders ?? []); setConnected(true); stopPoll(); } catch { } };
     es.addEventListener("init", onData);
     es.addEventListener("update", onData);
     es.addEventListener("error", () => { setConnected(false); es.close(); esRef.current = null; rcRef.current = setTimeout(connect, 10_000); if (!fbRef.current) startPoll(); });
@@ -486,7 +483,7 @@ function usePrepOrders() {
   const [prep, setPrep] = useState([]);
   useEffect(() => {
     let alive = true;
-    const poll = async () => { try { const r = await fetch(PREP_URL); const j = await r.json(); if (alive && j.success) setPrep(j.data ?? []); } catch {} };
+    const poll = async () => { try { const r = await fetch(PREP_URL); const j = await r.json(); if (alive && j.success) setPrep(j.data ?? []); } catch { } };
     poll(); const t = setInterval(poll, 15_000);
     return () => { alive = false; clearInterval(t); };
   }, []);
@@ -497,11 +494,11 @@ function useWakeLock(active) {
   useEffect(() => {
     if (!active || !("wakeLock" in navigator)) return;
     let lock = null, released = false;
-    const req = async () => { try { lock = await navigator.wakeLock.request("screen"); } catch {} };
+    const req = async () => { try { lock = await navigator.wakeLock.request("screen"); } catch { } };
     req();
     const onVis = () => { if (document.visibilityState === "visible" && !released) req(); };
     document.addEventListener("visibilitychange", onVis);
-    return () => { released = true; document.removeEventListener("visibilitychange", onVis); try { lock?.release(); } catch {} };
+    return () => { released = true; document.removeEventListener("visibilitychange", onVis); try { lock?.release(); } catch { } };
   }, [active]);
 }
 
@@ -566,12 +563,12 @@ export default function CekAntrian() {
     // Auto-unlock + aktifkan TTS (klik Perbesar = user gesture)
     tts.unlock();
     tts.setEnabled(true);
-    try { await rootRef.current?.requestFullscreen?.(); } catch {}
+    try { await rootRef.current?.requestFullscreen?.(); } catch { }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const exit = useCallback(async () => {
     setMagnify(false);
     if (typeof speechSynthesis !== "undefined") speechSynthesis.cancel();
-    try { if (document.fullscreenElement) await document.exitFullscreen(); } catch {}
+    try { if (document.fullscreenElement) await document.exitFullscreen(); } catch { }
   }, []);
   useEffect(() => {
     const onFs = () => { if (!document.fullscreenElement) setMagnify(false); };
@@ -608,11 +605,11 @@ export default function CekAntrian() {
       {/* ════════════════════════════════════════════ */}
       {magnify ? (
         <>
-        <style>{`
+          <style>{`
             .poppins-display, .poppins-display * { font-family: 'Poppins', sans-serif !important; --ds-font-sans: 'Poppins', sans-serif; --font-sans: 'Poppins', sans-serif; }
         `}</style>
-        <div className="fixed inset-0 z-[100] bg-surface flex flex-col poppins-display">
-          <style>{`
+          <div className="fixed inset-0 z-[100] bg-surface flex flex-col poppins-display">
+            <style>{`
             @keyframes cardEnter{
               from{opacity:0;transform:translateY(24px) scale(.97)}
               to{opacity:1;transform:translateY(0) scale(1)}
@@ -625,205 +622,199 @@ export default function CekAntrian() {
             .anim-right{animation:panelSlide .5s cubic-bezier(.16,1,.3,1) .1s both}
           `}</style>
 
-          {/* ── Konten utama: 2 panel (top bar dihapus, keluar via ESC) ── */}
-          {slideMap.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
-              <p className="text-2xl font-black text-content">Belum ada antrian hari ini</p>
-              <p className="text-sm text-content-muted mt-2">Papan akan update otomatis begitu ada servis atau penyiapan masuk.</p>
-              <p className="text-xs text-content-muted mt-4">Tekan ESC untuk keluar</p>
-            </div>
-          ) : (
-            <div className="flex-1 flex overflow-hidden min-h-0">
-              {/* ═══ PANEL KIRI (72%) — 1 kartu besar full ═══ */}
-              <div className="w-[72%] flex flex-col p-5 overflow-hidden" key={`left-${leftCard?.key}`}>
-                {leftCard && (
-                  <div className="anim-left flex flex-col gap-3 h-full">
-                    {/* Header panel kiri */}
-                    <div className="flex items-center gap-3">
-                      <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-lg font-black tracking-tight shadow-sm ${
-                        leftCard.source === "prep"
-                          ? "bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-300"
-                          : "bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300"
-                      }`}>
-                        {leftCard.source === "prep" ? <Truck size={20} /> : <Wrench size={20} />}
-                        {leftCard.source === "prep" ? "Penyiapan Barang" : "Antrian Service"}
-                      </span>
-                    </div>
-
-                    {/* Satu kartu besar — full height */}
-                    <div className="flex-1 min-h-0">
-                      <BigCard n={leftCard} />
-                    </div>
-                  </div>
-                )}
+            {/* ── Konten utama: 2 panel (top bar dihapus, keluar via ESC) ── */}
+            {slideMap.length === 0 ? (
+              <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
+                <p className="text-2xl font-black text-content">Belum ada antrian hari ini</p>
+                <p className="text-sm text-content-muted mt-2">Papan akan update otomatis begitu ada servis atau penyiapan masuk.</p>
+                <p className="text-xs text-content-muted mt-4">Tekan ESC untuk keluar</p>
               </div>
-
-              {/* ═══ DIVIDER ═══ */}
-              <div className="w-px bg-border shrink-0" />
-
-              {/* ═══ PANEL KANAN (28%) — daftar antrian ═══ */}
-              <div className="w-[28%] flex flex-col overflow-y-auto bg-gradient-to-b from-slate-50 via-slate-50/80 to-white dark:from-slate-800/60 dark:via-slate-800/40 dark:to-slate-900/30" key={`right-${rightPage?.key}`}>
-                {rightPage ? (
-                  <div className="anim-right flex flex-col h-full justify-center px-4 xl:px-5 py-4">
-                    {/* Header panel kanan */}
-                    <div className="flex items-center gap-2.5 mb-4 px-1">
-                      <div className={`w-2 h-2 rounded-full shrink-0 ${
-                        rightPage.source === "prep" ? "bg-violet-500" : "bg-blue-500"
-                      }`} />
-                      <span className="text-xs xl:text-sm font-extrabold text-content-soft uppercase tracking-[0.15em]">
-                        {rightPage.source === "prep" ? "Penyiapan" : "Service"}
-                      </span>
-                      <div className="flex-1 h-px bg-gradient-to-r from-slate-300 to-transparent dark:from-slate-600" />
-                      <span className="text-[11px] xl:text-xs font-bold text-white bg-slate-400 dark:bg-slate-600 px-2 py-0.5 rounded-full tabular-nums">
-                        {rightPage.no}/{rightPage.total}
-                      </span>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      {rightPage.items.map((n, idx) => {
-                        const dur1Str = formatDurasi(n.dur1);
-                        const dur2Str = formatDurasi(n.dur2);
-                        const isActive = leftCard?.key === n.key;
-                        const statusColor =
-                          n.step === 0 ? "text-amber-600 dark:text-amber-400"
-                          : n.step === 1 ? "text-blue-600 dark:text-blue-400"
-                          : "text-emerald-600 dark:text-emerald-400";
-                        const statusBg =
-                          n.step === 0 ? "bg-amber-50 dark:bg-amber-500/10"
-                          : n.step === 1 ? "bg-blue-50 dark:bg-blue-500/10"
-                          : "bg-emerald-50 dark:bg-emerald-500/10";
-                        const activeBorder =
-                          n.step === 0 ? "border-amber-400" : n.step === 1 ? "border-blue-500" : "border-emerald-500";
-
-                        return (
-                          <div key={n.key} className={`rounded-xl px-3.5 py-3 xl:py-3.5 transition-all duration-500 ${
-                            isActive
-                              ? `bg-white dark:bg-slate-800 shadow-md shadow-slate-200/60 dark:shadow-black/20 border border-slate-200/80 dark:border-slate-700 border-l-[3px] ${activeBorder}`
-                              : "opacity-35 hover:opacity-50 border border-transparent"
+            ) : (
+              <div className="flex-1 flex overflow-hidden min-h-0">
+                {/* ═══ PANEL KIRI (72%) — 1 kartu besar full ═══ */}
+                <div className="w-[72%] flex flex-col p-5 overflow-hidden" key={`left-${leftCard?.key}`}>
+                  {leftCard && (
+                    <div className="anim-left flex flex-col gap-3 h-full">
+                      {/* Header panel kiri */}
+                      <div className="flex items-center gap-3">
+                        <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-lg font-black tracking-tight shadow-sm ${leftCard.source === "prep"
+                            ? "bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-300"
+                            : "bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300"
                           }`}>
-                            {/* Baris 1: Nomor urut + Nama CS */}
-                            <div className="flex items-baseline gap-2">
-                              <span className={`text-[11px] xl:text-xs font-mono font-bold shrink-0 px-1.5 py-0.5 rounded ${
-                                isActive ? "bg-slate-100 dark:bg-slate-700 text-content-soft" : "text-content-muted"
-                              }`}>{n.orderNo}</span>
-                              <p className={`font-extrabold text-lg xl:text-xl 2xl:text-2xl leading-snug tracking-tight truncate ${
-                                isActive ? "text-content" : "text-content-soft"
-                              }`}>
-                                {n.nama}
-                              </p>
-                            </div>
+                          {leftCard.source === "prep" ? <Truck size={20} /> : <Wrench size={20} />}
+                          {leftCard.source === "prep" ? "Penyiapan Barang" : "Antrian Service"}
+                        </span>
+                      </div>
 
-                            {/* Baris 2: Tipe Device */}
-                            <p className="text-sm xl:text-base 2xl:text-lg text-content-muted font-medium mt-0.5 truncate">
-                              {n.device}
-                            </p>
-
-                            {/* Baris 3: Status badge + teknisi + durasi */}
-                            <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
-                              <span className={`inline-flex items-center text-[11px] xl:text-xs font-bold px-2 py-0.5 rounded-md ${statusColor} ${statusBg}`}>
-                                {n.labels[n.step]}
-                              </span>
-                              {n.step2Name && (
-                                <span className="text-[11px] xl:text-xs font-medium text-content-muted truncate">· {n.step2Name}</span>
-                              )}
-                              {(dur1Str || dur2Str) && (
-                                <span className="text-[10px] xl:text-[11px] font-semibold text-content-muted tabular-nums ml-auto">
-                                  {n.step <= 1 && dur1Str}{n.step === 1 && dur2Str ? ` → ${dur2Str}` : ""}
-                                  {n.step === 2 && formatJam(n.doneTime) ? `selesai ${formatJam(n.doneTime)}` : ""}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
+                      {/* Satu kartu besar — full height */}
+                      <div className="flex-1 min-h-0">
+                        <BigCard n={leftCard} />
+                      </div>
                     </div>
-                  </div>
-                ) : leftCard ? (
-                  /* Kalau cuma 1 data, panel kanan kosong dengan info */
-                  <div className="flex-1 flex flex-col items-center justify-center text-center px-4 bg-gradient-to-b from-slate-50 to-white dark:from-slate-800/60 dark:to-slate-900/30">
-                    <p className="text-xl font-bold text-content-muted">Tidak ada data lain</p>
-                    <p className="text-base text-content-muted mt-2">Semua data ditampilkan di panel kiri.</p>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-          )}
+                  )}
+                </div>
 
-          {/* ── Footer: page dots + running text ── */}
-          <div className="shrink-0">
-            {/* Page dots */}
-            {totalSlides > 1 && (
-              <div className="px-6 py-2 flex items-center justify-center gap-2">
-                {Array.from({ length: totalSlides }, (_, i) => (
-                  <div
-                    key={i}
-                    className={`h-2 rounded-full transition-all duration-500 ${
-                      i === slideIdx
-                        ? "w-10 bg-gradient-to-r from-blue-500 to-violet-500"
-                        : "w-2.5 bg-slate-300 dark:bg-slate-600"
-                    }`}
-                  />
-                ))}
+                {/* ═══ DIVIDER ═══ */}
+                <div className="w-px bg-border shrink-0" />
+
+                {/* ═══ PANEL KANAN (28%) — daftar antrian ═══ */}
+                <div className="w-[28%] flex flex-col overflow-y-auto bg-gradient-to-b from-slate-50 via-slate-50/80 to-white dark:from-slate-800/60 dark:via-slate-800/40 dark:to-slate-900/30" key={`right-${rightPage?.key}`}>
+                  {rightPage ? (
+                    <div className="anim-right flex flex-col h-full justify-center px-4 xl:px-5 py-4">
+                      {/* Header panel kanan */}
+                      <div className="flex items-center gap-2.5 mb-4 px-1">
+                        <div className={`w-2 h-2 rounded-full shrink-0 ${rightPage.source === "prep" ? "bg-violet-500" : "bg-blue-500"
+                          }`} />
+                        <span className="text-xs xl:text-sm font-extrabold text-content-soft uppercase tracking-[0.15em]">
+                          {rightPage.source === "prep" ? "Penyiapan" : "Service"}
+                        </span>
+                        <div className="flex-1 h-px bg-gradient-to-r from-slate-300 to-transparent dark:from-slate-600" />
+                        <span className="text-[11px] xl:text-xs font-bold text-white bg-slate-400 dark:bg-slate-600 px-2 py-0.5 rounded-full tabular-nums">
+                          {rightPage.no}/{rightPage.total}
+                        </span>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        {rightPage.items.map((n, idx) => {
+                          const dur1Str = formatDurasi(n.dur1);
+                          const dur2Str = formatDurasi(n.dur2);
+                          const isActive = leftCard?.key === n.key;
+                          const statusColor =
+                            n.step === 0 ? "text-amber-600 dark:text-amber-400"
+                              : n.step === 1 ? "text-blue-600 dark:text-blue-400"
+                                : "text-emerald-600 dark:text-emerald-400";
+                          const statusBg =
+                            n.step === 0 ? "bg-amber-50 dark:bg-amber-500/10"
+                              : n.step === 1 ? "bg-blue-50 dark:bg-blue-500/10"
+                                : "bg-emerald-50 dark:bg-emerald-500/10";
+                          const activeBorder =
+                            n.step === 0 ? "border-amber-400" : n.step === 1 ? "border-blue-500" : "border-emerald-500";
+
+                          return (
+                            <div key={n.key} className={`rounded-xl px-3.5 py-3 xl:py-3.5 transition-all duration-500 ${isActive
+                                ? `bg-white dark:bg-slate-800 shadow-md shadow-slate-200/60 dark:shadow-black/20 border border-slate-200/80 dark:border-slate-700 border-l-[3px] ${activeBorder}`
+                                : "opacity-35 hover:opacity-50 border border-transparent"
+                              }`}>
+                              {/* Baris 1: Nomor urut + Nama CS */}
+                              <div className="flex items-baseline gap-2">
+                                <span className={`text-[11px] xl:text-xs font-mono font-bold shrink-0 px-1.5 py-0.5 rounded ${isActive ? "bg-slate-100 dark:bg-slate-700 text-content-soft" : "text-content-muted"
+                                  }`}>{n.orderNo}</span>
+                                <p className={`font-extrabold text-lg xl:text-xl 2xl:text-2xl leading-snug tracking-tight truncate ${isActive ? "text-content" : "text-content-soft"
+                                  }`}>
+                                  {n.nama}
+                                </p>
+                              </div>
+
+                              {/* Baris 2: Tipe Device */}
+                              <p className="text-sm xl:text-base 2xl:text-lg text-content-muted font-medium mt-0.5 truncate">
+                                {n.device}
+                              </p>
+
+                              {/* Baris 3: Status badge + teknisi + durasi */}
+                              <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
+                                <span className={`inline-flex items-center text-[11px] xl:text-xs font-bold px-2 py-0.5 rounded-md ${statusColor} ${statusBg}`}>
+                                  {n.labels[n.step]}
+                                </span>
+                                {n.step2Name && (
+                                  <span className="text-[11px] xl:text-xs font-medium text-content-muted truncate">· {n.step2Name}</span>
+                                )}
+                                {(dur1Str || dur2Str) && (
+                                  <span className="text-[10px] xl:text-[11px] font-semibold text-content-muted tabular-nums ml-auto">
+                                    {n.step <= 1 && dur1Str}{n.step === 1 && dur2Str ? ` → ${dur2Str}` : ""}
+                                    {n.step === 2 && formatJam(n.doneTime) ? `selesai ${formatJam(n.doneTime)}` : ""}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ) : leftCard ? (
+                    /* Kalau cuma 1 data, panel kanan kosong dengan info */
+                    <div className="flex-1 flex flex-col items-center justify-center text-center px-4 bg-gradient-to-b from-slate-50 to-white dark:from-slate-800/60 dark:to-slate-900/30">
+                      <p className="text-xl font-bold text-content-muted">Tidak ada data lain</p>
+                      <p className="text-base text-content-muted mt-2">Semua data ditampilkan di panel kiri.</p>
+                    </div>
+                  ) : null}
+                </div>
               </div>
             )}
 
-            {/* Running text */}
-            <div className="relative z-10 overflow-visible bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 shadow-[0_-4px_20px_rgba(0,0,0,0.15)]">
-              <style>{`@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}.marquee-track{display:inline-flex;white-space:nowrap;animation:marquee 30s linear infinite}`}</style>
-              <div className="marquee-track py-2.5">
-                <span className="px-8 text-sm font-semibold text-white">{RUNNING_TEXT}</span>
-                <span className="px-8 text-sm font-semibold text-white">{RUNNING_TEXT}</span>
+            {/* ── Footer: page dots + running text ── */}
+            <div className="shrink-0">
+              {/* Page dots */}
+              {totalSlides > 1 && (
+                <div className="px-6 py-2 flex items-center justify-center gap-2">
+                  {Array.from({ length: totalSlides }, (_, i) => (
+                    <div
+                      key={i}
+                      className={`h-2 rounded-full transition-all duration-500 ${i === slideIdx
+                          ? "w-10 bg-gradient-to-r from-blue-500 to-violet-500"
+                          : "w-2.5 bg-slate-300 dark:bg-slate-600"
+                        }`}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Running text */}
+              <div className="relative z-10 overflow-visible bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 shadow-[0_-4px_20px_rgba(0,0,0,0.15)]">
+                <style>{`@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}.marquee-track{display:inline-flex;white-space:nowrap;animation:marquee 30s linear infinite}`}</style>
+                <div className="marquee-track py-2.5">
+                  <span className="px-8 text-sm font-semibold text-white">{RUNNING_TEXT}</span>
+                  <span className="px-8 text-sm font-semibold text-white">{RUNNING_TEXT}</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
         </>
       ) : (
-      /* ════════════════════════════════════════════ */
-      /* MODE NORMAL (tetap sama persis)             */
-      /* ════════════════════════════════════════════ */
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-14">
-        <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.fadeUp{animation:fadeUp .5s ease forwards}`}</style>
+        /* ════════════════════════════════════════════ */
+        /* MODE NORMAL (tetap sama persis)             */
+        /* ════════════════════════════════════════════ */
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-14">
+          <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.fadeUp{animation:fadeUp .5s ease forwards}`}</style>
 
-        <div className="text-center mb-8">
-          <span className="eyebrow"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full" /> Official Solit 03</span>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-content mt-4">Antrian <span className="text-blue-600">Servis</span> & Penyiapan</h1>
-          <p className="text-sm text-content-muted mt-3">Pantau status laptop & pesanan kamu secara real-time.</p>
-          <button onClick={enter} className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 shadow-soft transition">
-            <Maximize2 size={16} /> Perbesar (Mode Display TV)
-          </button>
-          <div className="flex items-center justify-center gap-2 mt-3">
-            <div className={`w-2 h-2 rounded-full ${connected ? "bg-emerald-500 animate-pulse" : "bg-slate-300"}`} />
-            <span className="text-xs text-content-muted">{connected ? "Terhubung real-time" : "Mode polling"}</span>
+          <div className="text-center mb-8">
+            <span className="eyebrow"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full" /> Official Solit 03</span>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-content mt-4">Antrian <span className="text-blue-600">Servis</span> & Penyiapan</h1>
+            <p className="text-sm text-content-muted mt-3">Pantau status laptop & pesanan kamu secara real-time.</p>
+            <button onClick={enter} className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 shadow-soft transition">
+              <Maximize2 size={16} /> Perbesar (Mode Display TV)
+            </button>
+            <div className="flex items-center justify-center gap-2 mt-3">
+              <div className={`w-2 h-2 rounded-full ${connected ? "bg-emerald-500 animate-pulse" : "bg-slate-300"}`} />
+              <span className="text-xs text-content-muted">{connected ? "Terhubung real-time" : "Mode polling"}</span>
+            </div>
           </div>
-        </div>
 
-        {/* PENYIAPAN */}
-        <div className="flex items-center gap-3 mb-4">
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><Truck size={15} /> PENYIAPAN BARANG</span>
-          <div className="flex-1 h-px bg-gradient-to-r from-violet-200 to-transparent" />
-        </div>
-        {prepCards.length === 0 ? (
-          <div className="bg-surface rounded-xl border border-border p-8 text-center mb-10"><Truck size={26} className="text-violet-400 mx-auto mb-2" /><p className="text-content-soft font-bold text-sm">Belum ada penyiapan hari ini</p></div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 fadeUp">
-            {prepCards.map((n) => <PhaseCard key={n.key} n={n} />)}
+          {/* PENYIAPAN */}
+          <div className="flex items-center gap-3 mb-4">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><Truck size={15} /> PENYIAPAN BARANG</span>
+            <div className="flex-1 h-px bg-gradient-to-r from-violet-200 to-transparent" />
           </div>
-        )}
+          {prepCards.length === 0 ? (
+            <div className="bg-surface rounded-xl border border-border p-8 text-center mb-10"><Truck size={26} className="text-violet-400 mx-auto mb-2" /><p className="text-content-soft font-bold text-sm">Belum ada penyiapan hari ini</p></div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 fadeUp">
+              {prepCards.map((n) => <PhaseCard key={n.key} n={n} />)}
+            </div>
+          )}
 
-        {/* SERVICE */}
-        <div className="flex items-center gap-3 mb-4">
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300"><Wrench size={15} /> ANTRIAN SERVICE</span>
-          <div className="flex-1 h-px bg-gradient-to-r from-blue-200 to-transparent" />
-        </div>
-        {svcCards.length === 0 ? (
-          <div className="bg-surface rounded-xl border border-border p-8 text-center"><Wrench size={26} className="text-blue-400 mx-auto mb-2" /><p className="text-content-soft font-bold text-sm">Belum ada antrian servis</p></div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 fadeUp">
-            {svcCards.map((n) => <PhaseCard key={n.key} n={n} />)}
+          {/* SERVICE */}
+          <div className="flex items-center gap-3 mb-4">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300"><Wrench size={15} /> ANTRIAN SERVICE</span>
+            <div className="flex-1 h-px bg-gradient-to-r from-blue-200 to-transparent" />
           </div>
-        )}
-      </div>
+          {svcCards.length === 0 ? (
+            <div className="bg-surface rounded-xl border border-border p-8 text-center"><Wrench size={26} className="text-blue-400 mx-auto mb-2" /><p className="text-content-soft font-bold text-sm">Belum ada antrian servis</p></div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 fadeUp">
+              {svcCards.map((n) => <PhaseCard key={n.key} n={n} />)}
+            </div>
+          )}
+        </div>
       )}
     </div>
   );
