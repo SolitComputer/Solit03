@@ -593,7 +593,10 @@ export default function CekAntrian() {
       <Helmet>
         <title>Cek Antrian Servis & Penyiapan | Solit 03</title>
         <meta name="description" content="Pantau status servis & penyiapan pesanan Solit 03 secara realtime." />
-        <link rel="canonical" href="https://solit03.com/cek-antrian" />
+        <link rel="canonical" href="https://solit.id/cek-antrian" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </Helmet>
 
       <div className="fixed inset-0 -z-10 opacity-30">
@@ -604,7 +607,7 @@ export default function CekAntrian() {
       {/* MODE DISPLAY (PERBESAR)                     */}
       {/* ════════════════════════════════════════════ */}
       {magnify ? (
-        <div className="fixed inset-0 z-[100] bg-surface flex flex-col">
+        <div className="fixed inset-0 z-[100] bg-surface flex flex-col" style={{ fontFamily: "'Poppins', sans-serif" }}>
           <style>{`
             @keyframes cardEnter{
               from{opacity:0;transform:translateY(24px) scale(.97)}
