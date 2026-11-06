@@ -607,8 +607,9 @@ export default function CekAntrian() {
       {/* MODE DISPLAY (PERBESAR)                     */}
       {/* ════════════════════════════════════════════ */}
       {magnify ? (
-        <div className="fixed inset-0 z-[100] bg-surface flex flex-col" style={{ fontFamily: "'Poppins', sans-serif" }}>
+        <div className="fixed inset-0 z-[100] bg-surface flex flex-col poppins-display">
           <style>{`
+            .poppins-display, .poppins-display * { font-family: 'Poppins', sans-serif !important; }
             @keyframes cardEnter{
               from{opacity:0;transform:translateY(24px) scale(.97)}
               to{opacity:1;transform:translateY(0) scale(1)}
