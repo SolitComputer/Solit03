@@ -607,9 +607,12 @@ export default function CekAntrian() {
       {/* MODE DISPLAY (PERBESAR)                     */}
       {/* ════════════════════════════════════════════ */}
       {magnify ? (
+        <>
+        <style>{`
+            .poppins-display, .poppins-display * { font-family: 'Poppins', sans-serif !important; --ds-font-sans: 'Poppins', sans-serif; --font-sans: 'Poppins', sans-serif; }
+        `}</style>
         <div className="fixed inset-0 z-[100] bg-surface flex flex-col poppins-display">
           <style>{`
-            .poppins-display, .poppins-display * { font-family: 'Poppins', sans-serif !important; }
             @keyframes cardEnter{
               from{opacity:0;transform:translateY(24px) scale(.97)}
               to{opacity:1;transform:translateY(0) scale(1)}
@@ -774,6 +777,7 @@ export default function CekAntrian() {
             </div>
           </div>
         </div>
+        </>
       ) : (
       /* ════════════════════════════════════════════ */
       /* MODE NORMAL (tetap sama persis)             */
