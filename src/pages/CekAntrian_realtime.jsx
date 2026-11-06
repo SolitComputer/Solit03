@@ -467,9 +467,11 @@ function useServiceOrders() {
   const connect = useCallback(() => {
     if (esRef.current) { esRef.current.close(); esRef.current = null; }
     clearTimeout(rcRef.current);
-    if (typeof EventSource === "undefined") { startPoll(); return; }
+    // Selalu jalankan polling 15 detik sebagai fallback
+    if (!fbRef.current) startPoll();
+    if (typeof EventSource === "undefined") return;
     const es = new EventSource(STREAM_URL); esRef.current = es;
-    const onData = (e) => { try { const p = JSON.parse(e.data); setOrders(p.orders ?? []); setConnected(true); stopPoll(); } catch { } };
+    const onData = (e) => { try { const p = JSON.parse(e.data); setOrders(p.orders ?? []); setConnected(true); } catch { } };
     es.addEventListener("init", onData);
     es.addEventListener("update", onData);
     es.addEventListener("error", () => { setConnected(false); es.close(); esRef.current = null; rcRef.current = setTimeout(connect, 10_000); if (!fbRef.current) startPoll(); });
