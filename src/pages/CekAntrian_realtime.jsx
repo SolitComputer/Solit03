@@ -438,7 +438,10 @@ function useTTS() {
     }
   }, [enabled, unlocked]);
 
-  return { enabled, setEnabled, volume, setVolume, unlock, unlocked, detectChanges };
+  // Cek apakah TTS sedang bicara atau ada antrean suara
+  const isSpeaking = useCallback(() => isSpeakingRef.current || queueRef.current.length > 0, []);
+
+  return { enabled, setEnabled, volume, setVolume, unlock, unlocked, detectChanges, enqueue, isSpeaking };
 }
 
 // ═══════════════════════════════════════════
@@ -519,10 +522,7 @@ export default function CekAntrian() {
   const svcCards = useMemo(() =>
     orders.map((o) => normSvc(o, now)).sort((a, b) => b.sortTs - a.sortTs), [orders, now]);
 
-  // Trigger TTS detection ketika data berubah
-  useEffect(() => {
-    if (magnify) tts.detectChanges(prepCards, svcCards);
-  }, [prepCards, svcCards, magnify]); // eslint-disable-line react-hooks/exhaustive-deps
+  // (TTS sekarang sinkron dengan auto-jump di bawah — tidak pakai detectChanges lagi)
 
   // Halaman mode Display: penyiapan dulu, lalu service
   const pages = useMemo(() => {
@@ -546,41 +546,58 @@ export default function CekAntrian() {
   const totalSlides = slideMap.length || 1;
   const prevCardMapRef = useRef(null);
 
-  // Auto-jump ke data baru ATAU status berubah
+  // Auto-jump + TTS SINKRON — jump ke card & announce card yang SAMA
   useEffect(() => {
     if (!magnify || slideMap.length === 0) return;
     const currentMap = new Map(slideMap.map(s => [s.card.key, s.card.step]));
 
     if (prevCardMapRef.current !== null) {
-      // Prioritas 1: data baru masuk
+      // Prioritas 1: data baru masuk → jump + announce data baru
       const newIdx = slideMap.findIndex(s => !prevCardMapRef.current.has(s.card.key));
       if (newIdx !== -1) {
+        const c = slideMap[newIdx].card;
         setSlideIdx(newIdx);
+        const srcLabel = c.source === "prep" ? "penyiapan barang" : "servis";
+        tts.enqueue(
+          `${srcLabel === "penyiapan barang" ? "Penyiapan barang" : "Servis"} baru masuk. Customer ${c.nama}, laptop ${c.device}.`
+        );
       } else {
-        // Prioritas 2: status berubah — jump ke card yang step-nya beda
+        // Prioritas 2: status berubah → jump + announce card yang step-nya beda
         const changedIdx = slideMap.findIndex(s => {
           const prevStep = prevCardMapRef.current.get(s.card.key);
           return prevStep !== undefined && prevStep !== s.card.step;
         });
         if (changedIdx !== -1) {
+          const c = slideMap[changedIdx].card;
           setSlideIdx(changedIdx);
+          if (c.source === "prep") {
+            tts.enqueue(
+              `Perhatian, update penyiapan barang. Atas nama ${c.nama}, perangkat ${c.device}, barang anda sedang ${c.labels[c.step]}.`
+            );
+          } else {
+            tts.enqueue(
+              `Perhatian, update servis. Atas nama ${c.nama}, perangkat ${c.device}, barang anda sedang ${c.labels[c.step]}.`
+            );
+          }
         }
       }
     }
     prevCardMapRef.current = currentMap;
-  }, [magnify, slideMap]);
+  }, [magnify, slideMap]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Auto-slide setiap 15 detik
+  // Auto-slide setiap 15 detik — PAUSE saat TTS sedang bicara
   useEffect(() => {
     if (!magnify || totalSlides < 2) return;
-    const t = setInterval(() => setSlideIdx((i) => (i + 1) % totalSlides), SLIDE_MS);
+    const t = setInterval(() => {
+      if (!tts.isSpeaking()) setSlideIdx((i) => (i + 1) % totalSlides);
+    }, SLIDE_MS);
     return () => clearInterval(t);
-  }, [magnify, totalSlides]);
+  }, [magnify, totalSlides]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (slideIdx >= totalSlides) setSlideIdx(0); }, [totalSlides, slideIdx]);
 
   // Enter/exit fullscreen
   const enter = useCallback(async () => {
-    setSlideIdx(0); setMagnify(true);
+    setSlideIdx(0); setMagnify(true); prevCardMapRef.current = null;
     // Auto-unlock + aktifkan TTS (klik Perbesar = user gesture)
     tts.unlock();
     tts.setEnabled(true);
