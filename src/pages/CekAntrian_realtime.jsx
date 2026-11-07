@@ -403,7 +403,7 @@ function useTTS() {
         const prev = prevMapRef.current.get(c.key);
         if (prev !== undefined && prev !== c.step) {
           enqueue(
-            `Informasi penyiapan barang. CS ${c.nama}, laptop ${c.device}, status pengerjaan berubah menjadi ${c.labels[c.step]}.`
+            `Perhatian, update penyiapan barang. Atas nama ${c.nama}, perangkat ${c.device}, status saat ini ${c.labels[c.step]}.`
           );
         }
       });
@@ -411,7 +411,7 @@ function useTTS() {
         const prev = prevMapRef.current.get(c.key);
         if (prev !== undefined && prev !== c.step) {
           enqueue(
-            `Informasi servis. CS ${c.nama}, laptop ${c.device}, status servis berubah menjadi ${c.labels[c.step]}.`
+            `Perhatian, ${srcLabel === "penyiapan barang" ? "penyiapan barang" : "servis"} baru masuk. Atas nama ${c.nama}, perangkat ${c.device}. Mohon ditunggu ya.`
           );
         }
       });
@@ -421,7 +421,7 @@ function useTTS() {
         if (!prevMapRef.current.has(c.key)) {
           const srcLabel = c.source === "prep" ? "penyiapan barang" : "servis";
           enqueue(
-            `${srcLabel === "penyiapan barang" ? "Penyiapan barang" : "Servis"} baru masuk. CS ${c.nama}, laptop ${c.device}.`
+            `${srcLabel === "penyiapan barang" ? "Penyiapan barang" : "Servis"} baru masuk. Customer ${c.nama}, laptop ${c.device}.`
           );
         }
       });
