@@ -682,18 +682,6 @@ export default function CekAntrian() {
                 <div className="w-[28%] flex flex-col overflow-y-auto bg-gradient-to-b from-slate-50 via-slate-50/80 to-white dark:from-slate-800/60 dark:via-slate-800/40 dark:to-slate-900/30" key={`right-${rightPage?.key}`}>
                   {rightPage ? (
                     <div className="anim-right flex flex-col h-full justify-center px-4 xl:px-5 py-4">
-                      {/* Header panel kanan */}
-                      <div className="flex items-center gap-2.5 mb-4 px-1">
-                        <div className={`w-2 h-2 rounded-full shrink-0 ${rightPage.source === "prep" ? "bg-violet-500" : "bg-blue-500"
-                          }`} />
-                        <span className="text-xs xl:text-sm font-extrabold text-content-soft uppercase tracking-[0.15em]">
-                          {rightPage.source === "prep" ? "Penyiapan" : "Service"}
-                        </span>
-                        <div className="flex-1 h-px bg-gradient-to-r from-slate-300 to-transparent dark:from-slate-600" />
-                        <span className="text-[11px] xl:text-xs font-bold text-white bg-slate-400 dark:bg-slate-600 px-2 py-0.5 rounded-full tabular-nums">
-                          {rightPage.no}/{rightPage.total}
-                        </span>
-                      </div>
 
                       <div className="space-y-1.5">
                         {rightPage.items.map((n, idx) => {
