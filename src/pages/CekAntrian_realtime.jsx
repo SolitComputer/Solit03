@@ -403,7 +403,7 @@ function useTTS() {
         const prev = prevMapRef.current.get(c.key);
         if (prev !== undefined && prev !== c.step) {
           enqueue(
-            `Perhatian, update penyiapan barang. Atas nama ${c.nama}, perangkat ${c.device}, status saat ini ${c.labels[c.step]}.`
+            `Perhatian, update penyiapan barang. Atas nama ${c.nama}, perangkat ${c.device}, barang anda sedang ${c.labels[c.step]}.`
           );
         }
       });
@@ -411,7 +411,7 @@ function useTTS() {
         const prev = prevMapRef.current.get(c.key);
         if (prev !== undefined && prev !== c.step) {
           enqueue(
-            `Perhatian, ${srcLabel === "penyiapan barang" ? "penyiapan barang" : "servis"} baru masuk. Atas nama ${c.nama}, perangkat ${c.device}. Mohon ditunggu ya.`
+            `Perhatian, update servis. Atas nama ${c.nama}, perangkat ${c.device}, barang anda sedang ${c.labels[c.step]}.`
           );
         }
       });
