@@ -544,21 +544,30 @@ export default function CekAntrian() {
     return map;
   }, [pages]);
   const totalSlides = slideMap.length || 1;
-  const prevKeysRef = useRef(null);
+  const prevCardMapRef = useRef(null);
 
-  // Auto-jump ke data baru yang baru masuk
+  // Auto-jump ke data baru ATAU status berubah
   useEffect(() => {
     if (!magnify || slideMap.length === 0) return;
-    const currentKeys = new Set(slideMap.map(s => s.card.key));
+    const currentMap = new Map(slideMap.map(s => [s.card.key, s.card.step]));
 
-    if (prevKeysRef.current !== null) {
-      // Cari slide pertama yang key-nya belum ada di prevKeys (= data baru)
-      const newIdx = slideMap.findIndex(s => !prevKeysRef.current.has(s.card.key));
+    if (prevCardMapRef.current !== null) {
+      // Prioritas 1: data baru masuk
+      const newIdx = slideMap.findIndex(s => !prevCardMapRef.current.has(s.card.key));
       if (newIdx !== -1) {
         setSlideIdx(newIdx);
+      } else {
+        // Prioritas 2: status berubah — jump ke card yang step-nya beda
+        const changedIdx = slideMap.findIndex(s => {
+          const prevStep = prevCardMapRef.current.get(s.card.key);
+          return prevStep !== undefined && prevStep !== s.card.step;
+        });
+        if (changedIdx !== -1) {
+          setSlideIdx(changedIdx);
+        }
       }
     }
-    prevKeysRef.current = currentKeys;
+    prevCardMapRef.current = currentMap;
   }, [magnify, slideMap]);
 
   // Auto-slide setiap 15 detik
