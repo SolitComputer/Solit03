@@ -245,94 +245,88 @@ function BigCard({ n }) {
   entries.push({ label: "Catatan Progres", catatan: true, catatanLines });
 
   return (
-    <div className="h-full flex items-center px-6 xl:px-10">
-      <div className="flex gap-6 xl:gap-10 w-full">
+    <div className="h-full w-full flex gap-8 xl:gap-12">
 
-        {/* ═══ KOLOM KIRI: info tanpa nomor ═══ */}
-        <div className="flex-1 min-w-0">
-          {entries.map((entry, i) => (
-            <div key={i} className={i < entries.length - 1 ? "pb-5 xl:pb-7 2xl:pb-8 mb-5 xl:mb-7 2xl:mb-8 border-b border-slate-200/50 dark:border-slate-700/30" : "pb-1"}>
-              <p className="text-xs xl:text-sm 2xl:text-base text-content-muted/70 font-bold tracking-[0.2em] leading-none uppercase">
-                {entry.label}
+      {/* ═══ KOLOM KIRI: info customer ═══ */}
+      <div className="flex-1 min-w-0 flex flex-col justify-center">
+        {entries.map((entry, i) => (
+          <div key={i} className={i < entries.length - 1 ? "pb-4 xl:pb-6 mb-4 xl:mb-6 border-b border-slate-100 dark:border-slate-800" : ""}>
+            <p className="text-[11px] xl:text-xs 2xl:text-sm text-slate-400 dark:text-slate-500 font-semibold tracking-[0.18em] leading-none uppercase mb-1.5">
+              {entry.label}
+            </p>
+
+            {entry.big ? (
+              <p className="text-4xl xl:text-5xl 2xl:text-6xl font-black text-content tracking-tight leading-[1.15]">
+                {entry.value}
               </p>
-
-              {entry.big ? (
-                <p className="text-3xl xl:text-4xl 2xl:text-5xl font-black text-content tracking-tight leading-snug mt-2">
-                  {entry.value}
-                </p>
-              ) : entry.chips ? (
-                <div className="flex gap-2 flex-wrap mt-2">
-                  {entry.chips.map((c, ci) => (
-                    <span key={ci} className={`text-lg xl:text-xl font-bold px-3 py-1 rounded-lg ${["bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300",
-                        "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300",
-                        "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"][ci % 3]
-                      }`}>{c}</span>
+            ) : entry.chips ? (
+              <div className="flex gap-2.5 flex-wrap mt-1">
+                {entry.chips.map((c, ci) => (
+                  <span key={ci} className={`text-base xl:text-lg font-bold px-3.5 py-1.5 rounded-xl ${
+                    ["bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300",
+                     "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300",
+                     "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"][ci % 3]
+                  }`}>{c}</span>
+                ))}
+              </div>
+            ) : entry.catatan ? (
+              entry.catatanLines.length > 0 ? (
+                <div className="mt-1.5 space-y-2">
+                  {entry.catatanLines.map((line, li) => (
+                    <div key={li} className="flex gap-3 items-baseline">
+                      <span className="shrink-0 w-7 h-7 xl:w-8 xl:h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm">
+                        <span className="text-white font-black text-xs xl:text-sm">{li + 1}</span>
+                      </span>
+                      <p className="text-xl xl:text-2xl 2xl:text-3xl font-bold text-content leading-snug">{line}</p>
+                    </div>
                   ))}
                 </div>
-              ) : entry.catatan ? (
-                /* Catatan Progres — bernomor kalau ada isi, strip kalau kosong */
-                entry.catatanLines.length > 0 ? (
-                  <div className="mt-2 space-y-1.5">
-                    {entry.catatanLines.map((line, li) => (
-                      <div key={li} className="flex gap-3 items-baseline">
-                        <span className="shrink-0 w-7 h-7 xl:w-8 xl:h-8 rounded-full bg-blue-600 dark:bg-blue-500 flex items-center justify-center shadow-sm">
-                          <span className="text-white font-black text-xs xl:text-sm">{li + 1}</span>
-                        </span>
-                        <p className="text-2xl xl:text-3xl 2xl:text-4xl font-bold text-content leading-snug">
-                          {line}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-3xl xl:text-4xl 2xl:text-5xl font-bold text-content-muted/50 leading-tight mt-2">—</p>
-                )
               ) : (
-                <p className="text-3xl xl:text-4xl 2xl:text-5xl font-extrabold text-content leading-snug mt-2">
-                  {entry.value}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* ═══ KOLOM KANAN: status progress timeline ═══ */}
-        <div className="shrink-0 flex flex-col justify-center pl-8 xl:pl-10 border-l-2 border-slate-200/80 dark:border-slate-700/60">
-          <div className="space-y-1">
-            {n.labels.map((lbl, si) => {
-              const isDone = si < n.step;
-              const isCurrent = si === n.step;
-              const stepDur = si === 0 ? formatDurasi(n.dur1) : si === 1 ? formatDurasi(n.dur2) : formatJam(n.doneTime);
-              return (
-                <div key={si} className="flex items-start gap-3">
-                  {/* Dot + garis vertikal */}
-                  <div className="flex flex-col items-center shrink-0 pt-1.5">
-                    <div className={`w-4 h-4 xl:w-5 xl:h-5 rounded-full shrink-0 ${isDone ? "bg-emerald-500 shadow-sm shadow-emerald-500/30" : isCurrent ? "bg-blue-500 ring-[5px] ring-blue-500/15 shadow-sm shadow-blue-500/30" : "bg-slate-300 dark:bg-slate-600"
-                      }`} />
-                    {si < n.labels.length - 1 && (
-                      <div className={`w-0.5 h-6 xl:h-8 ${isDone ? "bg-emerald-400" : "bg-slate-200 dark:bg-slate-600"}`} />
-                    )}
-                  </div>
-                  {/* Label + durasi */}
-                  <div className="flex-1 min-w-0">
-                    <p className={`text-xl xl:text-2xl 2xl:text-3xl font-extrabold leading-snug ${isCurrent ? statusColor : isDone ? "text-emerald-600 dark:text-emerald-400" : "text-content-muted"
-                      }`}>
-                      {lbl}
-                      {(isCurrent || isDone) && stepDur && (
-                        <span className={`font-semibold text-base xl:text-lg ${isDone ? "opacity-60" : "opacity-80"}`}> · {stepDur}</span>
-                      )}
-                    </p>
-                    {isCurrent && n.step2Name && (
-                      <p className="text-sm xl:text-base text-content-soft font-medium mt-0.5">oleh {n.step2Name}</p>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+                <p className="text-2xl xl:text-3xl font-bold text-slate-300 dark:text-slate-600 mt-1">—</p>
+              )
+            ) : (
+              <p className="text-2xl xl:text-3xl 2xl:text-4xl font-extrabold text-content leading-snug">
+                {entry.value}
+              </p>
+            )}
           </div>
-        </div>
-
+        ))}
       </div>
+
+      {/* ═══ KOLOM KANAN: status timeline ═══ */}
+      <div className="shrink-0 w-64 xl:w-72 2xl:w-80 flex flex-col justify-center pl-8 xl:pl-10 border-l border-slate-100 dark:border-slate-800">
+        <div className="space-y-1.5">
+          {n.labels.map((lbl, si) => {
+            const isDone = si < n.step;
+            const isCurrent = si === n.step;
+            const stepDur = si === 0 ? formatDurasi(n.dur1) : si === 1 ? formatDurasi(n.dur2) : formatJam(n.doneTime);
+            return (
+              <div key={si} className="flex items-start gap-3.5">
+                <div className="flex flex-col items-center shrink-0 pt-1.5">
+                  <div className={`w-4 h-4 xl:w-[18px] xl:h-[18px] rounded-full shrink-0 transition-all ${
+                    isDone ? "bg-emerald-500" : isCurrent ? "bg-blue-500 ring-4 ring-blue-500/15" : "bg-slate-200 dark:bg-slate-700"
+                  }`} />
+                  {si < n.labels.length - 1 && (
+                    <div className={`w-[2px] h-7 xl:h-9 rounded-full ${isDone ? "bg-emerald-300" : "bg-slate-200 dark:bg-slate-700"}`} />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className={`text-lg xl:text-xl 2xl:text-2xl font-bold leading-snug ${
+                    isCurrent ? statusColor : isDone ? "text-emerald-600 dark:text-emerald-400" : "text-slate-300 dark:text-slate-600"
+                  }`}>{lbl}</p>
+                  {(isCurrent || isDone) && stepDur && (
+                    <p className={`text-sm xl:text-base font-medium tabular-nums mt-0.5 ${isDone ? "text-slate-400" : "text-content-muted"}`}>{stepDur}</p>
+                  )}
+                  {isCurrent && n.step2Name && (
+                    <p className="text-sm text-content-soft font-medium mt-0.5">oleh {n.step2Name}</p>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
     </div>
   );
 }
@@ -619,74 +613,87 @@ export default function CekAntrian() {
       </div>
 
       {/* ════════════════════════════════════════════ */}
-      {/* MODE DISPLAY (PERBESAR)                     */}
+      {/* MODE DISPLAY (PERBESAR) — REDESIGN          */}
       {/* ════════════════════════════════════════════ */}
       {magnify ? (
         <>
           <style>{`
             .poppins-display, .poppins-display * { font-family: 'Poppins', sans-serif !important; --ds-font-sans: 'Poppins', sans-serif; --font-sans: 'Poppins', sans-serif; }
-        `}</style>
-          <div className="fixed inset-0 z-[100] bg-surface flex flex-col poppins-display">
-            <style>{`
             @keyframes cardEnter{
-              from{opacity:0;transform:translateY(24px) scale(.97)}
-              to{opacity:1;transform:translateY(0) scale(1)}
+              0%{opacity:0;transform:translateY(30px) scale(.95);filter:blur(4px)}
+              60%{opacity:1;filter:blur(0)}
+              100%{transform:translateY(0) scale(1)}
             }
             @keyframes panelSlide{
-              from{opacity:0;transform:translateX(20px)}
-              to{opacity:1;transform:translateX(0)}
+              0%{opacity:0;transform:translateX(24px) scale(.97)}
+              100%{opacity:1;transform:translateX(0) scale(1)}
             }
-            .anim-left{animation:cardEnter .6s cubic-bezier(.16,1,.3,1) both}
-            .anim-right{animation:panelSlide .5s cubic-bezier(.16,1,.3,1) .1s both}
+            @keyframes shimmer{
+              0%{background-position:-200% 0}
+              100%{background-position:200% 0}
+            }
+            @keyframes pulseGlow{
+              0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,0.3)}
+              50%{box-shadow:0 0 12px 4px rgba(59,130,246,0.15)}
+            }
+            .anim-left{animation:cardEnter .7s cubic-bezier(.22,1,.36,1) both}
+            .anim-right{animation:panelSlide .5s cubic-bezier(.22,1,.36,1) .12s both}
+            .active-card{animation:pulseGlow 2.5s ease-in-out infinite}
+            @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+            .marquee-track{display:inline-flex;white-space:nowrap;animation:marquee 35s linear infinite}
           `}</style>
+          <div className="fixed inset-0 z-[100] bg-white dark:bg-slate-950 flex flex-col poppins-display">
 
-            {/* ── Konten utama: 2 panel (top bar dihapus, keluar via ESC) ── */}
+            {/* ═══ TOP BAR — gradient accent + badge kategori ═══ */}
+            {leftCard && (
+              <div className={`shrink-0 ${leftCard.source === "prep"
+                ? "bg-gradient-to-r from-violet-600 via-violet-500 to-indigo-500"
+                : "bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500"}`}>
+                <div className="flex items-center justify-between px-8 py-2.5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+                      {leftCard.source === "prep" ? <Truck size={18} className="text-white" /> : <Wrench size={18} className="text-white" />}
+                    </div>
+                    <span className="text-white font-bold text-base tracking-wide">
+                      {leftCard.source === "prep" ? "Penyiapan Barang" : "Antrian Service"}
+                    </span>
+                  </div>
+                  <div className="w-2 h-2 rounded-full bg-white/50 animate-pulse" />
+                </div>
+              </div>
+            )}
+
+            {/* ═══ KONTEN UTAMA ═══ */}
             {slideMap.length === 0 ? (
               <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
-                <p className="text-2xl font-black text-content">Belum ada antrian hari ini</p>
-                <p className="text-sm text-content-muted mt-2">Papan akan update otomatis begitu ada servis atau penyiapan masuk.</p>
-                <p className="text-xs text-content-muted mt-4">Tekan ESC untuk keluar</p>
+                <div className="w-20 h-20 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-6">
+                  <Wrench size={36} className="text-slate-300 dark:text-slate-600" />
+                </div>
+                <p className="text-3xl font-black text-content">Belum ada antrian hari ini</p>
+                <p className="text-base text-content-muted mt-3 max-w-md">Papan akan update otomatis begitu ada servis atau penyiapan masuk.</p>
+                <p className="text-xs text-content-muted mt-6 opacity-50">Tekan ESC untuk keluar</p>
               </div>
             ) : (
-              <>
-              {/* Header badge — full width di tengah atas */}
-              {leftCard && (
-                <div className="flex items-center justify-center py-3">
-                  <span className={`inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-bold tracking-wide shadow-sm ${leftCard.source === "prep"
-                      ? "bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-300"
-                      : "bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300"
-                    }`}>
-                    {leftCard.source === "prep" ? <Truck size={16} /> : <Wrench size={16} />}
-                    {leftCard.source === "prep" ? "Penyiapan Barang" : "Antrian Service"}
-                  </span>
-                </div>
-              )}
-
               <div className="flex-1 flex overflow-hidden min-h-0">
-                {/* ═══ PANEL KIRI (72%) — 1 kartu besar full ═══ */}
-                <div className="w-[72%] flex flex-col p-5 overflow-hidden" key={`left-${leftCard?.key}`}>
+
+                {/* ═══ PANEL KIRI (74%) ═══ */}
+                <div className="w-[74%] flex flex-col overflow-hidden" key={`left-${leftCard?.key}`}>
                   {leftCard && (
-                    <div className="anim-left flex flex-col h-full">
-                      {/* Satu kartu besar — full height */}
-                      <div className="flex-1 min-h-0">
-                        <BigCard n={leftCard} />
-                      </div>
+                    <div className="anim-left flex-1 min-h-0 flex items-center px-8 xl:px-12 py-6">
+                      <BigCard n={leftCard} />
                     </div>
                   )}
                 </div>
 
-                {/* ═══ DIVIDER ═══ */}
-                <div className="w-px bg-border shrink-0" />
+                {/* ═══ DIVIDER — gradient line ═══ */}
+                <div className="w-px shrink-0 bg-gradient-to-b from-transparent via-slate-200 to-transparent dark:via-slate-700" />
 
-                {/* ═══ PANEL KANAN (28%) — daftar antrian ═══ */}
-                <div className="w-[28%] flex flex-col overflow-y-auto bg-gradient-to-b from-slate-50 via-slate-50/80 to-white dark:from-slate-800/60 dark:via-slate-800/40 dark:to-slate-900/30" key={`right-${rightPage?.key}`}>
+                {/* ═══ PANEL KANAN (26%) ═══ */}
+                <div className="w-[26%] flex flex-col overflow-y-auto bg-slate-50/80 dark:bg-slate-900/50" key={`right-${rightPage?.key}`}>
                   {rightPage ? (
-                    <div className="anim-right flex flex-col h-full justify-center px-4 xl:px-5 py-4">
-
-                      <div className="space-y-1.5">
-                        {rightPage.items.map((n, idx) => {
-                          const dur1Str = formatDurasi(n.dur1);
-                          const dur2Str = formatDurasi(n.dur2);
+                    <div className="anim-right flex flex-col h-full justify-center px-3 xl:px-4 py-4">
+                      <div className="space-y-2">
+                        {rightPage.items.map((n) => {
                           const isActive = leftCard?.key === n.key;
                           const statusColor =
                             n.step === 0 ? "text-amber-600 dark:text-amber-400"
@@ -696,42 +703,41 @@ export default function CekAntrian() {
                             n.step === 0 ? "bg-amber-50 dark:bg-amber-500/10"
                               : n.step === 1 ? "bg-blue-50 dark:bg-blue-500/10"
                                 : "bg-emerald-50 dark:bg-emerald-500/10";
-                          const activeBorder =
-                            n.step === 0 ? "border-amber-400" : n.step === 1 ? "border-blue-500" : "border-emerald-500";
+                          const accentColor =
+                            n.step === 0 ? "from-amber-400 to-amber-500" : n.step === 1 ? "from-blue-400 to-blue-500" : "from-emerald-400 to-emerald-500";
 
                           return (
-                            <div key={n.key} className={`rounded-xl px-3.5 py-3 xl:py-3.5 transition-all duration-500 ${isActive
-                                ? `bg-white dark:bg-slate-800 shadow-md shadow-slate-200/60 dark:shadow-black/20 border border-slate-200/80 dark:border-slate-700 border-l-[3px] ${activeBorder}`
-                                : "opacity-35 hover:opacity-50 border border-transparent"
+                            <div key={n.key} className={`rounded-2xl px-4 py-3.5 transition-all duration-500 relative overflow-hidden ${isActive
+                                ? "bg-white dark:bg-slate-800 shadow-lg shadow-slate-200/50 dark:shadow-black/30 ring-1 ring-slate-200/60 dark:ring-slate-700"
+                                : "opacity-30"
                               }`}>
-                              {/* Baris 1: Nomor urut + Nama CS */}
-                              <div className="flex items-baseline gap-2">
-                                <span className={`text-[11px] xl:text-xs font-mono font-bold shrink-0 px-1.5 py-0.5 rounded ${isActive ? "bg-slate-100 dark:bg-slate-700 text-content-soft" : "text-content-muted"
-                                  }`}>{n.orderNo}</span>
-                                <p className={`font-extrabold text-lg xl:text-xl 2xl:text-2xl leading-snug tracking-tight truncate ${isActive ? "text-content" : "text-content-soft"
-                                  }`}>
-                                  {n.nama}
-                                </p>
+                              {/* Accent bar kiri */}
+                              {isActive && (
+                                <div className={`absolute left-0 top-3 bottom-3 w-1 rounded-r-full bg-gradient-to-b ${accentColor}`} />
+                              )}
+
+                              {/* Nama + Order */}
+                              <div className="flex items-center gap-2 pl-2">
+                                <span className={`text-[10px] xl:text-[11px] font-mono font-bold shrink-0 px-1.5 py-0.5 rounded-md ${
+                                  isActive ? "bg-slate-100 dark:bg-slate-700/80 text-slate-500" : "text-content-muted"
+                                }`}>{n.orderNo}</span>
+                                <p className={`font-bold text-base xl:text-lg 2xl:text-xl leading-tight tracking-tight truncate ${
+                                  isActive ? "text-content" : "text-content-soft"
+                                }`}>{n.nama}</p>
                               </div>
 
-                              {/* Baris 2: Tipe Device */}
-                              <p className="text-sm xl:text-base 2xl:text-lg text-content-muted font-medium mt-0.5 truncate">
+                              {/* Device */}
+                              <p className="text-xs xl:text-sm text-content-muted font-medium mt-0.5 truncate pl-2">
                                 {n.device}
                               </p>
 
-                              {/* Baris 3: Status badge + teknisi + durasi */}
-                              <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
-                                <span className={`inline-flex items-center text-[11px] xl:text-xs font-bold px-2 py-0.5 rounded-md ${statusColor} ${statusBg}`}>
+                              {/* Status */}
+                              <div className="flex items-center gap-1.5 mt-1.5 pl-2">
+                                <span className={`text-[10px] xl:text-[11px] font-bold px-2 py-0.5 rounded-md ${statusColor} ${statusBg}`}>
                                   {n.labels[n.step]}
                                 </span>
                                 {n.step2Name && (
-                                  <span className="text-[11px] xl:text-xs font-medium text-content-muted truncate">· {n.step2Name}</span>
-                                )}
-                                {(dur1Str || dur2Str) && (
-                                  <span className="text-[10px] xl:text-[11px] font-semibold text-content-muted tabular-nums ml-auto">
-                                    {n.step <= 1 && dur1Str}{n.step === 1 && dur2Str ? ` → ${dur2Str}` : ""}
-                                    {n.step === 2 && formatJam(n.doneTime) ? `selesai ${formatJam(n.doneTime)}` : ""}
-                                  </span>
+                                  <span className="text-[10px] xl:text-[11px] font-medium text-content-muted truncate">· {n.step2Name}</span>
                                 )}
                               </div>
                             </div>
@@ -740,40 +746,30 @@ export default function CekAntrian() {
                       </div>
                     </div>
                   ) : leftCard ? (
-                    /* Kalau cuma 1 data, panel kanan kosong dengan info */
-                    <div className="flex-1 flex flex-col items-center justify-center text-center px-4 bg-gradient-to-b from-slate-50 to-white dark:from-slate-800/60 dark:to-slate-900/30">
-                      <p className="text-xl font-bold text-content-muted">Tidak ada data lain</p>
-                      <p className="text-base text-content-muted mt-2">Semua data ditampilkan di panel kiri.</p>
+                    <div className="flex-1 flex flex-col items-center justify-center text-center px-4">
+                      <p className="text-lg font-bold text-content-muted">Tidak ada data lain</p>
                     </div>
                   ) : null}
                 </div>
               </div>
-              </>
             )}
 
-            {/* ── Footer: page dots + running text ── */}
+            {/* ═══ FOOTER — dots + running text ═══ */}
             <div className="shrink-0">
-              {/* Page dots */}
               {totalSlides > 1 && (
-                <div className="px-6 py-2 flex items-center justify-center gap-2">
+                <div className="px-8 py-2 flex items-center justify-center gap-1.5">
                   {Array.from({ length: totalSlides }, (_, i) => (
-                    <div
-                      key={i}
-                      className={`h-2 rounded-full transition-all duration-500 ${i === slideIdx
-                          ? "w-10 bg-gradient-to-r from-blue-500 to-violet-500"
-                          : "w-2.5 bg-slate-300 dark:bg-slate-600"
-                        }`}
-                    />
+                    <div key={i} className={`rounded-full transition-all duration-500 ${i === slideIdx
+                      ? "h-2.5 w-8 bg-gradient-to-r from-blue-500 to-violet-500 shadow-sm shadow-blue-500/30"
+                      : "h-2 w-2 bg-slate-300/60 dark:bg-slate-600/60"
+                    }`} />
                   ))}
                 </div>
               )}
-
-              {/* Running text */}
-              <div className="relative z-10 overflow-visible bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 shadow-[0_-4px_20px_rgba(0,0,0,0.15)]">
-                <style>{`@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}.marquee-track{display:inline-flex;white-space:nowrap;animation:marquee 30s linear infinite}`}</style>
-                <div className="marquee-track py-2.5">
-                  <span className="px-8 text-sm font-semibold text-white">{RUNNING_TEXT}</span>
-                  <span className="px-8 text-sm font-semibold text-white">{RUNNING_TEXT}</span>
+              <div className="bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 shadow-[0_-2px_16px_rgba(37,99,235,0.2)]">
+                <div className="marquee-track py-3">
+                  <span className="px-10 text-sm font-semibold text-white/90 tracking-wide">{RUNNING_TEXT}</span>
+                  <span className="px-10 text-sm font-semibold text-white/90 tracking-wide">{RUNNING_TEXT}</span>
                 </div>
               </div>
             </div>
