@@ -718,9 +718,7 @@ export default function CekAntrian() {
 
             {/* ═══ TOP BAR — premium gradient + info ═══ */}
             {leftCard && (
-              <div className={`shrink-0 relative overflow-hidden ${leftCard.source === "prep"
-                ? "bg-gradient-to-r from-violet-600 via-purple-500 to-indigo-500"
-                : "bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500"}`}>
+              <div className={`shrink-0 relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500`}>
                 {/* Shimmer overlay */}
                 <div className="absolute inset-0 opacity-20" style={{
                   background:'linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.3) 50%,transparent 100%)',
