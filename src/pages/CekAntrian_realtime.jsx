@@ -7,7 +7,8 @@ const STREAM_URL = `${POS_BASE}/api/service/stream`;
 const SERVICE_URL = `${POS_BASE}/api/service/public`;
 const PREP_URL = `${POS_BASE}/api/preparation/public`;
 
-const SLIDE_MS = 15_000;   // durasi tiap slide di mode Display (15 detik)
+const SLIDE_MS_PREP = 15_000;  // durasi slide Penyiapan Barang (15 detik)
+const SLIDE_MS_SVC  = 10_000;  // durasi slide Service (10 detik)
 const PER_PAGE = 5;        // customer per panel per slide
 
 // ── Teks berjalan di bawah Mode Display ──
@@ -561,6 +562,12 @@ export default function CekAntrian() {
   const totalSlides = slideMap.length || 1;
   const prevCardMapRef = useRef(null);
 
+  // Refs supaya auto-slide bisa baca data terbaru tanpa re-trigger effect tiap detik
+  const slideMapRef = useRef(slideMap);
+  slideMapRef.current = slideMap;
+  const slideIdxRef = useRef(slideIdx);
+  slideIdxRef.current = slideIdx;
+
   // Auto-jump + TTS SINKRON — jump ke card & announce card yang SAMA
   useEffect(() => {
     if (!magnify || slideMap.length === 0) return;
@@ -600,13 +607,23 @@ export default function CekAntrian() {
     prevCardMapRef.current = currentMap;
   }, [magnify, slideMap]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Auto-slide setiap 15 detik — PAUSE saat TTS sedang bicara
+  // Auto-slide — durasi dinamis: 10 detik Service, 15 detik Penyiapan
   useEffect(() => {
     if (!magnify || totalSlides < 2) return;
-    const t = setInterval(() => {
-      if (!tts.isSpeaking()) setSlideIdx((i) => (i + 1) % totalSlides);
-    }, SLIDE_MS);
-    return () => clearInterval(t);
+    let timer = null;
+    const tick = () => {
+      const sm = slideMapRef.current;
+      const current = sm[slideIdxRef.current % sm.length];
+      const delay = current?.card?.source === "service" ? SLIDE_MS_SVC : SLIDE_MS_PREP;
+      timer = setTimeout(() => {
+        if (!tts.isSpeaking()) {
+          setSlideIdx((i) => (i + 1) % totalSlides);
+        }
+        tick();
+      }, delay);
+    };
+    tick();
+    return () => clearTimeout(timer);
   }, [magnify, totalSlides]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (slideIdx >= totalSlides) setSlideIdx(0); }, [totalSlides, slideIdx]);
 
