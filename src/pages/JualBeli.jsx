@@ -6,7 +6,7 @@ import Gallery from "../components/jualbeli/Gallery";
 import { tabData } from "../components/data/jualBeliData";
 import { Helmet } from "react-helmet-async";
 
-const WHATSAPP_NUMBER = "6285210647047";
+const WHATSAPP_NUMBER = "6285178277591";
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
 export default function JualBeli() {
@@ -237,7 +237,7 @@ export default function JualBeli() {
                 rel="noopener noreferrer"
                 className="text-[11px] font-mono text-green-600 hover:text-green-700 font-medium hover:underline transition"
               >
-                +62 852-1064-7047
+               +62 851-7827-7591
               </a>
               <div className="h-3 w-px bg-slate-300"></div>
             </div>
