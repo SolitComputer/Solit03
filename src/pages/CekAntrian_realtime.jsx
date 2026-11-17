@@ -360,25 +360,122 @@ function useTTS() {
   const isSpeakingRef = useRef(false);
   const prevMapRef = useRef(null); // null = belum ada data awal, skip announce
   const volumeRef = useRef(volume);
+  const chimeRef = useRef(null); // audio notifikasi "ding" sebelum suara AI
 
   useEffect(() => { volumeRef.current = volume; }, [volume]);
 
-  // Unlock audio context via user gesture
+  // Inisialisasi audio chime (sound_antrian.mp3 di /public)
+  useEffect(() => {
+    const audio = new Audio("/sound_antrian.mp3");
+    audio.preload = "auto";
+    audio.volume = volume;
+    audio.addEventListener("canplaythrough", () => {
+      console.log("[chime] file berhasil di-load, siap diputar ✅");
+    });
+    audio.addEventListener("error", () => {
+      console.error(
+        "[chime] FILE GAGAL DI-LOAD. Kemungkinan: file tidak ada di /public/sound_antrian.mp3, atau nama file beda huruf besar/kecil. Error code:", audio.error?.code
+      );
+    });
+    chimeRef.current = audio;
+    return () => {
+      try { audio.pause(); } catch { }
+      chimeRef.current = null;
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Sync volume ke chime kalau user geser slider
+  useEffect(() => {
+    if (chimeRef.current) chimeRef.current.volume = volume;
+  }, [volume]);
+
+  // Unlock audio context via user gesture (TTS + chime)
   const unlock = useCallback(() => {
     if (typeof speechSynthesis === "undefined") return;
     const u = new SpeechSynthesisUtterance(" ");
     u.lang = "id-ID";
     u.volume = 0;
     speechSynthesis.speak(u);
+
+    // Unlock HTMLAudioElement juga — play volume 0 lalu pause
+    const audio = chimeRef.current;
+    if (audio) {
+      const prevVol = audio.volume;
+      audio.volume = 0;
+      audio.play().then(() => {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.volume = prevVol;
+      }).catch(() => {
+        audio.volume = prevVol;
+      });
+    }
+
     setUnlocked(true);
   }, []);
 
-  const processQueue = useCallback(() => {
+  // Mainkan chime "sound_antrian.mp3", resolve setelah selesai (atau gagal)
+  // Mainkan chime "sound_antrian.mp3", resolve setelah selesai (atau gagal)
+  const playChime = useCallback(() => {
+    return new Promise((resolve) => {
+      const audio = chimeRef.current;
+      if (!audio) {
+        console.warn("[chime] chimeRef kosong — audio belum terinisialisasi");
+        resolve();
+        return;
+      }
+      try {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.volume = volumeRef.current;
+      } catch (e) {
+        console.warn("[chime] gagal reset audio:", e);
+      }
+      const done = () => {
+        audio.removeEventListener("ended", done);
+        audio.removeEventListener("error", done);
+        resolve();
+      };
+      audio.addEventListener("ended", () => {
+        console.log("[chime] selesai main normal ✅");
+        done();
+      }, { once: true });
+      audio.addEventListener("error", () => {
+        // Kode error HTMLMediaElement: 1=ABORTED, 2=NETWORK, 3=DECODE, 4=SRC_NOT_SUPPORTED
+        console.error("[chime] GAGAL load/play. Error code:", audio.error?.code, "src:", audio.src);
+        done();
+      }, { once: true });
+      audio.play()
+        .then(() => console.log("[chime] play() sukses, sedang berbunyi..."))
+        .catch((err) => {
+          console.error("[chime] play() DITOLAK browser:", err?.name, err?.message);
+          done();
+        });
+    });
+  }, []);
+
+  // Hentikan semuanya sekaligus: TTS yang masih ngomong, antrean, dan chime.
+  // Dipanggil saat keluar dari Mode Display supaya gak ada suara nyangkut.
+  const stopAll = useCallback(() => {
+    queueRef.current = [];
+    isSpeakingRef.current = false;
+    if (typeof speechSynthesis !== "undefined") speechSynthesis.cancel();
+    const audio = chimeRef.current;
+    if (audio) {
+      try { audio.pause(); audio.currentTime = 0; } catch { }
+    }
+  }, []);
+
+  const processQueue = useCallback(async () => {
     if (isSpeakingRef.current || queueRef.current.length === 0) return;
     if (typeof speechSynthesis === "undefined") return;
 
     isSpeakingRef.current = true;
     const text = queueRef.current.shift();
+
+    // ── Mainkan "ding" dulu, baru suara AI ──
+    await playChime();
+
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "id-ID";
     u.volume = volumeRef.current;
@@ -392,7 +489,7 @@ function useTTS() {
     u.onend = () => { isSpeakingRef.current = false; processQueue(); };
     u.onerror = () => { isSpeakingRef.current = false; processQueue(); };
     speechSynthesis.speak(u);
-  }, []);
+  }, [playChime]);
 
   const enqueue = useCallback((text) => {
     queueRef.current.push(text);
@@ -457,7 +554,7 @@ function useTTS() {
   // Cek apakah TTS sedang bicara atau ada antrean suara
   const isSpeaking = useCallback(() => isSpeakingRef.current || queueRef.current.length > 0, []);
 
-  return { enabled, setEnabled, volume, setVolume, unlock, unlocked, detectChanges, enqueue, isSpeaking };
+  return { enabled, setEnabled, volume, setVolume, unlock, unlocked, detectChanges, enqueue, isSpeaking, stopAll };
 }
 
 // ═══════════════════════════════════════════
@@ -637,9 +734,9 @@ export default function CekAntrian() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const exit = useCallback(async () => {
     setMagnify(false);
-    if (typeof speechSynthesis !== "undefined") speechSynthesis.cancel();
+    tts.stopAll(); // cancel TTS + kosongkan antrean + stop chime, sekali panggil
     try { if (document.fullscreenElement) await document.exitFullscreen(); } catch { }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     const onFs = () => { if (!document.fullscreenElement) setMagnify(false); };
     document.addEventListener("fullscreenchange", onFs);
