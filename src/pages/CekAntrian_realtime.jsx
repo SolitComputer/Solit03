@@ -471,10 +471,12 @@ function useTTS() {
     if (typeof speechSynthesis === "undefined") return;
 
     isSpeakingRef.current = true;
-    const text = queueRef.current.shift();
+    const { text, withChime } = queueRef.current.shift();
 
-    // ── Mainkan "ding" dulu, baru suara AI ──
-    await playChime();
+    // ── Chime cuma dimainkan kalau withChime = true (data baru masuk) ──
+    if (withChime) {
+      await playChime();
+    }
 
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "id-ID";
@@ -491,8 +493,10 @@ function useTTS() {
     speechSynthesis.speak(u);
   }, [playChime]);
 
-  const enqueue = useCallback((text) => {
-    queueRef.current.push(text);
+  // withChime: true  = mainkan chime dulu, baru TTS (dipakai utk DATA BARU masuk)
+  //            false = langsung TTS tanpa chime (dipakai utk UPDATE STATUS)
+  const enqueue = useCallback((text, withChime = true) => {
+    queueRef.current.push({ text, withChime });
     processQueue();
   }, [processQueue]);
 
@@ -671,17 +675,18 @@ export default function CekAntrian() {
     const currentMap = new Map(slideMap.map(s => [s.card.key, s.card.step]));
 
     if (prevCardMapRef.current !== null) {
-      // Prioritas 1: data baru masuk → jump + announce data baru
+      // Prioritas 1: data baru masuk → jump + announce data baru (PAKAI CHIME)
       const newIdx = slideMap.findIndex(s => !prevCardMapRef.current.has(s.card.key));
       if (newIdx !== -1) {
         const c = slideMap[newIdx].card;
         setSlideIdx(newIdx);
         const srcLabel = c.source === "prep" ? "penyiapan barang" : "servis";
         tts.enqueue(
-          `${srcLabel === "penyiapan barang" ? "Penyiapan barang" : "Servis"} baru masuk. Customer ${c.nama}, laptop ${c.device}.`
+          `${srcLabel === "penyiapan barang" ? "Penyiapan barang" : "Servis"} baru masuk. Customer ${c.nama}, laptop ${c.device}.`,
+          true // ← chime dimainkan dulu
         );
       } else {
-        // Prioritas 2: status berubah → jump + announce card yang step-nya beda
+        // Prioritas 2: status berubah → jump + announce card yang step-nya beda (TANPA CHIME)
         const changedIdx = slideMap.findIndex(s => {
           const prevStep = prevCardMapRef.current.get(s.card.key);
           return prevStep !== undefined && prevStep !== s.card.step;
@@ -691,11 +696,13 @@ export default function CekAntrian() {
           setSlideIdx(changedIdx);
           if (c.source === "prep") {
             tts.enqueue(
-              `Perhatian, update penyiapan barang. Atas nama ${c.nama}, perangkat ${c.device}, barang anda sedang ${c.labels[c.step]}.`
+              `Perhatian, update penyiapan barang. Atas nama ${c.nama}, perangkat ${c.device}, barang anda sedang ${c.labels[c.step]}.`,
+              false // ← skip chime, langsung AI ngomong
             );
           } else {
             tts.enqueue(
-              `Perhatian, update servis. Atas nama ${c.nama}, perangkat ${c.device}, barang anda sedang ${c.labels[c.step]}.`
+              `Perhatian, update servis. Atas nama ${c.nama}, perangkat ${c.device}, barang anda sedang ${c.labels[c.step]}.`,
+              false // ← skip chime, langsung AI ngomong
             );
           }
         }
