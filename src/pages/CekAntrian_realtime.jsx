@@ -415,7 +415,6 @@ function useTTS() {
   }, []);
 
   // Mainkan chime "sound_antrian.mp3", resolve setelah selesai (atau gagal)
-  // Mainkan chime "sound_antrian.mp3", resolve setelah selesai (atau gagal)
   const playChime = useCallback(() => {
     return new Promise((resolve) => {
       const audio = chimeRef.current;
@@ -516,11 +515,12 @@ function useTTS() {
       }
 
       // Cek perubahan status
+      // ✅ REVISI: step 2 (Selesai) → "sudah diselesaikan", step 0-1 → "sedang [label]"
       prepCards.forEach((c) => {
         const prev = prevMapRef.current.get(c.key);
         if (prev !== undefined && prev !== c.step) {
           enqueue(
-            `Perhatian, update penyiapan barang. Atas nama ${c.nama}, perangkat ${c.device}, barang anda sedang ${c.labels[c.step]}.`
+            `Perhatian, update penyiapan barang. Atas nama ${c.nama}, perangkat ${c.device}, barang anda ${c.step === 2 ? 'sudah diselesaikan' : `sedang ${c.labels[c.step]}`}.`
           );
         }
       });
@@ -528,7 +528,7 @@ function useTTS() {
         const prev = prevMapRef.current.get(c.key);
         if (prev !== undefined && prev !== c.step) {
           enqueue(
-            `Perhatian, update servis. Atas nama ${c.nama}, perangkat ${c.device}, barang anda sedang ${c.labels[c.step]}.`
+            `Perhatian, update servis. Atas nama ${c.nama}, perangkat ${c.device}, barang anda ${c.step === 2 ? 'sudah diselesaikan' : `sedang ${c.labels[c.step]}`}.`
           );
         }
       });
@@ -694,14 +694,15 @@ export default function CekAntrian() {
         if (changedIdx !== -1) {
           const c = slideMap[changedIdx].card;
           setSlideIdx(changedIdx);
+          // ✅ REVISI: step 2 (Selesai) → "sudah diselesaikan", step 0-1 → "sedang [label]"
           if (c.source === "prep") {
             tts.enqueue(
-              `Perhatian, update penyiapan barang. Atas nama ${c.nama}, perangkat ${c.device}, barang anda sedang ${c.labels[c.step]}.`,
+              `Perhatian, update penyiapan barang. Atas nama ${c.nama}, perangkat ${c.device}, barang anda ${c.step === 2 ? 'sudah diselesaikan' : `sedang ${c.labels[c.step]}`}.`,
               false // ← skip chime, langsung AI ngomong
             );
           } else {
             tts.enqueue(
-              `Perhatian, update servis. Atas nama ${c.nama}, perangkat ${c.device}, barang anda sedang ${c.labels[c.step]}.`,
+              `Perhatian, update servis. Atas nama ${c.nama}, perangkat ${c.device}, barang anda ${c.step === 2 ? 'sudah diselesaikan' : `sedang ${c.labels[c.step]}`}.`,
               false // ← skip chime, langsung AI ngomong
             );
           }
