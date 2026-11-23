@@ -976,11 +976,6 @@ export default function CekAntrian() {
                                   </div>
 
                                   <div className="flex-1 min-w-0">
-                                    <div className="flex items-center gap-1.5">
-                                      <span className={`text-[10px] xl:text-[11px] font-mono font-bold shrink-0 ${
-                                        isActive ? "text-slate-400" : "text-content-muted"
-                                      }`}>{n.orderNo}</span>
-                                    </div>
                                     <p className={`font-bold text-sm xl:text-base 2xl:text-lg leading-tight tracking-tight truncate ${
                                       isActive ? "text-content" : "text-content-soft"
                                     }`}>{n.nama}</p>
