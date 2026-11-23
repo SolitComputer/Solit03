@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { Wrench, Clock, Package, Check, Maximize2, Truck } from "lucide-react";
+import { Wrench, Clock, Package, Check, Maximize2, Truck, User, Monitor, MessageSquare, X } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 
 const POS_BASE = "https://pos.solit.id";
@@ -215,8 +215,8 @@ function PhaseCard({ n }) {
 
 function BigCard({ n }) {
   const st = STEP_STYLE[n.step] ?? STEP_STYLE[0];
+  const Icon = st.icon;
 
-  // Warna status sesuai step
   const statusColor =
     n.step === 0 ? "text-amber-500"
       : n.step === 1 ? "text-blue-500"
@@ -227,122 +227,153 @@ function BigCard({ n }) {
       : n.step === 1 ? "from-blue-400 to-blue-500"
         : "from-emerald-400 to-emerald-500";
 
-  // Entri info di sisi kiri
-  const entries = [
-    { label: "Nama Customer", value: n.nama, big: true },
-    { label: n.source === "prep" ? "Tipe Barang" : "Tipe Laptop", value: n.device },
-  ];
-
-  if (n.source === "service") {
-    entries.push({ label: "Keluhan", value: n.subtitle || "—" });
-  } else if (n.chips.length > 0) {
-    entries.push({ label: "Spesifikasi", chips: n.chips });
-  }
+  const badgeDur =
+    n.step === 0 ? formatDurasi(n.dur1) :
+      n.step === 1 ? formatDurasi(n.dur2) :
+        formatJam(n.doneTime);
 
   const catatanLines = n.catatan
     ? n.catatan.split(/\n|;|,/).map(s => s.trim()).filter(Boolean)
     : [];
-  entries.push({ label: "Catatan Progres", catatan: true, catatanLines });
 
   return (
-    <div className="h-full w-full flex gap-6 xl:gap-10">
+    <div className="h-full w-full flex flex-col">
+      {/* ═══ MAIN CONTENT: Left info + Right timeline ═══ */}
+      <div className="flex-1 flex gap-8 xl:gap-12 min-h-0">
 
-      {/* ═══ KOLOM KIRI: info customer ═══ */}
-      <div className="flex-1 min-w-0 flex flex-col justify-center">
+        {/* ─── LEFT: Customer info ─── */}
+        <div className="flex-1 min-w-0 flex flex-col justify-center">
 
-        {entries.map((entry, i) => (
-          <div key={i} className={i < entries.length - 1 ? "pb-3 xl:pb-5 mb-3 xl:mb-5 border-b border-slate-100/80 dark:border-slate-800/60" : ""}>
-            <p className="text-[10px] xl:text-[11px] 2xl:text-xs text-slate-400 dark:text-slate-500 font-bold tracking-[0.2em] leading-none uppercase mb-2">
-              {entry.label}
-            </p>
-
-            {entry.big ? (
-              <p className="text-3xl xl:text-4xl 2xl:text-5xl font-black text-content tracking-tight leading-[1.1]">
-                {entry.value}
+          {/* Nama Customer */}
+          <div className="mb-5 xl:mb-7">
+            <div className="flex items-center gap-2 mb-2">
+              <User size={13} className="text-slate-400" />
+              <p className="text-[10px] xl:text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-[0.2em] uppercase">
+                Nama Customer
               </p>
-            ) : entry.chips ? (
-              <div className="flex gap-2.5 flex-wrap mt-1">
-                {entry.chips.map((c, ci) => (
-                  <span key={ci} className={`text-base xl:text-lg font-bold px-3.5 py-1.5 rounded-xl ${
-                    ["bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300",
-                     "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300",
-                     "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"][ci % 3]
+            </div>
+            <p className="text-4xl xl:text-5xl 2xl:text-6xl font-black text-content tracking-tight leading-[1.05]">
+              {n.nama}
+            </p>
+          </div>
+
+          {/* Tipe Barang / Laptop */}
+          <div className="pb-4 xl:pb-5 mb-4 xl:mb-5 border-b border-slate-100/80 dark:border-slate-800/60">
+            <div className="flex items-center gap-2 mb-2">
+              <Monitor size={13} className="text-slate-400" />
+              <p className="text-[10px] xl:text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-[0.2em] uppercase">
+                {n.source === "prep" ? "Tipe Barang" : "Tipe Laptop"}
+              </p>
+            </div>
+            <p className="text-2xl xl:text-3xl 2xl:text-4xl font-extrabold text-content leading-snug">
+              {n.device}
+            </p>
+          </div>
+
+          {/* Keluhan (service) or Spesifikasi (prep) */}
+          {n.source === "service" && n.subtitle ? (
+            <div className="pb-4 xl:pb-5 mb-4 xl:mb-5 border-b border-slate-100/80 dark:border-slate-800/60">
+              <div className="flex items-center gap-2 mb-2">
+                <MessageSquare size={13} className="text-slate-400" />
+                <p className="text-[10px] xl:text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-[0.2em] uppercase">Keluhan</p>
+              </div>
+              <p className="text-xl xl:text-2xl 2xl:text-3xl font-bold text-content leading-snug">{n.subtitle}</p>
+            </div>
+          ) : n.chips.length > 0 ? (
+            <div className="pb-4 xl:pb-5 mb-4 xl:mb-5 border-b border-slate-100/80 dark:border-slate-800/60">
+              <p className="text-[10px] xl:text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-[0.2em] uppercase mb-3">Spesifikasi</p>
+              <div className="flex gap-3 flex-wrap">
+                {n.chips.map((c, ci) => (
+                  <span key={ci} className={`text-base xl:text-lg 2xl:text-xl font-bold px-4 py-2 rounded-xl shadow-sm ${
+                    ["bg-blue-50 text-blue-700 border border-blue-100 dark:bg-blue-500/15 dark:text-blue-300 dark:border-blue-500/20",
+                     "bg-violet-50 text-violet-700 border border-violet-100 dark:bg-violet-500/15 dark:text-violet-300 dark:border-violet-500/20",
+                     "bg-emerald-50 text-emerald-700 border border-emerald-100 dark:bg-emerald-500/15 dark:text-emerald-300 dark:border-emerald-500/20"][ci % 3]
                   }`}>{c}</span>
                 ))}
               </div>
-            ) : entry.catatan ? (
-              entry.catatanLines.length > 0 ? (
-                <div className="mt-1.5 space-y-2">
-                  {entry.catatanLines.map((line, li) => (
-                    <div key={li} className="flex gap-3 items-baseline">
-                      <span className="shrink-0 w-7 h-7 xl:w-8 xl:h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm">
-                        <span className="text-white font-black text-xs xl:text-sm">{li + 1}</span>
-                      </span>
-                      <p className="text-lg xl:text-xl 2xl:text-2xl font-bold text-content leading-snug">{line}</p>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xl xl:text-2xl font-bold text-slate-300 dark:text-slate-600 mt-1">—</p>
-              )
+            </div>
+          ) : null}
+
+          {/* Catatan Progres */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <MessageSquare size={13} className="text-slate-400" />
+              <p className="text-[10px] xl:text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-[0.2em] uppercase">Catatan Progres</p>
+            </div>
+            {catatanLines.length > 0 ? (
+              <div className="space-y-2.5">
+                {catatanLines.map((line, li) => (
+                  <div key={li} className="flex gap-3 items-start">
+                    <span className="shrink-0 w-7 h-7 xl:w-8 xl:h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm shadow-blue-500/20">
+                      <span className="text-white font-black text-xs xl:text-sm">{li + 1}</span>
+                    </span>
+                    <p className="text-lg xl:text-xl 2xl:text-2xl font-bold text-content leading-snug pt-0.5">{line}</p>
+                  </div>
+                ))}
+              </div>
             ) : (
-              <p className="text-xl xl:text-2xl 2xl:text-3xl font-extrabold text-content leading-snug">
-                {entry.value}
-              </p>
+              <p className="text-xl xl:text-2xl font-bold text-slate-200 dark:text-slate-700">— Belum ada catatan</p>
             )}
           </div>
-        ))}
-      </div>
-
-      {/* ═══ KOLOM KANAN: status timeline — REDESIGN ═══ */}
-      <div className="shrink-0 w-56 xl:w-64 2xl:w-72 flex flex-col justify-center pl-6 xl:pl-8 border-l-2 border-slate-100 dark:border-slate-800">
-        <p className="text-[10px] xl:text-[11px] font-bold tracking-[0.2em] text-slate-400 uppercase mb-4 xl:mb-5">Status</p>
-        <div className="flex flex-col">
-          {n.labels.map((lbl, si) => {
-            const isDone = si < n.step;
-            const isCurrent = si === n.step;
-            const stepDur = si === 0 ? formatDurasi(n.dur1) : si === 1 ? formatDurasi(n.dur2) : formatJam(n.doneTime);
-            return (
-              <div key={si}>
-                <div className="flex items-start gap-3.5">
-                  {/* Dot */}
-                  <div className="flex flex-col items-center shrink-0">
-                    <div className={`w-5 h-5 xl:w-6 xl:h-6 rounded-full shrink-0 flex items-center justify-center transition-all ${
-                      isDone
-                        ? "bg-emerald-500 shadow-md shadow-emerald-500/25"
-                        : isCurrent
-                          ? `bg-gradient-to-br ${dotGradient} ring-[3px] ring-offset-2 ring-offset-white dark:ring-offset-slate-950 shadow-lg`
-                          : "bg-slate-200 dark:bg-slate-700"
-                    }`} style={isCurrent ? { ringColor: st.bar + '30' } : undefined}>
-                      {isDone && <Check size={12} className="text-white" strokeWidth={3} />}
-                      {isCurrent && <div className="w-2 h-2 rounded-full bg-white animate-pulse" />}
-                    </div>
-                  </div>
-                  {/* Label + durasi */}
-                  <div className="flex-1 min-w-0 -mt-0.5">
-                    <p className={`text-base xl:text-lg 2xl:text-xl font-bold leading-snug ${
-                      isCurrent ? statusColor : isDone ? "text-emerald-500" : "text-slate-300 dark:text-slate-600"
-                    }`}>{lbl}</p>
-                    {(isCurrent || isDone) && stepDur && (
-                      <p className={`text-xs xl:text-sm font-semibold tabular-nums mt-0.5 ${isDone ? "text-slate-400" : "text-content-muted"}`}>{stepDur}</p>
-                    )}
-                    {isCurrent && n.step2Name && (
-                      <p className="text-xs xl:text-sm text-content-soft font-medium mt-0.5">oleh {n.step2Name}</p>
-                    )}
-                  </div>
-                </div>
-                {/* Connecting line */}
-                {si < n.labels.length - 1 && (
-                  <div className="flex items-stretch ml-[9px] xl:ml-[11px]">
-                    <div className={`w-[2px] min-h-[24px] xl:min-h-[28px] my-1 rounded-full ${isDone ? "bg-emerald-400" : "bg-slate-200 dark:bg-slate-700"}`} />
-                  </div>
-                )}
-              </div>
-            );
-          })}
         </div>
-      </div>
 
+        {/* ─── RIGHT: Status timeline in card ─── */}
+        <div className="shrink-0 w-60 xl:w-72 2xl:w-80 flex flex-col justify-center">
+          <div className="bg-gradient-to-br from-slate-50/90 to-slate-100/60 dark:from-slate-800/50 dark:to-slate-800/30 rounded-3xl p-6 xl:p-8 border border-slate-200/60 dark:border-slate-700/40 shadow-sm">
+            <p className="text-[10px] xl:text-[11px] font-bold tracking-[0.25em] text-slate-400 dark:text-slate-500 uppercase mb-6 xl:mb-8">Progress</p>
+            <div className="flex flex-col">
+              {n.labels.map((lbl, si) => {
+                const isDone = si < n.step;
+                const isCurrent = si === n.step;
+                const stepDur = si === 0 ? formatDurasi(n.dur1) : si === 1 ? formatDurasi(n.dur2) : formatJam(n.doneTime);
+                return (
+                  <div key={si}>
+                    <div className="flex items-start gap-4">
+                      {/* Dot */}
+                      <div className="flex flex-col items-center shrink-0">
+                        <div className={`w-6 h-6 xl:w-7 xl:h-7 rounded-full shrink-0 flex items-center justify-center transition-all ${
+                          isDone
+                            ? "bg-emerald-500 shadow-md shadow-emerald-500/30"
+                            : isCurrent
+                              ? `bg-gradient-to-br ${dotGradient} ring-[3px] ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-800 shadow-lg`
+                              : "bg-slate-200 dark:bg-slate-700"
+                        }`} style={isCurrent ? { ringColor: st.bar + '30' } : undefined}>
+                          {isDone && <Check size={14} className="text-white" strokeWidth={3} />}
+                          {isCurrent && <div className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />}
+                        </div>
+                      </div>
+                      {/* Label + durasi */}
+                      <div className="flex-1 min-w-0 -mt-0.5">
+                        <p className={`text-lg xl:text-xl font-bold leading-snug ${
+                          isCurrent ? statusColor : isDone ? "text-emerald-500" : "text-slate-300 dark:text-slate-600"
+                        }`}>{lbl}</p>
+                        {(isCurrent || isDone) && stepDur && (
+                          <span className={`inline-block text-xs xl:text-sm font-bold tabular-nums mt-1.5 px-2.5 py-0.5 rounded-lg ${
+                            isDone ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
+                                   : n.step === 0 ? "bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400"
+                                   : n.step === 1 ? "bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"
+                                   : "bg-slate-100 text-content-muted dark:bg-slate-700/50"
+                          }`}>{stepDur}</span>
+                        )}
+                        {isCurrent && n.step2Name && (
+                          <p className="text-sm xl:text-base text-content-soft font-semibold mt-1">oleh {n.step2Name}</p>
+                        )}
+                      </div>
+                    </div>
+                    {/* Connecting line */}
+                    {si < n.labels.length - 1 && (
+                      <div className="flex items-stretch ml-[11px] xl:ml-[13px]">
+                        <div className={`w-[2px] min-h-[32px] xl:min-h-[40px] my-1.5 rounded-full transition-colors ${isDone ? "bg-emerald-400" : "bg-slate-200 dark:bg-slate-700"}`} />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 }
@@ -440,7 +471,6 @@ function useTTS() {
         done();
       }, { once: true });
       audio.addEventListener("error", () => {
-        // Kode error HTMLMediaElement: 1=ABORTED, 2=NETWORK, 3=DECODE, 4=SRC_NOT_SUPPORTED
         console.error("[chime] GAGAL load/play. Error code:", audio.error?.code, "src:", audio.src);
         done();
       }, { once: true });
@@ -453,8 +483,7 @@ function useTTS() {
     });
   }, []);
 
-  // Hentikan semuanya sekaligus: TTS yang masih ngomong, antrean, dan chime.
-  // Dipanggil saat keluar dari Mode Display supaya gak ada suara nyangkut.
+  // Hentikan semuanya sekaligus
   const stopAll = useCallback(() => {
     queueRef.current = [];
     isSpeakingRef.current = false;
@@ -472,7 +501,6 @@ function useTTS() {
     isSpeakingRef.current = true;
     const { text, withChime } = queueRef.current.shift();
 
-    // ── Chime cuma dimainkan kalau withChime = true (data baru masuk) ──
     if (withChime) {
       await playChime();
     }
@@ -482,7 +510,6 @@ function useTTS() {
     u.volume = volumeRef.current;
     u.rate = 0.95;
 
-    // Prefer Indonesian voice if available
     const voices = speechSynthesis.getVoices();
     const idVoice = voices.find((v) => v.lang === "id-ID" || v.lang.startsWith("id"));
     if (idVoice) u.voice = idVoice;
@@ -492,14 +519,11 @@ function useTTS() {
     speechSynthesis.speak(u);
   }, [playChime]);
 
-  // withChime: true  = mainkan chime dulu, baru TTS (dipakai utk DATA BARU masuk)
-  //            false = langsung TTS tanpa chime (dipakai utk UPDATE STATUS)
   const enqueue = useCallback((text, withChime = true) => {
     queueRef.current.push({ text, withChime });
     processQueue();
   }, [processQueue]);
 
-  // Deteksi perubahan status → masukkan ke antrean suara
   const detectChanges = useCallback(
     (prepCards, svcCards) => {
       if (!enabled || !unlocked) return;
@@ -508,14 +532,11 @@ function useTTS() {
       const newMap = new Map();
       allCards.forEach((c) => newMap.set(c.key, c.step));
 
-      // Load pertama → simpan data awal tanpa announce
       if (prevMapRef.current === null) {
         prevMapRef.current = newMap;
         return;
       }
 
-      // Cek perubahan status
-      // ✅ REVISI: step 2 (Selesai) → "sudah diselesaikan", step 0-1 → "sedang [label]"
       prepCards.forEach((c) => {
         const prev = prevMapRef.current.get(c.key);
         if (prev !== undefined && prev !== c.step) {
@@ -533,7 +554,6 @@ function useTTS() {
         }
       });
 
-      // Deteksi data baru yang belum pernah ada sebelumnya
       allCards.forEach((c) => {
         if (!prevMapRef.current.has(c.key)) {
           const srcLabel = c.source === "prep" ? "penyiapan barang" : "servis";
@@ -548,14 +568,12 @@ function useTTS() {
     [enabled, unlocked, enqueue]
   );
 
-  // Reset prevMap ketika TTS pertama kali diaktifkan agar tidak announce semua data lama
   useEffect(() => {
     if (enabled && unlocked) {
-      prevMapRef.current = null; // akan di-set pada detectChanges berikutnya
+      prevMapRef.current = null;
     }
   }, [enabled, unlocked]);
 
-  // Cek apakah TTS sedang bicara atau ada antrean suara
   const isSpeaking = useCallback(() => isSpeakingRef.current || queueRef.current.length > 0, []);
 
   return { enabled, setEnabled, volume, setVolume, unlock, unlocked, detectChanges, enqueue, isSpeaking, stopAll };
@@ -581,7 +599,6 @@ function useServiceOrders() {
   const connect = useCallback(() => {
     if (esRef.current) { esRef.current.close(); esRef.current = null; }
     clearTimeout(rcRef.current);
-    // Selalu jalankan polling 15 detik sebagai fallback
     if (!fbRef.current) startPoll();
     if (typeof EventSource === "undefined") return;
     const es = new EventSource(STREAM_URL); esRef.current = es;
@@ -639,8 +656,6 @@ export default function CekAntrian() {
   const svcCards = useMemo(() =>
     orders.map((o) => normSvc(o, now)).sort((a, b) => b.sortTs - a.sortTs), [orders, now]);
 
-  // (TTS sekarang sinkron dengan auto-jump di bawah — tidak pakai detectChanges lagi)
-
   // Halaman mode Display: penyiapan dulu, lalu service
   const pages = useMemo(() => {
     const p = [];
@@ -651,8 +666,7 @@ export default function CekAntrian() {
     return p;
   }, [prepCards, svcCards]);
 
-  // slideMap: setiap slide = 1 kartu, disinkronkan dengan halaman kanan
-  // Kiri cycle A→B→C dalam page, baru pindah page berikutnya
+  // slideMap: setiap slide = 1 kartu
   const slideMap = useMemo(() => {
     const map = [];
     pages.forEach((page, pi) => {
@@ -663,19 +677,17 @@ export default function CekAntrian() {
   const totalSlides = slideMap.length || 1;
   const prevCardMapRef = useRef(null);
 
-  // Refs supaya auto-slide bisa baca data terbaru tanpa re-trigger effect tiap detik
   const slideMapRef = useRef(slideMap);
   slideMapRef.current = slideMap;
   const slideIdxRef = useRef(slideIdx);
   slideIdxRef.current = slideIdx;
 
-  // Auto-jump + TTS SINKRON — jump ke card & announce card yang SAMA
+  // Auto-jump + TTS SINKRON
   useEffect(() => {
     if (!magnify || slideMap.length === 0) return;
     const currentMap = new Map(slideMap.map(s => [s.card.key, s.card.step]));
 
     if (prevCardMapRef.current !== null) {
-      // Prioritas 1: data baru masuk → jump + announce data baru (PAKAI CHIME)
       const newIdx = slideMap.findIndex(s => !prevCardMapRef.current.has(s.card.key));
       if (newIdx !== -1) {
         const c = slideMap[newIdx].card;
@@ -683,10 +695,9 @@ export default function CekAntrian() {
         const srcLabel = c.source === "prep" ? "penyiapan barang" : "servis";
         tts.enqueue(
           `${srcLabel === "penyiapan barang" ? "Penyiapan barang" : "Servis"} baru masuk. Customer ${c.nama}, laptop ${c.device}.`,
-          true // ← chime dimainkan dulu
+          true
         );
       } else {
-        // Prioritas 2: status berubah → jump + announce card yang step-nya beda (TANPA CHIME)
         const changedIdx = slideMap.findIndex(s => {
           const prevStep = prevCardMapRef.current.get(s.card.key);
           return prevStep !== undefined && prevStep !== s.card.step;
@@ -694,16 +705,15 @@ export default function CekAntrian() {
         if (changedIdx !== -1) {
           const c = slideMap[changedIdx].card;
           setSlideIdx(changedIdx);
-          // ✅ REVISI: step 2 (Selesai) → "sudah diselesaikan", step 0-1 → "sedang [label]"
           if (c.source === "prep") {
             tts.enqueue(
               `Perhatian, update penyiapan barang. Atas nama ${c.nama}, perangkat ${c.device}, barang anda ${c.step === 2 ? 'sudah diselesaikan' : `sedang ${c.labels[c.step]}`}.`,
-              false // ← skip chime, langsung AI ngomong
+              false
             );
           } else {
             tts.enqueue(
               `Perhatian, update servis. Atas nama ${c.nama}, perangkat ${c.device}, barang anda ${c.step === 2 ? 'sudah diselesaikan' : `sedang ${c.labels[c.step]}`}.`,
-              false // ← skip chime, langsung AI ngomong
+              false
             );
           }
         }
@@ -712,7 +722,7 @@ export default function CekAntrian() {
     prevCardMapRef.current = currentMap;
   }, [magnify, slideMap]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Auto-slide — durasi dinamis: 10 detik Service, 15 detik Penyiapan
+  // Auto-slide — durasi dinamis
   useEffect(() => {
     if (!magnify || totalSlides < 2) return;
     let timer = null;
@@ -735,14 +745,13 @@ export default function CekAntrian() {
   // Enter/exit fullscreen
   const enter = useCallback(async () => {
     setSlideIdx(0); setMagnify(true); prevCardMapRef.current = null;
-    // Auto-unlock + aktifkan TTS (klik Perbesar = user gesture)
     tts.unlock();
     tts.setEnabled(true);
     try { await rootRef.current?.requestFullscreen?.(); } catch { }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const exit = useCallback(async () => {
     setMagnify(false);
-    tts.stopAll(); // cancel TTS + kosongkan antrean + stop chime, sekali panggil
+    tts.stopAll();
     try { if (document.fullscreenElement) await document.exitFullscreen(); } catch { }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -751,7 +760,7 @@ export default function CekAntrian() {
     return () => document.removeEventListener("fullscreenchange", onFs);
   }, []);
 
-  // Panel kiri & kanan — disinkronkan lewat slideMap
+  // Panel kiri & kanan
   const currentSlide = slideMap.length > 0 ? slideMap[slideIdx % slideMap.length] : null;
   const leftCard = currentSlide?.card ?? null;
   const rightPage = currentSlide ? pages[currentSlide.pageIdx] : null;
@@ -759,6 +768,11 @@ export default function CekAntrian() {
   const rightLabels = rightPage?.source === "prep"
     ? ["Menunggu disiapkan", "Disiapkan", "Selesai"]
     : ["Menunggu dikerjakan", "Dikerjakan", "Selesai"];
+
+  // Live clock for display mode
+  const clockTime = new Date(now).toLocaleTimeString("id-ID", {
+    hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false
+  }).replace(/:/g, ".");
 
   return (
     <div ref={rootRef} className="min-h-screen bg-surface-muted relative overflow-x-hidden">
@@ -776,27 +790,27 @@ export default function CekAntrian() {
       </div>
 
       {/* ════════════════════════════════════════════ */}
-      {/* MODE DISPLAY (PERBESAR) — REDESIGN          */}
+      {/* MODE DISPLAY (PERBESAR) — REDESIGN v2       */}
       {/* ════════════════════════════════════════════ */}
       {magnify ? (
         <>
           <style>{`
             .poppins-display, .poppins-display * { font-family: 'Poppins', sans-serif !important; --ds-font-sans: 'Poppins', sans-serif; --font-sans: 'Poppins', sans-serif; }
             @keyframes cardEnter{
-              0%{opacity:0;transform:translateY(24px) scale(.97);filter:blur(6px)}
+              0%{opacity:0;transform:translateY(20px) scale(.98);filter:blur(4px)}
               100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
             }
             @keyframes panelSlide{
-              0%{opacity:0;transform:translateX(20px)}
+              0%{opacity:0;transform:translateX(16px)}
               100%{opacity:1;transform:translateX(0)}
             }
             @keyframes shimmer{
               0%{background-position:-200% 0}
               100%{background-position:200% 0}
             }
-            @keyframes pulseGlow{
-              0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,0.25),0 1px 3px rgba(0,0,0,0.08)}
-              50%{box-shadow:0 0 20px 6px rgba(59,130,246,0.12),0 4px 12px rgba(0,0,0,0.06)}
+            @keyframes activeGlow{
+              0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,0.2),0 2px 8px rgba(0,0,0,0.06)}
+              50%{box-shadow:0 0 28px 8px rgba(59,130,246,0.08),0 4px 16px rgba(0,0,0,0.04)}
             }
             @keyframes floatOrb{
               0%,100%{transform:translate(0,0) scale(1)}
@@ -807,46 +821,76 @@ export default function CekAntrian() {
               0%{opacity:0;transform:translateY(8px)}
               100%{opacity:1;transform:translateY(0)}
             }
-            .anim-left{animation:cardEnter .6s cubic-bezier(.22,1,.36,1) both}
-            .anim-right{animation:panelSlide .45s cubic-bezier(.22,1,.36,1) .1s both}
-            .active-card{animation:pulseGlow 3s ease-in-out infinite}
+            .anim-left{animation:cardEnter .5s cubic-bezier(.22,1,.36,1) both}
+            .anim-right{animation:panelSlide .4s cubic-bezier(.22,1,.36,1) .08s both}
+            .active-card-glow{animation:activeGlow 3s ease-in-out infinite}
             .slide-num{animation:slideNumber .4s ease both}
             @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
             .marquee-track{display:inline-flex;white-space:nowrap;animation:marquee 40s linear infinite}
           `}</style>
-          <div className="fixed inset-0 z-[100] bg-gradient-to-br from-slate-50 via-white to-blue-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950/20 flex flex-col poppins-display">
+          <div className="fixed inset-0 z-[100] bg-gradient-to-br from-slate-50 via-white to-blue-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950/15 flex flex-col poppins-display">
             {/* Decorative floating orbs */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
               <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-blue-400/[0.04] dark:bg-blue-400/[0.03]" style={{animation:'floatOrb 20s ease-in-out infinite'}} />
               <div className="absolute -bottom-32 -left-20 w-96 h-96 rounded-full bg-violet-400/[0.04] dark:bg-violet-400/[0.03]" style={{animation:'floatOrb 25s ease-in-out infinite reverse'}} />
+              <div className="absolute top-1/2 right-1/4 w-64 h-64 rounded-full bg-emerald-400/[0.03] dark:bg-emerald-400/[0.02]" style={{animation:'floatOrb 22s ease-in-out infinite 5s'}} />
             </div>
 
-            {/* ═══ TOP BAR — premium gradient + info ═══ */}
+            {/* ═══ TOP BAR — dark premium + clock + counter ═══ */}
             {leftCard && (
-              <div className={`shrink-0 relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500`}>
+              <div className="shrink-0 relative overflow-hidden">
+                {/* Dark gradient background */}
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-black dark:via-slate-900 dark:to-black" />
                 {/* Shimmer overlay */}
-                <div className="absolute inset-0 opacity-20" style={{
-                  background:'linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.3) 50%,transparent 100%)',
+                <div className="absolute inset-0 opacity-10" style={{
+                  background:'linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.2) 50%,transparent 100%)',
                   backgroundSize:'200% 100%',
-                  animation:'shimmer 4s ease-in-out infinite'
+                  animation:'shimmer 6s ease-in-out infinite'
                 }} />
-                <div className="relative flex items-center justify-between px-8 xl:px-10 py-3 xl:py-3.5">
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-9 h-9 xl:w-10 xl:h-10 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/10">
-                      {leftCard.source === "prep" ? <Truck size={20} className="text-white" /> : <Wrench size={20} className="text-white" />}
+                {/* Accent line bottom */}
+                <div className={`absolute bottom-0 left-0 right-0 h-[2px] ${
+                  leftCard.source === "prep"
+                    ? "bg-gradient-to-r from-transparent via-violet-500 to-transparent"
+                    : "bg-gradient-to-r from-transparent via-blue-500 to-transparent"
+                }`} />
+
+                <div className="relative flex items-center justify-between px-6 xl:px-8 py-2.5 xl:py-3">
+                  {/* Left: Source + Title */}
+                  <div className="flex items-center gap-3">
+                    <div className={`w-9 h-9 xl:w-10 xl:h-10 rounded-xl flex items-center justify-center border ${
+                      leftCard.source === "prep"
+                        ? "bg-violet-500/15 border-violet-500/30"
+                        : "bg-blue-500/15 border-blue-500/30"
+                    }`}>
+                      {leftCard.source === "prep"
+                        ? <Truck size={18} className="text-violet-400" />
+                        : <Wrench size={18} className="text-blue-400" />
+                      }
                     </div>
                     <div>
-                      <span className="text-white font-extrabold text-base xl:text-lg tracking-wide block leading-tight">
+                      <span className="text-white font-extrabold text-sm xl:text-base tracking-wide block leading-tight">
                         {leftCard.source === "prep" ? "Penyiapan Barang" : "Antrian Service"}
                       </span>
-                      <span className="text-white/60 text-[10px] xl:text-xs font-medium tracking-wider">SOLIT 03 — Live Queue</span>
+                      <span className="text-white/40 text-[10px] xl:text-[11px] font-medium tracking-wider uppercase">SOLIT 03</span>
                     </div>
                   </div>
+
+                  {/* Right: Clock + Live + Counter + Close */}
                   <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm rounded-full px-3 py-1 border border-white/10">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      <span className="text-white/80 text-[11px] xl:text-xs font-semibold">LIVE</span>
+                    {/* Clock */}
+                    <div className="flex items-center gap-1.5 text-white/50">
+                      <Clock size={14} />
+                      <span className="font-mono text-sm xl:text-base font-bold tabular-nums tracking-wider">{clockTime}</span>
                     </div>
+
+                    <div className="w-px h-5 bg-white/10" />
+
+                    {/* LIVE badge */}
+                    <div className="flex items-center gap-1.5 bg-white/[0.06] rounded-full px-3 py-1 border border-white/[0.08]">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="text-emerald-400/90 text-[11px] xl:text-xs font-bold tracking-wider">LIVE</span>
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -855,12 +899,14 @@ export default function CekAntrian() {
             {/* ═══ KONTEN UTAMA ═══ */}
             {slideMap.length === 0 ? (
               <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
-                <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-800/50 flex items-center justify-center mb-8 shadow-lg shadow-slate-200/30 dark:shadow-black/20">
-                  <Wrench size={40} className="text-slate-300 dark:text-slate-600" />
+                <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-800/50 flex items-center justify-center mb-8 shadow-xl shadow-slate-200/30 dark:shadow-black/20 border border-slate-200/50 dark:border-slate-700/30">
+                  <Wrench size={44} className="text-slate-300 dark:text-slate-600" />
                 </div>
                 <p className="text-3xl xl:text-4xl font-black text-content">Belum ada antrian hari ini</p>
                 <p className="text-base xl:text-lg text-content-muted mt-3 max-w-lg">Papan akan update otomatis begitu ada servis atau penyiapan masuk.</p>
-                <p className="text-xs text-content-muted mt-8 opacity-40">Tekan ESC untuk keluar</p>
+                <button onClick={exit} className="mt-8 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-content-soft text-sm font-semibold transition-colors border border-slate-200 dark:border-slate-700">
+                  <X size={16} /> Keluar Mode Display
+                </button>
               </div>
             ) : (
               <div className="flex-1 flex overflow-hidden min-h-0">
@@ -874,59 +920,93 @@ export default function CekAntrian() {
                   )}
                 </div>
 
-                {/* ═══ DIVIDER — gradient line ═══ */}
-                <div className="w-px shrink-0 bg-gradient-to-b from-transparent via-slate-200/80 to-transparent dark:via-slate-700/60" />
+                {/* ═══ DIVIDER ═══ */}
+                <div className="w-px shrink-0 bg-gradient-to-b from-transparent via-slate-200/80 to-transparent dark:via-slate-700/40" />
 
-                {/* ═══ PANEL KANAN (26%) — REDESIGN ═══ */}
-                <div className="w-[26%] flex flex-col overflow-y-auto bg-gradient-to-b from-slate-50/90 via-slate-50/60 to-slate-100/80 dark:from-slate-900/60 dark:via-slate-900/40 dark:to-slate-900/60" key={`right-${rightPage?.key}`}>
+                {/* ═══ PANEL KANAN (26%) — REDESIGN v2 ═══ */}
+                <div className="w-[26%] flex flex-col overflow-y-auto bg-gradient-to-b from-slate-50/80 via-white/60 to-slate-50/80 dark:from-slate-900/50 dark:via-slate-900/30 dark:to-slate-900/50" key={`right-${rightPage?.key}`}>
                   {rightPage ? (
-                    <div className="anim-right flex flex-col h-full justify-center px-3 xl:px-4 py-4">
-                      <div className="space-y-2.5">
+                    <div className="anim-right flex flex-col h-full px-3 xl:px-4 py-4">
+
+                      {/* Cards */}
+                      <div className="flex-1 flex flex-col justify-center space-y-2.5">
                         {rightPage.items.map((n, ni) => {
                           const isActive = leftCard?.key === n.key;
                           const statusColor =
                             n.step === 0 ? "text-amber-600 dark:text-amber-400"
                               : n.step === 1 ? "text-blue-600 dark:text-blue-400"
                                 : "text-emerald-600 dark:text-emerald-400";
-                          const statusBg =
-                            n.step === 0 ? "bg-amber-50 dark:bg-amber-500/10"
-                              : n.step === 1 ? "bg-blue-50 dark:bg-blue-500/10"
-                                : "bg-emerald-50 dark:bg-emerald-500/10";
-                          const accentGrad =
-                            n.step === 0 ? "from-amber-400 to-amber-500" : n.step === 1 ? "from-blue-400 to-blue-500" : "from-emerald-400 to-emerald-500";
+                          const accentColor =
+                            n.step === 0 ? "from-amber-400 to-amber-500" :
+                            n.step === 1 ? "from-blue-400 to-blue-500" :
+                            "from-emerald-400 to-emerald-500";
+                          const dotColor =
+                            n.step === 0 ? "bg-amber-400" : n.step === 1 ? "bg-blue-400" : "bg-emerald-400";
+                          const queueBg =
+                            n.step === 0 ? "from-amber-500 to-amber-600" :
+                            n.step === 1 ? "from-blue-500 to-blue-600" :
+                            "from-emerald-500 to-emerald-600";
+
+                          const badgeDur =
+                            n.step === 0 ? formatDurasi(n.dur1) :
+                              n.step === 1 ? formatDurasi(n.dur2) :
+                                formatJam(n.doneTime);
 
                           return (
-                            <div key={n.key} className={`rounded-2xl px-4 py-3.5 transition-all duration-500 relative overflow-hidden ${isActive
-                                ? "bg-white dark:bg-slate-800/90 shadow-xl shadow-slate-200/60 dark:shadow-black/40 ring-1 ring-slate-200/80 dark:ring-slate-700/60 active-card"
-                                : "bg-white/40 dark:bg-slate-800/20 opacity-50 hover:opacity-60"
-                              }`}>
-                              {/* Accent bar kiri — gradient */}
-                              <div className={`absolute left-0 top-0 bottom-0 w-1 rounded-r-full bg-gradient-to-b ${accentGrad} ${isActive ? "opacity-100" : "opacity-30"}`} />
+                            <div key={n.key} className={`rounded-2xl transition-all duration-500 relative overflow-hidden ${
+                              isActive
+                                ? "bg-white dark:bg-slate-800/90 shadow-xl shadow-slate-200/50 dark:shadow-black/40 ring-1 ring-slate-200/80 dark:ring-slate-700/50 active-card-glow"
+                                : "bg-white/30 dark:bg-slate-800/15 opacity-45 hover:opacity-55"
+                            }`}>
+                              {/* Accent bar kiri */}
+                              <div className={`absolute left-0 top-0 bottom-0 w-1 rounded-r-full bg-gradient-to-b ${accentColor} ${isActive ? "opacity-100" : "opacity-25"}`} />
 
-                              {/* Nama + Order */}
-                              <div className="flex items-center gap-2 pl-2.5">
-                                <span className={`text-[10px] xl:text-[11px] font-mono font-bold shrink-0 px-1.5 py-0.5 rounded-md ${
-                                  isActive ? "bg-slate-100 dark:bg-slate-700/80 text-slate-500" : "text-content-muted"
-                                }`}>{n.orderNo}</span>
-                                <p className={`font-bold text-sm xl:text-base 2xl:text-lg leading-tight tracking-tight truncate ${
-                                  isActive ? "text-content" : "text-content-soft"
-                                }`}>{n.nama}</p>
-                              </div>
+                              <div className="px-4 py-3.5 pl-5">
+                                {/* Row 1: Queue number + Name */}
+                                <div className="flex items-center gap-2.5">
+                                  {/* Queue position */}
+                                  <div className={`shrink-0 w-7 h-7 xl:w-8 xl:h-8 rounded-lg flex items-center justify-center ${
+                                    isActive
+                                      ? `bg-gradient-to-br ${queueBg} shadow-sm`
+                                      : "bg-slate-100 dark:bg-slate-800"
+                                  }`}>
+                                    <span className={`text-xs xl:text-sm font-black ${
+                                      isActive ? "text-white" : "text-slate-400 dark:text-slate-600"
+                                    }`}>{ni + 1}</span>
+                                  </div>
 
-                              {/* Device */}
-                              <p className="text-[11px] xl:text-xs text-content-muted font-medium mt-0.5 truncate pl-2.5">
-                                {n.device}
-                              </p>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-1.5">
+                                      <span className={`text-[10px] xl:text-[11px] font-mono font-bold shrink-0 ${
+                                        isActive ? "text-slate-400" : "text-content-muted"
+                                      }`}>{n.orderNo}</span>
+                                    </div>
+                                    <p className={`font-bold text-sm xl:text-base 2xl:text-lg leading-tight tracking-tight truncate ${
+                                      isActive ? "text-content" : "text-content-soft"
+                                    }`}>{n.nama}</p>
+                                  </div>
+                                </div>
 
-                              {/* Status badge */}
-                              <div className="flex items-center gap-1.5 mt-2 pl-2.5">
-                                <div className={`w-1.5 h-1.5 rounded-full ${n.step === 0 ? "bg-amber-400" : n.step === 1 ? "bg-blue-400" : "bg-emerald-400"} ${isActive ? "animate-pulse" : ""}`} />
-                                <span className={`text-[10px] xl:text-[11px] font-bold ${statusColor}`}>
-                                  {n.labels[n.step]}
-                                </span>
-                                {n.step2Name && (
-                                  <span className="text-[10px] xl:text-[11px] font-medium text-content-muted truncate">· {n.step2Name}</span>
-                                )}
+                                {/* Row 2: Device */}
+                                <p className="text-[11px] xl:text-xs text-content-muted font-medium mt-1 truncate pl-[38px] xl:pl-[42px]">
+                                  {n.device}
+                                </p>
+
+                                {/* Row 3: Status + Duration */}
+                                <div className="flex items-center gap-1.5 mt-2 pl-[38px] xl:pl-[42px]">
+                                  <div className={`w-1.5 h-1.5 rounded-full ${dotColor} ${isActive ? "animate-pulse" : ""}`} />
+                                  <span className={`text-[10px] xl:text-[11px] font-bold ${statusColor}`}>
+                                    {n.labels[n.step]}
+                                  </span>
+                                  {badgeDur && (
+                                    <span className="text-[10px] xl:text-[11px] font-semibold text-content-muted tabular-nums">
+                                      · {badgeDur}
+                                    </span>
+                                  )}
+                                  {n.step2Name && (
+                                    <span className="text-[10px] xl:text-[11px] font-medium text-content-muted truncate">· {n.step2Name}</span>
+                                  )}
+                                </div>
                               </div>
                             </div>
                           );
@@ -944,21 +1024,30 @@ export default function CekAntrian() {
 
             {/* ═══ FOOTER — slide indicator + running text ═══ */}
             <div className="shrink-0 relative">
+              {/* Slide indicators */}
               {totalSlides > 1 && (
-                <div className="px-8 py-2.5 flex items-center justify-center gap-1.5 bg-white/60 dark:bg-slate-900/40 backdrop-blur-sm">
+                <div className="px-8 py-2 flex items-center justify-center gap-1.5 bg-white/50 dark:bg-slate-900/30 backdrop-blur-sm">
                   {Array.from({ length: totalSlides }, (_, i) => (
-                    <div key={i} className={`rounded-full transition-all duration-500 ${i === slideIdx
-                      ? "h-2 w-7 bg-gradient-to-r from-blue-500 to-violet-500 shadow-sm shadow-blue-500/30"
-                      : "h-1.5 w-1.5 bg-slate-300/50 dark:bg-slate-600/50"
-                    }`} />
+                    <button
+                      key={i}
+                      onClick={() => setSlideIdx(i)}
+                      className={`rounded-full transition-all duration-500 ${i === slideIdx % totalSlides
+                        ? "h-2 w-8 bg-gradient-to-r from-blue-500 to-violet-500 shadow-sm shadow-blue-500/25"
+                        : "h-1.5 w-1.5 bg-slate-300/40 dark:bg-slate-600/40 hover:bg-slate-400/60"
+                      }`}
+                    />
                   ))}
                 </div>
               )}
+              {/* Running text marquee */}
               <div className="relative overflow-hidden bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-violet-600/10 to-blue-600/10" />
-                <div className="relative marquee-track py-3.5">
-                  <span className="px-12 text-[13px] xl:text-sm font-semibold text-white/80 tracking-wider">{RUNNING_TEXT}</span>
-                  <span className="px-12 text-[13px] xl:text-sm font-semibold text-white/80 tracking-wider">{RUNNING_TEXT}</span>
+                {/* Fade edges */}
+                <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-slate-800 to-transparent dark:from-slate-900 z-10 pointer-events-none" />
+                <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-slate-800 to-transparent dark:from-slate-900 z-10 pointer-events-none" />
+                <div className="relative marquee-track py-3">
+                  <span className="px-12 text-[13px] xl:text-sm font-semibold text-white/70 tracking-wider">{RUNNING_TEXT}</span>
+                  <span className="px-12 text-[13px] xl:text-sm font-semibold text-white/70 tracking-wider">{RUNNING_TEXT}</span>
                 </div>
               </div>
             </div>
