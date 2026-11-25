@@ -20,6 +20,7 @@ import KatalogLaptop from "./pages/KatalogLaptop";
 import Berita from "./pages/Berita";
 import ArtikelDetail from "./pages/ArtikelDetail";
 import JasaWebsite from "./pages/JasaWebsite";
+import DaftarMitra from "./pages/DaftarMitra";
 
 // --- Admin pages (dipisah, tidak ikut ke-load di sisi publik) ---
 const Login = lazy(() => import("./admin/pages/Login"));
@@ -70,6 +71,7 @@ function App() {
             <Route path="/berita" element={<Berita />} />
             <Route path="/berita/:slug" element={<ArtikelDetail />} />
             <Route path="/jasa-pembuatan-website" element={<JasaWebsite />} />
+            <Route path="/daftar-mitra" element={<DaftarMitra />} />
           </Route>
 
           <Route path="/admin/login" element={<Login />} />

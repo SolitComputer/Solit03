@@ -3,7 +3,7 @@ import {
   Cookie, ShieldCheck, ShieldX, Settings2, BarChart3,
   ChevronLeft, ChevronRight, Activity, Globe
 } from "lucide-react";
-import { getCookieConsentStats, getCookieConsentLog } from "../services/AdminCookieConsent";
+import { getCookieConsentStats, getCookieConsentLog } from "../services/AdminConsentLog";
 import { useToast } from "../context/ToastContext";
 
 const actionBadge = {

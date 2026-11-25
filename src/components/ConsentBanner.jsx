@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Cookie, Settings2, X } from "lucide-react";
-import { getStoredConsent, saveConsent } from "../services/cookieConsent";
+import { getStoredConsent, saveConsent } from "../services/consentStore";
 
 const DEFAULT_PREFS = { analytics: false, marketing: false };
 
-export default function CookieConsent() {
+export default function ConsentBanner() {
   const [visible, setVisible] = useState(false);
   const [customizing, setCustomizing] = useState(false);
   const [prefs, setPrefs] = useState(DEFAULT_PREFS);

@@ -24,6 +24,7 @@ const NAV = [
             { name: "Jasa Web", href: "/jasa-pembuatan-website" },
             { name: "Cek Garansi", href: "/cek-garansi" },
             { name: "Cek Antrian", href: "/cek-antrian" },
+            { name: "Daftar Mitra & Reseller", href: "/daftar-mitra" },
         ],
     },
     {

@@ -3,7 +3,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { Outlet, useLocation } from "react-router-dom";
 import ScrollProgress from "../ui/ScrollProgress";
-import CookieConsent from "../CookieConsent";
+import ConsentBanner from "../ConsentBanner";
 
 export default function MainLayout() {
   const { pathname } = useLocation();
@@ -21,7 +21,7 @@ export default function MainLayout() {
         <Outlet />
       </main>
       <Footer />
-      <CookieConsent />
+      <ConsentBanner />
     </div>
   );
 }
