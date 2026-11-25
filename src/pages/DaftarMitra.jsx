@@ -15,7 +15,62 @@ const INITIAL = {
   email: "",
   full_address: "",
 };
+function compressImage(file, maxWidth = 1200, quality = 0.7) {
+  return new Promise((resolve) => {
+    // Kalau file sudah kecil (< 500KB), skip kompresi
+    if (file.size < 500 * 1024) {
+      resolve(file);
+      return;
+    }
 
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+
+      let { width, height } = img;
+
+      // Resize kalau lebih lebar dari maxWidth
+      if (width > maxWidth) {
+        height = Math.round((height * maxWidth) / width);
+        width = maxWidth;
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            resolve(file); // fallback ke file asli kalau gagal
+            return;
+          }
+          // Buat File baru dengan nama & tipe yang sama
+          const compressed = new File([blob], file.name, {
+            type: "image/jpeg",
+            lastModified: Date.now(),
+          });
+          // Pakai yang lebih kecil (kadang kompresi malah lebih besar)
+          resolve(compressed.size < file.size ? compressed : file);
+        },
+        "image/jpeg",
+        quality
+      );
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      resolve(file); // fallback ke file asli
+    };
+
+    img.src = url;
+  });
+}
 export default function DaftarMitra() {
   const [searchParams] = useSearchParams();
   const ref = searchParams.get("ref") || "";
@@ -24,8 +79,8 @@ export default function DaftarMitra() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null); // { success, message }
   const [errors, setErrors] = useState({});
-  const [followProofFile, setFollowProofFile] = useState(null);
-  const [followProofPreview, setFollowProofPreview] = useState(null);
+  const [followProofFiles, setFollowProofFiles] = useState([]);
+  const [followProofPreviews, setFollowProofPreviews] = useState([]);
   const [uploadingProof, setUploadingProof] = useState(false);
   const topRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -60,27 +115,46 @@ export default function DaftarMitra() {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: null }));
   };
 
+  const MAX_FILES = 5;
+
   const handleFileChange = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
     const allowed = ["image/jpeg", "image/png", "image/webp"];
-    if (!allowed.includes(file.type)) {
-      setErrors((prev) => ({ ...prev, follow_proof: "Format file harus JPG, PNG, atau WebP" }));
+    const totalAfter = followProofFiles.length + files.length;
+
+    if (totalAfter > MAX_FILES) {
+      setErrors((prev) => ({ ...prev, follow_proof: `Maksimal ${MAX_FILES} foto` }));
       return;
     }
-    if (file.size > 5 * 1024 * 1024) {
-      setErrors((prev) => ({ ...prev, follow_proof: "Ukuran file maksimal 5MB" }));
-      return;
+
+    for (const file of files) {
+      if (!allowed.includes(file.type)) {
+        setErrors((prev) => ({ ...prev, follow_proof: `"${file.name}" — format harus JPG, PNG, atau WebP` }));
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        setErrors((prev) => ({ ...prev, follow_proof: `"${file.name}" — ukuran maksimal 5MB` }));
+        return;
+      }
     }
-    setFollowProofFile(file);
-    setFollowProofPreview(URL.createObjectURL(file));
-    if (errors.follow_proof) setErrors((prev) => ({ ...prev, follow_proof: null }));
+
+    // Kompres semua file sebelum simpan ke state
+    Promise.all(files.map((f) => compressImage(f))).then((compressed) => {
+      setFollowProofFiles((prev) => [...prev, ...compressed]);
+      setFollowProofPreviews((prev) => [...prev, ...compressed.map((f) => URL.createObjectURL(f))]);
+      if (errors.follow_proof) setErrors((prev) => ({ ...prev, follow_proof: null }));
+    });
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const removeFile = () => {
-    setFollowProofFile(null);
-    setFollowProofPreview(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
+  const removeFile = (index) => {
+    setFollowProofFiles((prev) => prev.filter((_, i) => i !== index));
+    setFollowProofPreviews((prev) => {
+      URL.revokeObjectURL(prev[index]);
+      return prev.filter((_, i) => i !== index);
+    });
   };
 
   const validate = () => {
@@ -94,7 +168,7 @@ export default function DaftarMitra() {
       errs.email = "Format email tidak valid";
     }
     if (!form.full_address.trim()) errs.full_address = "Alamat lengkap wajib diisi";
-    if (!followProofFile) errs.follow_proof = "Screenshot bukti follow wajib diupload";
+    if (followProofFiles.length === 0) errs.follow_proof = "Screenshot bukti follow wajib diupload (minimal 1 foto)";
     return errs;
   };
 
@@ -110,36 +184,37 @@ export default function DaftarMitra() {
     setResult(null);
 
     try {
-      // ── Upload screenshot dulu ──
-      let followProofUrl = null;
-      if (followProofFile) {
+       // ── Upload semua screenshot satu per satu ──
+      const uploadedUrls = [];
+      if (followProofFiles.length > 0) {
         setUploadingProof(true);
-        try {
-          const formData = new FormData();
-          formData.append("file", followProofFile);
-          const uploadRes = await fetch(`${SOLIT_POS_API}/api/partners/upload-proof`, {
-            method: "POST",
-            mode: "cors",
-            body: formData,
-          });
-          const uploadData = await uploadRes.json();
-          if (uploadData.success) {
-            followProofUrl = uploadData.url;
-          } else {
-            setResult({ success: false, message: uploadData.message || "Gagal upload screenshot" });
+        for (let i = 0; i < followProofFiles.length; i++) {
+          try {
+            const formData = new FormData();
+            formData.append("file", followProofFiles[i]);
+            const uploadRes = await fetch(`${SOLIT_POS_API}/api/partners/upload-proof`, {
+              method: "POST",
+              mode: "cors",
+              body: formData,
+            });
+            const uploadData = await uploadRes.json();
+            if (uploadData.success) {
+              uploadedUrls.push(uploadData.url);
+            } else {
+              setResult({ success: false, message: uploadData.message || `Gagal upload foto ke-${i + 1}` });
+              setUploadingProof(false);
+              setLoading(false);
+              return;
+            }
+          } catch {
+            setResult({ success: false, message: `Gagal upload foto ke-${i + 1}. Coba lagi.` });
             setUploadingProof(false);
             setLoading(false);
             return;
           }
-        } catch {
-          setResult({ success: false, message: "Gagal upload screenshot. Coba lagi." });
-          setUploadingProof(false);
-          setLoading(false);
-          return;
         }
         setUploadingProof(false);
       }
-
       const payload = {
         ...form,
         full_name: form.full_name.trim(),
@@ -147,7 +222,8 @@ export default function DaftarMitra() {
         email: form.email.trim().toLowerCase(),
         full_address: form.full_address.trim(),
         referred_by: ref || undefined,
-        follow_proof_url: followProofUrl,
+        follow_proof_url: uploadedUrls[0] || null,
+        follow_proof_urls: uploadedUrls,
       };
 
       const res = await fetch(`${SOLIT_POS_API}/api/partners/register`, {
@@ -163,9 +239,8 @@ export default function DaftarMitra() {
         setResult({ success: true, message: data.message });
         setForm(INITIAL);
         setErrors({});
-        setFollowProofFile(null);
-        setFollowProofPreview(null);
-        if (fileInputRef.current) fileInputRef.current.value = "";
+        setFollowProofFiles([]);
+        setFollowProofPreviews([]);
         topRef.current?.scrollIntoView({ behavior: "smooth" });
       } else {
         setResult({ success: false, message: data.message || "Gagal mengirim pendaftaran" });
@@ -176,14 +251,12 @@ export default function DaftarMitra() {
       setLoading(false);
     }
   };
-
   const handleReset = () => {
     setForm(INITIAL);
     setResult(null);
     setErrors({});
-    setFollowProofFile(null);
-    setFollowProofPreview(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
+    setFollowProofFiles([]);
+    setFollowProofPreviews([]);
   };
 
   // ── Kalau sudah sukses, tampilkan halaman terima kasih ──
@@ -421,54 +494,73 @@ export default function DaftarMitra() {
                   </p>
                 </div>
 
-                {!followProofPreview ? (
+                {/* Grid preview foto yang sudah dipilih */}
+                {followProofPreviews.length > 0 && (
+                  <div className="grid grid-cols-3 gap-2 mb-3">
+                    {followProofPreviews.map((preview, i) => (
+                      <div key={i} className="relative group/img rounded-xl overflow-hidden border-2 border-blue-200 bg-blue-50/30 aspect-square">
+                        <img
+                          src={preview}
+                          alt={`Bukti follow ${i + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeFile(i)}
+                          className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity shadow-md"
+                          title="Hapus foto ini"
+                        >
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                          </svg>
+                        </button>
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[10px] text-center py-0.5 font-medium">
+                          {followProofFiles[i]?.name?.slice(0, 15)}{followProofFiles[i]?.name?.length > 15 ? "..." : ""}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Tombol tambah foto */}
+                {followProofFiles.length < MAX_FILES && (
                   <label
-                    className={`group flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-xl cursor-pointer transition-all ${
+                    className={`group flex flex-col items-center justify-center w-full border-2 border-dashed rounded-xl cursor-pointer transition-all ${
+                      followProofPreviews.length > 0 ? "h-24" : "h-40"
+                    } ${
                       errors.follow_proof
                         ? "border-red-300 bg-red-50/50 hover:border-red-400"
                         : "border-slate-300 bg-surface-muted hover:border-blue-400 hover:bg-blue-50/30"
                     }`}
                   >
-                    <div className="flex flex-col items-center gap-2 text-content-muted group-hover:text-blue-500 transition-colors">
-                      <FileImage className="w-8 h-8" />
+                    <div className="flex flex-col items-center gap-1.5 text-content-muted group-hover:text-blue-500 transition-colors">
+                      <FileImage className="w-7 h-7" />
                       <div className="text-center">
-                        <p className="text-sm font-semibold">Klik untuk upload screenshot</p>
-                        <p className="text-xs mt-0.5">JPG, PNG, atau WebP (maks. 5MB)</p>
+                        <p className="text-sm font-semibold">
+                          {followProofPreviews.length > 0
+                            ? `Tambah foto lagi (${followProofFiles.length}/${MAX_FILES})`
+                            : "Klik untuk upload screenshot"}
+                        </p>
+                        <p className="text-xs mt-0.5">JPG, PNG, atau WebP (maks. 5MB per foto)</p>
                       </div>
                     </div>
                     <input
                       ref={fileInputRef}
                       type="file"
                       accept="image/jpeg,image/png,image/webp"
+                      multiple
                       onChange={handleFileChange}
                       className="hidden"
                     />
                   </label>
-                ) : (
-                  <div className="relative group rounded-xl overflow-hidden border-2 border-blue-200 bg-blue-50/30">
-                    <img
-                      src={followProofPreview}
-                      alt="Preview bukti follow"
-                      className="w-full h-48 object-contain bg-white"
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                      <button
-                        type="button"
-                        onClick={removeFile}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-1.5 shadow-lg"
-                      >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                          <line x1="18" y1="6" x2="6" y2="18" />
-                          <line x1="6" y1="6" x2="18" y2="18" />
-                        </svg>
-                        Hapus & Ganti
-                      </button>
-                    </div>
-                    <div className="px-3 py-2 bg-blue-50 border-t border-blue-200 flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-emerald-500" />
-                      <span className="text-xs text-content-soft font-medium truncate">{followProofFile?.name}</span>
-                    </div>
-                  </div>
+                )}
+
+                {/* Info kalau sudah penuh */}
+                {followProofFiles.length >= MAX_FILES && (
+                  <p className="text-xs text-blue-600 font-medium text-center">
+                    Maksimal {MAX_FILES} foto tercapai
+                  </p>
                 )}
                 {errors.follow_proof && (
                   <p className="text-xs text-red-500 mt-1.5">{errors.follow_proof}</p>
