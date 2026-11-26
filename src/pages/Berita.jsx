@@ -83,26 +83,27 @@ export default function Berita() {
       </Helmet>
 
       {/* Header */}
-      <div className="bg-[#0f172a] text-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
-          <div className="flex items-center gap-2 text-blue-400 text-xs font-bold uppercase tracking-widest mb-2">
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#0A1628] via-[#0F2341] to-[#0A1628] text-white">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_-10%,rgba(35,145,255,0.1),transparent)] pointer-events-none" />
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-14">
+          <div className="flex items-center gap-2 text-[#2391FF] text-xs font-bold uppercase tracking-[0.2em] mb-3">
             <Newspaper size={14} /> Berita &amp; Artikel
           </div>
-          <h1 className="text-3xl md:text-4xl font-black tracking-tight">
-            Update, tips, dan cerita seputar teknologi
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
+            Update, tips, dan cerita<br className="hidden sm:block" /> seputar teknologi
           </h1>
 
-          <div className="relative mt-6 max-w-md">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-content-muted" />
+          <div className="relative mt-8 max-w-md">
+            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Cari artikel..."
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-9 pr-9 py-2.5 text-sm text-white placeholder:text-content-muted focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl pl-10 pr-10 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-[#2391FF]/50 focus:border-[#2391FF]/30 transition-all backdrop-blur-sm"
             />
             {search && (
-              <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-content-muted hover:text-white">
+              <button onClick={() => setSearch("")} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors">
                 <X size={14} />
               </button>
             )}
@@ -111,18 +112,18 @@ export default function Berita() {
       </div>
 
       {/* Category filter bar */}
-      <div className="bg-[#0f172a] border-t border-b border-slate-800 text-slate-300">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 overflow-x-auto no-scrollbar">
-          <div className="flex items-center gap-1.5 pr-3 mr-1 border-r border-slate-800 text-content-muted text-xs font-bold uppercase tracking-wider shrink-0 select-none">
-            <SlidersHorizontal size={13} className="text-blue-400" /> Kategori
+      <div className="bg-gradient-to-r from-[#0A1628] via-[#0D1D35] to-[#0A1628] border-t border-b border-white/[0.05] text-slate-300">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center gap-2.5 overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-1.5 pr-3 mr-1 border-r border-white/[0.08] text-slate-500 text-xs font-bold uppercase tracking-wider shrink-0 select-none">
+            <SlidersHorizontal size={13} className="text-[#2391FF]" /> Kategori
           </div>
 
           <button
             onClick={() => setCategory("")}
             className={`px-4 py-1.5 rounded-full text-xs font-bold tracking-wide whitespace-nowrap transition-all duration-200 ${
               !activeCategory
-                ? "bg-blue-600 text-white shadow-md shadow-blue-600/30 scale-[1.03]"
-                : "bg-slate-800/80 border border-slate-700/60 text-slate-300 hover:text-white hover:bg-slate-700/70"
+                ? "bg-[#2391FF] text-white shadow-lg shadow-[#2391FF]/25 scale-[1.03]"
+                : "bg-white/[0.05] border border-white/[0.08] text-slate-300 hover:text-white hover:bg-white/[0.1]"
             }`}
           >
             Semua
@@ -133,8 +134,8 @@ export default function Berita() {
               onClick={() => setCategory(c.slug)}
               className={`px-4 py-1.5 rounded-full text-xs font-bold tracking-wide whitespace-nowrap transition-all duration-200 ${
                 activeCategory === c.slug
-                  ? "bg-blue-600 text-white shadow-md shadow-blue-600/30 scale-[1.03]"
-                  : "bg-slate-800/80 border border-slate-700/60 text-slate-300 hover:text-white hover:bg-slate-700/70"
+                  ? "bg-[#2391FF] text-white shadow-lg shadow-[#2391FF]/25 scale-[1.03]"
+                  : "bg-white/[0.05] border border-white/[0.08] text-slate-300 hover:text-white hover:bg-white/[0.1]"
               }`}
             >
               {c.name}
@@ -168,15 +169,17 @@ export default function Berita() {
 
           {loading ? (
             <div className="flex items-center justify-center py-24">
-              <Loader2 size={28} className="animate-spin text-blue-500" />
+              <Loader2 size={28} className="animate-spin text-[#2391FF]" />
             </div>
           ) : listArticles.length === 0 ? (
             <div className="text-center py-24">
-              <Newspaper size={40} className="mx-auto mb-3 text-slate-300" />
-              <p className="text-content-muted text-sm">Belum ada artikel ditemukan</p>
+              <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-4">
+                <Newspaper size={28} className="text-slate-300 dark:text-slate-600" />
+              </div>
+              <p className="text-content-muted text-sm font-medium">Belum ada artikel ditemukan</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {(() => {
                 const nodes = [];
                 listArticles.forEach((a, i) => {
@@ -189,7 +192,7 @@ export default function Berita() {
                       nodes.push(
                         <div key={`ad-${i}`} className="col-span-full py-4 my-2">
                           <div className="flex items-center justify-center gap-1.5 text-[10px] font-bold text-content-muted uppercase tracking-widest mb-2">
-                            <Megaphone size={11} className="text-blue-500" /> SPONSORED PROMO
+                            <Megaphone size={11} className="text-[#2391FF]" /> SPONSORED PROMO
                           </div>
                           <div className="max-w-4xl mx-auto">
                             <AdCard ad={ad} />
@@ -206,19 +209,19 @@ export default function Berita() {
           )}
 
           {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 mt-10">
+            <div className="flex items-center justify-center gap-3 mt-12">
               <button
                 onClick={() => setPage(Math.max(page - 1, 1))}
                 disabled={page === 1}
-                className="p-2 rounded-lg border border-border text-content-muted hover:bg-surface transition disabled:opacity-30"
+                className="p-2.5 rounded-xl border border-border text-content-muted hover:bg-surface hover:border-[#2391FF]/30 hover:text-[#2391FF] transition-all disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:border-border disabled:hover:text-content-muted"
               >
                 <ChevronLeft size={16} />
               </button>
-              <span className="text-sm text-content-muted px-3">Halaman {page} dari {totalPages}</span>
+              <span className="text-sm text-content-muted px-4 font-medium">Halaman <span className="text-content font-bold">{page}</span> dari {totalPages}</span>
               <button
                 onClick={() => setPage(Math.min(page + 1, totalPages))}
                 disabled={page === totalPages}
-                className="p-2 rounded-lg border border-border text-content-muted hover:bg-surface transition disabled:opacity-30"
+                className="p-2.5 rounded-xl border border-border text-content-muted hover:bg-surface hover:border-[#2391FF]/30 hover:text-[#2391FF] transition-all disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:border-border disabled:hover:text-content-muted"
               >
                 <ChevronRight size={16} />
               </button>

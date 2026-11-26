@@ -312,24 +312,24 @@ export default function CekGaransi() {
 
                 <div id="hero" className={`text-center mb-12 md:mb-16 transition-all duration-700 ${isVisible.hero ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
                     <span className="eyebrow">
-                        <span className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
+                        <span className="w-1.5 h-1.5 bg-[#2391FF] rounded-full" />
                         Official Solit 03
                     </span>
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-content mt-5">
-                        Cek Status <span className="text-blue-600">Garansi</span>
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-content mt-5">
+                        Cek Status <span className="text-[#2391FF]">Garansi</span>
                     </h1>
                     <p className="text-sm md:text-base text-content-muted max-w-2xl mx-auto mt-4">
-                        Masukkan <span className="font-semibold text-blue-600">Serial Number (SN)</span> laptop Anda untuk mengetahui masa berlaku garansi dengan mudah.
+                        Masukkan <span className="font-semibold text-[#2391FF]">Serial Number (SN)</span> laptop Anda untuk mengetahui masa berlaku garansi dengan mudah.
                     </p>
                     <div className="flex justify-center items-center gap-2 mt-6">
-                        <div className="w-12 h-0.5 bg-gradient-to-r from-transparent to-blue-400 rounded-full" />
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                        <div className="w-12 h-0.5 bg-gradient-to-l from-transparent to-blue-400 rounded-full" />
+                        <div className="w-12 h-0.5 bg-gradient-to-r from-transparent to-[#2391FF] rounded-full" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#2391FF]" />
+                        <div className="w-12 h-0.5 bg-gradient-to-l from-transparent to-[#2391FF] rounded-full" />
                     </div>
                 </div>
 
                 <div id="card" className={`transition-all duration-500 delay-100 ${isVisible.card ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}>
-                    <div className="bg-surface rounded-2xl border border-border shadow-soft hover:shadow-soft-lg transition-all duration-300 p-6 sm:p-8">
+                    <div className="bg-surface rounded-2xl border border-border shadow-soft hover:shadow-soft-lg transition-all duration-300 p-6 sm:p-10">
                         <form onSubmit={handleClickWithAwesomeAnim} className="space-y-6">
                             <div>
                                 <label className="block text-sm font-semibold text-content-soft mb-2">Serial Number (SN)</label>
@@ -349,7 +349,7 @@ export default function CekGaransi() {
                                         onKeyDown={(e) => e.key === "Enter" && handleClickWithAwesomeAnim(e)}
                                         placeholder="Contoh: SN-0006151"
                                         maxLength={60}
-                                        className="w-full pl-12 pr-12 py-4 border-2 border-border rounded-xl text-content font-mono text-base placeholder:text-content-muted focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all bg-surface-muted"
+                                        className="w-full pl-12 pr-12 py-4 border-2 border-border rounded-xl text-content font-mono text-base placeholder:text-content-muted focus:outline-none focus:border-[#2391FF] focus:ring-4 focus:ring-[#2391FF]/10 transition-all bg-surface-muted"
                                         autoComplete="off"
                                         spellCheck={false}
                                     />
@@ -362,7 +362,7 @@ export default function CekGaransi() {
                                     )}
                                 </div>
                                 <p className="text-xs text-content-muted mt-3 flex items-center gap-1">
-                                    <span className="inline-block w-4 h-4 bg-blue-100 rounded-full text-center text-blue-600 text-[10px] font-bold">i</span>
+                                    <span className="inline-block w-4 h-4 bg-[#2391FF]/10 rounded-full text-center text-[#2391FF] text-[10px] font-bold">i</span>
                                     SN dapat ditemukan di stiker bodi laptop atau nota pembelian.
                                 </p>
                             </div>
@@ -372,7 +372,7 @@ export default function CekGaransi() {
                                     ref={buttonRef}
                                     type="submit"
                                     disabled={loading || !sn.trim()}
-                                    className={`group relative w-full h-14 overflow-visible rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-base transition-all duration-300 shadow-soft hover:shadow-soft-lg active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 ${
+                                    className={`group relative w-full h-14 overflow-visible rounded-xl bg-gradient-to-r from-[#2391FF] to-blue-600 hover:from-[#1a7de6] hover:to-blue-700 text-white font-semibold text-base transition-all duration-300 shadow-soft hover:shadow-soft-lg active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 ${
                                         isBtnPressed && !loading ? "scale-95 ring-4 ring-blue-400/60" : ""
                                     } ${btnFlash ? "bg-surface text-blue-700" : ""}`}
                                 >
@@ -435,7 +435,7 @@ export default function CekGaransi() {
                             { icon: Shield, title: "Lihat Status", desc: "Sistem akan menampilkan detail garansi Anda" },
                         ].map((item, i) => (
                             <div key={i} className="card-3d p-6 text-center">
-                                <div className="flex justify-center mb-3"><item.icon className="w-9 h-9 text-blue-600" aria-hidden="true" /></div>
+                                <div className="flex justify-center mb-3"><item.icon className="w-9 h-9 text-[#2391FF]" aria-hidden="true" /></div>
                                 <p className="text-md font-bold text-content">{item.title}</p>
                                 <p className="text-sm text-content-muted mt-2 leading-relaxed">{item.desc}</p>
                             </div>
@@ -472,7 +472,7 @@ export default function CekGaransi() {
                 <div className="flex justify-center mt-12">
                     <div className="flex gap-2">
                         {[...Array(3)].map((_, i) => (
-                            <div key={i} className="w-1.5 h-1.5 rounded-full bg-blue-400 opacity-50 animate-pulse" style={{ animationDelay: `${i * 0.2}s` }} />
+                            <div key={i} className="w-1.5 h-1.5 rounded-full bg-[#2391FF] opacity-40 animate-pulse" style={{ animationDelay: `${i * 0.2}s` }} />
                         ))}
                     </div>
                 </div>
@@ -634,7 +634,7 @@ function WarrantyResult({ data, cfg, onReset, onCopy }) {
                                         {row.copyable && (
                                             <button
                                                 onClick={() => onCopy(row.value)}
-                                                className="text-content-muted hover:text-blue-500 transition opacity-0 group-hover:opacity-100 focus:opacity-100 p-1 flex-shrink-0"
+                                                className="text-content-muted hover:text-[#2391FF] transition opacity-0 group-hover:opacity-100 focus:opacity-100 p-1 flex-shrink-0"
                                                 title="Salin SN"
                                             >
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -715,7 +715,7 @@ function WarrantyTerms() {
             <ol className="px-5 pb-5 space-y-3">
                 {terms.map((t, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm text-content-soft leading-relaxed">
-                        <span className="flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold mt-0.5">
+                        <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#2391FF]/10 text-[#2391FF] flex items-center justify-center text-xs font-bold mt-0.5">
                             {i + 1}
                         </span>
                         <span>{t}</span>
@@ -751,7 +751,7 @@ function NotFoundCard({ message, sn, onReset, onCopy }) {
                         <p className="text-xs text-content-muted mb-1">SN yang dicari</p>
                         <p className="font-mono font-bold text-content text-lg tracking-wide">{sn}</p>
                     </div>
-                    <button onClick={() => onCopy(sn)} className="text-content-muted hover:text-blue-500 transition opacity-0 group-hover:opacity-100 focus:opacity-100 p-1" title="Salin SN">
+                    <button onClick={() => onCopy(sn)} className="text-content-muted hover:text-[#2391FF] transition opacity-0 group-hover:opacity-100 focus:opacity-100 p-1" title="Salin SN">
                         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />

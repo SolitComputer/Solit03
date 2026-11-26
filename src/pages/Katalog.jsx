@@ -92,7 +92,7 @@ function getTagBadgeColor(colorName) {
 function SearchLoadingIndicator() {
   return (
     <div className="absolute right-3 top-1/2 -translate-y-1/2">
-      <Loader2 size={14} className="text-blue-500 animate-spin" />
+      <Loader2 size={14} className="text-[#2391FF] animate-spin" />
     </div>
   );
 }
@@ -186,7 +186,7 @@ function AnimatedProductCard({ product, onClick, index, allTags }) {
         </p>
 
         {/* Nama produk */}
-        <h3 className="font-bold text-content text-xs sm:text-sm leading-tight line-clamp-2 group-hover:text-blue-600 transition-colors">
+        <h3 className="font-bold text-content text-xs sm:text-sm leading-tight line-clamp-2 group-hover:text-[#2391FF] transition-colors">
           {product.name}
         </h3>
 
@@ -230,7 +230,7 @@ function AnimatedProductCard({ product, onClick, index, allTags }) {
               </p>
             )}
           </div>
-          <button className="px-2 sm:px-2.5 py-1 bg-surface border border-border hover:border-blue-500 text-content-soft hover:text-blue-600 text-[10px] sm:text-[11px] font-semibold rounded-lg transition-all hover:shadow-soft-sm whitespace-nowrap">
+          <button className="px-2 sm:px-2.5 py-1 bg-surface border border-border hover:border-[#2391FF] text-content-soft hover:text-[#2391FF] text-[10px] sm:text-[11px] font-semibold rounded-lg transition-all hover:shadow-soft-sm whitespace-nowrap">
             Detail
           </button>
         </div>
@@ -249,7 +249,7 @@ function AnimatedSearchBar({ value, onChange, isLoading, onFocus, onBlur }) {
   return (
     <div className={`relative transition-all duration-300 ${isFocused ? 'scale-[1.02]' : 'scale-100'}`}>
       <div
-        className={`absolute inset-0 bg-blue-500 rounded-lg blur-lg transition-opacity duration-300 ${isFocused ? 'opacity-30' : 'opacity-0'
+        className={`absolute inset-0 bg-[#2391FF] rounded-lg blur-lg transition-opacity duration-300 ${isFocused ? 'opacity-20' : 'opacity-0'
           }`}
       />
 
@@ -277,7 +277,7 @@ function AnimatedSearchBar({ value, onChange, isLoading, onFocus, onBlur }) {
             setIsFocused(false);
             onBlur?.();
           }}
-          className="w-full pl-8 pr-8 py-1.5 text-xs sm:text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-surface-muted transition-all duration-300"
+          className="w-full pl-8 pr-8 py-1.5 text-xs sm:text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2391FF] focus:border-transparent bg-surface-muted transition-all duration-300"
         />
 
         {isLoading && <SearchLoadingIndicator />}
@@ -323,13 +323,13 @@ function EmptyStateWithAnimation({ onReset, hasFilter, searchTerm }) {
       {searchTerm && (
         <button
           onClick={() => onReset()}
-          className="px-3 sm:px-4 py-1.5 bg-blue-600 text-white rounded-lg text-[11px] sm:text-xs font-semibold hover:bg-blue-700 transition-all hover:scale-105"
+          className="px-3 sm:px-4 py-1.5 bg-[#2391FF] text-white rounded-lg text-[11px] sm:text-xs font-semibold hover:bg-[#2391FF]/90 transition-all hover:scale-105"
         >
           Bersihkan Pencarian
         </button>
       )}
       {hasFilter && !searchTerm && (
-        <button onClick={onReset} className="px-3 sm:px-4 py-1.5 bg-blue-600 text-white rounded-lg text-[11px] sm:text-xs font-semibold hover:bg-blue-700 transition-all hover:scale-105">
+        <button onClick={onReset} className="px-3 sm:px-4 py-1.5 bg-[#2391FF] text-white rounded-lg text-[11px] sm:text-xs font-semibold hover:bg-[#2391FF]/90 transition-all hover:scale-105">
           Reset Filter
         </button>
       )}
@@ -356,12 +356,12 @@ function ResultCountWithAnimation({ count, isSearching }) {
   return (
     <div className="flex items-center gap-1.5">
       {isSearching ? (
-        <Loader2 size={10} className="text-blue-500 animate-spin" />
+        <Loader2 size={10} className="text-[#2391FF] animate-spin" />
       ) : (
         <div className={`w-1.5 h-1.5 rounded-full bg-green-500 transition-all duration-300 ${isAnimating ? 'scale-150' : 'scale-100'}`} />
       )}
       <p className="text-[11px] sm:text-xs text-content-muted">
-        <span className={`font-semibold text-content transition-all duration-300 ${isAnimating ? 'text-blue-600' : ''}`}>
+        <span className={`font-semibold text-content transition-all duration-300 ${isAnimating ? 'text-[#2391FF]' : ''}`}>
           {displayCount}
         </span> produk ditemukan
       </p>
@@ -413,7 +413,7 @@ function DynamicTagFilter({ tags, selectedTagId, onTagChange, onClear, isLoading
               name="productTag"
               checked={!selectedTagId}
               onChange={onClear}
-              className="w-3 h-3 text-blue-600"
+              className="w-3 h-3 text-[#2391FF] accent-[#2391FF]"
             />
             <span className="text-content-soft">Semua Produk</span>
           </label>
@@ -426,7 +426,7 @@ function DynamicTagFilter({ tags, selectedTagId, onTagChange, onClear, isLoading
                   name="productTag"
                   checked={selectedTagId === tag.id}
                   onChange={() => onTagChange(tag.id)}
-                  className="w-3 h-3 text-blue-600 flex-shrink-0"
+                  className="w-3 h-3 text-[#2391FF] accent-[#2391FF] flex-shrink-0"
                 />
                 <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full ${getTagColorStyle(tag.color)} transition-all group-hover:scale-105 truncate`}>
                   <Tag size={10} className="flex-shrink-0" />
@@ -474,36 +474,37 @@ function SkeletonGrid() {
 // Welcome Screen
 function WelcomeScreen({ onStart }) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden bg-gradient-to-br from-[#0A1628] via-[#0F2341] to-[#0A1628] px-4">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_30%,rgba(35,145,255,0.08),transparent)] pointer-events-none" />
       <div className="relative z-10 text-center px-4 max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-[11px] sm:text-xs font-medium mb-4 sm:mb-6 backdrop-blur-sm">
+        <div className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full bg-[#2391FF]/10 border border-[#2391FF]/20 text-[#2391FF] text-[11px] sm:text-xs font-semibold mb-5 sm:mb-7 backdrop-blur-sm">
           <Zap size={12} />
           <span>Temukan laptop impianmu</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl md:text-5xl font-black text-white mb-3 sm:mb-4 leading-tight tracking-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-4 sm:mb-5 leading-tight tracking-tight">
           Katalog<br />
-          <span className="text-blue-400">
+          <span className="text-[#2391FF]">
             Laptop
           </span>
         </h1>
-        <p className="text-content-muted text-xs sm:text-sm md:text-base mb-6 sm:mb-8 leading-relaxed max-w-lg mx-auto px-2">
+        <p className="text-slate-400 text-sm sm:text-base md:text-lg mb-7 sm:mb-9 leading-relaxed max-w-lg mx-auto px-2">
           Jelajahi koleksi laptop pilihan dari brand‑brand ternama. Temukan yang paling pas untuk kebutuhanmu.
         </p>
         <button
           onClick={onStart}
-          className="group btn btn-primary px-4 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm active:scale-95"
+          className="group btn btn-primary px-5 sm:px-7 py-2.5 sm:py-3 text-sm sm:text-base active:scale-95 shadow-lg shadow-[#2391FF]/20"
         >
           Mulai Pilih
-          <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+          <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
         </button>
-        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-8 sm:mt-10 text-content-muted text-[11px] sm:text-xs">
+        <div className="flex flex-wrap items-center justify-center gap-5 sm:gap-8 mt-10 sm:mt-12 text-slate-500 text-xs sm:text-sm">
           {[
-            { icon: <Package size={12} />, label: "Produk Lengkap" },
-            { icon: <Tag size={12} />, label: "Harga Terbaik" },
-            { icon: <Star size={12} />, label: "Brand Terpercaya" },
+            { icon: <Package size={14} />, label: "Produk Lengkap" },
+            { icon: <Tag size={14} />, label: "Harga Terbaik" },
+            { icon: <Star size={14} />, label: "Brand Terpercaya" },
           ].map((s) => (
-            <div key={s.label} className="flex items-center gap-1.5">
-              <span className="text-blue-400">{s.icon}</span>
+            <div key={s.label} className="flex items-center gap-2">
+              <span className="text-[#2391FF]/60">{s.icon}</span>
               {s.label}
             </div>
           ))}
@@ -516,12 +517,12 @@ function WelcomeScreen({ onStart }) {
 // Category Screen
 function CategoryScreen({ categories, onSelect, onSkip }) {
   const COLORS = [
-    "from-blue-500 to-blue-700",
-    "from-blue-600 to-blue-800",
-    "from-sky-500 to-sky-700",
-    "from-sky-600 to-blue-700",
-    "from-blue-500 to-sky-600",
-    "from-blue-700 to-blue-900",
+    "from-[#2391FF] to-[#1a6fcc]",
+    "from-[#1e82e0] to-[#0F2341]",
+    "from-[#2391FF] to-[#0A1628]",
+    "from-[#1a7ae0] to-[#1560b8]",
+    "from-[#2391FF] to-[#1976d2]",
+    "from-[#1560b8] to-[#0A1628]",
   ];
 
   return (
@@ -553,15 +554,15 @@ function CategoryScreen({ categories, onSelect, onSkip }) {
           ))}
           <button
             onClick={onSkip}
-            className="group relative rounded-xl overflow-hidden text-left border border-dashed border-border hover:border-blue-400 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg active:scale-95 bg-surface"
+            className="group relative rounded-xl overflow-hidden text-left border border-dashed border-border hover:border-[#2391FF] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg active:scale-95 bg-surface"
           >
             <div className="p-3 sm:p-4">
-              <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg bg-slate-100 flex items-center justify-center mb-2 sm:mb-3 text-content-muted group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+              <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg bg-slate-100 flex items-center justify-center mb-2 sm:mb-3 text-content-muted group-hover:bg-[#2391FF]/5 group-hover:text-[#2391FF] transition-colors">
                 <ShoppingBag size={18} />
               </div>
               <h3 className="text-sm sm:text-base font-bold text-content-soft mb-0.5">Semua Produk</h3>
               <p className="text-content-muted text-[10px] sm:text-xs">Jelajahi semua laptop</p>
-              <div className="flex items-center gap-0.5 mt-1 sm:mt-2 text-blue-600 text-[10px] sm:text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="flex items-center gap-0.5 mt-1 sm:mt-2 text-[#2391FF] text-[10px] sm:text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                 Lihat semua
                 <ArrowRight size={12} />
               </div>
@@ -576,9 +577,9 @@ function CategoryScreen({ categories, onSelect, onSkip }) {
 // Chip Component
 function Chip({ label, onRemove }) {
   return (
-    <span className="inline-flex items-center gap-0.5 px-1.5 sm:px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-[9px] sm:text-[10px] font-medium">
+    <span className="inline-flex items-center gap-0.5 px-1.5 sm:px-2 py-0.5 bg-[#2391FF]/10 text-[#2391FF] rounded-full text-[9px] sm:text-[10px] font-medium">
       <span className="truncate max-w-[100px] sm:max-w-none">{label}</span>
-      <button onClick={onRemove} className="hover:text-blue-900 flex-shrink-0">
+      <button onClick={onRemove} className="hover:text-[#2391FF]/70 flex-shrink-0">
         <X size={8} />
       </button>
     </span>
@@ -591,7 +592,7 @@ function PageBtn({ children, active, disabled, onClick }) {
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`w-6 h-6 sm:w-7 sm:h-7 rounded-lg text-[11px] sm:text-xs font-semibold flex items-center justify-center transition-all ${active ? "bg-blue-600 text-white shadow-soft-sm" : disabled ? "text-slate-300 cursor-not-allowed" : "text-content-soft hover:bg-slate-200"
+      className={`w-6 h-6 sm:w-7 sm:h-7 rounded-lg text-[11px] sm:text-xs font-semibold flex items-center justify-center transition-all ${active ? "bg-[#2391FF] text-white shadow-soft-sm" : disabled ? "text-slate-300 cursor-not-allowed" : "text-content-soft hover:bg-slate-200"
         }`}
     >
       {children}
@@ -621,7 +622,7 @@ function SortDropdown({ value, onChange, options }) {
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex items-center gap-1.5 pl-3 pr-2 sm:pl-4 py-1.5 text-[10px] sm:text-xs bg-surface-muted text-content rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer transition-all hover:bg-slate-200/50"
+        className="flex items-center gap-1.5 pl-3 pr-2 sm:pl-4 py-1.5 text-[10px] sm:text-xs bg-surface-muted text-content rounded-lg focus:outline-none focus:ring-1 focus:ring-[#2391FF] cursor-pointer transition-all hover:bg-slate-200/50"
       >
         <span>{selectedLabel}</span>
         <ChevronDown
@@ -642,7 +643,7 @@ function SortDropdown({ value, onChange, options }) {
               }}
               className={`w-full text-left px-3 py-1.5 text-[11px] sm:text-xs transition-colors ${
                 opt.value === value
-                  ? "bg-blue-500/15 text-blue-400 font-semibold"
+                  ? "bg-[#2391FF]/15 text-[#2391FF] font-semibold"
                   : "text-content-soft hover:bg-white/5"
               }`}
             >
@@ -716,8 +717,8 @@ function ProductModal({ product, onClose, allTags }) {
       >
         <div className="sticky top-0 z-10 bg-surface/95 backdrop-blur-sm border-b border-border px-3 sm:px-4 py-2 flex sm:py-2.5 items-center justify-between">
           <div className="flex items-center gap-1.5 text-[11px] sm:text-xs">
-            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-blue-100 flex items-center justify-center">
-              <Laptop size={14} className="text-blue-600" />
+            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-[#2391FF]/10 flex items-center justify-center">
+              <Laptop size={14} className="text-[#2391FF]" />
             </div>
             <div className="flex items-center gap-1 text-content-muted truncate">
               <span className="hidden sm:inline">Detail Produk</span>
@@ -765,7 +766,7 @@ function ProductModal({ product, onClose, allTags }) {
                       <button
                         key={i}
                         onClick={() => setImgIdx(i)}
-                        className={`flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden border-2 transition-all ${i === imgIdx ? "border-blue-500 ring-1 ring-blue-200" : "border-border"}`}
+                        className={`flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden border-2 transition-all ${i === imgIdx ? "border-[#2391FF] ring-1 ring-[#2391FF]/30" : "border-border"}`}
                       >
                         <img src={img} alt="" className="w-full h-full object-cover" />
                       </button>
@@ -794,7 +795,7 @@ function ProductModal({ product, onClose, allTags }) {
 
               <div className="flex flex-wrap gap-1.5 mb-3">
                 {product.brands?.name && (
-                  <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 bg-blue-50 text-blue-700 text-[9px] sm:text-[10px] font-semibold rounded-full">
+                  <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 bg-[#2391FF]/5 text-[#2391FF] text-[9px] sm:text-[10px] font-semibold rounded-full">
                     <Tag size={10} /> {product.brands.name}
                   </span>
                 )}
@@ -820,7 +821,7 @@ function ProductModal({ product, onClose, allTags }) {
                       </span>
                     </>
                   ) : (
-                    <p className="text-lg sm:text-xl lg:text-2xl font-black text-blue-700">{fmt(originalPrice)}</p>
+                    <p className="text-lg sm:text-xl lg:text-2xl font-black text-[#2391FF]">{fmt(originalPrice)}</p>
                   )}
                 </div>
               </div>
@@ -848,8 +849,8 @@ function ProductModal({ product, onClose, allTags }) {
               {SPEC_ROWS.length > 0 && (
                 <div className="bg-surface-muted rounded-lg p-2 sm:p-3 mb-3">
                   <div className="flex items-center gap-1.5 mb-2">
-                    <div className="w-5 h-5 rounded-lg bg-blue-100 flex items-center justify-center">
-                      <Cpu size={12} className="text-blue-600" />
+                    <div className="w-5 h-5 rounded-lg bg-[#2391FF]/10 flex items-center justify-center">
+                      <Cpu size={12} className="text-[#2391FF]" />
                     </div>
                     <p className="text-[9px] sm:text-[10px] font-semibold text-content-muted uppercase">Spesifikasi</p>
                   </div>
@@ -1022,7 +1023,7 @@ function ProductScreen({
               name="category"
               checked={!selectedCategory}
               onChange={() => setSelectedCategory(null)}
-              className="w-3 h-3 text-blue-600"
+              className="w-3 h-3 text-[#2391FF] accent-[#2391FF]"
             />
             <span className="text-content-soft">Semua Kategori</span>
           </label>
@@ -1033,7 +1034,7 @@ function ProductScreen({
                 name="category"
                 checked={selectedCategory?.id === cat.id}
                 onChange={() => setSelectedCategory(cat)}
-                className="w-3 h-3 text-blue-600"
+                className="w-3 h-3 text-[#2391FF] accent-[#2391FF]"
               />
               <span className="text-content-soft flex items-center gap-1">
                 <span className="text-sm">{getCategoryIcon(cat.name)}</span>
@@ -1053,7 +1054,7 @@ function ProductScreen({
               name="brand"
               checked={!selectedBrand}
               onChange={() => setSelectedBrand(null)}
-              className="w-3 h-3 text-blue-600"
+              className="w-3 h-3 text-[#2391FF] accent-[#2391FF]"
             />
             <span className="text-content-soft">Semua Brand</span>
           </label>
@@ -1064,7 +1065,7 @@ function ProductScreen({
                 name="brand"
                 checked={selectedBrand?.id === brand.id}
                 onChange={() => setSelectedBrand(brand)}
-                className="w-3 h-3 text-blue-600"
+                className="w-3 h-3 text-[#2391FF] accent-[#2391FF]"
               />
               <span className="text-content-soft truncate">{brand.name}</span>
             </label>
@@ -1080,14 +1081,14 @@ function ProductScreen({
             placeholder="Min"
             value={priceRange.min}
             onChange={(e) => setPriceRange({ ...priceRange, min: e.target.value })}
-            className="w-1/2 px-2 py-1.5 text-xs border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-1/2 px-2 py-1.5 text-xs border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#2391FF]"
           />
           <input
             type="number"
             placeholder="Max"
             value={priceRange.max}
             onChange={(e) => setPriceRange({ ...priceRange, max: e.target.value })}
-            className="w-1/2 px-2 py-1.5 text-xs border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-1/2 px-2 py-1.5 text-xs border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#2391FF]"
           />
         </div>
       </div>
@@ -1102,7 +1103,7 @@ function ProductScreen({
                 name="stock"
                 checked={stockFilter === opt}
                 onChange={() => setStockFilter(opt)}
-                className="w-3 h-3 text-blue-600"
+                className="w-3 h-3 text-[#2391FF] accent-[#2391FF]"
               />
               <span className="text-content-soft">
                 {opt === "all" ? "Semua" : opt === "inStock" ? "Tersedia" : "Habis"}
@@ -1207,7 +1208,7 @@ function ProductScreen({
                 >
                   <Filter size={12} />
                   <span className="hidden xs:inline">Filter</span>
-                  {hasFilter && <span className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse" />}
+                  {hasFilter && <span className="w-1.5 h-1.5 bg-[#2391FF] rounded-full animate-pulse" />}
                 </button>
               </div>
             </div>
@@ -1516,7 +1517,7 @@ export default function Katalog() {
       <div className="min-h-screen flex items-center justify-center bg-surface-muted px-4">
         <div className="text-center">
           <p className="text-red-500 text-xs sm:text-sm mb-2">Gagal memuat data</p>
-          <button onClick={loadData} className="px-3 sm:px-3.5 py-1.5 bg-blue-600 text-white text-xs sm:text-sm rounded-lg">Coba Lagi</button>
+          <button onClick={loadData} className="px-3 sm:px-3.5 py-1.5 bg-[#2391FF] text-white text-xs sm:text-sm rounded-lg hover:bg-[#2391FF]/90 transition-colors">Coba Lagi</button>
         </div>
       </div>
     );

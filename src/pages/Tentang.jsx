@@ -156,9 +156,9 @@ export default function Tentang() {
               transition={{ delay: 0.3, duration: 0.6 }}
               className="text-center mt-6 md:mt-8"
             >
-              <div className="w-10 h-0.5 bg-blue-500 rounded-full mx-auto mb-4" />
-              <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-content">
-                Tentang Solit 03
+              <div className="w-12 h-0.5 bg-[#2391FF] rounded-full mx-auto mb-4" />
+              <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-content">
+                Tentang <span className="text-[#2391FF]">Solit 03</span>
               </h1>
               <p className="mt-3 text-sm md:text-lg text-content-muted max-w-md md:max-w-lg mx-auto">
                 Laptop Second Berkualitas Tinggi, Rasa Seperti Baru
@@ -183,7 +183,7 @@ export default function Tentang() {
               initial={{ width: 0 }}
               whileInView={{ width: 64 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="h-0.5 bg-blue-500/60 mx-auto mb-5 rounded-full"
+              className="h-0.5 bg-[#2391FF]/60 mx-auto mb-5 rounded-full"
             />
             <p className="text-content-muted leading-relaxed text-base md:text-lg">
               Solit 03 hadir dari satu keresahan sederhana: mengapa laptop
@@ -221,7 +221,7 @@ export default function Tentang() {
                 initial={{ x: -20, opacity: 0 }}
                 whileInView={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.3 }}
-                className="text-lg md:text-xl font-semibold mb-3 text-blue-600"
+                className="text-lg md:text-xl font-semibold mb-3 text-[#2391FF]"
               >
                 Proses & Komitmen Kami
               </motion.h3>
@@ -261,24 +261,24 @@ export default function Tentang() {
           className="py-16 md:py-20 px-4 relative overflow-hidden"
         >
           {/* Background dengan efek gradien dan blur */}
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-blue-50/30" />
-          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100/40 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-blue-50/30 dark:from-slate-900 dark:via-slate-900 dark:to-[#2391FF]/5" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#2391FF]/10 dark:bg-[#2391FF]/5 rounded-full blur-3xl pointer-events-none" />
 
           <div className="max-w-5xl mx-auto relative z-10">
             {/* Section Header */}
             <motion.div variants={fadeInUp} className="text-center mb-10 md:mb-12">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="inline-flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-full px-3 py-1 mb-3 shadow-soft-sm"
+                className="inline-flex items-center gap-2 bg-blue-50 dark:bg-[#2391FF]/10 border border-blue-100 dark:border-[#2391FF]/20 rounded-full px-3 py-1 mb-3 shadow-soft-sm"
               >
-                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
-                <span className="text-[11px] font-semibold text-blue-700 tracking-wider uppercase">
+                <div className="w-1.5 h-1.5 bg-[#2391FF] rounded-full" />
+                <span className="text-[11px] font-semibold text-[#2391FF] dark:text-blue-300 tracking-wider uppercase">
                   Peta Perjalanan
                 </span>
               </motion.div>
 
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">
-                <span className="text-blue-600 ml-2">
+                <span className="text-[#2391FF]">
                   Visi & Misi Kami
                 </span>
               </h2>
@@ -289,9 +289,9 @@ export default function Tentang() {
                 transition={{ duration: 0.6 }}
                 className="flex justify-center gap-1.5 mt-3"
               >
-                <div className="w-10 h-0.5 bg-gradient-to-r from-blue-500 to-blue-400 rounded-full" />
-                <div className="w-2 h-0.5 bg-blue-400 rounded-full" />
-                <div className="w-2 h-0.5 bg-blue-300 rounded-full" />
+                <div className="w-10 h-0.5 bg-gradient-to-r from-[#2391FF] to-blue-400 rounded-full" />
+                <div className="w-2 h-0.5 bg-[#2391FF]/60 rounded-full" />
+                <div className="w-2 h-0.5 bg-[#2391FF]/30 rounded-full" />
               </motion.div>
             </motion.div>
 
@@ -303,10 +303,10 @@ export default function Tentang() {
                 transition={{ duration: 0.3 }}
                 className="group relative bg-surface rounded-2xl border border-border shadow-soft hover:shadow-soft-lg overflow-hidden"
               >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl" />
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl" />
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#2391FF]/5 rounded-full blur-2xl" />
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-[#2391FF]/5 rounded-full blur-2xl" />
 
-                <div className="absolute inset-0 bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl -z-10" />
+                <div className="absolute inset-0 bg-[#2391FF] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl -z-10" />
                 <div className="absolute inset-[1px] bg-surface rounded-2xl -z-10" />
 
                 <div className="p-5 md:p-6 text-center relative">
@@ -315,8 +315,8 @@ export default function Tentang() {
                     transition={{ duration: 0.6 }}
                     className="relative inline-block"
                   >
-                    <div className="absolute inset-0 bg-blue-500 rounded-xl blur-md opacity-40 group-hover:opacity-70 transition duration-300" />
-                    <div className="relative w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-soft group-hover:scale-105 transition duration-300">
+                    <div className="absolute inset-0 bg-[#2391FF] rounded-xl blur-md opacity-40 group-hover:opacity-70 transition duration-300" />
+                    <div className="relative w-14 h-14 bg-[#2391FF] rounded-xl flex items-center justify-center mx-auto mb-4 shadow-soft group-hover:scale-105 transition duration-300">
                       <svg
                         className="w-7 h-7 text-white"
                         fill="none"
@@ -340,7 +340,7 @@ export default function Tentang() {
                   </motion.div>
 
                   <h3 className="text-xl font-bold mb-3">
-                    <span className="text-blue-600">
+                    <span className="text-[#2391FF]">
                       Visi
                     </span>
                   </h3>
@@ -360,10 +360,10 @@ export default function Tentang() {
                 transition={{ duration: 0.3 }}
                 className="group relative bg-surface rounded-2xl border border-border shadow-soft hover:shadow-soft-lg overflow-hidden"
               >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl" />
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl" />
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#2391FF]/5 rounded-full blur-2xl" />
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-[#2391FF]/5 rounded-full blur-2xl" />
 
-                <div className="absolute inset-0 bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl -z-10" />
+                <div className="absolute inset-0 bg-[#2391FF] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl -z-10" />
                 <div className="absolute inset-[1px] bg-surface rounded-2xl -z-10" />
 
                 <div className="p-5 md:p-6">
@@ -372,8 +372,8 @@ export default function Tentang() {
                     transition={{ duration: 0.6 }}
                     className="relative inline-block mx-auto block w-fit mb-4"
                   >
-                    <div className="absolute inset-0 bg-blue-500 rounded-xl blur-md opacity-40 group-hover:opacity-70 transition duration-300" />
-                    <div className="relative w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center shadow-soft group-hover:scale-105 transition duration-300">
+                    <div className="absolute inset-0 bg-[#2391FF] rounded-xl blur-md opacity-40 group-hover:opacity-70 transition duration-300" />
+                    <div className="relative w-14 h-14 bg-[#2391FF] rounded-xl flex items-center justify-center shadow-soft group-hover:scale-105 transition duration-300">
                       <svg
                         className="w-7 h-7 text-white"
                         fill="none"
@@ -391,7 +391,7 @@ export default function Tentang() {
                   </motion.div>
 
                   <h3 className="text-xl font-bold text-center mb-4">
-                    <span className="text-blue-600">
+                    <span className="text-[#2391FF]">
                       Misi
                     </span>
                   </h3>
@@ -417,7 +417,7 @@ export default function Tentang() {
                         <div className="relative flex-shrink-0 mt-0.5">
                           <motion.div
                             whileHover={{ scale: 1.2 }}
-                            className="w-4 h-4 bg-blue-600 rounded-full flex items-center justify-center shadow-soft-sm"
+                            className="w-4 h-4 bg-[#2391FF] rounded-full flex items-center justify-center shadow-soft-sm"
                           >
                             <svg
                               className="w-2.5 h-2.5 text-white"
@@ -457,7 +457,7 @@ export default function Tentang() {
           >
             <motion.div variants={fadeInUp}>
               <div className="inline-block mb-3">
-                <span className="inline-flex items-center rounded-full bg-blue-50 px-4 py-1 text-sm font-semibold text-blue-700 ring-1 ring-inset ring-blue-600/20">
+                <span className="inline-flex items-center rounded-full bg-blue-50 dark:bg-[#2391FF]/10 px-4 py-1 text-sm font-semibold text-[#2391FF] ring-1 ring-inset ring-[#2391FF]/20">
                   Core Values
                 </span>
               </div>
@@ -468,7 +468,7 @@ export default function Tentang() {
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
                 transition={{ duration: 0.6 }}
-                className="h-1 w-16 bg-gradient-to-r from-blue-500 to-blue-700 rounded-full mx-auto mb-4"
+                className="h-1 w-16 bg-gradient-to-r from-[#2391FF] to-blue-600 rounded-full mx-auto mb-4"
               />
               <p className="text-content-muted text-base md:text-lg max-w-2xl mx-auto">
                 Prinsip yang menjadi fondasi setiap langkah kami dalam melayani
@@ -482,7 +482,7 @@ export default function Tentang() {
               {
                 icon: (
                   <svg
-                    className="w-7 h-7 text-blue-700"
+                    className="w-7 h-7 text-[#2391FF]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -497,13 +497,13 @@ export default function Tentang() {
                 ),
                 title: "Kualitas Premium",
                 desc: "Setiap laptop melalui 15+ titik pengecekan. Garansi performa dan fisik barang sebelum sampai ke tangan Anda.",
-                gradient: "from-blue-100 to-blue-200",
-                textColor: "text-blue-700",
+                gradient: "from-[#2391FF]/15 to-blue-200 dark:from-[#2391FF]/20 dark:to-blue-900/30",
+                textColor: "text-[#2391FF]",
               },
               {
                 icon: (
                   <svg
-                    className="w-7 h-7 text-blue-700"
+                    className="w-7 h-7 text-[#2391FF]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -518,13 +518,13 @@ export default function Tentang() {
                 ),
                 title: "Transparansi Penuh",
                 desc: "Kami jelaskan kondisi laptop secara jujur, termasuk minus dan plusnya. Tidak ada manipulasi — kepercayaan adalah segalanya.",
-                gradient: "from-blue-100 to-blue-200",
-                textColor: "text-blue-700",
+                gradient: "from-[#2391FF]/15 to-blue-200 dark:from-[#2391FF]/20 dark:to-blue-900/30",
+                textColor: "text-[#2391FF]",
               },
               {
                 icon: (
                   <svg
-                    className="w-7 h-7 text-blue-700"
+                    className="w-7 h-7 text-[#2391FF]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -539,8 +539,8 @@ export default function Tentang() {
                 ),
                 title: "Solusi Cerdas & Cepat",
                 desc: "Bantu Anda memilih laptop yang pas dengan budget dan kebutuhan. Konsultasi gratis, respons cepat, tanpa drama.",
-                gradient: "from-blue-100 to-blue-200",
-                textColor: "text-blue-700",
+                gradient: "from-[#2391FF]/15 to-blue-200 dark:from-[#2391FF]/20 dark:to-blue-900/30",
+                textColor: "text-[#2391FF]",
               },
             ].map((item, idx) => (
               <motion.div

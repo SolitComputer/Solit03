@@ -279,12 +279,12 @@ export default function DaftarMitra() {
               <h1 className="text-2xl font-bold text-content">Pendaftaran Berhasil!</h1>
               <p className="text-content-muted mt-2">{result.message}</p>
             </div>
-            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-sm text-emerald-800">
+            <div className="bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 rounded-xl p-4 text-sm text-emerald-800 dark:text-emerald-300">
               Tim kami akan meninjau pendaftaran Anda dan menghubungi via WhatsApp dalam <span className="font-bold">1×24 jam</span>.
             </div>
             <button
               onClick={handleReset}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-soft hover:shadow-soft-lg active:scale-95"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#2391FF] to-blue-600 hover:from-[#1a7de6] hover:to-blue-700 text-white font-bold rounded-xl transition-all shadow-[0_4px_16px_rgba(35,145,255,0.25)] hover:shadow-[0_8px_24px_rgba(35,145,255,0.35)] active:scale-95"
             >
               Daftar Lagi
             </button>
@@ -319,21 +319,21 @@ export default function DaftarMitra() {
           }`}
         >
           <span className="eyebrow">
-            <span className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
+            <span className="w-1.5 h-1.5 bg-[#2391FF] rounded-full" />
             Reseller & Official Partner
           </span>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-content mt-5">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-content mt-5">
             Gabung Jadi{" "}
-            <span className="text-blue-600">Mitra & Reseller</span>
+            <span className="text-[#2391FF]">Mitra & Reseller</span>
           </h1>
-          <p className="text-sm md:text-base text-content-muted max-w-2xl mx-auto mt-4">
+          <p className="text-sm md:text-base text-content-muted max-w-2xl mx-auto mt-4 leading-relaxed">
             Daftar sekarang dan dapatkan akses ke stok laptop second berkualitas
-            dengan harga khusus langsung dari <span className="font-semibold text-blue-600">Solit</span>.
+            dengan harga khusus langsung dari <span className="font-semibold text-[#2391FF]">Solit</span>.
           </p>
           <div className="flex justify-center items-center gap-2 mt-6">
-            <div className="w-12 h-0.5 bg-gradient-to-r from-transparent to-blue-400 rounded-full" />
-            <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-            <div className="w-12 h-0.5 bg-gradient-to-l from-transparent to-blue-400 rounded-full" />
+            <div className="w-12 h-0.5 bg-gradient-to-r from-transparent to-[#2391FF] rounded-full" />
+            <div className="w-1.5 h-1.5 rounded-full bg-[#2391FF]" />
+            <div className="w-12 h-0.5 bg-gradient-to-l from-transparent to-[#2391FF] rounded-full" />
           </div>
         </div>
 
@@ -344,10 +344,10 @@ export default function DaftarMitra() {
             isVisible.form ? "opacity-100 scale-100" : "opacity-0 scale-95"
           }`}
         >
-          <div className="bg-surface rounded-2xl border border-border shadow-soft hover:shadow-soft-lg transition-all duration-300 p-6 sm:p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                <Shield className="w-5 h-5 text-blue-600" />
+          <div className="bg-surface rounded-2xl border border-border shadow-soft hover:shadow-soft-lg transition-all duration-300 p-6 sm:p-8 md:p-10">
+            <div className="flex items-center gap-3 mb-7">
+              <div className="w-11 h-11 bg-[#2391FF]/10 dark:bg-[#2391FF]/15 rounded-xl flex items-center justify-center">
+                <Shield className="w-5 h-5 text-[#2391FF]" />
               </div>
               <div>
                 <h2 className="text-lg font-bold text-content">Formulir Pendaftaran</h2>
@@ -383,16 +383,16 @@ export default function DaftarMitra() {
                       }}
                       className={`group relative p-4 rounded-xl border-2 text-left transition-all duration-200 ${
                         form.type === opt.value
-                          ? "border-blue-500 bg-blue-50 ring-4 ring-blue-100"
-                          : "border-border hover:border-slate-300 bg-surface"
+                          ? "border-[#2391FF] bg-[#2391FF]/5 ring-4 ring-[#2391FF]/10 dark:bg-[#2391FF]/10 dark:ring-[#2391FF]/5"
+                          : "border-border hover:border-slate-300 dark:hover:border-slate-600 bg-surface"
                       }`}
                     >
                       <div className="flex items-center gap-2">
                         <div
                           className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
                             form.type === opt.value
-                              ? "border-blue-500 bg-blue-500"
-                              : "border-slate-300"
+                              ? "border-[#2391FF] bg-[#2391FF]"
+                              : "border-slate-300 dark:border-slate-600"
                           }`}
                         >
                           {form.type === opt.value && (
@@ -401,7 +401,7 @@ export default function DaftarMitra() {
                         </div>
                         <span
                           className={`font-bold text-sm ${
-                            form.type === opt.value ? "text-blue-700" : "text-content"
+                            form.type === opt.value ? "text-[#2391FF]" : "text-content"
                           }`}
                         >
                           {opt.label}
@@ -458,7 +458,7 @@ export default function DaftarMitra() {
                   Alamat Lengkap <span className="text-red-500">*</span>
                 </label>
                 <div className="relative group">
-                  <div className="absolute left-4 top-3.5 text-content-muted group-focus-within:text-blue-500 transition-colors">
+                  <div className="absolute left-4 top-3.5 text-content-muted group-focus-within:text-[#2391FF] transition-colors">
                     <MapPin className="w-4 h-4" />
                   </div>
                   <textarea
@@ -470,7 +470,7 @@ export default function DaftarMitra() {
                     className={`w-full pl-11 pr-4 py-3 border-2 rounded-xl text-sm text-content placeholder:text-content-muted bg-surface-muted focus:outline-none focus:ring-4 transition-all resize-none ${
                       errors.full_address
                         ? "border-red-300 focus:border-red-500 focus:ring-red-100"
-                        : "border-border focus:border-blue-500 focus:ring-blue-100"
+                        : "border-border focus:border-[#2391FF] focus:ring-[#2391FF]/10"
                     }`}
                   />
                 </div>
@@ -484,21 +484,23 @@ export default function DaftarMitra() {
                 <label className="block text-sm font-semibold text-content-soft mb-2">
                   Bukti Follow Sosmed Solit <span className="text-red-500">*</span>
                 </label>
-                <div className="bg-blue-50/80 border border-blue-100 rounded-xl px-4 py-3 mb-3">
-                  <p className="text-xs text-blue-700 leading-relaxed">
-                    Follow minimal 1 akun sosmed Solit:{" "}
-                    <span className="font-semibold">IG @solit.comp</span>,{" "}
-                    <span className="font-semibold">TikTok solit.comp</span>, atau{" "}
-                    <span className="font-semibold">FB Page "Solit Computer"</span>.
-                    Disarankan follow ketiganya. <span className="font-bold">Upload screenshot sebagai bukti.</span>
-                  </p>
+                <div className="bg-[#2391FF]/5 dark:bg-[#2391FF]/10 border border-[#2391FF]/15 dark:border-[#2391FF]/20 rounded-xl px-4 py-3.5 mb-3 space-y-2">
+                  <p className="text-xs font-bold text-[#2391FF] dark:text-blue-300">Wajib follow semua akun Solit 03:</p>
+                  <ul className="text-xs text-slate-700 dark:text-slate-300 space-y-1">
+                    <li><span className="font-semibold">FB:</span>{" "}<a href="https://web.facebook.com/SolitComputer03/" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-900">SolitComputer03</a></li>
+                    <li><span className="font-semibold">TikTok:</span>{" "}<a href="https://www.tiktok.com/@solusi_it03" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-900">@solusi_it03</a></li>
+                    <li><span className="font-semibold">IG:</span>{" "}<a href="https://www.instagram.com/solit.comp/" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-900">@solit.comp</a></li>
+                    <li><span className="font-semibold">YouTube:</span>{" "}<a href="https://www.youtube.com/@SOLITComputer03" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-900">SOLIT Computer 03</a></li>
+                    <li><span className="font-semibold">Google Maps:</span>{" "}<a href="https://share.google/y0e2feeURnLiE973y" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-900">Review & Follow</a></li>
+                  </ul>
+                  <p className="text-[11px] text-[#2391FF] dark:text-blue-300 font-medium">Upload screenshot sebagai bukti follow.</p>
                 </div>
 
                 {/* Grid preview foto yang sudah dipilih */}
                 {followProofPreviews.length > 0 && (
                   <div className="grid grid-cols-3 gap-2 mb-3">
                     {followProofPreviews.map((preview, i) => (
-                      <div key={i} className="relative group/img rounded-xl overflow-hidden border-2 border-blue-200 bg-blue-50/30 aspect-square">
+                      <div key={i} className="relative group/img rounded-xl overflow-hidden border-2 border-[#2391FF]/30 dark:border-[#2391FF]/20 bg-[#2391FF]/5 dark:bg-[#2391FF]/10 aspect-square">
                         <img
                           src={preview}
                           alt={`Bukti follow ${i + 1}`}
@@ -531,10 +533,10 @@ export default function DaftarMitra() {
                     } ${
                       errors.follow_proof
                         ? "border-red-300 bg-red-50/50 hover:border-red-400"
-                        : "border-slate-300 bg-surface-muted hover:border-blue-400 hover:bg-blue-50/30"
+                        : "border-slate-300 dark:border-slate-600 bg-surface-muted hover:border-[#2391FF] hover:bg-[#2391FF]/5 dark:hover:bg-[#2391FF]/10"
                     }`}
                   >
-                    <div className="flex flex-col items-center gap-1.5 text-content-muted group-hover:text-blue-500 transition-colors">
+                    <div className="flex flex-col items-center gap-1.5 text-content-muted group-hover:text-[#2391FF] transition-colors">
                       <FileImage className="w-7 h-7" />
                       <div className="text-center">
                         <p className="text-sm font-semibold">
@@ -558,7 +560,7 @@ export default function DaftarMitra() {
 
                 {/* Info kalau sudah penuh */}
                 {followProofFiles.length >= MAX_FILES && (
-                  <p className="text-xs text-blue-600 font-medium text-center">
+                  <p className="text-xs text-[#2391FF] font-medium text-center">
                     Maksimal {MAX_FILES} foto tercapai
                   </p>
                 )}
@@ -571,7 +573,7 @@ export default function DaftarMitra() {
               <button
                 type="submit"
                 disabled={loading}
-                className="group relative w-full h-14 overflow-hidden rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-base transition-all duration-300 shadow-soft hover:shadow-soft-lg active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                className="group relative w-full h-14 overflow-hidden rounded-xl bg-gradient-to-r from-[#2391FF] to-blue-600 hover:from-[#1a7de6] hover:to-blue-700 text-white font-bold text-base transition-all duration-300 shadow-[0_4px_16px_rgba(35,145,255,0.25)] hover:shadow-[0_8px_24px_rgba(35,145,255,0.35)] active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                 {loading ? (
@@ -652,7 +654,7 @@ function Field({ label, name, type = "text", value, onChange, error, icon, place
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       <div className="relative group">
-        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-content-muted group-focus-within:text-blue-500 transition-colors">
+        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-content-muted group-focus-within:text-[#2391FF] transition-colors">
           {icon}
         </div>
         <input
@@ -664,7 +666,7 @@ function Field({ label, name, type = "text", value, onChange, error, icon, place
           className={`w-full pl-11 pr-4 py-3.5 border-2 rounded-xl text-sm text-content placeholder:text-content-muted bg-surface-muted focus:outline-none focus:ring-4 transition-all ${
             error
               ? "border-red-300 focus:border-red-500 focus:ring-red-100"
-              : "border-border focus:border-blue-500 focus:ring-blue-100"
+              : "border-border focus:border-[#2391FF] focus:ring-[#2391FF]/10"
           }`}
           autoComplete="off"
         />

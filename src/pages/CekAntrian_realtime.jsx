@@ -120,9 +120,9 @@ function normSvc(o, now) {
 // ═══════════════════════════════════════════
 
 const STEP_STYLE = [
-  { bar: "#EF9F27", badgeBg: "bg-amber-50 dark:bg-amber-500/15", badgeText: "text-amber-700 dark:text-amber-300", icon: Clock },
-  { bar: "#378ADD", badgeBg: "bg-blue-50 dark:bg-blue-500/15", badgeText: "text-blue-700 dark:text-blue-300", icon: Package },
-  { bar: "#1D9E75", badgeBg: "bg-emerald-50 dark:bg-emerald-500/15", badgeText: "text-emerald-700 dark:text-emerald-300", icon: Check },
+  { bar: "#EF9F27", badgeBg: "bg-amber-50 dark:bg-amber-900/30", badgeText: "text-amber-700 dark:text-amber-300", icon: Clock },
+  { bar: "#2391FF", badgeBg: "bg-blue-50 dark:bg-[#2391FF]/15", badgeText: "text-[#2391FF] dark:text-blue-300", icon: Package },
+  { bar: "#1D9E75", badgeBg: "bg-emerald-50 dark:bg-emerald-900/30", badgeText: "text-emerald-700 dark:text-emerald-300", icon: Check },
 ];
 
 // ═══════════════════════════════════════════
@@ -130,14 +130,14 @@ const STEP_STYLE = [
 // ═══════════════════════════════════════════
 
 function Dot({ state, big = false }) {
-  const size = big ? "w-5 h-5" : "w-4 h-4";
-  const iconSize = big ? 11 : 9;
+  const size = big ? "w-5 h-5" : "w-[18px] h-[18px]";
+  const iconSize = big ? 11 : 10;
   const cls = {
-    done: "bg-emerald-500 text-white",
-    active1: "bg-amber-500 ring-4 ring-amber-100 animate-pulse",
-    active2: "bg-blue-500 ring-4 ring-blue-100 animate-pulse",
-    active3: "bg-emerald-500 ring-4 ring-emerald-100 text-white",
-    pending: "bg-surface border-2 border-slate-300",
+    done: "bg-emerald-500 text-white shadow-sm shadow-emerald-500/30",
+    active1: "bg-amber-500 ring-4 ring-amber-500/20 animate-pulse",
+    active2: "bg-[#2391FF] ring-4 ring-[#2391FF]/20 animate-pulse",
+    active3: "bg-emerald-500 ring-4 ring-emerald-500/20 text-white",
+    pending: "bg-surface border-2 border-slate-300 dark:border-slate-600",
   }[state];
   return (
     <div className={`${size} rounded-full flex items-center justify-center flex-shrink-0 ${cls}`}>
@@ -153,7 +153,7 @@ function dotState(step, i) {
 }
 
 function lineColor(step, i) {
-  return i < step ? (step === 2 ? "bg-emerald-500" : "bg-blue-500") : "bg-slate-200";
+  return i < step ? (step === 2 ? "bg-emerald-500" : "bg-[#2391FF]") : "bg-slate-200 dark:bg-slate-700";
 }
 
 // ═══════════════════════════════════════════
@@ -170,39 +170,39 @@ function PhaseCard({ n }) {
   const badgeLabel = n.labels[n.step];
 
   return (
-    <div className="group bg-surface border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-200 dark:hover:border-blue-500/40 transition-all duration-300 ease-out">
-      <div style={{ height: 6, background: `linear-gradient(90deg, ${st.bar}, ${st.bar}cc)` }} />
-      <div className="p-3">
-        <div className="flex items-center justify-between mb-1.5">
-          <span className="font-mono text-[11px] font-bold text-content-soft bg-surface-muted dark:bg-slate-700/50 px-1.5 py-0.5 rounded-md">{n.orderNo}</span>
-          <span className={`inline-flex items-center gap-1 ${st.badgeBg} ${st.badgeText} text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm`}>
-            <Icon size={12} /> {badgeLabel}{badgeDur ? ` · ${badgeDur}` : ""}
+    <div className="group relative bg-white/80 dark:bg-[#0F2341]/60 backdrop-blur-sm border border-slate-200/80 dark:border-[#2391FF]/15 rounded-2xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_16px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_30px_rgba(35,145,255,0.1)] hover:-translate-y-1 hover:border-[#2391FF]/30 dark:hover:border-[#2391FF]/40 transition-all duration-300 ease-out">
+      <div style={{ height: 4, background: `linear-gradient(90deg, ${st.bar}, ${st.bar}88)` }} />
+      <div className="p-4 sm:p-5">
+        <div className="flex items-center justify-between mb-2.5">
+          <span className="font-mono text-xs font-bold text-[#2391FF] bg-[#2391FF]/8 dark:bg-[#2391FF]/15 px-2.5 py-1 rounded-lg tracking-wide">{n.orderNo}</span>
+          <span className={`inline-flex items-center gap-1.5 ${st.badgeBg} ${st.badgeText} text-xs font-bold px-3 py-1.5 rounded-full`}>
+            <Icon size={13} /> {badgeLabel}{badgeDur ? ` · ${badgeDur}` : ""}
           </span>
         </div>
-        <p className="font-bold text-content leading-tight text-sm">{n.nama}</p>
-        <p className="text-xs text-content-soft dark:text-slate-300 mt-0.5 truncate">
+        <p className="font-extrabold text-content leading-tight text-base sm:text-lg tracking-tight">{n.nama}</p>
+        <p className="text-sm text-content-soft dark:text-slate-300 mt-1 truncate">
           {n.device}{n.subtitle ? <span className="text-content-muted dark:text-slate-400"> · {n.subtitle}</span> : null}
         </p>
         {n.chips.length > 0 && (
-          <div className="flex gap-1.5 flex-wrap mt-1.5">
+          <div className="flex gap-2 flex-wrap mt-2.5">
             {n.chips.map((c, i) => (
-              <span key={i} className={`text-[10px] font-semibold px-2 py-0.5 rounded ${["bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300", "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300", "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"][i % 3]}`}>{c}</span>
+              <span key={i} className={`text-[11px] font-semibold px-2.5 py-1 rounded-lg ${["bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300", "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300", "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"][i % 3]}`}>{c}</span>
             ))}
           </div>
         )}
-        <div className="flex items-center gap-1 mt-2">
+        <div className="flex items-center gap-1.5 mt-3.5">
           <Dot state={dotState(n.step, 0)} />
-          <div className={`flex-1 h-0.5 rounded ${lineColor(n.step, 0)}`} />
+          <div className={`flex-1 h-[3px] rounded-full ${lineColor(n.step, 0)}`} />
           <Dot state={dotState(n.step, 1)} />
-          <div className={`flex-1 h-0.5 rounded ${lineColor(n.step, 1)}`} />
+          <div className={`flex-1 h-[3px] rounded-full ${lineColor(n.step, 1)}`} />
           <Dot state={dotState(n.step, 2)} />
         </div>
-        <div className="flex justify-between mt-1">
-          <span className={`text-[10px] ${n.step >= 0 ? "text-content font-medium" : "text-content-muted"}`}>{n.labels[0]}</span>
-          <span className={`text-[10px] ${n.step >= 1 ? "text-blue-600 dark:text-blue-400 font-medium" : "text-content-muted"} truncate px-1`}>
+        <div className="flex justify-between mt-1.5">
+          <span className={`text-[11px] ${n.step >= 0 ? "text-content font-semibold" : "text-content-muted"}`}>{n.labels[0]}</span>
+          <span className={`text-[11px] ${n.step >= 1 ? "text-[#2391FF] dark:text-blue-400 font-semibold" : "text-content-muted"} truncate px-1`}>
             {n.step2Name ? `oleh ${n.step2Name}` : n.labels[1]}
           </span>
-          <span className={`text-[10px] ${n.step >= 2 ? "text-emerald-600 dark:text-emerald-400 font-medium" : "text-content-muted"}`}>{n.labels[2]}</span>
+          <span className={`text-[11px] ${n.step >= 2 ? "text-emerald-600 dark:text-emerald-400 font-semibold" : "text-content-muted"}`}>{n.labels[2]}</span>
         </div>
       </div>
     </div>
@@ -218,13 +218,13 @@ function BigCard({ n }) {
   const Icon = st.icon;
 
   const statusColor =
-    n.step === 0 ? "text-amber-500"
-      : n.step === 1 ? "text-blue-500"
-        : "text-emerald-500";
+    n.step === 0 ? "text-amber-600 dark:text-amber-400"
+      : n.step === 1 ? "text-[#2391FF]"
+        : "text-emerald-600 dark:text-emerald-400";
 
   const dotGradient =
     n.step === 0 ? "from-amber-400 to-amber-500"
-      : n.step === 1 ? "from-blue-400 to-blue-500"
+      : n.step === 1 ? "from-[#2391FF] to-blue-500"
         : "from-emerald-400 to-emerald-500";
 
   const badgeDur =
@@ -245,49 +245,49 @@ function BigCard({ n }) {
         <div className="flex-1 min-w-0 flex flex-col justify-center">
 
           {/* Nama Customer */}
-          <div className="mb-5 xl:mb-7">
-            <div className="flex items-center gap-2 mb-2">
-              <User size={13} className="text-slate-400" />
-              <p className="text-[10px] xl:text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-[0.2em] uppercase">
+          <div className="mb-6 xl:mb-8">
+            <div className="flex items-center gap-2.5 mb-3">
+              <User size={16} className="text-[#2391FF]/60 dark:text-[#2391FF]/50" />
+              <p className="text-xs xl:text-sm text-[#2391FF]/60 dark:text-[#2391FF]/50 font-bold tracking-[0.25em] uppercase">
                 Nama Customer
               </p>
             </div>
-            <p className="text-4xl xl:text-5xl 2xl:text-6xl font-black text-content tracking-tight leading-[1.05]">
+            <p className="text-5xl xl:text-6xl 2xl:text-7xl font-black text-slate-800 dark:text-white tracking-tight leading-[1.05]">
               {n.nama}
             </p>
           </div>
 
           {/* Tipe Barang / Laptop */}
-          <div className="pb-4 xl:pb-5 mb-4 xl:mb-5 border-b border-slate-100/80 dark:border-slate-800/60">
-            <div className="flex items-center gap-2 mb-2">
-              <Monitor size={13} className="text-slate-400" />
-              <p className="text-[10px] xl:text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-[0.2em] uppercase">
+          <div className="pb-5 xl:pb-6 mb-5 xl:mb-6 border-b border-slate-200/60 dark:border-white/[0.06]">
+            <div className="flex items-center gap-2.5 mb-3">
+              <Monitor size={16} className="text-[#2391FF]/60 dark:text-[#2391FF]/50" />
+              <p className="text-xs xl:text-sm text-[#2391FF]/60 dark:text-[#2391FF]/50 font-bold tracking-[0.25em] uppercase">
                 {n.source === "prep" ? "Tipe Barang" : "Tipe Laptop"}
               </p>
             </div>
-            <p className="text-2xl xl:text-3xl 2xl:text-4xl font-extrabold text-content leading-snug">
+            <p className="text-3xl xl:text-4xl 2xl:text-5xl font-extrabold text-slate-700 dark:text-white/90 leading-snug">
               {n.device}
             </p>
           </div>
 
           {/* Keluhan (service) or Spesifikasi (prep) */}
           {n.source === "service" && n.subtitle ? (
-            <div className="pb-4 xl:pb-5 mb-4 xl:mb-5 border-b border-slate-100/80 dark:border-slate-800/60">
-              <div className="flex items-center gap-2 mb-2">
-                <MessageSquare size={13} className="text-slate-400" />
-                <p className="text-[10px] xl:text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-[0.2em] uppercase">Keluhan</p>
+            <div className="pb-5 xl:pb-6 mb-5 xl:mb-6 border-b border-slate-200/60 dark:border-white/[0.06]">
+              <div className="flex items-center gap-2.5 mb-3">
+                <MessageSquare size={16} className="text-[#2391FF]/60 dark:text-[#2391FF]/50" />
+                <p className="text-xs xl:text-sm text-[#2391FF]/60 dark:text-[#2391FF]/50 font-bold tracking-[0.25em] uppercase">Keluhan</p>
               </div>
-              <p className="text-xl xl:text-2xl 2xl:text-3xl font-bold text-content leading-snug">{n.subtitle}</p>
+              <p className="text-2xl xl:text-3xl 2xl:text-4xl font-bold text-slate-700 dark:text-white/80 leading-snug">{n.subtitle}</p>
             </div>
           ) : n.chips.length > 0 ? (
-            <div className="pb-4 xl:pb-5 mb-4 xl:mb-5 border-b border-slate-100/80 dark:border-slate-800/60">
-              <p className="text-[10px] xl:text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-[0.2em] uppercase mb-3">Spesifikasi</p>
+            <div className="pb-5 xl:pb-6 mb-5 xl:mb-6 border-b border-slate-200/60 dark:border-white/[0.06]">
+              <p className="text-xs xl:text-sm text-[#2391FF]/60 dark:text-[#2391FF]/50 font-bold tracking-[0.25em] uppercase mb-4">Spesifikasi</p>
               <div className="flex gap-3 flex-wrap">
                 {n.chips.map((c, ci) => (
-                  <span key={ci} className={`text-base xl:text-lg 2xl:text-xl font-bold px-4 py-2 rounded-xl shadow-sm ${
-                    ["bg-blue-50 text-blue-700 border border-blue-100 dark:bg-blue-500/15 dark:text-blue-300 dark:border-blue-500/20",
-                     "bg-violet-50 text-violet-700 border border-violet-100 dark:bg-violet-500/15 dark:text-violet-300 dark:border-violet-500/20",
-                     "bg-emerald-50 text-emerald-700 border border-emerald-100 dark:bg-emerald-500/15 dark:text-emerald-300 dark:border-emerald-500/20"][ci % 3]
+                  <span key={ci} className={`text-lg xl:text-xl 2xl:text-2xl font-bold px-5 py-2.5 rounded-xl ${
+                    ["bg-[#2391FF]/10 text-[#2391FF] border border-[#2391FF]/15 dark:border-[#2391FF]/20",
+                     "bg-violet-100 text-violet-700 border border-violet-200 dark:bg-violet-500/10 dark:text-violet-400 dark:border-violet-500/20",
+                     "bg-emerald-100 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20"][ci % 3]
                   }`}>{c}</span>
                 ))}
               </div>
@@ -296,31 +296,31 @@ function BigCard({ n }) {
 
           {/* Catatan Progres */}
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <MessageSquare size={13} className="text-slate-400" />
-              <p className="text-[10px] xl:text-[11px] text-slate-400 dark:text-slate-500 font-bold tracking-[0.2em] uppercase">Catatan Progres</p>
+            <div className="flex items-center gap-2.5 mb-4">
+              <MessageSquare size={16} className="text-[#2391FF]/60 dark:text-[#2391FF]/50" />
+              <p className="text-xs xl:text-sm text-[#2391FF]/60 dark:text-[#2391FF]/50 font-bold tracking-[0.25em] uppercase">Catatan Progres</p>
             </div>
             {catatanLines.length > 0 ? (
-              <div className="space-y-2.5">
+              <div className="space-y-3">
                 {catatanLines.map((line, li) => (
-                  <div key={li} className="flex gap-3 items-start">
-                    <span className="shrink-0 w-7 h-7 xl:w-8 xl:h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm shadow-blue-500/20">
-                      <span className="text-white font-black text-xs xl:text-sm">{li + 1}</span>
+                  <div key={li} className="flex gap-4 items-start">
+                    <span className="shrink-0 w-8 h-8 xl:w-9 xl:h-9 rounded-full bg-gradient-to-br from-[#2391FF] to-blue-600 flex items-center justify-center shadow-lg shadow-[#2391FF]/20">
+                      <span className="text-white font-black text-sm xl:text-base">{li + 1}</span>
                     </span>
-                    <p className="text-lg xl:text-xl 2xl:text-2xl font-bold text-content leading-snug pt-0.5">{line}</p>
+                    <p className="text-xl xl:text-2xl 2xl:text-3xl font-bold text-slate-700 dark:text-white/80 leading-snug pt-0.5">{line}</p>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-xl xl:text-2xl font-bold text-slate-200 dark:text-slate-700">— Belum ada catatan</p>
+              <p className="text-2xl xl:text-3xl font-bold text-slate-200 dark:text-white/15">— Belum ada catatan</p>
             )}
           </div>
         </div>
 
         {/* ─── RIGHT: Status timeline in card ─── */}
-        <div className="shrink-0 w-60 xl:w-72 2xl:w-80 flex flex-col justify-center">
-          <div className="bg-gradient-to-br from-slate-50/90 to-slate-100/60 dark:from-slate-800/50 dark:to-slate-800/30 rounded-3xl p-6 xl:p-8 border border-slate-200/60 dark:border-slate-700/40 shadow-sm">
-            <p className="text-[10px] xl:text-[11px] font-bold tracking-[0.25em] text-slate-400 dark:text-slate-500 uppercase mb-6 xl:mb-8">Progress</p>
+        <div className="shrink-0 w-64 xl:w-80 2xl:w-[22rem] flex flex-col justify-center">
+          <div className="bg-slate-50/90 dark:bg-white/[0.04] backdrop-blur-sm rounded-3xl p-7 xl:p-9 border border-slate-200/60 dark:border-white/[0.06] shadow-lg dark:shadow-[0_8px_40px_rgba(0,0,0,0.3)]">
+            <p className="text-xs xl:text-sm font-bold tracking-[0.3em] text-[#2391FF]/50 dark:text-[#2391FF]/40 uppercase mb-7 xl:mb-9">Progress</p>
             <div className="flex flex-col">
               {n.labels.map((lbl, si) => {
                 const isDone = si < n.step;
@@ -331,39 +331,39 @@ function BigCard({ n }) {
                     <div className="flex items-start gap-4">
                       {/* Dot */}
                       <div className="flex flex-col items-center shrink-0">
-                        <div className={`w-6 h-6 xl:w-7 xl:h-7 rounded-full shrink-0 flex items-center justify-center transition-all ${
+                        <div className={`w-7 h-7 xl:w-8 xl:h-8 rounded-full shrink-0 flex items-center justify-center transition-all ${
                           isDone
-                            ? "bg-emerald-500 shadow-md shadow-emerald-500/30"
+                            ? "bg-emerald-500 shadow-lg shadow-emerald-500/30"
                             : isCurrent
-                              ? `bg-gradient-to-br ${dotGradient} ring-[3px] ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-800 shadow-lg`
-                              : "bg-slate-200 dark:bg-slate-700"
+                              ? `bg-gradient-to-br ${dotGradient} ring-[3px] ring-offset-2 ring-offset-slate-50 dark:ring-offset-[#0A1628] shadow-lg`
+                              : "bg-slate-200 dark:bg-white/10"
                         }`} style={isCurrent ? { ringColor: st.bar + '30' } : undefined}>
-                          {isDone && <Check size={14} className="text-white" strokeWidth={3} />}
-                          {isCurrent && <div className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />}
+                          {isDone && <Check size={16} className="text-white" strokeWidth={3} />}
+                          {isCurrent && <div className="w-3 h-3 rounded-full bg-white animate-pulse" />}
                         </div>
                       </div>
                       {/* Label + durasi */}
                       <div className="flex-1 min-w-0 -mt-0.5">
-                        <p className={`text-lg xl:text-xl font-bold leading-snug ${
-                          isCurrent ? statusColor : isDone ? "text-emerald-500" : "text-slate-300 dark:text-slate-600"
+                        <p className={`text-xl xl:text-2xl font-bold leading-snug ${
+                          isCurrent ? statusColor : isDone ? "text-emerald-500 dark:text-emerald-400" : "text-slate-300 dark:text-white/20"
                         }`}>{lbl}</p>
                         {(isCurrent || isDone) && stepDur && (
-                          <span className={`inline-block text-xs xl:text-sm font-bold tabular-nums mt-1.5 px-2.5 py-0.5 rounded-lg ${
+                          <span className={`inline-block text-sm xl:text-base font-bold tabular-nums mt-2 px-3 py-1 rounded-lg ${
                             isDone ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
                                    : n.step === 0 ? "bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400"
-                                   : n.step === 1 ? "bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"
-                                   : "bg-slate-100 text-content-muted dark:bg-slate-700/50"
+                                   : n.step === 1 ? "bg-[#2391FF]/10 text-[#2391FF]"
+                                   : "bg-slate-100 text-slate-500 dark:bg-white/5 dark:text-white/40"
                           }`}>{stepDur}</span>
                         )}
                         {isCurrent && n.step2Name && (
-                          <p className="text-sm xl:text-base text-content-soft font-semibold mt-1">oleh {n.step2Name}</p>
+                          <p className="text-base xl:text-lg text-slate-400 dark:text-white/50 font-semibold mt-1.5">oleh {n.step2Name}</p>
                         )}
                       </div>
                     </div>
                     {/* Connecting line */}
                     {si < n.labels.length - 1 && (
-                      <div className="flex items-stretch ml-[11px] xl:ml-[13px]">
-                        <div className={`w-[2px] min-h-[32px] xl:min-h-[40px] my-1.5 rounded-full transition-colors ${isDone ? "bg-emerald-400" : "bg-slate-200 dark:bg-slate-700"}`} />
+                      <div className="flex items-stretch ml-[13px] xl:ml-[15px]">
+                        <div className={`w-[2px] min-h-[36px] xl:min-h-[44px] my-2 rounded-full transition-colors ${isDone ? "bg-emerald-400/60" : "bg-slate-200 dark:bg-white/[0.06]"}`} />
                       </div>
                     )}
                   </div>
@@ -828,22 +828,23 @@ export default function CekAntrian() {
             @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
             .marquee-track{display:inline-flex;white-space:nowrap;animation:marquee 40s linear infinite}
           `}</style>
-          <div className="fixed inset-0 z-[100] bg-gradient-to-br from-slate-50 via-white to-blue-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950/15 flex flex-col poppins-display">
+          <div className="fixed inset-0 z-[100] bg-gradient-to-br from-slate-50 via-white to-blue-50/40 dark:from-[#0A1628] dark:via-[#0D1D35] dark:to-[#0A1628] flex flex-col poppins-display">
             {/* Decorative floating orbs */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-blue-400/[0.04] dark:bg-blue-400/[0.03]" style={{animation:'floatOrb 20s ease-in-out infinite'}} />
-              <div className="absolute -bottom-32 -left-20 w-96 h-96 rounded-full bg-violet-400/[0.04] dark:bg-violet-400/[0.03]" style={{animation:'floatOrb 25s ease-in-out infinite reverse'}} />
-              <div className="absolute top-1/2 right-1/4 w-64 h-64 rounded-full bg-emerald-400/[0.03] dark:bg-emerald-400/[0.02]" style={{animation:'floatOrb 22s ease-in-out infinite 5s'}} />
+              <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-[#2391FF]/[0.06] dark:bg-[#2391FF]/[0.04]" style={{animation:'floatOrb 20s ease-in-out infinite'}} />
+              <div className="absolute -bottom-32 -left-20 w-[28rem] h-[28rem] rounded-full bg-violet-400/[0.05] dark:bg-violet-500/[0.03]" style={{animation:'floatOrb 25s ease-in-out infinite reverse'}} />
+              <div className="absolute top-1/2 right-1/4 w-72 h-72 rounded-full bg-emerald-400/[0.04] dark:bg-emerald-500/[0.03]" style={{animation:'floatOrb 22s ease-in-out infinite 5s'}} />
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(35,145,255,0.08),transparent)] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(35,145,255,0.06),transparent)]" />
             </div>
 
             {/* ═══ TOP BAR — dark premium + clock + counter ═══ */}
             {leftCard && (
               <div className="shrink-0 relative overflow-hidden">
-                {/* Dark gradient background */}
-                <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-black dark:via-slate-900 dark:to-black" />
+                {/* Gradient background */}
+                <div className="absolute inset-0 bg-gradient-to-r from-white via-slate-50 to-white dark:from-[#060E1A] dark:via-[#0A1628] dark:to-[#060E1A] shadow-sm dark:shadow-none" />
                 {/* Shimmer overlay */}
-                <div className="absolute inset-0 opacity-10" style={{
-                  background:'linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.2) 50%,transparent 100%)',
+                <div className="absolute inset-0 opacity-[0.05] dark:opacity-[0.07]" style={{
+                  background:'linear-gradient(90deg,transparent 0%,rgba(35,145,255,0.4) 50%,transparent 100%)',
                   backgroundSize:'200% 100%',
                   animation:'shimmer 6s ease-in-out infinite'
                 }} />
@@ -851,44 +852,44 @@ export default function CekAntrian() {
                 <div className={`absolute bottom-0 left-0 right-0 h-[2px] ${
                   leftCard.source === "prep"
                     ? "bg-gradient-to-r from-transparent via-violet-500 to-transparent"
-                    : "bg-gradient-to-r from-transparent via-blue-500 to-transparent"
+                    : "bg-gradient-to-r from-transparent via-[#2391FF] to-transparent"
                 }`} />
 
-                <div className="relative flex items-center justify-between px-6 xl:px-8 py-2.5 xl:py-3">
+                <div className="relative flex items-center justify-between px-8 xl:px-12 py-3 xl:py-4">
                   {/* Left: Source + Title */}
-                  <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 xl:w-10 xl:h-10 rounded-xl flex items-center justify-center border ${
+                  <div className="flex items-center gap-4">
+                    <div className={`w-11 h-11 xl:w-12 xl:h-12 rounded-xl flex items-center justify-center border backdrop-blur-sm ${
                       leftCard.source === "prep"
-                        ? "bg-violet-500/15 border-violet-500/30"
-                        : "bg-blue-500/15 border-blue-500/30"
+                        ? "bg-violet-100 border-violet-200 dark:bg-violet-500/15 dark:border-violet-500/25 shadow-[0_0_20px_rgba(139,92,246,0.1)] dark:shadow-[0_0_20px_rgba(139,92,246,0.15)]"
+                        : "bg-[#2391FF]/10 border-[#2391FF]/20 dark:bg-[#2391FF]/15 dark:border-[#2391FF]/25 shadow-[0_0_20px_rgba(35,145,255,0.1)] dark:shadow-[0_0_20px_rgba(35,145,255,0.15)]"
                     }`}>
                       {leftCard.source === "prep"
-                        ? <Truck size={18} className="text-violet-400" />
-                        : <Wrench size={18} className="text-blue-400" />
+                        ? <Truck size={22} className="text-violet-600 dark:text-violet-400" />
+                        : <Wrench size={22} className="text-[#2391FF]" />
                       }
                     </div>
                     <div>
-                      <span className="text-white font-extrabold text-sm xl:text-base tracking-wide block leading-tight">
+                      <span className="text-slate-800 dark:text-white font-extrabold text-lg xl:text-xl tracking-wide block leading-tight">
                         {leftCard.source === "prep" ? "Penyiapan Barang" : "Antrian Service"}
                       </span>
-                      <span className="text-white/40 text-[10px] xl:text-[11px] font-medium tracking-wider uppercase">SOLIT 03</span>
+                      <span className="text-[#2391FF]/70 dark:text-[#2391FF]/50 text-xs xl:text-sm font-bold tracking-[0.2em] uppercase">SOLIT 03</span>
                     </div>
                   </div>
 
                   {/* Right: Clock + Live + Counter + Close */}
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-4">
                     {/* Clock */}
-                    <div className="flex items-center gap-1.5 text-white/50">
-                      <Clock size={14} />
-                      <span className="font-mono text-sm xl:text-base font-bold tabular-nums tracking-wider">{clockTime}</span>
+                    <div className="flex items-center gap-2 text-slate-500 dark:text-white/60">
+                      <Clock size={18} />
+                      <span className="font-mono text-lg xl:text-xl font-bold tabular-nums tracking-wider">{clockTime}</span>
                     </div>
 
-                    <div className="w-px h-5 bg-white/10" />
+                    <div className="w-px h-7 bg-slate-200 dark:bg-white/10" />
 
                     {/* LIVE badge */}
-                    <div className="flex items-center gap-1.5 bg-white/[0.06] rounded-full px-3 py-1 border border-white/[0.08]">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      <span className="text-emerald-400/90 text-[11px] xl:text-xs font-bold tracking-wider">LIVE</span>
+                    <div className="flex items-center gap-2 bg-emerald-50 dark:bg-emerald-500/10 rounded-full px-4 py-1.5 border border-emerald-200 dark:border-emerald-500/20">
+                      <div className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
+                      <span className="text-emerald-600 dark:text-emerald-400 text-xs xl:text-sm font-bold tracking-wider">LIVE</span>
                     </div>
 
                   </div>
@@ -899,13 +900,13 @@ export default function CekAntrian() {
             {/* ═══ KONTEN UTAMA ═══ */}
             {slideMap.length === 0 ? (
               <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
-                <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-800/50 flex items-center justify-center mb-8 shadow-xl shadow-slate-200/30 dark:shadow-black/20 border border-slate-200/50 dark:border-slate-700/30">
-                  <Wrench size={44} className="text-slate-300 dark:text-slate-600" />
+                <div className="w-32 h-32 rounded-3xl bg-slate-100 dark:bg-white/[0.04] flex items-center justify-center mb-10 shadow-2xl shadow-slate-200/50 dark:shadow-black/20 border border-slate-200/50 dark:border-white/[0.06]">
+                  <Wrench size={52} className="text-slate-300 dark:text-white/15" />
                 </div>
-                <p className="text-3xl xl:text-4xl font-black text-content">Belum ada antrian hari ini</p>
-                <p className="text-base xl:text-lg text-content-muted mt-3 max-w-lg">Papan akan update otomatis begitu ada servis atau penyiapan masuk.</p>
-                <button onClick={exit} className="mt-8 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-content-soft text-sm font-semibold transition-colors border border-slate-200 dark:border-slate-700">
-                  <X size={16} /> Keluar Mode Display
+                <p className="text-4xl xl:text-5xl font-black text-slate-800 dark:text-white">Belum ada antrian hari ini</p>
+                <p className="text-lg xl:text-xl text-slate-400 dark:text-white/40 mt-4 max-w-lg">Papan akan update otomatis begitu ada servis atau penyiapan masuk.</p>
+                <button onClick={exit} className="mt-10 inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.06] dark:hover:bg-white/[0.1] text-slate-500 dark:text-white/60 text-base font-semibold transition-colors border border-slate-200 dark:border-white/[0.08]">
+                  <X size={18} /> Keluar Mode Display
                 </button>
               </div>
             ) : (
@@ -921,10 +922,10 @@ export default function CekAntrian() {
                 </div>
 
                 {/* ═══ DIVIDER ═══ */}
-                <div className="w-px shrink-0 bg-gradient-to-b from-transparent via-slate-200/80 to-transparent dark:via-slate-700/40" />
+                <div className="w-px shrink-0 bg-gradient-to-b from-transparent via-slate-200/80 dark:via-white/[0.08] to-transparent" />
 
                 {/* ═══ PANEL KANAN (26%) — REDESIGN v2 ═══ */}
-                <div className="w-[26%] flex flex-col overflow-y-auto bg-gradient-to-b from-slate-50/80 via-white/60 to-slate-50/80 dark:from-slate-900/50 dark:via-slate-900/30 dark:to-slate-900/50" key={`right-${rightPage?.key}`}>
+                <div className="w-[26%] flex flex-col overflow-y-auto bg-slate-50/50 dark:bg-white/[0.02]" key={`right-${rightPage?.key}`}>
                   {rightPage ? (
                     <div className="anim-right flex flex-col h-full px-3 xl:px-4 py-4">
 
@@ -933,8 +934,8 @@ export default function CekAntrian() {
                         {rightPage.items.map((n, ni) => {
                           const isActive = leftCard?.key === n.key;
                           const statusColor =
-                            n.step === 0 ? "text-amber-600 dark:text-amber-400"
-                              : n.step === 1 ? "text-blue-600 dark:text-blue-400"
+                            n.step === 0 ? "text-amber-600 dark:text-amber-500"
+                              : n.step === 1 ? "text-[#2391FF]"
                                 : "text-emerald-600 dark:text-emerald-400";
                           const accentColor =
                             n.step === 0 ? "from-amber-400 to-amber-500" :
@@ -955,51 +956,51 @@ export default function CekAntrian() {
                           return (
                             <div key={n.key} className={`rounded-2xl transition-all duration-500 relative overflow-hidden ${
                               isActive
-                                ? "bg-white dark:bg-slate-800/90 shadow-xl shadow-slate-200/50 dark:shadow-black/40 ring-1 ring-slate-200/80 dark:ring-slate-700/50 active-card-glow"
-                                : "bg-white/30 dark:bg-slate-800/15 opacity-45 hover:opacity-55"
+                                ? "bg-white dark:bg-white/[0.07] shadow-xl dark:shadow-[0_4px_24px_rgba(0,0,0,0.3)] ring-1 ring-slate-200/80 dark:ring-white/[0.1] active-card-glow"
+                                : "bg-white/40 dark:bg-white/[0.02] opacity-45 hover:opacity-55"
                             }`}>
                               {/* Accent bar kiri */}
-                              <div className={`absolute left-0 top-0 bottom-0 w-1 rounded-r-full bg-gradient-to-b ${accentColor} ${isActive ? "opacity-100" : "opacity-25"}`} />
+                              <div className={`absolute left-0 top-0 bottom-0 w-1 rounded-r-full bg-gradient-to-b ${accentColor} ${isActive ? "opacity-100" : "opacity-20"}`} />
 
-                              <div className="px-4 py-3.5 pl-5">
+                              <div className="px-4 py-4 pl-5">
                                 {/* Row 1: Queue number + Name */}
-                                <div className="flex items-center gap-2.5">
+                                <div className="flex items-center gap-3">
                                   {/* Queue position */}
-                                  <div className={`shrink-0 w-7 h-7 xl:w-8 xl:h-8 rounded-lg flex items-center justify-center ${
+                                  <div className={`shrink-0 w-8 h-8 xl:w-9 xl:h-9 rounded-lg flex items-center justify-center ${
                                     isActive
-                                      ? `bg-gradient-to-br ${queueBg} shadow-sm`
-                                      : "bg-slate-100 dark:bg-slate-800"
+                                      ? `bg-gradient-to-br ${queueBg} shadow-lg shadow-blue-500/20`
+                                      : "bg-slate-100 dark:bg-white/[0.06]"
                                   }`}>
-                                    <span className={`text-xs xl:text-sm font-black ${
-                                      isActive ? "text-white" : "text-slate-400 dark:text-slate-600"
+                                    <span className={`text-sm xl:text-base font-black ${
+                                      isActive ? "text-white" : "text-slate-400 dark:text-white/25"
                                     }`}>{ni + 1}</span>
                                   </div>
 
                                   <div className="flex-1 min-w-0">
-                                    <p className={`font-bold text-sm xl:text-base 2xl:text-lg leading-tight tracking-tight truncate ${
-                                      isActive ? "text-content" : "text-content-soft"
+                                    <p className={`font-bold text-base xl:text-lg 2xl:text-xl leading-tight tracking-tight truncate ${
+                                      isActive ? "text-slate-800 dark:text-white" : "text-slate-400 dark:text-white/50"
                                     }`}>{n.nama}</p>
                                   </div>
                                 </div>
 
                                 {/* Row 2: Device */}
-                                <p className="text-[11px] xl:text-xs text-content-muted font-medium mt-1 truncate pl-[38px] xl:pl-[42px]">
+                                <p className="text-xs xl:text-sm text-slate-400 dark:text-white/30 font-medium mt-1.5 truncate pl-[44px] xl:pl-[48px]">
                                   {n.device}
                                 </p>
 
                                 {/* Row 3: Status + Duration */}
-                                <div className="flex items-center gap-1.5 mt-2 pl-[38px] xl:pl-[42px]">
-                                  <div className={`w-1.5 h-1.5 rounded-full ${dotColor} ${isActive ? "animate-pulse" : ""}`} />
-                                  <span className={`text-[10px] xl:text-[11px] font-bold ${statusColor}`}>
+                                <div className="flex items-center gap-2 mt-2.5 pl-[44px] xl:pl-[48px]">
+                                  <div className={`w-2 h-2 rounded-full ${dotColor} ${isActive ? "animate-pulse shadow-[0_0_6px_currentColor]" : ""}`} />
+                                  <span className={`text-xs xl:text-sm font-bold ${statusColor}`}>
                                     {n.labels[n.step]}
                                   </span>
                                   {badgeDur && (
-                                    <span className="text-[10px] xl:text-[11px] font-semibold text-content-muted tabular-nums">
+                                    <span className="text-xs xl:text-sm font-semibold text-slate-400 dark:text-white/30 tabular-nums">
                                       · {badgeDur}
                                     </span>
                                   )}
                                   {n.step2Name && (
-                                    <span className="text-[10px] xl:text-[11px] font-medium text-content-muted truncate">· {n.step2Name}</span>
+                                    <span className="text-xs xl:text-sm font-medium text-slate-400 dark:text-white/25 truncate">· {n.step2Name}</span>
                                   )}
                                 </div>
                               </div>
@@ -1010,7 +1011,7 @@ export default function CekAntrian() {
                     </div>
                   ) : leftCard ? (
                     <div className="flex-1 flex flex-col items-center justify-center text-center px-4">
-                      <p className="text-lg font-bold text-content-muted">Tidak ada data lain</p>
+                      <p className="text-lg font-bold text-slate-300 dark:text-white/20">Tidak ada data lain</p>
                     </div>
                   ) : null}
                 </div>
@@ -1021,28 +1022,28 @@ export default function CekAntrian() {
             <div className="shrink-0 relative">
               {/* Slide indicators */}
               {totalSlides > 1 && (
-                <div className="px-8 py-2 flex items-center justify-center gap-1.5 bg-white/50 dark:bg-slate-900/30 backdrop-blur-sm">
+                <div className="px-8 py-2.5 flex items-center justify-center gap-2 bg-white/50 dark:bg-black/20 backdrop-blur-sm">
                   {Array.from({ length: totalSlides }, (_, i) => (
                     <button
                       key={i}
                       onClick={() => setSlideIdx(i)}
                       className={`rounded-full transition-all duration-500 ${i === slideIdx % totalSlides
-                        ? "h-2 w-8 bg-gradient-to-r from-blue-500 to-violet-500 shadow-sm shadow-blue-500/25"
-                        : "h-1.5 w-1.5 bg-slate-300/40 dark:bg-slate-600/40 hover:bg-slate-400/60"
+                        ? "h-2.5 w-10 bg-gradient-to-r from-[#2391FF] to-violet-500 shadow-md shadow-[#2391FF]/30"
+                        : "h-2 w-2 bg-slate-300/50 dark:bg-white/10 hover:bg-slate-400/60 dark:hover:bg-white/20"
                       }`}
                     />
                   ))}
                 </div>
               )}
               {/* Running text marquee */}
-              <div className="relative overflow-hidden bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-violet-600/10 to-blue-600/10" />
+              <div className="relative overflow-hidden bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 dark:from-[#060E1A] dark:via-[#0A1628] dark:to-[#060E1A]">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#2391FF]/5 via-violet-600/5 to-[#2391FF]/5" />
                 {/* Fade edges */}
-                <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-slate-800 to-transparent dark:from-slate-900 z-10 pointer-events-none" />
-                <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-slate-800 to-transparent dark:from-slate-900 z-10 pointer-events-none" />
-                <div className="relative marquee-track py-3">
-                  <span className="px-12 text-[13px] xl:text-sm font-semibold text-white/70 tracking-wider">{RUNNING_TEXT}</span>
-                  <span className="px-12 text-[13px] xl:text-sm font-semibold text-white/70 tracking-wider">{RUNNING_TEXT}</span>
+                <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-slate-800 dark:from-[#060E1A] to-transparent z-10 pointer-events-none" />
+                <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-slate-800 dark:from-[#060E1A] to-transparent z-10 pointer-events-none" />
+                <div className="relative marquee-track py-3.5">
+                  <span className="px-14 text-sm xl:text-base font-semibold text-white/60 dark:text-white/50 tracking-wider">{RUNNING_TEXT}</span>
+                  <span className="px-14 text-sm xl:text-base font-semibold text-white/60 dark:text-white/50 tracking-wider">{RUNNING_TEXT}</span>
                 </div>
               </div>
             </div>
@@ -1052,44 +1053,44 @@ export default function CekAntrian() {
         /* ════════════════════════════════════════════ */
         /* MODE NORMAL (tetap sama persis)             */
         /* ════════════════════════════════════════════ */
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-14">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
           <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.fadeUp{animation:fadeUp .5s ease forwards}`}</style>
 
-          <div className="text-center mb-8">
-            <span className="eyebrow"><span className="w-1.5 h-1.5 bg-blue-500 rounded-full" /> Official Solit 03</span>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-content mt-4">Antrian <span className="text-blue-600">Servis</span> & Penyiapan</h1>
-            <p className="text-sm text-content-muted mt-3">Pantau status laptop & pesanan kamu secara real-time.</p>
-            <button onClick={enter} className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 shadow-soft transition">
-              <Maximize2 size={16} /> Perbesar (Mode Display TV)
+          <div className="text-center mb-10 md:mb-14">
+            <span className="eyebrow"><span className="w-1.5 h-1.5 bg-[#2391FF] rounded-full" /> Official Solit 03</span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-content mt-5">Antrian <span className="text-[#2391FF]">Servis</span> & Penyiapan</h1>
+            <p className="text-base text-content-muted mt-4 max-w-md mx-auto">Pantau status laptop & pesanan kamu secara real-time.</p>
+            <button onClick={enter} className="mt-6 inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-gradient-to-r from-[#2391FF] to-blue-600 text-white text-sm font-bold hover:shadow-lg hover:shadow-[#2391FF]/25 hover:-translate-y-0.5 shadow-soft transition-all duration-300">
+              <Maximize2 size={18} /> Perbesar (Mode Display TV)
             </button>
-            <div className="flex items-center justify-center gap-2 mt-3">
-              <div className={`w-2 h-2 rounded-full ${connected ? "bg-emerald-500 animate-pulse" : "bg-slate-300"}`} />
-              <span className="text-xs text-content-muted">{connected ? "Terhubung real-time" : "Mode polling"}</span>
+            <div className="flex items-center justify-center gap-2.5 mt-4">
+              <div className={`w-2.5 h-2.5 rounded-full ${connected ? "bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.5)]" : "bg-slate-300"}`} />
+              <span className="text-sm text-content-muted font-medium">{connected ? "Terhubung real-time" : "Mode polling"}</span>
             </div>
           </div>
 
           {/* PENYIAPAN */}
-          <div className="flex items-center gap-3 mb-4">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"><Truck size={15} /> PENYIAPAN BARANG</span>
-            <div className="flex-1 h-px bg-gradient-to-r from-violet-200 to-transparent" />
+          <div className="flex items-center gap-3 mb-5">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300 shadow-sm"><Truck size={16} /> PENYIAPAN BARANG</span>
+            <div className="flex-1 h-px bg-gradient-to-r from-violet-200 to-transparent dark:from-violet-500/20" />
           </div>
           {prepCards.length === 0 ? (
-            <div className="bg-surface rounded-xl border border-border p-8 text-center mb-10"><Truck size={26} className="text-violet-400 mx-auto mb-2" /><p className="text-content-soft font-bold text-sm">Belum ada penyiapan hari ini</p></div>
+            <div className="bg-white/60 dark:bg-[#0F2341]/40 backdrop-blur-sm rounded-2xl border border-slate-200/60 dark:border-violet-500/10 p-10 text-center mb-12"><Truck size={30} className="text-violet-400/60 mx-auto mb-3" /><p className="text-content-soft font-bold text-base">Belum ada penyiapan hari ini</p></div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 fadeUp">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12 fadeUp">
               {prepCards.map((n) => <PhaseCard key={n.key} n={n} />)}
             </div>
           )}
 
           {/* SERVICE */}
-          <div className="flex items-center gap-3 mb-4">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-bold bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300"><Wrench size={15} /> ANTRIAN SERVICE</span>
-            <div className="flex-1 h-px bg-gradient-to-r from-blue-200 to-transparent" />
+          <div className="flex items-center gap-3 mb-5">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold bg-blue-50 text-[#2391FF] dark:bg-[#2391FF]/15 dark:text-blue-300 shadow-sm"><Wrench size={16} /> ANTRIAN SERVICE</span>
+            <div className="flex-1 h-px bg-gradient-to-r from-blue-200 to-transparent dark:from-[#2391FF]/20" />
           </div>
           {svcCards.length === 0 ? (
-            <div className="bg-surface rounded-xl border border-border p-8 text-center"><Wrench size={26} className="text-blue-400 mx-auto mb-2" /><p className="text-content-soft font-bold text-sm">Belum ada antrian servis</p></div>
+            <div className="bg-white/60 dark:bg-[#0F2341]/40 backdrop-blur-sm rounded-2xl border border-slate-200/60 dark:border-[#2391FF]/10 p-10 text-center"><Wrench size={30} className="text-[#2391FF]/40 mx-auto mb-3" /><p className="text-content-soft font-bold text-base">Belum ada antrian servis</p></div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 fadeUp">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 fadeUp">
               {svcCards.map((n) => <PhaseCard key={n.key} n={n} />)}
             </div>
           )}

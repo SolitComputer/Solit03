@@ -157,7 +157,7 @@ function FaqItem({ item, isOpen, onToggle }) {
     <div
       className={`rounded-2xl border overflow-hidden transition-colors duration-300 ${
         isOpen
-          ? "border-blue-500/40 bg-blue-500/[0.04]"
+          ? "border-[#2391FF]/40 bg-[#2391FF]/[0.04]"
           : "border-white/10 bg-white/[0.03] hover:border-white/20"
       }`}
     >
@@ -168,7 +168,7 @@ function FaqItem({ item, isOpen, onToggle }) {
       >
         <span
           className={`text-sm md:text-base font-semibold transition-colors duration-300 ${
-            isOpen ? "text-blue-300" : "text-white"
+            isOpen ? "text-[#2391FF]" : "text-white"
           }`}
         >
           {item.q}
@@ -176,13 +176,13 @@ function FaqItem({ item, isOpen, onToggle }) {
         <span
           className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
             isOpen
-              ? "border-blue-400/40 bg-blue-500/10 rotate-180"
+              ? "border-[#2391FF]/40 bg-[#2391FF]/10 rotate-180"
               : "border-white/10 bg-white/[0.03]"
           }`}
         >
           <ChevronDown
             className={`w-4 h-4 transition-colors duration-300 ${
-              isOpen ? "text-blue-300" : "text-slate-400"
+              isOpen ? "text-[#2391FF]" : "text-slate-400"
             }`}
           />
         </span>
@@ -220,20 +220,20 @@ export default function JasaWebsite() {
         <link rel="canonical" href="https://solit03.com/jasa-pembuatan-website" />
       </Helmet>
 
-      <main className="bg-black overflow-hidden">
+      <main className="bg-[#050A12] overflow-hidden">
         {/* ================= HERO ================= */}
         <section className="relative pt-16 pb-20 md:pt-28 md:pb-32 px-4">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(37,99,235,0.28),transparent_55%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(35,145,255,0.22),transparent_55%)]" />
           <div className="absolute inset-0 ds-starfield opacity-50" />
-          <div className="pointer-events-none absolute top-1/3 left-[8%] w-72 h-72 bg-blue-600/10 blur-[110px] rounded-full" />
-          <div className="pointer-events-none absolute bottom-0 right-[10%] w-80 h-80 bg-sky-500/10 blur-[120px] rounded-full" />
+          <div className="pointer-events-none absolute top-1/3 left-[8%] w-72 h-72 bg-[#2391FF]/10 blur-[110px] rounded-full" />
+          <div className="pointer-events-none absolute bottom-0 right-[10%] w-80 h-80 bg-sky-500/8 blur-[120px] rounded-full" />
 
           <div className="relative z-10 max-w-3xl mx-auto text-center">
             <motion.span
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-300"
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#2391FF]"
             >
               <span className="relative flex h-1.5 w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
@@ -249,7 +249,7 @@ export default function JasaWebsite() {
               className="mt-6 font-serif text-4xl md:text-6xl font-bold tracking-tight text-white leading-[1.1] text-balance"
             >
               Jasa Pembuatan Website &amp;{" "}
-              <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-blue-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#2391FF] via-sky-300 to-blue-500 bg-clip-text text-transparent">
                 Aplikasi Custom
               </span>
             </motion.h1>
@@ -275,7 +275,7 @@ export default function JasaWebsite() {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-6 py-3 rounded-xl shadow-[0_10px_30px_rgba(37,99,235,0.35)] hover:shadow-[0_15px_40px_rgba(37,99,235,0.5)] hover:-translate-y-0.5 transition-all duration-200"
+                className="group inline-flex items-center gap-2 bg-[#2391FF] hover:bg-[#1a7de6] text-white text-sm font-semibold px-6 py-3 rounded-xl shadow-[0_10px_30px_rgba(35,145,255,0.35)] hover:shadow-[0_15px_40px_rgba(35,145,255,0.5)] hover:-translate-y-0.5 transition-all duration-200"
               >
                 Konsultasi Gratis{" "}
                 <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
@@ -295,15 +295,15 @@ export default function JasaWebsite() {
               className="mt-10 flex flex-wrap items-center justify-center gap-2.5 text-[11px] md:text-xs font-medium uppercase tracking-wider text-slate-300"
             >
               <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+                <ShieldCheck className="w-3.5 h-3.5 text-[#2391FF]" />
                 Bergaransi Resmi
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5">
-                <Clock className="w-3.5 h-3.5 text-blue-400" />
+                <Clock className="w-3.5 h-3.5 text-[#2391FF]" />
                 Support 24 Jam
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5">
-                <Layers className="w-3.5 h-3.5 text-blue-400" />
+                <Layers className="w-3.5 h-3.5 text-[#2391FF]" />
                 Proses Transparan
               </span>
             </motion.div>
@@ -316,7 +316,7 @@ export default function JasaWebsite() {
             transition={{ delay: 0.5, duration: 0.7, ease: "easeOut" }}
             className="relative z-10 max-w-3xl mx-auto mt-14 md:mt-16"
           >
-            <div className="pointer-events-none absolute -inset-4 rounded-[2rem] bg-blue-600/20 blur-3xl" />
+            <div className="pointer-events-none absolute -inset-4 rounded-[2rem] bg-[#2391FF]/15 blur-3xl" />
             <div className="relative rounded-2xl border border-white/10 ring-1 ring-white/[0.06] ring-inset bg-white/[0.03] backdrop-blur-md shadow-[0_30px_80px_rgba(2,6,23,0.6)] overflow-hidden">
               <CursorSpotlight color="rgba(59,130,246,0.16)" size={420} />
               <div className="relative flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/[0.02]">
@@ -368,7 +368,7 @@ export default function JasaWebsite() {
                 </p>
                 <p className="text-slate-400">
                   {"});"}
-                  <span className="inline-block w-[7px] h-[14px] bg-blue-400/80 ml-1 align-middle animate-pulse" />
+                  <span className="inline-block w-[7px] h-[14px] bg-[#2391FF]/80 ml-1 align-middle animate-pulse" />
                 </p>
               </div>
             </div>
@@ -389,7 +389,7 @@ export default function JasaWebsite() {
             >
               <motion.span
                 variants={fadeInUp}
-                className="text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-400"
+                className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#2391FF]"
               >
                 Paket Layanan
               </motion.span>
@@ -425,12 +425,12 @@ export default function JasaWebsite() {
                     transition={{ type: "spring", stiffness: 300, damping: 24 }}
                     className={`relative rounded-2xl border p-6 md:p-7 flex flex-col transition-colors duration-300 ${
                       plan.popular
-                        ? "border-blue-500/60 bg-gradient-to-b from-blue-950/60 to-white/[0.02] shadow-[0_20px_60px_rgba(37,99,235,0.25)] md:-mt-4 md:mb-[-1rem]"
+                        ? "border-[#2391FF]/50 bg-gradient-to-b from-[#2391FF]/10 to-white/[0.02] shadow-[0_20px_60px_rgba(35,145,255,0.2)] md:-mt-4 md:mb-[-1rem]"
                         : "border-white/10 bg-white/[0.02] hover:border-white/20"
                     }`}
                   >
                     {plan.popular && (
-                      <span className="absolute top-0 right-6 -translate-y-1/2 inline-flex items-center gap-1 bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-[0_6px_20px_rgba(37,99,235,0.5)]">
+                      <span className="absolute top-0 right-6 -translate-y-1/2 inline-flex items-center gap-1 bg-[#2391FF] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-[0_6px_20px_rgba(35,145,255,0.4)]">
                         <Sparkles className="w-3 h-3" />
                         Populer
                       </span>
@@ -439,7 +439,7 @@ export default function JasaWebsite() {
                     <span
                       className={`inline-flex h-10 w-10 items-center justify-center rounded-xl border ${
                         plan.popular
-                          ? "border-blue-400/40 bg-blue-500/10 text-blue-300"
+                          ? "border-[#2391FF]/40 bg-[#2391FF]/10 text-[#2391FF]"
                           : "border-white/10 bg-white/[0.04] text-slate-300"
                       }`}
                     >
@@ -450,7 +450,7 @@ export default function JasaWebsite() {
                     <p className="mt-1 text-xs text-slate-400">Mulai dari</p>
                     <p
                       className={`mt-2 font-mono tabular-nums text-2xl md:text-3xl font-extrabold ${
-                        plan.popular ? "text-blue-400" : "text-white"
+                        plan.popular ? "text-[#2391FF]" : "text-white"
                       }`}
                     >
                       {plan.price}
@@ -462,7 +462,7 @@ export default function JasaWebsite() {
                           key={f}
                           className="flex items-start gap-2 text-sm text-slate-300"
                         >
-                          <Check className="w-4 h-4 mt-0.5 text-blue-400 shrink-0" />
+                          <Check className="w-4 h-4 mt-0.5 text-[#2391FF] shrink-0" />
                           {f}
                         </li>
                       ))}
@@ -474,7 +474,7 @@ export default function JasaWebsite() {
                       rel="noopener noreferrer"
                       className={`mt-7 inline-flex items-center justify-center w-full rounded-xl py-2.5 text-sm font-semibold transition-all duration-200 ${
                         plan.popular
-                          ? "bg-blue-600 hover:bg-blue-500 text-white shadow-[0_10px_24px_rgba(37,99,235,0.3)] hover:shadow-[0_14px_32px_rgba(37,99,235,0.45)]"
+                          ? "bg-[#2391FF] hover:bg-[#1a7de6] text-white shadow-[0_10px_24px_rgba(35,145,255,0.3)] hover:shadow-[0_14px_32px_rgba(35,145,255,0.4)]"
                           : "border border-white/15 text-white hover:bg-white/5"
                       }`}
                     >
@@ -503,7 +503,7 @@ export default function JasaWebsite() {
               >
                 <motion.span
                   variants={fadeInUp}
-                  className="text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-400"
+                  className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#2391FF]"
                 >
                   Karya Kami
                 </motion.span>
@@ -538,12 +538,12 @@ export default function JasaWebsite() {
                 rel="noopener noreferrer"
                 variants={fadeInUp}
                 whileHover={{ y: -4 }}
-                className="group relative rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden hover:border-blue-400/30 transition-colors duration-300"
+                className="group relative rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden hover:border-[#2391FF]/30 transition-colors duration-300"
               >
-                <div className="pointer-events-none absolute -inset-1 rounded-2xl bg-blue-500/0 group-hover:bg-blue-500/[0.05] blur-2xl transition-colors duration-500" />
-                <div className="relative p-4 bg-slate-900">
+                <div className="pointer-events-none absolute -inset-1 rounded-2xl bg-[#2391FF]/0 group-hover:bg-[#2391FF]/[0.05] blur-2xl transition-colors duration-500" />
+                <div className="relative p-4 bg-slate-900/80">
                   <div className="rounded-lg overflow-hidden bg-white shadow-[0_20px_40px_rgba(0,0,0,0.35)] transition-transform duration-500 group-hover:scale-[1.02]">
-                    <div className="flex items-center justify-between px-3 py-2 bg-blue-700 text-white text-[11px] font-semibold">
+                    <div className="flex items-center justify-between px-3 py-2 bg-[#2391FF] text-white text-[11px] font-semibold">
                       <span>solit03 Laptop &amp; Aksesoris</span>
                       <span className="rounded bg-white/20 px-2 py-0.5 text-[10px]">
                         Search...
@@ -554,7 +554,7 @@ export default function JasaWebsite() {
                         <div key={i} className="text-center">
                           <div className="aspect-square rounded-md bg-slate-200 mb-1.5" />
                           <div className="h-1.5 w-3/4 mx-auto rounded bg-slate-200 mb-1" />
-                          <div className="h-4 w-full rounded bg-blue-700" />
+                          <div className="h-4 w-full rounded bg-[#2391FF]" />
                         </div>
                       ))}
                     </div>
@@ -567,7 +567,7 @@ export default function JasaWebsite() {
                       {CASE_STUDIES[0].tags}
                     </p>
                   </div>
-                  <ArrowRight className="w-5 h-5 text-blue-400 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5 text-[#2391FF] group-hover:translate-x-1 transition-transform" />
                 </div>
               </motion.a>
 
@@ -578,10 +578,10 @@ export default function JasaWebsite() {
                 rel="noopener noreferrer"
                 variants={fadeInUp}
                 whileHover={{ y: -4 }}
-                className="group relative rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden hover:border-blue-400/30 transition-colors duration-300"
+                className="group relative rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden hover:border-[#2391FF]/30 transition-colors duration-300"
               >
-                <div className="pointer-events-none absolute -inset-1 rounded-2xl bg-blue-500/0 group-hover:bg-blue-500/[0.05] blur-2xl transition-colors duration-500" />
-                <div className="relative p-4 bg-slate-900">
+                <div className="pointer-events-none absolute -inset-1 rounded-2xl bg-[#2391FF]/0 group-hover:bg-[#2391FF]/[0.05] blur-2xl transition-colors duration-500" />
+                <div className="relative p-4 bg-slate-900/80">
                   <div className="rounded-lg overflow-hidden bg-white p-3 shadow-[0_20px_40px_rgba(0,0,0,0.35)] transition-transform duration-500 group-hover:scale-[1.02]">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="w-6 h-6 rounded-full bg-blue-100" />
@@ -608,7 +608,7 @@ export default function JasaWebsite() {
                       {CASE_STUDIES[1].tags}
                     </p>
                   </div>
-                  <ArrowRight className="w-5 h-5 text-blue-400 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5 text-[#2391FF] group-hover:translate-x-1 transition-transform" />
                 </div>
               </motion.a>
             </motion.div>
@@ -620,12 +620,12 @@ export default function JasaWebsite() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="mt-6 flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-white/15 py-10 text-center hover:border-blue-400/50 hover:bg-white/[0.02] transition-colors duration-200"
+              className="mt-6 flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-white/15 py-10 text-center hover:border-[#2391FF]/40 hover:bg-white/[0.02] transition-colors duration-200"
             >
               <span className="text-white font-serif text-lg">
                 Proyek Berikutnya, Milik Anda?
               </span>
-              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-400 underline underline-offset-4">
+              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#2391FF] underline underline-offset-4">
                 Mulai Diskusi <ArrowRight className="w-3.5 h-3.5" />
               </span>
             </motion.a>
@@ -645,7 +645,7 @@ export default function JasaWebsite() {
             >
               <motion.span
                 variants={fadeInUp}
-                className="text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-400"
+                className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#2391FF]"
               >
                 Alur Kerja
               </motion.span>
@@ -674,10 +674,10 @@ export default function JasaWebsite() {
                     className="group grid md:grid-cols-[3.5rem_16rem_1fr] gap-2 md:gap-8 py-6 md:py-8 md:px-4 md:-mx-4 rounded-xl transition-colors duration-300 hover:bg-white/[0.02]"
                   >
                     <span className="relative flex items-center gap-2">
-                      <span className="hidden md:inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-black text-slate-500 transition-all duration-300 group-hover:border-blue-400/40 group-hover:text-blue-300 group-hover:bg-blue-500/10">
+                      <span className="hidden md:inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-[#050A12] text-slate-500 transition-all duration-300 group-hover:border-[#2391FF]/40 group-hover:text-[#2391FF] group-hover:bg-[#2391FF]/10">
                         <StepIcon className="w-4 h-4" />
                       </span>
-                      <span className="font-mono text-lg font-bold text-slate-700 transition-colors duration-300 group-hover:text-blue-400">
+                      <span className="font-mono text-lg font-bold text-slate-700 transition-colors duration-300 group-hover:text-[#2391FF]">
                         {item.step}
                       </span>
                     </span>
@@ -702,7 +702,7 @@ export default function JasaWebsite() {
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-400"
+              className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#2391FF]"
             >
               FAQ
             </motion.span>
@@ -752,7 +752,7 @@ export default function JasaWebsite() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
-            className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 px-6 py-14 md:py-16 text-center ring-1 ring-white/10"
+            className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden bg-gradient-to-br from-[#2391FF] via-[#1a7de6] to-[#0F2341] px-6 py-14 md:py-16 text-center ring-1 ring-white/10"
           >
             <CursorSpotlight color="rgba(255,255,255,0.18)" size={480} />
             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:32px_32px]" />
@@ -771,7 +771,7 @@ export default function JasaWebsite() {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group mt-7 inline-flex items-center gap-2 bg-white text-blue-700 text-sm font-bold px-6 py-3 rounded-xl hover:-translate-y-0.5 hover:shadow-xl transition-all duration-200"
+                className="group mt-7 inline-flex items-center gap-2 bg-white text-[#2391FF] text-sm font-bold px-6 py-3 rounded-xl hover:-translate-y-0.5 hover:shadow-xl transition-all duration-200"
               >
                 Hubungi via WhatsApp{" "}
                 <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />

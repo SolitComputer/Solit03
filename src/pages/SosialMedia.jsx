@@ -102,7 +102,7 @@ export default function SosialMedia() {
                 <link rel="canonical" href="https://solit03.com/sosial-media" />
             </Helmet>
             {/* Subtle decorative orb */}
-            <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-100/40 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -top-32 -right-32 w-80 h-80 bg-[#2391FF]/10 dark:bg-[#2391FF]/5 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
                 {/* Hero Section */}
@@ -113,23 +113,23 @@ export default function SosialMedia() {
                     }`}
                 >
                     <span className="eyebrow">
-                        <span className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
+                        <span className="w-1.5 h-1.5 bg-[#2391FF] rounded-full" />
                         Connect With Us
                     </span>
 
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-content mt-5">
-                        Temukan Kami di <span className="text-blue-600">Sosial Media</span>
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-content mt-5">
+                        Temukan Kami di <span className="text-[#2391FF]">Sosial Media</span>
                     </h1>
 
                     <p className="text-sm md:text-base text-content-muted mt-4 max-w-2xl mx-auto">
                         Follow dan hubungi{" "}
-                        <span className="font-semibold text-blue-600">Solit 03</span>
+                        <span className="font-semibold text-[#2391FF]">Solit 03</span>
                     </p>
 
                     <div className="flex justify-center items-center gap-2 mt-6">
-                        <div className="w-12 h-0.5 bg-gradient-to-r from-transparent to-blue-400 rounded-full" />
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                        <div className="w-12 h-0.5 bg-gradient-to-l from-transparent to-blue-400 rounded-full" />
+                        <div className="w-12 h-0.5 bg-gradient-to-r from-transparent to-[#2391FF]/60 rounded-full" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#2391FF]" />
+                        <div className="w-12 h-0.5 bg-gradient-to-l from-transparent to-[#2391FF]/60 rounded-full" />
                     </div>
                 </section>
 
@@ -150,7 +150,7 @@ export default function SosialMedia() {
                                 className="group card-3d p-4 md:p-5 text-center overflow-hidden"
                             >
                                 {/* Icon */}
-                                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full mx-auto mb-3 overflow-hidden ring-2 ring-offset-2 ring-slate-100 group-hover:ring-blue-200 transition-all duration-300">
+                                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full mx-auto mb-3 overflow-hidden ring-2 ring-offset-2 ring-slate-100 dark:ring-slate-700 dark:ring-offset-slate-800 group-hover:ring-[#2391FF]/40 transition-all duration-300">
                                     <img
                                         src={item.icon}
                                         alt={item.name}
@@ -159,12 +159,12 @@ export default function SosialMedia() {
                                 </div>
 
                                 {/* Name */}
-                                <h3 className="text-sm md:text-base font-bold text-content group-hover:text-blue-600 transition-colors duration-300">
+                                <h3 className="text-sm md:text-base font-bold text-content group-hover:text-[#2391FF] transition-colors duration-300">
                                     {item.name}
                                 </h3>
 
                                 {/* Action Text */}
-                                <p className="text-[10px] text-content-muted mt-1 group-hover:text-blue-500 transition-colors inline-flex items-center justify-center gap-1">
+                                <p className="text-[10px] text-content-muted mt-1 group-hover:text-[#2391FF] transition-colors inline-flex items-center justify-center gap-1">
                                     Kunjungi <ArrowRight className="w-3 h-3" aria-hidden="true" />
                                 </p>
                             </a>
@@ -177,11 +177,11 @@ export default function SosialMedia() {
                     <div className="mt-12 md:mt-16">
                         <div className="text-center mb-8">
                             <span className="eyebrow">
-                                <span className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
+                                <span className="w-1.5 h-1.5 bg-[#2391FF] rounded-full" />
                                 Galeri
                             </span>
                             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-content mt-5">
-                                Galeri <span className="text-blue-600">Solit 03</span>
+                                Galeri <span className="text-[#2391FF]">Solit 03</span>
                             </h2>
                             <p className="text-xs md:text-sm text-content-muted mt-3 max-w-xl mx-auto">
                                 Arahkan kursor untuk menyorot — koleksi unit yang pernah kami rapikan.
@@ -207,9 +207,9 @@ export default function SosialMedia() {
                             Visit Us
                         </span>
                         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-content mt-5">
-                            Lokasi <span className="text-blue-600">Kami</span>
+                            Lokasi <span className="text-[#2391FF]">Kami</span>
                         </h2>
-                        <div className="w-12 h-0.5 bg-blue-500 mx-auto mt-4 rounded-full" />
+                        <div className="w-12 h-0.5 bg-[#2391FF] mx-auto mt-4 rounded-full" />
                     </div>
 
                     {/* Map */}
@@ -225,7 +225,7 @@ export default function SosialMedia() {
                         </div>
                         <div className="bg-surface-muted px-4 py-3 border-t border-border">
                             <div className="flex items-center justify-center gap-2 text-xs text-content-soft text-center">
-                                <svg className="w-3.5 h-3.5 text-blue-600 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-3.5 h-3.5 text-[#2391FF] shrink-0" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
                                 </svg>
                                 <span>JL. H Naiman GG MUSOLAH AINAL YAQIN, Kel. Rangkapan Jaya, Kec. Pancoran Mas, Kota Depok, Jawa Barat 16435</span>

@@ -99,7 +99,7 @@ export default function ArtikelDetail() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-surface-muted">
-        <Loader2 size={28} className="animate-spin text-blue-500" />
+        <Loader2 size={28} className="animate-spin text-[#2391FF]" />
       </div>
     );
   }
@@ -109,7 +109,7 @@ export default function ArtikelDetail() {
       <div className="min-h-screen flex flex-col items-center justify-center bg-surface-muted px-4 text-center">
         <Newspaper size={40} className="text-slate-300 mb-3" />
         <h1 className="text-xl font-bold text-content">Artikel tidak ditemukan</h1>
-        <button onClick={() => navigate("/berita")} className="mt-4 text-blue-600 text-sm font-semibold hover:underline">
+        <button onClick={() => navigate("/berita")} className="mt-4 text-[#2391FF] text-sm font-semibold hover:underline">
           Kembali ke Berita
         </button>
       </div>
@@ -141,7 +141,7 @@ export default function ArtikelDetail() {
 
       {/* ============ STICKY READING HEADER (THE VERGE STYLE) ============ */}
       <div
-        className={`fixed top-0 left-0 right-0 w-full max-w-full z-50 bg-[#0f172a]/95 backdrop-blur-md border-b border-slate-800 shadow-xl transition-all duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 right-0 w-full max-w-full z-50 bg-[#0A1628]/95 backdrop-blur-md border-b border-[#2391FF]/10 shadow-xl transition-all duration-300 ease-in-out ${
           showStickyHeader ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
         }`}
       >
@@ -150,7 +150,7 @@ export default function ArtikelDetail() {
           <Link to="/" className="flex items-center gap-2 shrink-0 group">
             <img src={logo} alt="Solit 03" className="w-6 h-6 rounded-full object-cover ring-1 ring-slate-700" />
             <span className="text-sm font-black uppercase tracking-tight text-white font-['Hanken_Grotesk',sans-serif]">
-              SOLIT<span className="text-blue-500">03</span>
+              SOLIT<span className="text-[#2391FF]">03</span>
             </span>
           </Link>
 
@@ -167,7 +167,7 @@ export default function ArtikelDetail() {
               <button
                 onClick={() => setStickySizeMenuOpen((v) => !v)}
                 aria-label="Ukuran teks"
-                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-semibold text-slate-200 hover:text-white hover:border-blue-500 transition"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-semibold text-slate-200 hover:text-white hover:border-[#2391FF] transition"
               >
                 <Type size={13} />
               </button>
@@ -192,7 +192,7 @@ export default function ArtikelDetail() {
 
             <button
               onClick={handleShare}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-semibold text-slate-200 hover:text-white hover:border-blue-500 transition"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-semibold text-slate-200 hover:text-white hover:border-[#2391FF] transition"
             >
               {copied ? <Check size={13} className="text-emerald-400" /> : <Share2 size={13} />}
               <span className="hidden sm:inline">{copied ? "Tersalin" : "Bagikan"}</span>
@@ -207,9 +207,9 @@ export default function ArtikelDetail() {
         <div className="flex flex-wrap items-center gap-2.5 mb-6 text-xs">
           <Link
             to="/berita"
-            className="group inline-flex items-center gap-1.5 font-semibold text-content-muted hover:text-blue-600 transition-colors"
+            className="group inline-flex items-center gap-1.5 font-semibold text-content-muted hover:text-[#2391FF] transition-colors"
           >
-            <ChevronLeft size={15} className="text-content-muted group-hover:text-blue-600 transition-transform group-hover:-translate-x-0.5" />
+            <ChevronLeft size={15} className="text-content-muted group-hover:text-[#2391FF] transition-transform group-hover:-translate-x-0.5" />
             Kembali ke Berita
           </Link>
 
@@ -220,7 +220,7 @@ export default function ArtikelDetail() {
           {category?.name && (
             <Link
               to={`/berita?kategori=${category.slug}`}
-              className="inline-flex items-center px-2.5 py-1 bg-blue-50 border border-blue-200/80 text-blue-600 text-[11px] font-black uppercase tracking-wider rounded-md hover:bg-blue-100 hover:border-blue-300 transition-all shadow-2xs"
+              className="inline-flex items-center px-2.5 py-1 bg-[#2391FF]/10 border border-[#2391FF]/20 text-[#2391FF] text-[11px] font-black uppercase tracking-wider rounded-md hover:bg-[#2391FF]/15 hover:border-[#2391FF]/30 transition-all shadow-2xs"
             >
               {category.name}
             </Link>
@@ -240,10 +240,10 @@ export default function ArtikelDetail() {
         <div className="flex flex-wrap items-center gap-x-5 gap-y-3 mt-6 pb-6 border-b border-border">
           {article.author && (
             <span className="flex items-center gap-2 text-sm">
-              <span className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-[11px] font-black text-white">
+              <span className="w-7 h-7 rounded-full bg-[#2391FF] flex items-center justify-center text-[11px] font-black text-white">
                 {article.author.charAt(0).toUpperCase()}
               </span>
-              <span className="font-semibold text-blue-600">{article.author}</span>
+              <span className="font-semibold text-[#2391FF]">{article.author}</span>
             </span>
           )}
           <span className="flex items-center gap-1.5 text-sm text-content-muted">
@@ -257,7 +257,7 @@ export default function ArtikelDetail() {
             <button
               onClick={() => setHeaderSizeMenuOpen((v) => !v)}
               aria-label="Ukuran teks"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-border text-xs font-semibold text-content-soft hover:border-blue-300 hover:text-blue-600 transition"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-border text-xs font-semibold text-content-soft hover:border-[#2391FF]/40 hover:text-[#2391FF] transition"
             >
               <Type size={13} />
             </button>
@@ -311,7 +311,7 @@ export default function ArtikelDetail() {
               <img
                 src={article.cover_image}
                 alt={article.title}
-                className="w-full aspect-video object-cover rounded-2xl shadow-md"
+                className="w-full aspect-video object-cover rounded-2xl shadow-lg"
               />
               {article.author && (
                 <p className="text-xs text-content-muted mt-2 text-center">Foto: {article.author} / Solit 03</p>
@@ -373,18 +373,18 @@ export default function ArtikelDetail() {
               {popular.length > 0 && (
                 <div className="bg-surface border border-border rounded-2xl p-5 shadow-sm">
                   <div className="flex items-center gap-2 mb-4">
-                    <Flame size={15} className="text-blue-600" />
-                    <h2 className="text-xs font-black uppercase tracking-widest text-blue-600">Most Popular</h2>
+                    <Flame size={15} className="text-[#2391FF]" />
+                    <h2 className="text-xs font-black uppercase tracking-widest text-[#2391FF]">Most Popular</h2>
                   </div>
                   <ol className="space-y-4">
                     {popular.map((a, i) => (
                       <li key={a.id}>
                         <Link to={`/berita/${a.slug}`} className="group flex items-start gap-3">
-                          <span className="font-display text-2xl font-black leading-none text-blue-600 flex-shrink-0 w-6">
+                          <span className="font-display text-2xl font-black leading-none text-[#2391FF] flex-shrink-0 w-6">
                             {i + 1}
                           </span>
                           <div className="min-w-0">
-                            <h3 className="text-sm font-semibold text-content leading-snug line-clamp-3 group-hover:text-blue-600 transition-colors">
+                            <h3 className="text-sm font-semibold text-content leading-snug line-clamp-3 group-hover:text-[#2391FF] transition-colors">
                               {a.title}
                             </h3>
                             <span className="flex items-center gap-1 text-[11px] text-content-muted mt-1.5">
@@ -401,14 +401,14 @@ export default function ArtikelDetail() {
               {article.tags?.length > 0 && (
                 <div className="bg-surface border border-border rounded-2xl p-5 shadow-sm">
                   <div className="flex items-center gap-2 mb-3">
-                    <TagIcon size={14} className="text-blue-600" />
+                    <TagIcon size={14} className="text-[#2391FF]" />
                     <h2 className="text-xs font-black uppercase tracking-widest text-content-muted">Tags</h2>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {article.tags.map((t) => (
                       <span
                         key={t.id}
-                        className="px-3 py-1.5 bg-surface-muted border border-border text-content-soft text-xs font-semibold rounded-full hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-colors cursor-default"
+                        className="px-3 py-1.5 bg-surface-muted border border-border text-content-soft text-xs font-semibold rounded-full hover:bg-[#2391FF]/10 hover:border-[#2391FF]/20 hover:text-[#2391FF] transition-colors cursor-default"
                       >
                         #{t.name}
                       </span>
@@ -434,9 +434,9 @@ export default function ArtikelDetail() {
 
       {/* ============ RELATED ============ */}
       {related.length > 0 && (
-        <div className="mt-16 bg-slate-100/80 border-t border-border/80 py-12">
+        <div className="mt-16 bg-gradient-to-b from-slate-50 to-slate-100/80 dark:from-slate-900/50 dark:to-slate-800/30 border-t border-border/80 py-12">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <div className="flex items-center gap-2 text-blue-600 text-xs font-bold uppercase tracking-widest mb-2">
+            <div className="flex items-center gap-2 text-[#2391FF] text-xs font-bold uppercase tracking-widest mb-2">
               <Newspaper size={14} /> Baca Juga
             </div>
             <h2 className="font-display text-2xl md:text-3xl font-black text-content tracking-tight mb-8">
@@ -448,7 +448,7 @@ export default function ArtikelDetail() {
                 <Link
                   key={a.id}
                   to={`/berita/${a.slug}`}
-                  className="group bg-surface rounded-2xl overflow-hidden border border-border hover:border-blue-300 shadow-sm hover:shadow-md transition-all duration-200"
+                  className="group bg-surface rounded-2xl overflow-hidden border border-border hover:border-[#2391FF]/30 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
                 >
                   <div className="aspect-[16/10] bg-slate-100 overflow-hidden">
                     {a.cover_image ? (
@@ -465,11 +465,11 @@ export default function ArtikelDetail() {
                   </div>
                   <div className="p-4">
                     {a.article_categories?.name && (
-                      <span className="text-blue-600 text-[10px] font-bold uppercase tracking-widest">
+                      <span className="text-[#2391FF] text-[10px] font-bold uppercase tracking-widest">
                         {a.article_categories.name}
                       </span>
                     )}
-                    <h3 className="font-semibold text-content text-sm leading-snug mt-1.5 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                    <h3 className="font-semibold text-content text-sm leading-snug mt-1.5 line-clamp-2 group-hover:text-[#2391FF] transition-colors">
                       {a.title}
                     </h3>
                   </div>

@@ -115,17 +115,17 @@ export default function JualBeli() {
               }`}
           >
             {/* Decorative Badge */}
-            <div className="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-100 rounded-full px-3 py-1 mb-4 shadow-soft-sm">
-              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
-              <span className="text-[10px] font-semibold text-blue-700 tracking-wider uppercase">
+            <div className="inline-flex items-center gap-1.5 bg-[#2391FF]/10 border border-[#2391FF]/15 rounded-full px-3 py-1 mb-4 shadow-soft-sm">
+              <div className="w-1.5 h-1.5 bg-[#2391FF] rounded-full" />
+              <span className="text-[10px] font-semibold text-[#2391FF] tracking-wider uppercase">
                 Solusi Terpercaya
               </span>
             </div>
 
             {/* Main Title */}
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight">
               <span className="text-content">Solusi Laptop & </span>
-              <span className="text-blue-600">
+              <span className="text-[#2391FF]">
                 Aset Kantor
               </span>
               <br />
@@ -137,8 +137,8 @@ export default function JualBeli() {
               <p className="text-content-muted text-sm sm:text-base md:text-lg">
                 Jadi Cuan di{" "}
                 <span className="relative inline-block">
-                  <span className="absolute inset-x-0 bottom-0 h-2 bg-blue-200/50 rounded-full -z-10"></span>
-                  <span className="font-bold bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent">
+                  <span className="absolute inset-x-0 bottom-0 h-2 bg-[#2391FF]/20 rounded-full -z-10"></span>
+                  <span className="font-bold bg-gradient-to-r from-[#2391FF] to-blue-500 bg-clip-text text-transparent">
                     Solit 03
                   </span>
                 </span>
@@ -147,9 +147,9 @@ export default function JualBeli() {
 
             {/* Decorative Elements */}
             <div className="flex justify-center gap-2 mt-4">
-              <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-blue-600 rounded-full" />
-              <div className="w-2 h-0.5 bg-blue-500 rounded-full" />
-              <div className="w-12 h-0.5 bg-gradient-to-r from-blue-600 to-transparent rounded-full" />
+              <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-[#2391FF]/60 to-[#2391FF] rounded-full" />
+              <div className="w-2 h-0.5 bg-[#2391FF] rounded-full" />
+              <div className="w-12 h-0.5 bg-gradient-to-r from-[#2391FF] to-transparent rounded-full" />
             </div>
 
             {/* Floating Icon Decoration */}
@@ -256,8 +256,8 @@ export default function JualBeli() {
                   Galeri Produk
                 </h3>
                 <div className="flex justify-center gap-1 mt-1">
-                  <div className="w-6 h-0.5 bg-gradient-to-r from-blue-400 to-transparent rounded-full"></div>
-                  <div className="w-6 h-0.5 bg-gradient-to-r from-transparent to-blue-400 rounded-full"></div>
+                  <div className="w-6 h-0.5 bg-gradient-to-r from-[#2391FF] to-transparent rounded-full"></div>
+                  <div className="w-6 h-0.5 bg-gradient-to-r from-transparent to-[#2391FF] rounded-full"></div>
                 </div>
               </div>
 
@@ -273,7 +273,7 @@ export default function JualBeli() {
               {[...Array(3)].map((_, i) => (
                 <div
                   key={i}
-                  className="w-1 h-1 rounded-full bg-blue-300 opacity-40"
+                  className="w-1 h-1 rounded-full bg-[#2391FF] opacity-30"
                   style={{ animationDelay: `${i * 0.2}s` }}
                 />
               ))}

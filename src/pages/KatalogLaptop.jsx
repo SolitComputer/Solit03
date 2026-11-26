@@ -92,7 +92,7 @@ function LaptopCard({ laptop, onClick, index }) {
 
             <div className="p-2 sm:p-3">
                 <p className="text-[10px] sm:text-[11px] text-content-muted font-medium mb-0.5 truncate">{laptop.brand || "Umum"}</p>
-                <h3 className="font-bold text-content text-xs sm:text-sm leading-tight line-clamp-2 group-hover:text-blue-600 transition-colors">{laptop.laptop_name}</h3>
+                <h3 className="font-bold text-content text-xs sm:text-sm leading-tight line-clamp-2 group-hover:text-[#2391FF] transition-colors">{laptop.laptop_name}</h3>
 
                 <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 mt-1.5 mb-2">
                     {laptop.cpu && (
@@ -111,11 +111,11 @@ function LaptopCard({ laptop, onClick, index }) {
 
                 <div className="flex items-center justify-between pt-2 border-t border-border gap-2">
                     <div className="flex-1 min-w-0">
-                        <p className={`font-black leading-tight truncate ${Number(laptop.price) > 0 ? "text-content text-sm sm:text-base" : "text-blue-600 text-xs sm:text-sm"}`}>
+                        <p className={`font-black leading-tight truncate ${Number(laptop.price) > 0 ? "text-content text-sm sm:text-base" : "text-[#2391FF] text-xs sm:text-sm"}`}>
                             {priceLabel(laptop.price)}
                         </p>
                     </div>
-                    <button className="px-2 sm:px-2.5 py-1 bg-surface border border-border hover:border-blue-500 text-content-soft hover:text-blue-600 text-[10px] sm:text-[11px] font-semibold rounded-lg transition-all hover:shadow-soft-sm whitespace-nowrap">
+                    <button className="px-2 sm:px-2.5 py-1 bg-surface border border-border hover:border-[#2391FF] text-content-soft hover:text-[#2391FF] text-[10px] sm:text-[11px] font-semibold rounded-lg transition-all hover:shadow-soft-sm whitespace-nowrap">
                         Detail
                     </button>
                 </div>
@@ -130,15 +130,15 @@ function AnimatedSearchBar({ value, onChange, isLoading }) {
     const isMobile = useMediaQuery("(max-width: 640px)");
     return (
         <div className={`relative transition-all duration-300 ${isFocused ? "scale-[1.02]" : "scale-100"}`}>
-            <div className={`absolute inset-0 bg-blue-500 rounded-lg blur-lg transition-opacity duration-300 ${isFocused ? "opacity-30" : "opacity-0"}`} />
+            <div className={`absolute inset-0 bg-[#2391FF] rounded-lg blur-lg transition-opacity duration-300 ${isFocused ? "opacity-20" : "opacity-0"}`} />
             <div className="relative">
                 <Search size={isMobile ? 14 : 16} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-content-muted"
                     style={{ transform: isFocused ? "translateY(-50%) scale(1.1)" : "translateY(-50%)" }} />
                 <input type="text" placeholder={isMobile ? "Cari laptop..." : "Cari nama, brand, atau CPU..."} value={value}
                     onChange={(e) => onChange(e.target.value)} onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)}
-                    className="w-full pl-8 pr-8 py-1.5 text-xs sm:text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-surface-muted transition-all duration-300" />
+                    className="w-full pl-8 pr-8 py-1.5 text-xs sm:text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2391FF] focus:border-transparent bg-surface-muted transition-all duration-300" />
                 {isLoading && (
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2"><Loader2 size={14} className="text-blue-500 animate-spin" /></div>
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2"><Loader2 size={14} className="text-[#2391FF] animate-spin" /></div>
                 )}
                 {value && !isLoading && (
                     <button onClick={() => onChange("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-content-muted hover:text-content-soft transition-colors">
@@ -164,12 +164,12 @@ function ResultCount({ count, isSearching }) {
     return (
         <div className="flex items-center gap-1.5">
             {isSearching ? (
-                <Loader2 size={10} className="text-blue-500 animate-spin" />
+                <Loader2 size={10} className="text-[#2391FF] animate-spin" />
             ) : (
                 <div className={`w-1.5 h-1.5 rounded-full bg-green-500 transition-all duration-300 ${anim ? "scale-150" : "scale-100"}`} />
             )}
             <p className="text-[11px] sm:text-xs text-content-muted">
-                <span className={`font-semibold text-content transition-all duration-300 ${anim ? "text-blue-600" : ""}`}>{display}</span> laptop ditemukan
+                <span className={`font-semibold text-content transition-all duration-300 ${anim ? "text-[#2391FF]" : ""}`}>{display}</span> laptop ditemukan
             </p>
         </div>
     );
@@ -178,16 +178,16 @@ function ResultCount({ count, isSearching }) {
 // ── Chip + PageBtn (port) ──
 function Chip({ label, onRemove }) {
     return (
-        <span className="inline-flex items-center gap-0.5 px-1.5 sm:px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-[9px] sm:text-[10px] font-medium">
+        <span className="inline-flex items-center gap-0.5 px-1.5 sm:px-2 py-0.5 bg-[#2391FF]/10 text-[#2391FF] rounded-full text-[9px] sm:text-[10px] font-medium">
             <span className="truncate max-w-[120px] sm:max-w-none">{label}</span>
-            <button onClick={onRemove} className="hover:text-blue-900 flex-shrink-0"><X size={8} /></button>
+            <button onClick={onRemove} className="hover:text-[#2391FF]/70 flex-shrink-0"><X size={8} /></button>
         </span>
     );
 }
 function PageBtn({ children, active, disabled, onClick }) {
     return (
         <button onClick={onClick} disabled={disabled}
-            className={`w-6 h-6 sm:w-7 sm:h-7 rounded-lg text-[11px] sm:text-xs font-semibold flex items-center justify-center transition-all ${active ? "bg-blue-600 text-white shadow-sm" : disabled ? "text-slate-300 cursor-not-allowed" : "text-content-soft hover:bg-slate-200"}`}>
+            className={`w-6 h-6 sm:w-7 sm:h-7 rounded-lg text-[11px] sm:text-xs font-semibold flex items-center justify-center transition-all ${active ? "bg-[#2391FF] text-white shadow-sm" : disabled ? "text-slate-300 cursor-not-allowed" : "text-content-soft hover:bg-slate-200"}`}>
             {children}
         </button>
     );
@@ -210,7 +210,7 @@ function EmptyState({ onReset, hasFilter, searchTerm }) {
                     : hasFilter ? "Coba ubah filter pencarian" : "Stok tampil setelah admin upload foto"}
             </p>
             {(searchTerm || hasFilter) && (
-                <button onClick={onReset} className="px-3 sm:px-4 py-1.5 bg-blue-600 text-white rounded-lg text-[11px] sm:text-xs font-semibold hover:bg-blue-700 transition-all hover:scale-105">
+                <button onClick={onReset} className="px-3 sm:px-4 py-1.5 bg-[#2391FF] text-white rounded-lg text-[11px] sm:text-xs font-semibold hover:bg-[#2391FF]/90 transition-all hover:scale-105">
                     {searchTerm ? "Bersihkan Pencarian" : "Reset Filter"}
                 </button>
             )}
@@ -248,12 +248,12 @@ function FilterSidebar({ brands, selectedBrand, setSelectedBrand, priceRange, se
                 <h3 className="text-xs font-semibold text-content-soft mb-2">Brand</h3>
                 <div className="space-y-1.5 max-h-48 overflow-y-auto">
                     <label className="flex items-center gap-1.5 cursor-pointer text-xs">
-                        <input type="radio" name="brand" checked={!selectedBrand} onChange={() => setSelectedBrand(null)} className="w-3 h-3 text-blue-600" />
+                        <input type="radio" name="brand" checked={!selectedBrand} onChange={() => setSelectedBrand(null)} className="w-3 h-3 text-[#2391FF] accent-[#2391FF]" />
                         <span className="text-content-soft">Semua Brand</span>
                     </label>
                     {brands.map((b) => (
                         <label key={b} className="flex items-center gap-1.5 cursor-pointer text-xs">
-                            <input type="radio" name="brand" checked={selectedBrand === b} onChange={() => setSelectedBrand(b)} className="w-3 h-3 text-blue-600" />
+                            <input type="radio" name="brand" checked={selectedBrand === b} onChange={() => setSelectedBrand(b)} className="w-3 h-3 text-[#2391FF] accent-[#2391FF]" />
                             <span className="text-content-soft truncate">{b}</span>
                         </label>
                     ))}
@@ -264,14 +264,14 @@ function FilterSidebar({ brands, selectedBrand, setSelectedBrand, priceRange, se
                 <h3 className="text-xs font-semibold text-content-soft mb-2">Rentang Harga</h3>
                 <div className="flex gap-1.5">
                     <input type="number" placeholder="Min" value={priceRange.min} onChange={(e) => setPriceRange({ ...priceRange, min: e.target.value })}
-                        className="w-1/2 px-2 py-1.5 text-xs border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                        className="w-1/2 px-2 py-1.5 text-xs border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#2391FF]" />
                     <input type="number" placeholder="Max" value={priceRange.max} onChange={(e) => setPriceRange({ ...priceRange, max: e.target.value })}
-                        className="w-1/2 px-2 py-1.5 text-xs border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                        className="w-1/2 px-2 py-1.5 text-xs border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#2391FF]" />
                 </div>
             </div>
 
             {hasFilter && (
-                <button onClick={onReset} className="w-full py-1.5 text-xs font-medium text-content-soft hover:text-blue-600 border border-border rounded-lg hover:bg-surface-muted transition-colors flex items-center justify-center gap-1.5">
+                <button onClick={onReset} className="w-full py-1.5 text-xs font-medium text-content-soft hover:text-[#2391FF] border border-border rounded-lg hover:bg-surface-muted transition-colors flex items-center justify-center gap-1.5">
                     <RotateCcw size={10} /> Reset Filter
                 </button>
             )}
@@ -309,7 +309,7 @@ function DetailModal({ laptop, onClose }) {
             <div className="bg-surface rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-soft-lg mx-2 sm:mx-0" onClick={(e) => e.stopPropagation()}>
                 <div className="sticky top-0 z-10 bg-surface/95 backdrop-blur-sm border-b border-border px-3 sm:px-4 py-2 flex sm:py-2.5 items-center justify-between">
                     <div className="flex items-center gap-1.5 text-[11px] sm:text-xs">
-                        <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-blue-100 flex items-center justify-center"><Laptop size={14} className="text-blue-600" /></div>
+                        <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-[#2391FF]/10 flex items-center justify-center"><Laptop size={14} className="text-[#2391FF]" /></div>
                         <div className="flex items-center gap-1 text-content-muted truncate">
                             <span className="hidden sm:inline">Detail Laptop</span>
                             {laptop.brand && (<><ChevronRight size={12} className="text-slate-300 flex-shrink-0" /><span className="text-content-soft font-medium truncate">{laptop.brand}</span></>)}
@@ -342,7 +342,7 @@ function DetailModal({ laptop, onClose }) {
                                 <div className="mt-3">
                                     <div className="flex gap-1 sm:gap-1.5 overflow-x-auto pb-1 justify-center">
                                         {images.map((img, i) => (
-                                            <button key={i} onClick={() => setImgIdx(i)} className={`flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden border-2 transition-all ${i === imgIdx ? "border-blue-500 ring-1 ring-blue-200" : "border-border"}`}>
+                                            <button key={i} onClick={() => setImgIdx(i)} className={`flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden border-2 transition-all ${i === imgIdx ? "border-[#2391FF] ring-1 ring-[#2391FF]/30" : "border-border"}`}>
                                                 <img src={img} alt="" className="w-full h-full object-cover" />
                                             </button>
                                         ))}
@@ -355,7 +355,7 @@ function DetailModal({ laptop, onClose }) {
                         <div className="p-3 sm:p-4 lg:p-5">
                             <div className="flex flex-wrap gap-1.5 mb-3">
                                 {laptop.brand && (
-                                    <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 bg-blue-50 text-blue-700 text-[9px] sm:text-[10px] font-semibold rounded-full"><Tag size={10} /> {laptop.brand}</span>
+                                    <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 bg-[#2391FF]/5 text-[#2391FF] text-[9px] sm:text-[10px] font-semibold rounded-full"><Tag size={10} /> {laptop.brand}</span>
                                 )}
                                 <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 bg-green-50 text-green-700 text-[9px] sm:text-[10px] font-semibold rounded-full"><Package size={10} /> Ready {stock} unit</span>
                             </div>
@@ -363,7 +363,7 @@ function DetailModal({ laptop, onClose }) {
                             <h1 className="text-base sm:text-lg lg:text-xl font-bold text-content mb-2 leading-tight">{laptop.laptop_name}</h1>
 
                             <div className="mb-3 pb-2 border-b border-border">
-                                <p className={`font-black ${Number(laptop.price) > 0 ? "text-blue-700 text-lg sm:text-xl lg:text-2xl" : "text-content-soft text-base"}`}>{priceLabel(laptop.price)}</p>
+                                <p className={`font-black ${Number(laptop.price) > 0 ? "text-[#2391FF] text-lg sm:text-xl lg:text-2xl" : "text-content-soft text-base"}`}>{priceLabel(laptop.price)}</p>
                             </div>
 
                             <div className={`mb-3 p-2 rounded-lg flex items-center gap-2 text-[10px] sm:text-xs ${stock > 0 ? (stock < 5 ? "bg-amber-50 border border-amber-100" : "bg-green-50 border border-green-100") : "bg-red-50 border border-red-100"}`}>
@@ -376,7 +376,7 @@ function DetailModal({ laptop, onClose }) {
                             {SPEC_ROWS.length > 0 && (
                                 <div className="bg-surface-muted rounded-lg p-2 sm:p-3 mb-3">
                                     <div className="flex items-center gap-1.5 mb-2">
-                                        <div className="w-5 h-5 rounded-lg bg-blue-100 flex items-center justify-center"><Cpu size={12} className="text-blue-600" /></div>
+                                        <div className="w-5 h-5 rounded-lg bg-[#2391FF]/10 flex items-center justify-center"><Cpu size={12} className="text-[#2391FF]" /></div>
                                         <p className="text-[9px] sm:text-[10px] font-semibold text-content-muted uppercase">Spesifikasi</p>
                                     </div>
                                     <div className="grid grid-cols-1 gap-1.5 text-[10px] sm:text-xs">
@@ -495,7 +495,7 @@ export default function KatalogLaptop() {
             <div className="min-h-screen flex items-center justify-center bg-surface-muted px-4">
                 <div className="text-center">
                     <p className="text-red-500 text-xs sm:text-sm mb-2">{error}</p>
-                    <button onClick={load} className="px-3 sm:px-3.5 py-1.5 bg-blue-600 text-white text-xs sm:text-sm rounded-lg">Coba Lagi</button>
+                    <button onClick={load} className="px-3 sm:px-3.5 py-1.5 bg-[#2391FF] text-white text-xs sm:text-sm rounded-lg hover:bg-[#2391FF]/90 transition-colors">Coba Lagi</button>
                 </div>
             </div>
         );
@@ -530,7 +530,7 @@ export default function KatalogLaptop() {
                     <div className="w-full px-2 sm:px-3 py-2">
                         <div className="flex items-center justify-between gap-2">
                             <div className="flex items-center gap-1.5 text-content-soft flex-shrink-0">
-                                <Laptop size={16} className="text-blue-600" />
+                                <Laptop size={16} className="text-[#2391FF]" />
                                 <span className="text-xs sm:text-sm font-bold hidden sm:inline">Laptop Ready</span>
                             </div>
 
@@ -540,7 +540,7 @@ export default function KatalogLaptop() {
 
                             <div className="flex items-center gap-1 sm:gap-1.5">
                                 <select value={sort} onChange={(e) => setSort(e.target.value)}
-                                    className="px-1.5 sm:px-2 py-1.5 text-[10px] sm:text-xs bg-surface-muted text-content border-0 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer transition-all hover:bg-slate-200/50">
+                                    className="px-1.5 sm:px-2 py-1.5 text-[10px] sm:text-xs bg-surface-muted text-content border-0 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#2391FF] cursor-pointer transition-all hover:bg-slate-200/50">
                                     <option value="newest">Terbaru</option>
                                     <option value="price_high">Harga Tertinggi</option>
                                     <option value="price_low">Harga Terendah</option>
@@ -550,7 +550,7 @@ export default function KatalogLaptop() {
                                     className="lg:hidden flex items-center gap-1 px-1.5 sm:px-2 py-1.5 text-[10px] sm:text-xs bg-surface-muted text-content rounded-lg transition-all hover:bg-slate-200/50 flex-shrink-0">
                                     <Filter size={12} />
                                     <span className="hidden sm:inline">Filter</span>
-                                    {hasFilter && <span className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse" />}
+                                    {hasFilter && <span className="w-1.5 h-1.5 bg-[#2391FF] rounded-full animate-pulse" />}
                                 </button>
                             </div>
                         </div>
