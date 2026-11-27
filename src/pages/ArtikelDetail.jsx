@@ -359,29 +359,6 @@ export default function ArtikelDetail() {
                 )}
               </div>
 
-              {/* Thumbnail strip — hanya tampil kalau > 1 gambar */}
-              {hasMultipleImages && (
-                <div className="flex gap-2 mt-3 overflow-x-auto pb-1 scrollbar-thin">
-                  {images.map((img, i) => (
-                    <button
-                      key={img.id || img.url || i}
-                      onClick={() => setActiveImageIndex(i)}
-                      className={`flex-shrink-0 w-16 h-12 sm:w-20 sm:h-14 rounded-lg overflow-hidden border-2 transition-all ${
-                        activeImageIndex === i
-                          ? "border-[#2391FF] ring-2 ring-[#2391FF]/30 shadow-md scale-105"
-                          : "border-transparent opacity-60 hover:opacity-100 hover:border-slate-300"
-                      }`}
-                    >
-                      <img
-                        src={img.url}
-                        alt={`Thumbnail ${i + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </button>
-                  ))}
-                </div>
-              )}
-
               {/* Kredit foto */}
               {article.author && (
                 <p className="text-xs text-content-muted mt-2 text-center">Foto: {article.author} / Solit 03</p>
