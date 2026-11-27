@@ -1,9 +1,10 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
   ChevronLeft, Loader2, Newspaper, Eye, CalendarDays,
   Share2, Check, Flame, Clock, Tag as TagIcon, Megaphone, Type,
+  ChevronRight, ImageIcon,
 } from "lucide-react";
 import { getArticleBySlug, getRelatedArticles, getPopularArticles } from "../services/articles";
 import { getArticleAds } from "../services/siteContent";
@@ -35,6 +36,7 @@ export default function ArtikelDetail() {
   const [fontSize, setFontSize] = useState(() => localStorage.getItem("solit03-article-font-size") || "md");
   const [stickySizeMenuOpen, setStickySizeMenuOpen] = useState(false);
   const [headerSizeMenuOpen, setHeaderSizeMenuOpen] = useState(false);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);  // ← BARU: index gambar aktif
 
   useEffect(() => {
     localStorage.setItem("solit03-article-font-size", fontSize);
@@ -57,12 +59,11 @@ export default function ArtikelDetail() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-
-
   useEffect(() => {
     window.scrollTo(0, 0);
     setLoading(true);
     setNotFound(false);
+    setActiveImageIndex(0);  // ← BARU: reset index saat ganti artikel
     getArticleBySlug(slug)
       .then(async (data) => {
         setArticle(data);
@@ -117,6 +118,16 @@ export default function ArtikelDetail() {
   }
 
   const category = article.article_categories;
+
+  // ═══ BARU: Ambil images dari article, fallback ke cover_image ═══
+  const images =
+    article.images?.length > 0
+      ? article.images
+      : article.cover_image
+      ? [{ url: article.cover_image, is_primary: true }]
+      : [];
+
+  const hasMultipleImages = images.length > 1;
 
   // Select ads for different editorial placements
   const horizontalAds = allAds.filter((a) => a.banner_size !== "sidebar_flank");
@@ -304,15 +315,74 @@ export default function ArtikelDetail() {
 
         {/* TENGAH: HERO + BILLBOARD + ARTIKEL */}
         <div className="w-full max-w-6xl px-4 sm:px-6 min-w-0">
-          
-          {/* ============ HERO IMAGE ============ */}
-          {article.cover_image && (
+
+          {/* ═══════════════════════════════════════════════════════ */}
+          {/* ═══ HERO IMAGE — MULTI IMAGE GALLERY ═══              */}
+          {/* ═══════════════════════════════════════════════════════ */}
+          {images.length > 0 && (
             <div className="max-w-5xl mx-auto mb-8">
-              <img
-                src={article.cover_image}
-                alt={article.title}
-                className="w-full aspect-video object-cover rounded-2xl shadow-lg"
-              />
+              {/* Gambar utama yang aktif */}
+              <div className="relative rounded-2xl overflow-hidden shadow-lg group">
+                <img
+                  src={images[activeImageIndex]?.url}
+                  alt={`${article.title} — Foto ${activeImageIndex + 1}`}
+                  className="w-full aspect-video object-cover transition-opacity duration-300"
+                />
+
+                {/* Navigasi prev/next — hanya tampil kalau > 1 gambar */}
+                {hasMultipleImages && (
+                  <>
+                    {/* Tombol Previous */}
+                    <button
+                      onClick={() => setActiveImageIndex((i) => (i === 0 ? images.length - 1 : i - 1))}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 backdrop-blur-sm transition opacity-0 group-hover:opacity-100"
+                      aria-label="Foto sebelumnya"
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+
+                    {/* Tombol Next */}
+                    <button
+                      onClick={() => setActiveImageIndex((i) => (i === images.length - 1 ? 0 : i + 1))}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 backdrop-blur-sm transition opacity-0 group-hover:opacity-100"
+                      aria-label="Foto selanjutnya"
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+
+                    {/* Counter badge */}
+                    <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/50 text-white text-xs font-semibold backdrop-blur-sm">
+                      <ImageIcon size={12} />
+                      {activeImageIndex + 1} / {images.length}
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Thumbnail strip — hanya tampil kalau > 1 gambar */}
+              {hasMultipleImages && (
+                <div className="flex gap-2 mt-3 overflow-x-auto pb-1 scrollbar-thin">
+                  {images.map((img, i) => (
+                    <button
+                      key={img.id || img.url || i}
+                      onClick={() => setActiveImageIndex(i)}
+                      className={`flex-shrink-0 w-16 h-12 sm:w-20 sm:h-14 rounded-lg overflow-hidden border-2 transition-all ${
+                        activeImageIndex === i
+                          ? "border-[#2391FF] ring-2 ring-[#2391FF]/30 shadow-md scale-105"
+                          : "border-transparent opacity-60 hover:opacity-100 hover:border-slate-300"
+                      }`}
+                    >
+                      <img
+                        src={img.url}
+                        alt={`Thumbnail ${i + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Kredit foto */}
               {article.author && (
                 <p className="text-xs text-content-muted mt-2 text-center">Foto: {article.author} / Solit 03</p>
               )}

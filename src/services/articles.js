@@ -56,16 +56,40 @@ export async function getArticleBySlug(slug) {
     .single();
   if (error) throw error;
 
+  // Fetch tags
   const { data: tagRows } = await supabase
     .from("article_tag_relations")
     .select("article_tags ( id, name, slug )")
     .eq("article_id", article.id);
 
+  // ═══ BARU: Fetch images dari tabel article_images ═══
+  const { data: imageRows } = await supabase
+    .from("article_images")
+    .select("id, image_url, is_primary, sort_order")
+    .eq("article_id", article.id)
+    .order("sort_order", { ascending: true });
+
+  const images = (imageRows || []).map((img) => ({
+    id: img.id,
+    url: img.image_url,
+    is_primary: img.is_primary,
+  }));
+
+  // Fallback: kalau belum ada di article_images, pakai cover_image lama
+  const finalImages =
+    images.length > 0
+      ? images
+      : article.cover_image
+      ? [{ url: article.cover_image, is_primary: true }]
+      : [];
+
+  // Increment views (fire-and-forget)
   supabase.rpc("increment_article_views", { article_id: article.id }).then(() => {});
 
   return {
     ...article,
     tags: (tagRows || []).map((t) => t.article_tags).filter(Boolean),
+    images: finalImages,
   };
 }
 
