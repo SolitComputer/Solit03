@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { 
-  ImagePlus, X, Loader2, Star, FileText, Sparkles, 
-  Tag, User, Globe, Check, Layers, Rocket, FileEdit
+import {
+  ImagePlus, X, Loader2, Star, FileText, Sparkles,
+  Tag, User, Globe, Check, Layers, Rocket, FileEdit,
+  CheckCircle2,
 } from "lucide-react";
 import TiptapEditor from "./TiptapEditor";
 import { uploadArticleImage } from "../../services/storage";
 import { getArticleTags } from "../services/AdminArticleTags";
+import { compressImage, formatFileSize } from "../../utils/compressImage";
 
 function slugify(text) {
   return text
@@ -15,9 +17,12 @@ function slugify(text) {
     .replace(/^-|-$/g, "");
 }
 
+const MAX_IMAGES = 10;
+
 export default function ArticleForm({ form, setForm, categories, onSubmit, buttonText, disabled }) {
   const [slugManual, setSlugManual] = useState(!!form.slug);
-  const [uploadingCover, setUploadingCover] = useState(false);
+  const [uploadingImages, setUploadingImages] = useState(false);
+  const [compressionInfo, setCompressionInfo] = useState(null);
   const [tagInput, setTagInput] = useState("");
   const [availableTags, setAvailableTags] = useState([]);
   const [tagDropdownOpen, setTagDropdownOpen] = useState(false);
@@ -35,22 +40,114 @@ export default function ArticleForm({ form, setForm, categories, onSubmit, butto
     setForm((f) => ({ ...f, title, slug: slugManual ? f.slug : slugify(title) }));
   }
 
-  async function handleCoverUpload(e) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  // ═══════════════════════════════════════════════════════════
+  // Multi-image upload dengan kompresi otomatis
+  // ═══════════════════════════════════════════════════════════
+  async function handleImagesUpload(e) {
+    const files = Array.from(e.target.files || []).filter((f) =>
+      f.type.startsWith("image/")
+    );
+    if (files.length === 0) return;
+
+    const currentImages = form.images || [];
+    const remaining = MAX_IMAGES - currentImages.length;
+    if (remaining <= 0) return;
+
+    const toProcess = files.slice(0, remaining);
+    setUploadingImages(true);
+    setCompressionInfo(null);
+
     try {
-      setUploadingCover(true);
-      const url = await uploadArticleImage(file);
-      setForm((f) => ({ ...f, cover_image: url }));
+      const newImages = [];
+      let totalOriginal = 0;
+      let totalCompressed = 0;
+
+      for (const file of toProcess) {
+        const originalSize = file.size;
+
+        // 1. Kompresi gambar
+        const compressed = await compressImage(file, {
+          maxWidth: 1200,
+          maxHeight: 1200,
+          quality: 0.8,
+          outputType: "image/webp",
+        });
+
+        totalOriginal += originalSize;
+        totalCompressed += compressed.size;
+
+        // 2. Upload ke Supabase Storage
+        const url = await uploadArticleImage(compressed);
+
+        newImages.push({
+          url,
+          is_primary: currentImages.length === 0 && newImages.length === 0,
+        });
+      }
+
+      // Tampilkan info kompresi
+      const savedPercent = Math.round(
+        ((totalOriginal - totalCompressed) / totalOriginal) * 100
+      );
+      setCompressionInfo({
+        count: newImages.length,
+        original: formatFileSize(totalOriginal),
+        compressed: formatFileSize(totalCompressed),
+        saved: savedPercent,
+      });
+      setTimeout(() => setCompressionInfo(null), 4000);
+
+      // Update form state
+      const allImages = [...currentImages, ...newImages];
+      const primaryUrl =
+        allImages.find((i) => i.is_primary)?.url || allImages[0]?.url || "";
+
+      setForm((f) => ({
+        ...f,
+        images: allImages,
+        cover_image: primaryUrl,
+      }));
     } catch (err) {
-      console.error(err);
-      alert("Gagal upload cover image");
+      console.error("Gagal upload gambar:", err);
+      alert("Gagal upload gambar");
     } finally {
-      setUploadingCover(false);
+      setUploadingImages(false);
       e.target.value = "";
     }
   }
 
+  function setPrimaryImage(index) {
+    const updated = (form.images || []).map((img, i) => ({
+      ...img,
+      is_primary: i === index,
+    }));
+    setForm((f) => ({
+      ...f,
+      images: updated,
+      cover_image: updated[index]?.url || "",
+    }));
+  }
+
+  function removeImage(index) {
+    const images = [...(form.images || [])];
+    const removed = images.splice(index, 1)[0];
+
+    // Jika yang dihapus primary, set foto pertama sebagai primary
+    if (removed?.is_primary && images.length > 0) {
+      images[0].is_primary = true;
+    }
+
+    setForm((f) => ({
+      ...f,
+      images,
+      cover_image:
+        images.find((i) => i.is_primary)?.url || images[0]?.url || "",
+    }));
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // Tags (tidak berubah)
+  // ═══════════════════════════════════════════════════════════
   function addTag(name) {
     const val = (name ?? tagInput).trim();
     if (!val) return;
@@ -72,13 +169,16 @@ export default function ArticleForm({ form, setForm, categories, onSubmit, butto
     ? unselectedTags.filter((t) => t.name.toLowerCase().includes(tagInput.trim().toLowerCase()))
     : unselectedTags;
 
+  const imageCount = form.images?.length || 0;
+  const canAddMore = imageCount < MAX_IMAGES;
+
   return (
     <form onSubmit={onSubmit} className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        
+
         {/* ================= MAIN CONTENT (Left 2 Cols) ================= */}
         <div className="lg:col-span-2 space-y-6">
-          
+
           {/* Card 1: Judul & Meta */}
           <div className="bg-surface border border-border rounded-2xl shadow-sm p-6 space-y-5">
             <div className="flex items-center gap-2.5 pb-4 border-b border-border">
@@ -176,49 +276,140 @@ export default function ArticleForm({ form, setForm, categories, onSubmit, butto
 
         {/* ================= SIDEBAR (Right 1 Col) ================= */}
         <div className="space-y-6 sticky top-20">
-          
-          {/* Cover Image Upload Card */}
+
+          {/* ═══ MULTI IMAGE UPLOAD CARD ═══ */}
           <div className="bg-surface border border-border rounded-2xl shadow-sm p-5 space-y-4">
             <div className="flex justify-between items-center">
-              <label className="text-xs font-bold text-content-soft uppercase tracking-wider">Cover Image</label>
-              <span className="text-[10px] text-content-muted font-medium">16:9 (Maks 5MB)</span>
+              <label className="text-xs font-bold text-content-soft uppercase tracking-wider">
+                Cover Image
+              </label>
+              <span className="text-[10px] text-content-muted font-medium">
+                {imageCount}/{MAX_IMAGES} Gambar
+              </span>
             </div>
 
-            {form.cover_image ? (
-              <div className="relative rounded-xl overflow-hidden border border-border group">
-                <img src={form.cover_image} alt="cover" className="w-full aspect-video object-cover group-hover:scale-105 transition duration-300" />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setForm((f) => ({ ...f, cover_image: "" }))}
-                    className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 shadow-md transition"
-                    title="Hapus Cover"
-                  >
-                    <X size={14} />
-                  </button>
-                </div>
+            {/* Info Kompresi — muncul 4 detik setelah upload */}
+            {compressionInfo && (
+              <div className="flex items-center gap-2 px-3 py-2 bg-green-50 border border-green-200 rounded-lg text-[11px] text-green-700">
+                <CheckCircle2 size={13} className="flex-shrink-0" />
+                <span>
+                  {compressionInfo.count} gambar:{" "}
+                  <span className="font-semibold">{compressionInfo.original}</span>
+                  {" → "}
+                  <span className="font-semibold">{compressionInfo.compressed}</span>
+                  {" "}
+                  <span className="font-bold">(hemat {compressionInfo.saved}%)</span>
+                </span>
               </div>
-            ) : (
-              <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-border rounded-xl aspect-video cursor-pointer hover:border-blue-500 hover:bg-blue-50/40 transition p-4 text-center">
-                {uploadingCover ? (
-                  <Loader2 size={24} className="animate-spin text-blue-600" />
-                ) : (
-                  <div className="p-3 bg-blue-50 text-blue-600 rounded-full">
-                    <ImagePlus size={20} />
+            )}
+
+            {/* Preview Grid Gambar */}
+            {imageCount > 0 && (
+              <div className={`grid gap-2 ${imageCount === 1 ? "grid-cols-1" : "grid-cols-2"}`}>
+                {form.images.map((img, i) => (
+                  <div
+                    key={img.id || img.url || i}
+                    className={`relative group rounded-xl overflow-hidden border-2 transition-all ${
+                      imageCount === 1 ? "aspect-video" : "aspect-[4/3]"
+                    } ${
+                      img.is_primary
+                        ? "border-amber-400 ring-2 ring-amber-200 shadow-sm"
+                        : "border-border hover:border-blue-300"
+                    }`}
+                  >
+                    <img
+                      src={img.url}
+                      alt={`Cover ${i + 1}`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                    />
+
+                    {/* Badge COVER di gambar primary */}
+                    {img.is_primary && (
+                      <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 bg-amber-500 text-white text-[9px] font-bold rounded-md shadow-sm">
+                        COVER
+                      </div>
+                    )}
+
+                    {/* Hover overlay — tombol set primary & hapus */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center gap-1.5 opacity-0 group-hover:opacity-100">
+                      {!img.is_primary && imageCount > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => setPrimaryImage(i)}
+                          title="Set sebagai cover utama"
+                          className="p-2 bg-white/90 hover:bg-amber-50 rounded-full shadow-md transition hover:scale-110"
+                        >
+                          <Star size={14} className="text-amber-500" />
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => removeImage(i)}
+                        title="Hapus gambar"
+                        className="p-2 bg-white/90 hover:bg-red-50 rounded-full shadow-md transition hover:scale-110"
+                      >
+                        <X size={14} className="text-red-500" />
+                      </button>
+                    </div>
                   </div>
+                ))}
+              </div>
+            )}
+
+            {/* Upload Zone — klik atau bisa pilih banyak file sekaligus */}
+            {canAddMore && (
+              <label
+                className={`flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-xl cursor-pointer transition p-4 text-center ${
+                  imageCount === 0 ? "aspect-video" : "py-3"
+                } ${
+                  uploadingImages
+                    ? "border-blue-300 bg-blue-50/40 cursor-wait"
+                    : "border-border hover:border-blue-500 hover:bg-blue-50/40"
+                }`}
+              >
+                {uploadingImages ? (
+                  <>
+                    <Loader2 size={22} className="animate-spin text-blue-600" />
+                    <p className="text-xs font-bold text-blue-600">Mengkompresi & upload...</p>
+                  </>
+                ) : (
+                  <>
+                    <div className={`${imageCount === 0 ? "p-3" : "p-2"} bg-blue-50 text-blue-600 rounded-full`}>
+                      <ImagePlus size={imageCount === 0 ? 20 : 16} />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-content-soft">
+                        {imageCount === 0 ? "Upload Gambar Cover" : "Tambah Gambar Lagi"}
+                      </p>
+                      <p className="text-[11px] text-content-muted mt-0.5">
+                        PNG, JPG, WebP — otomatis dikompresi
+                      </p>
+                    </div>
+                  </>
                 )}
-                <div>
-                  <p className="text-xs font-bold text-content-soft">Klik / Upload Gambar</p>
-                  <p className="text-[11px] text-content-muted mt-0.5">PNG, JPG, WebP</p>
-                </div>
-                <input type="file" accept="image/*" className="hidden" onChange={handleCoverUpload} />
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  multiple
+                  className="hidden"
+                  onChange={handleImagesUpload}
+                  disabled={uploadingImages}
+                />
               </label>
+            )}
+
+            {/* Hint set cover */}
+            {imageCount > 1 && (
+              <p className="text-[10px] text-content-muted text-center">
+                <Star size={9} className="inline text-amber-500 mr-0.5" fill="currentColor" />
+                Hover gambar & klik ★ untuk set cover utama
+              </p>
             )}
           </div>
 
-          {/* Pengaturan Kategori & Status */}
+          {/* Pengaturan Kategori & Status (tidak berubah) */}
           <div className="bg-surface border border-border rounded-2xl shadow-sm p-5 space-y-4">
-            
+
             {/* Kategori */}
             <div>
               <label className="text-xs font-bold text-content-soft uppercase tracking-wider block mb-1.5 flex items-center gap-1">

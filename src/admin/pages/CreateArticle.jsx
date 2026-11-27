@@ -18,6 +18,7 @@ export default function CreateArticle() {
     excerpt: "",
     content: "",
     cover_image: "",
+    images: [],            // ← BARU: array multi image
     category_id: "",
     author: "",
     tag_names: [],
@@ -49,8 +50,8 @@ export default function CreateArticle() {
       {/* Header with Back Button */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface p-5 rounded-2xl border border-border shadow-sm">
         <div>
-          <Link 
-            to="/admin/articles" 
+          <Link
+            to="/admin/articles"
             className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 transition mb-1.5"
           >
             <ArrowLeft size={14} /> Kembali ke Daftar Artikel
