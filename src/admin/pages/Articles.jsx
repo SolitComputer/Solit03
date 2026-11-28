@@ -94,7 +94,7 @@ export default function Articles() {
           </div>
           <Link
             to="/admin/articles/create"
-            className="flex items-center gap-2 px-4 py-2 bg-surface text-blue-600 hover:bg-blue-50 text-sm font-semibold rounded-xl shadow-lg transition hover:scale-105 active:scale-95"
+            className="flex items-center gap-2 px-4 py-2 bg-surface text-blue-600 hover:bg-surface-muted text-sm font-semibold rounded-xl shadow-lg transition hover:scale-105 active:scale-95"
           >
             <Plus size={16} /> Tulis Artikel
           </Link>
@@ -148,7 +148,7 @@ export default function Articles() {
               <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-content-muted pointer-events-none" />
             </div>
             {hasFilters && (
-              <button onClick={resetFilters} className="px-3 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm text-content-soft transition flex items-center gap-1.5">
+              <button onClick={resetFilters} className="px-3 py-2.5 bg-surface-muted border border-border hover:text-content rounded-lg text-sm text-content-soft transition flex items-center gap-1.5">
                 <RefreshCw size={14} /> Reset
               </button>
             )}
@@ -157,7 +157,7 @@ export default function Articles() {
 
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gradient-to-r from-gray-50 to-white border-b border-border">
+            <thead className="bg-surface-muted border-b border-border">
               <tr>
                 <th className="text-left px-4 py-3 text-[11px] font-semibold text-content-muted uppercase tracking-wider">Artikel</th>
                 <th className="text-left px-4 py-3 text-[11px] font-semibold text-content-muted uppercase tracking-wider">Kategori</th>
@@ -167,30 +167,30 @@ export default function Articles() {
                 <th className="text-center px-4 py-3 text-[11px] font-semibold text-content-muted uppercase tracking-wider">Aksi</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
+            <tbody className="divide-y divide-border">
               {loading ? (
                 <tr><td colSpan={6} className="py-20 text-center">
                   <div className="w-10 h-10 mx-auto border-3 border-blue-200 rounded-full animate-spin border-t-blue-600" />
                 </td></tr>
               ) : articles.length === 0 ? (
                 <tr><td colSpan={6} className="py-20 text-center">
-                  <Newspaper size={48} className="mx-auto mb-3 text-gray-200" />
+                  <Newspaper size={48} className="mx-auto mb-3 text-content-muted opacity-40" />
                   <p className="text-sm text-content-muted">Belum ada artikel</p>
                 </td></tr>
               ) : (
                 articles.map((a) => (
-                  <tr key={a.id} className="hover:bg-blue-50/30 transition group">
+                  <tr key={a.id} className="hover:bg-blue-500/5 transition group">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         {a.cover_image ? (
                           <img src={a.cover_image} alt={a.title} className="w-12 h-9 rounded-lg object-cover border border-border" />
                         ) : (
-                          <div className="w-12 h-9 bg-gray-100 rounded-lg flex items-center justify-center">
-                            <Newspaper size={14} className="text-gray-300" />
+                          <div className="w-12 h-9 bg-surface-muted border border-border rounded-lg flex items-center justify-center">
+                            <Newspaper size={14} className="text-content-muted" />
                           </div>
                         )}
                         <div className="min-w-0">
-                          <p className="text-sm font-semibold text-content group-hover:text-blue-600 transition line-clamp-1 flex items-center gap-1.5">
+                          <p className="text-sm font-semibold text-content group-hover:text-blue-500 transition line-clamp-1 flex items-center gap-1.5">
                             {a.is_featured && <Star size={12} className="text-amber-500 flex-shrink-0" fill="currentColor" />}
                             {a.title}
                           </p>
@@ -206,7 +206,7 @@ export default function Articles() {
                     </td>
                     <td className="px-4 py-3">
                       <span className={`inline-flex px-2 py-1 rounded-lg text-[10px] font-semibold ${
-                        a.status === "published" ? "bg-green-50 text-green-600 border border-green-100" : "bg-gray-100 text-content-muted border border-border"
+                        a.status === "published" ? "bg-green-500/10 text-green-500 border border-green-500/20" : "bg-surface-muted text-content-muted border border-border"
                       }`}>
                         {a.status === "published" ? "Published" : "Draft"}
                       </span>
@@ -221,13 +221,13 @@ export default function Articles() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-center gap-1">
-                        <Link to={`/admin/articles/edit/${a.id}`} className="p-2 text-content-muted hover:text-blue-600 hover:bg-blue-50 rounded-lg transition">
+                        <Link to={`/admin/articles/edit/${a.id}`} className="p-2 text-content-muted hover:text-blue-600 hover:bg-blue-500/10 rounded-lg transition">
                           <Edit size={14} />
                         </Link>
                         <button
                           onClick={() => handleDelete(a.id)}
                           disabled={deletingId === a.id}
-                          className="p-2 text-content-muted hover:text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-40"
+                          className="p-2 text-content-muted hover:text-red-600 hover:bg-red-500/10 rounded-lg transition disabled:opacity-40"
                         >
                           {deletingId === a.id ? (
                             <div className="w-3.5 h-3.5 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
@@ -263,7 +263,7 @@ export default function Articles() {
                 return (
                   <button key={n} onClick={() => setCurrentPage(n)}
                     className={`min-w-[34px] h-8 rounded-lg text-sm font-medium transition-all ${
-                      currentPage === n ? "bg-blue-600 text-white shadow-sm" : "text-content-soft hover:bg-gray-200"
+                      currentPage === n ? "bg-blue-600 text-white shadow-sm" : "text-content-soft hover:bg-surface-muted"
                     }`}>
                     {n}
                   </button>
