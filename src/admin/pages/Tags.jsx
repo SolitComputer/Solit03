@@ -384,13 +384,11 @@ export default function Tags() {
 
       {/* Main List */}
       <div className="bg-surface rounded-xl shadow-md border border-border overflow-hidden">
-        <div className="px-5 py-4 border-b-2 border-border flex items-center justify-between bg-gradient-to-r from-gray-50 to-white">
-          <p className="text-sm font-bold text-content-soft">Daftar Tag</p>
-          <p className="text-xs font-semibold text-content-muted bg-gray-100 px-2 py-1 rounded-lg">{filtered.length} ditemukan</p>
-        </div>
+<div className="px-5 py-4 border-b-2 border-border flex items-center justify-between bg-gradient-to-r from-surface-muted to-surface">          <p className="text-sm font-bold text-content-soft">Daftar Tag</p>
+<p className="text-xs font-semibold text-content-muted bg-surface-muted px-2 py-1 rounded-lg">{filtered.length} ditemukan</p>        </div>
 
         {loading ? (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-border">
             {[1,2,3,4].map(i => (
               <div key={i} className="flex items-center gap-4 px-5 py-4 animate-pulse">
                 <div className="w-10 h-10 bg-gray-200 rounded-xl flex-shrink-0" />
@@ -408,12 +406,11 @@ export default function Tags() {
             <p className="text-sm text-content-muted mt-1">{search ? "Coba dengan kata kunci lain" : "Klik tombol Tambah Tag untuk memulai"}</p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-border">
             {paginated.map(tag => {
               const c = getColorStyle(tag.color);
               return (
-                <div key={tag.id} className="flex items-center gap-4 px-5 py-4 hover:bg-gradient-to-r hover:from-gray-50 hover:to-white transition-all duration-200 group">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md bg-gradient-to-br ${c.bg}`}>
+                <div key={tag.id} className="flex items-center gap-4 px-5 py-4 hover:bg-surface-muted/50 transition-all duration-200 group">                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md bg-gradient-to-br ${c.bg}`}>
                     <Tag size={16} className={c.text} />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -469,7 +466,7 @@ export default function Tags() {
                       className={`min-w-[32px] h-8 rounded-lg text-sm font-semibold transition-all duration-200 
                         ${page===n 
                           ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md" 
-                          : "text-content-soft hover:bg-gray-100 border-2 border-transparent hover:border-border"}`}>
+                          : "text-content-soft hover:bg-surface-muted border-2 border-transparent hover:border-border"}`}>
                       {n}
                     </button>
                   );

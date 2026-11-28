@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet-async";
 import {
   ChevronLeft, Loader2, Newspaper, Eye, CalendarDays,
   Share2, Check, Flame, Clock, Tag as TagIcon, Megaphone, Type,
-  ChevronRight, ImageIcon,
+  ChevronRight,
 } from "lucide-react";
 import { getArticleBySlug, getRelatedArticles, getPopularArticles } from "../services/articles";
 import { getArticleAds } from "../services/siteContent";
@@ -349,16 +349,9 @@ export default function ArtikelDetail() {
                     >
                       <ChevronRight size={20} />
                     </button>
-
-                    {/* Counter badge */}
-                    <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/50 text-white text-xs font-semibold backdrop-blur-sm">
-                      <ImageIcon size={12} />
-                      {activeImageIndex + 1} / {images.length}
-                    </div>
                   </>
                 )}
               </div>
-
               {/* Kredit foto */}
               {article.author && (
                 <p className="text-xs text-content-muted mt-2 text-center">Foto: {article.author} / Solit 03</p>
