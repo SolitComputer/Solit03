@@ -81,12 +81,12 @@ export default function EditArticle() {
         <div>
           <Link
             to="/admin/articles"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 transition mb-1.5"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-500 hover:text-blue-400 transition mb-1.5"
           >
             <ArrowLeft size={14} /> Kembali ke Daftar Artikel
           </Link>
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-indigo-100 text-indigo-600 rounded-xl">
+            <div className="p-2 bg-indigo-500/10 text-indigo-500 rounded-xl">
               <Edit3 size={20} />
             </div>
             <div>
